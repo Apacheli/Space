@@ -7,7 +7,6 @@ export type ShardContainerConnectData =
   & {
     firstShardID?: number;
     lastShardID?: number;
-    maxConcurrency?: number;
   }
   & Omit<GatewayIdentifyDataPartial, "shard">;
 
@@ -33,7 +32,7 @@ export default class ShardContainer extends EventPipeline {
     this.connectShards(url, {
       shardCount,
       ...data,
-    }, data.maxConcurrency);
+    });
   }
 
   spawnShards(lastShardID: number, firstShardID = 0) {
@@ -43,18 +42,12 @@ export default class ShardContainer extends EventPipeline {
     }
   }
 
-  async connectShards(
-    url: string,
-    identifyData?: GatewayIdentifyDataPartial,
-    maxConcurrency = 1,
-  ) {
+  async connectShards(url: string, identifyData?: GatewayIdentifyDataPartial) {
     let i = 0;
     do {
-      for (let c = 0; i < this.shards.length && c < maxConcurrency; c++) {
-        const shard = this.shards[i++];
-        await shard.connect(url);
-        shard.resumeOrIdentify(true, identifyData);
-      }
+      const shard = this.shards[i++];
+      await shard.connect(url);
+      shard.resumeOrIdentify(true, identifyData);
     } while (i < this.shards.length && await sleep(5000, true));
   }
 }

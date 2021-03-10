@@ -165,16 +165,16 @@ import {
   RESTPutAPIGuildMemberResult,
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
-} from "https://deno.land/x/discord_api_types/v8/mod.ts";
+} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/rest/mod.ts";
 import HTTPError from "./HTTPError.ts";
 
-interface HTTPClientOptions {
+export interface HTTPClientOptions {
   delay?: number;
   userAgent?: string;
   version?: number;
 }
 
-interface RequestInput {
+export interface RequestInput {
   data?: unknown;
   files?: File[];
   method?: string;
@@ -182,15 +182,16 @@ interface RequestInput {
   reason?: string;
 }
 
-const DELAY = 15_000;
-const USER_AGENT = "DiscordBot (https://github.com/Apacheli/Space, 1.0.0)";
-const VERSION = 8;
+export const DELAY = 15_000;
+export const USER_AGENT =
+  "DiscordBot (https://github.com/Apacheli/Space, 1.0.0)";
+export const VERSION = 8;
 
 export default class HTTPClient {
   constructor(public token: string, public options?: HTTPClientOptions) {
   }
 
-  async request<T = any>(path: string, input?: RequestInput) {
+  async request<T = unknown>(path: string, input?: RequestInput) {
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -213,7 +214,7 @@ export default class HTTPClient {
     }
 
     const version = this.options?.version ?? VERSION;
-    let url = `https://discord.com/api/v${version}${path}`;
+    let url = `https://discord.com/api/v${version}/${path}`;
     if (input?.query) {
       url += `?${new URLSearchParams(input.query as Record<string, string>)}`;
     }
@@ -251,7 +252,7 @@ export default class HTTPClient {
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    */
   getEntitlements(applicationID: string, data: unknown) {
-    return this.request<unknown>(`applications/${applicationID}/entitlements`, {
+    return this.request(`applications/${applicationID}/entitlements`, {
       data,
     });
   }
@@ -265,7 +266,7 @@ export default class HTTPClient {
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
   getEntitlement(applicationID: string, entitlementID: string, data: unknown) {
-    return this.request<unknown>(
+    return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}`,
       {
         data,
@@ -280,7 +281,7 @@ export default class HTTPClient {
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    */
   getSKUs(applicationID: string) {
-    return this.request<unknown>(`applications/${applicationID}/skus`);
+    return this.request(`applications/${applicationID}/skus`);
   }
 
   /**
@@ -293,7 +294,7 @@ export default class HTTPClient {
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
   consumeSKU(applicationID: string, entitlementID: string) {
-    return this.request<unknown>(
+    return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}/consume`,
       {
         method: "POST",
@@ -312,7 +313,7 @@ export default class HTTPClient {
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
   deleteTestEntitlement(applicationID: string, entitlementID: string) {
-    return this.request<unknown>(
+    return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}`,
       {
         method: "DELETE",
@@ -333,7 +334,7 @@ export default class HTTPClient {
    * @param userID https://discord.dev/resources/user#user-object
    */
   createPurchaseDiscount(skuID: string, userID: string, data: unknown) {
-    return this.request<unknown>(`store/skus/${skuID}/discounts/${userID}`, {
+    return this.request(`store/skus/${skuID}/discounts/${userID}`, {
       data,
       method: "PUT",
     });
@@ -350,7 +351,7 @@ export default class HTTPClient {
    * @param userID https://discord.dev/resources/user#user-object
    */
   deletePurchaseDiscount(skuID: string, userID: string) {
-    return this.request<unknown>(`store/skus/${skuID}/discounts/${userID}`, {
+    return this.request(`store/skus/${skuID}/discounts/${userID}`, {
       method: "DELETE",
     });
   }
@@ -443,12 +444,9 @@ export default class HTTPClient {
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
   deleteGlobalApplicationCommand(applicationID: string, commandID: string) {
-    return this.request<unknown>(
-      `applications/${applicationID}/commands/${commandID}`,
-      {
-        method: "DELETE",
-      },
-    );
+    return this.request(`applications/${applicationID}/commands/${commandID}`, {
+      method: "DELETE",
+    });
   }
 
   /**
@@ -555,7 +553,7 @@ export default class HTTPClient {
     guildID: string,
     commandID: string,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `applications/${applicationID}/guilds/${guildID}/commands/${commandID}`,
       {
         method: "DELETE",
@@ -576,7 +574,7 @@ export default class HTTPClient {
     interactionToken: string,
     data: RESTPostAPIInteractionCallbackJSONBody,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `interactions/${interactionID}/${interactionToken}/callback`,
       {
         data,
@@ -598,7 +596,7 @@ export default class HTTPClient {
     interactionToken: string,
     data: unknown,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `webhooks/${applicationID}/${interactionToken}/messages/@original`,
       {
         data,
@@ -619,7 +617,7 @@ export default class HTTPClient {
     interactionToken: string,
     data: unknown,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `webhooks/${applicationID}/${interactionToken}/messages/@original`,
       {
         data,
@@ -642,13 +640,10 @@ export default class HTTPClient {
     interactionToken: string,
     data: unknown,
   ) {
-    return this.request<unknown>(
-      `webhooks/${applicationID}/${interactionToken}`,
-      {
-        data,
-        method: "POST",
-      },
-    );
+    return this.request(`webhooks/${applicationID}/${interactionToken}`, {
+      data,
+      method: "POST",
+    });
   }
 
   /**
@@ -666,7 +661,7 @@ export default class HTTPClient {
     messageID: string,
     data: unknown,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `webhooks/${applicationID}/${interactionToken}/messages/${messageID}`,
       {
         data,
@@ -689,7 +684,7 @@ export default class HTTPClient {
     messageID: string,
     data: unknown,
   ) {
-    return this.request<unknown>(
+    return this.request(
       `webhooks/${applicationID}/${interactionToken}/messages/${messageID}`,
       {
         data,
@@ -837,11 +832,16 @@ export default class HTTPClient {
    * how to properly format messages.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  createMessage(channelID: string, data: RESTPostAPIChannelMessageJSONBody) {
+  createMessage(
+    channelID: string,
+    data: RESTPostAPIChannelMessageJSONBody,
+    files?: File[],
+  ) {
     return this.request<RESTPostAPIChannelMessageResult>(
       `channels/${channelID}/messages`,
       {
         data,
+        files,
         method: "POST",
       },
     );
@@ -2426,7 +2426,7 @@ export default class HTTPClient {
    * return an empty array.
    */
   getUserPrivateChannels() {
-    return this.request<unknown>("users/@me/channels");
+    return this.request("users/@me/channels");
   }
 
   /**
@@ -2461,7 +2461,7 @@ export default class HTTPClient {
    * > ⚠️ This endpoint is limited to 10 active group DMs.
    */
   createGroupPrivateChannel(data: unknown) {
-    return this.request<unknown>("users/@me/channels", {
+    return this.request("users/@me/channels", {
       data,
       method: "POST",
     });
@@ -2659,11 +2659,13 @@ export default class HTTPClient {
     webhookID: string,
     webhookToken: string,
     data: RESTPostAPIWebhookWithTokenJSONBody,
+    files?: File[],
   ) {
     return this.request<RESTPostAPIWebhookWithTokenResult>(
       `webhooks/${webhookID}/${webhookToken}`,
       {
         data,
+        files,
         method: "POST",
       },
     );
