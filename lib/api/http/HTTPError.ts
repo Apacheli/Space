@@ -1,7 +1,18 @@
-export default class HTTPError extends Error {
+export interface ResponseError {
+  code: number;
+  errors?: Record<string, { _errors: Omit<ResponseError, "errors">[] }>;
+  message: string;
+}
+
+export default class HTTPError extends Error implements ResponseError {
+  code;
+  errors;
   name = "HTTPError";
 
-  constructor(message: string, public code: number, public status: number) {
-    super(message);
+  constructor(body: ResponseError, public response: Response) {
+    super(body.message);
+
+    this.code = body.code;
+    this.errors = body.errors;
   }
 }

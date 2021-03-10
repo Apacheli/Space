@@ -24,7 +24,7 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-export default class Shard extends EventManager {
+export default class ShardClient extends EventManager {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
   latency = 0;

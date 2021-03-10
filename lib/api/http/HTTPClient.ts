@@ -191,7 +191,7 @@ export default class HTTPClient {
   constructor(public token: string, public options?: HTTPClientOptions) {
   }
 
-  async request<T = unknown>(path: string, input?: RequestInput) {
+  async request<T = any>(path: string, input?: RequestInput) {
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -236,7 +236,7 @@ export default class HTTPClient {
     if (response.ok) {
       return result as T;
     }
-    throw new HTTPError(result.message, result.code, response.status);
+    throw new HTTPError(result, response);
   }
 
   /**

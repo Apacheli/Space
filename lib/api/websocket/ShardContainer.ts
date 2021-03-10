@@ -1,4 +1,4 @@
-import Shard, { GatewayIdentifyDataPartial } from "./Shard.ts";
+import ShardClient, { GatewayIdentifyDataPartial } from "./ShardClient.ts";
 import EventPipeline from "../../util/EventPipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { sleep } from "../../util/util.ts";
@@ -12,7 +12,8 @@ export type ShardContainerConnectData =
   & Omit<GatewayIdentifyDataPartial, "shard">;
 
 export default class ShardContainer extends EventPipeline {
-  shards: Shard[] = [];
+  lastShardIdentify = 0;
+  shards: ShardClient[] = [];
 
   constructor(public token: string) {
     super();
@@ -38,7 +39,7 @@ export default class ShardContainer extends EventPipeline {
 
   spawnShards(lastShardID: number, firstShardID = 0) {
     for (let i = firstShardID; i < lastShardID; i++) {
-      const shard = new Shard(this.token, i);
+      const shard = new ShardClient(this.token, i);
       this.shards.push(shard);
     }
   }
@@ -49,6 +50,7 @@ export default class ShardContainer extends EventPipeline {
       const shard = this.shards[i++];
       await shard.connect(url);
       shard.resumeOrIdentify(true, identifyData);
+      this.lastShardIdentify = Date.now();
     } while (i < this.shards.length && await sleep(5000, true));
   }
 }
