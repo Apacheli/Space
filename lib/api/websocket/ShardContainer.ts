@@ -7,6 +7,7 @@ export type ShardContainerConnectData =
   & {
     firstShardID?: number;
     lastShardID?: number;
+    url: string;
   }
   & Omit<GatewayIdentifyDataPartial, "shard">;
 
@@ -17,20 +18,20 @@ export default class ShardContainer extends EventPipeline {
     super();
   }
 
-  connect(url: string, data: ShardContainerConnectData) {
-    const lastShardID = data.lastShardID ?? data.shardCount;
+  connect(data: ShardContainerConnectData) {
+    const lastShardID = data.lastShardID ?? data.shards;
     if (!lastShardID) {
       throw new Error("Invalid number of shards to spawn.");
     }
     const firstShardID = data.firstShardID ?? 0;
     this.spawnShards(firstShardID, lastShardID);
-    const shardCount = data.shardCount ?? lastShardID - firstShardID;
+    const shards = data.shards ?? lastShardID - firstShardID;
     logger.debug?.(
-      `Connecting ${lastShardID - firstShardID}/${shardCount} shards`,
+      `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1})`,
     );
-    this.connectShards(url, {
-      shardCount,
+    this.connectShards(data.url, {
+      shards,
       ...data,
     });
   }

@@ -167,6 +167,7 @@ import {
   RESTPutAPIGuildTemplateSyncResult,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/rest/mod.ts";
 import HTTPError from "./HTTPError.ts";
+import { repository, version } from "../../meta.ts";
 
 export interface HTTPClientOptions {
   delay?: number;
@@ -183,8 +184,7 @@ export interface RequestInput {
 }
 
 export const DELAY = 15_000;
-export const USER_AGENT =
-  "DiscordBot (https://github.com/Apacheli/Space, 1.0.0)";
+export const USER_AGENT = `DiscordBot (${repository}, ${version})`;
 export const VERSION = 8;
 
 export default class HTTPClient {

@@ -20,7 +20,7 @@ export interface GuildMembersChunkEntry {
 }
 
 export type GatewayIdentifyDataPartial = PartialExcept<
-  GatewayIdentifyData & { shardCount: number },
+  GatewayIdentifyData & { shards: number },
   "intents"
 >;
 
@@ -238,8 +238,8 @@ export default class Shard extends EventManager {
         $os: Deno.build.os,
       },
       shard: data.shard ?? (
-        this.id !== undefined && data.shardCount !== undefined
-          ? [this.id, data.shardCount]
+        this.id !== undefined && data.shards !== undefined
+          ? [this.id, data.shards]
           : undefined
       ),
       token: this.token,
