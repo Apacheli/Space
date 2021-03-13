@@ -1,9 +1,9 @@
 import ShardClient, { GatewayIdentifyDataPartial } from "./ShardClient.ts";
-import EventPipeline from "../../util/EventPipeline.ts";
+import EventPipeline, { Handler } from "../../util/EventPipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { sleep } from "../../util/util.ts";
 
-export type ShardContainerConnectData =
+export type GatewayClientConnectData =
   & {
     firstShardID?: number;
     lastShardID?: number;
@@ -11,15 +11,16 @@ export type ShardContainerConnectData =
   }
   & Omit<GatewayIdentifyDataPartial, "shard">;
 
-export default class ShardContainer extends EventPipeline {
-  lastShardIdentify = 0;
+export const SHARD_CONNECT_DELAY = 5000;
+
+export default class GatewayClient extends EventPipeline {
   shards: ShardClient[] = [];
 
   constructor(public token: string) {
     super();
   }
 
-  connect(data: ShardContainerConnectData) {
+  connect(data: GatewayClientConnectData) {
     const lastShardID = data.lastShardID ?? data.shards;
     if (!lastShardID) {
       throw new Error("Invalid number of shards to spawn.");
@@ -50,7 +51,13 @@ export default class ShardContainer extends EventPipeline {
       const shard = this.shards[i++];
       await shard.connect(url);
       shard.resumeOrIdentify(true, identifyData);
-      this.lastShardIdentify = Date.now();
-    } while (i < this.shards.length && await sleep(5000, true));
+    } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
+  }
+
+  listen(event: string, ...handlers: Handler[]) {
+    for (const shard of this.shards) {
+      shard.listen(event, (data) => this.dispatch(event, { data, shard }));
+    }
+    super.listen(event, ...handlers);
   }
 }

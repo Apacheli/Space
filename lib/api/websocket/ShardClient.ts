@@ -1,6 +1,7 @@
 import {
   GatewayCloseCodes,
   GatewayDispatchEvents,
+  GatewayDispatchPayload,
   GatewayGuildMembersChunkDispatchData,
   GatewayIdentifyData,
   GatewayOPCodes,
@@ -46,10 +47,7 @@ export default class ShardClient extends EventManager {
   connect(url: string) {
     this.url = url;
 
-    logger.debug?.(
-      this.id === undefined ? "An unknown shard" : `Shard ${this.id}`,
-      "is connecting.",
-    );
+    logger.debug?.(`Shard ${this.id ?? "unknown"} is connecting.`);
 
     const socket = new WebSocket(url);
     socket.addEventListener("close", (event) => this.onSocketClose(event));
@@ -119,7 +117,6 @@ export default class ShardClient extends EventManager {
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
       logger.debug?.(`Shard ${this.id} is reconnecting.`);
-      this.dispatch("RECONNECT");
       await this.connect(this.url);
       this.resumeOrIdentify(resumable, this.identifyData);
     }
@@ -137,19 +134,15 @@ export default class ShardClient extends EventManager {
         this.seq = payload.s;
         switch (payload.t) {
           case GatewayDispatchEvents.GuildCreate: {
-            const guild = payload.d;
-            if (this.unavailableGuilds.has(guild.id)) {
-              this.unavailableGuilds.delete(guild.id);
-              return this.dispatch("GUILD_AVAILABLE", guild);
+            if (this.unavailableGuilds.has(payload.d.id)) {
+              this.unavailableGuilds.delete(payload.d.id);
             }
             break;
           }
 
           case GatewayDispatchEvents.GuildDelete: {
-            const guild = payload.d;
-            if (guild.unavailable) {
-              this.unavailableGuilds.add(guild.id);
-              return this.dispatch("GUILD_UNAVAILABLE", guild);
+            if (payload.d.unavailable) {
+              this.unavailableGuilds.add(payload.d.id);
             }
             break;
           }
