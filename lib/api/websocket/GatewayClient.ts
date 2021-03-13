@@ -53,11 +53,4 @@ export default class GatewayClient extends EventPipeline {
       shard.resumeOrIdentify(true, identifyData);
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
-
-  listen(event: string, ...handlers: Handler[]) {
-    for (const shard of this.shards) {
-      shard.listen(event, (data) => this.dispatch(event, { data, shard }));
-    }
-    super.listen(event, ...handlers);
-  }
 }
