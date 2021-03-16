@@ -10,7 +10,7 @@ import {
   GatewayRequestGuildMembersData,
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
-} from "https://deno.land/x/discord_api_types/v8/mod.ts";
+} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import EventManager from "../../util/EventPipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { PartialExcept, PartialKeys } from "../../util/util.ts";
@@ -25,7 +25,14 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-export default class ShardClient extends EventManager {
+export default interface Shard {
+  listen(
+    event: "DISPATCH",
+    ...listeners: ((payload: GatewayDispatchPayload) => unknown)[]
+  ): unknown;
+}
+
+export default class Shard extends EventManager {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
   latency = 0;
@@ -183,7 +190,7 @@ export default class ShardClient extends EventManager {
           }
         }
 
-        this.dispatch(payload.t, payload.d);
+        this.dispatch("DISPATCH", payload);
         break;
       }
 
@@ -255,6 +262,10 @@ export default class ShardClient extends EventManager {
   updateVoiceState(
     data: PartialKeys<GatewayVoiceStateUpdateData, "self_deaf" | "self_mute">,
   ) {
+    // TODO: Queue until the guild is available.
+    if (this.unavailableGuilds.has(data.guild_id)) {
+      throw new Error("STOP! SPACE DOES NOT SUPPORT THIS YET!");
+    }
     const payload: GatewayVoiceStateUpdateData = {
       "self_deaf": false,
       "self_mute": false,
@@ -278,6 +289,10 @@ export default class ShardClient extends EventManager {
   requestGuildMembers(
     data: PartialKeys<GatewayRequestGuildMembersData, "limit">,
   ) {
+    // TODO: Queue until the guild is available.
+    if (this.unavailableGuilds.has(data.guild_id)) {
+      throw new Error("Cannot request members from an navailable guild.");
+    }
     const nonce = data.nonce ?? `${Date.now()}`.padStart(16, "0");
     const payload: GatewayRequestGuildMembersData = {
       limit: 0,

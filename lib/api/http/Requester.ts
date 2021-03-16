@@ -165,11 +165,11 @@ import {
   RESTPutAPIGuildMemberResult,
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
-} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/rest/mod.ts";
+} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import HTTPError from "./HTTPError.ts";
 import { repository, version } from "../../meta.ts";
 
-export interface HTTPClientOptions {
+export interface RequesterOptions {
   delay?: number;
   userAgent?: string;
   version?: number;
@@ -187,10 +187,11 @@ export const DELAY = 15_000;
 export const USER_AGENT = `DiscordBot (${repository}, ${version})`;
 export const VERSION = 8;
 
-export default class HTTPClient {
-  constructor(public token: string, public options?: HTTPClientOptions) {
+export default class Requester {
+  constructor(public token: string, public options?: RequesterOptions) {
   }
 
+  // TODO: Support rate limiting
   async request<T = any>(path: string, input?: RequestInput) {
     const headers = new Headers();
     headers.set("Authorization", this.token);

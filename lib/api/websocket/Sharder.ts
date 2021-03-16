@@ -1,9 +1,9 @@
-import ShardClient, { GatewayIdentifyDataPartial } from "./ShardClient.ts";
-import EventPipeline, { Handler } from "../../util/EventPipeline.ts";
+import Shard, { GatewayIdentifyDataPartial } from "./Shard.ts";
+import EventPipeline from "../../util/EventPipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { sleep } from "../../util/util.ts";
 
-export type GatewayClientConnectData =
+export type SharderConnectData =
   & {
     firstShardID?: number;
     lastShardID?: number;
@@ -13,14 +13,16 @@ export type GatewayClientConnectData =
 
 export const SHARD_CONNECT_DELAY = 5000;
 
-export default class GatewayClient extends EventPipeline {
-  shards: ShardClient[] = [];
+export default class Sharder extends EventPipeline {
+  shards: Shard[] = [];
+
+  // private shardCount = 0;
 
   constructor(public token: string) {
     super();
   }
 
-  connect(data: GatewayClientConnectData) {
+  connect(data: SharderConnectData) {
     const lastShardID = data.lastShardID ?? data.shards;
     if (!lastShardID) {
       throw new Error("Invalid number of shards to spawn.");
@@ -32,6 +34,7 @@ export default class GatewayClient extends EventPipeline {
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1})`,
     );
+    // this.shardCount = shards;
     this.connectShards(data.url, {
       shards,
       ...data,
@@ -40,7 +43,11 @@ export default class GatewayClient extends EventPipeline {
 
   spawnShards(lastShardID: number, firstShardID = 0) {
     for (let i = firstShardID; i < lastShardID; i++) {
-      const shard = new ShardClient(this.token, i);
+      const shard = new Shard(this.token, i);
+      shard.listen(
+        "DISPATCH",
+        (payload) => this.dispatch(payload.t, { data: payload.d, shard }),
+      );
       this.shards.push(shard);
     }
   }
@@ -53,4 +60,9 @@ export default class GatewayClient extends EventPipeline {
       shard.resumeOrIdentify(true, identifyData);
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
+
+  /* requestGuildMembers(data) {
+    const shard = this.shards[parseInt(data.guild_id) & this.shardCount];
+    return shard.requestGuildMembers(data);
+  } */
 }
