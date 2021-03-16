@@ -168,6 +168,7 @@ import {
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import HTTPError from "./HTTPError.ts";
 import { repository, version } from "../../meta.ts";
+import RateLimitBucket from "../../util/RateLimitBucket.ts";
 
 export interface RequesterOptions {
   delay?: number;
@@ -187,12 +188,39 @@ export const DELAY = 15_000;
 export const USER_AGENT = `DiscordBot (${repository}, ${version})`;
 export const VERSION = 8;
 
-export default class Requester {
+export const parseRateLimitRoute = (route: string, method?: string) => {
+  route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
+  if (route.includes("/reactions/")) {
+    return route.replace(/\/reactions\/[^/]+/, "/reactions/:emoji");
+  }
+  if (method === "DELETE" && route.endsWith("messages/:id")) {
+    return `DELETE ${route}`;
+  }
+  return route;
+};
+
+export default class Requester extends Map<string, RateLimitBucket> {
   constructor(public token: string, public options?: RequesterOptions) {
+    super();
   }
 
   // TODO: Support rate limiting
   async request<T = any>(path: string, input?: RequestInput) {
+    const route = parseRateLimitRoute(path);
+    const bucket = this.get(route) ?? new RateLimitBucket();
+    this.set(route, bucket);
+
+    if (bucket.outdated) {
+      bucket.resetRateLimits();
+    } else if (bucket.busy) {
+      return new Promise<T>((resolve, reject) => {
+        bucket.push(() =>
+          this.request(path, input)
+            .then(resolve, reject)
+        );
+      });
+    }
+
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -224,12 +252,18 @@ export default class Requester {
     const delay = this.options?.delay ?? DELAY;
     const timeout = setTimeout(() => controller.abort(), delay);
 
+    bucket.lock();
     const response = await fetch(url, {
       body,
       headers,
       method: input?.method,
       signal: controller.signal,
     });
+    bucket.unlock(
+      parseFloat(response.headers.get("x-ratelimit-limit") ?? "0"),
+      parseFloat(response.headers.get("x-ratelimit-reset-after") ?? "0") * 1000,
+      parseFloat(response.headers.get("x-ratelimit-remaining") ?? "0"),
+    );
 
     clearTimeout(timeout);
 
