@@ -11,7 +11,7 @@ import {
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-import EventManager from "../../util/EventPipeline.ts";
+import EventPipeline from "../../util/EventPipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { PartialExcept, PartialKeys } from "../../util/util.ts";
 
@@ -32,7 +32,7 @@ export default interface Shard {
   ): unknown;
 }
 
-export default class Shard extends EventManager {
+export default class Shard extends EventPipeline {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
   latency = 0;
@@ -134,7 +134,7 @@ export default class Shard extends EventManager {
   }
 
   onSocketMessage(event: MessageEvent<string>) {
-    const payload: GatewayReceivePayload = JSON.parse(event.data);
+    const payload = this.decode<GatewayReceivePayload>(event.data);
 
     switch (payload.op) {
       case GatewayOPCodes.Dispatch: {
@@ -220,8 +220,16 @@ export default class Shard extends EventManager {
       d: data,
       op: opcode,
     };
-    const json = JSON.stringify(payload);
-    this.socket.send(json);
+    this.socket.send(this.encode(payload));
+  }
+
+  // TODO: Maybe support ETF encoding in the future. Can't confirm this.
+  encode(data: unknown) {
+    return JSON.stringify(data);
+  }
+
+  decode<T>(data: string): T {
+    return JSON.parse(data);
   }
 
   heartbeat() {
