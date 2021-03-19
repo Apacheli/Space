@@ -16,8 +16,6 @@ export const SHARD_CONNECT_DELAY = 5000;
 export default class Sharder extends EventPipeline {
   shards: Shard[] = [];
 
-  // private shardCount = 0;
-
   constructor(public token: string) {
     super();
   }
@@ -34,7 +32,6 @@ export default class Sharder extends EventPipeline {
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1})`,
     );
-    // this.shardCount = shards;
     this.connectShards(data.url, {
       shards,
       ...data,
@@ -60,9 +57,4 @@ export default class Sharder extends EventPipeline {
       shard.resumeOrIdentify(true, identifyData);
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
-
-  /* requestGuildMembers(data) {
-    const shard = this.shards[parseInt(data.guild_id) & this.shardCount];
-    return shard.requestGuildMembers(data);
-  } */
 }

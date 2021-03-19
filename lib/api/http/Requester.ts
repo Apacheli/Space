@@ -212,7 +212,7 @@ export default class Requester extends Map<string, RateLimitBucket> {
 
     if (bucket.outdated) {
       bucket.resetRateLimits();
-    } else if (bucket.busy) {
+    } else if (bucket.active || bucket.rateLimited) {
       return new Promise<T>((resolve, reject) => {
         bucket.push(() =>
           this.request(path, input)
