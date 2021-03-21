@@ -172,6 +172,7 @@ import RateLimitBucket from "../../util/RateLimitBucket.ts";
 
 export interface RequesterOptions {
   delay?: number;
+  retries?: number;
   userAgent?: string;
   version?: number;
 }
@@ -204,20 +205,14 @@ export default class Requester extends Map<string, RateLimitBucket> {
     super();
   }
 
-  // TODO: Support rate limiting
   async request<T = any>(path: string, input?: RequestInput) {
     const route = parseRateLimitRoute(path);
     const bucket = this.get(route) ?? new RateLimitBucket();
     this.set(route, bucket);
 
-    if (bucket.outdated) {
-      bucket.resetRateLimits();
-    } else if (bucket.active || bucket.rateLimited) {
-      return new Promise<T>((resolve, reject) => {
-        bucket.push(() =>
-          this.request(path, input)
-            .then(resolve, reject)
-        );
+    if (bucket.locked || bucket.rateLimited) {
+      return new Promise<T>((resolve, reject) => { // TypeScript return bug
+        bucket.add(() => this.request(path, input).then(resolve, reject));
       });
     }
 
@@ -260,9 +255,9 @@ export default class Requester extends Map<string, RateLimitBucket> {
       signal: controller.signal,
     });
     bucket.unlock(
-      parseFloat(response.headers.get("x-ratelimit-limit") ?? "0"),
+      parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
       parseFloat(response.headers.get("x-ratelimit-reset-after") ?? "0") * 1000,
-      parseFloat(response.headers.get("x-ratelimit-remaining") ?? "0"),
+      parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
     );
 
     clearTimeout(timeout);
