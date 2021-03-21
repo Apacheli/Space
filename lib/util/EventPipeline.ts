@@ -22,4 +22,4 @@ export default class EventPipeline extends Map<string, Handler[]> {
   }
 }
 
-export type Handler = (...args: unknown[]) => unknown;
+export type Handler = (...args: any) => any;

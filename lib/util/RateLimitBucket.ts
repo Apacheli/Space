@@ -1,4 +1,4 @@
-export type GenericFunction = (...args: unknown[]) => unknown;
+export type GenericFunction = (...args: any) => any;
 
 export default class RateLimitBucket {
   lastRequestAt = 0;

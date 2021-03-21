@@ -25,13 +25,6 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-export default interface Shard {
-  listen(
-    event: "DISPATCH",
-    ...listeners: ((payload: GatewayDispatchPayload) => unknown)[]
-  ): unknown;
-}
-
 export default class Shard extends EventPipeline {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
