@@ -3,12 +3,13 @@ import {
   APIGuild,
   APIUser,
   GatewayPresenceUpdateDispatchData,
+  Snowflake,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import Requester, { RequesterOptions } from "../api/http/Requester.ts";
 import Sharder, { SharderConnectData } from "../api/websocket/Sharder.ts";
 import Container, { Storable } from "../util/Container.ts";
 
-export type IDPresence = GatewayPresenceUpdateDispatchData & { id: string };
+export type IDPresence = GatewayPresenceUpdateDispatchData & { id: Snowflake };
 
 export interface ClientOptions extends RequesterOptions {
   channels?: Storable<APIChannel>;
