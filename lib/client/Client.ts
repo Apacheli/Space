@@ -11,34 +11,41 @@ import Container, { Storable } from "../util/Container.ts";
 
 export type IDPresence = GatewayPresenceUpdateDispatchData & { id: Snowflake };
 
-export interface ClientOptions extends RequesterOptions {
+export interface ClientOptions {
+  // gatewayOptions;
+  restOptions?: RequesterOptions;
+  stores?: ClientStores;
+}
+
+export interface ClientStores {
   channels?: Storable<APIChannel>;
   guilds?: Storable<APIGuild>;
+  restOptions?: RequesterOptions;
   presences?: Storable<IDPresence>;
   users?: Storable<APIUser>;
 }
 
-export default class Client extends Sharder {
+export default class Client {
   channels;
+  gateway;
   guilds;
-  requester;
+  rest;
   presences;
   users;
 
   constructor(token: string, options?: ClientOptions) {
-    super(token);
-
-    this.channels = options?.channels ?? new Container<APIChannel>();
-    this.guilds = options?.guilds ?? new Container<APIGuild>();
-    this.requester = new Requester(token, options);
-    this.presences = options?.presences ?? new Container<IDPresence>();
-    this.users = options?.users ?? new Container<APIUser>();
+    this.channels = options?.stores?.channels ?? new Container<APIChannel>();
+    this.gateway = new Sharder(token, /* options?.gatewayOptions */);
+    this.guilds = options?.stores?.guilds ?? new Container<APIGuild>();
+    this.rest = new Requester(token, options?.restOptions);
+    this.presences = options?.stores?.presences ?? new Container<IDPresence>();
+    this.users = options?.stores?.users ?? new Container<APIUser>();
   }
 
   async connect(data: SharderConnectData) {
-    super.connect({
+    this.gateway.connect({
       shards: 1,
-      ...!data.url && await this.requester.getGatewayBot(),
+      ...!data.url && await this.rest.getGatewayBot(),
       ...data,
     });
   }
