@@ -40,7 +40,6 @@ import {
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-
 import Client from "./Client.ts";
 
 export const onApplicationCommandCreate = (
