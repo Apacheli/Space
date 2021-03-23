@@ -35,7 +35,7 @@ export default class Client {
 
   constructor(token: string, options?: ClientOptions) {
     this.channels = options?.stores?.channels ?? new Container<APIChannel>();
-    this.gateway = new Sharder(token, /* options?.gatewayOptions */);
+    this.gateway = new Sharder(token);
     this.guilds = options?.stores?.guilds ?? new Container<APIGuild>();
     this.rest = new Requester(token, options?.restOptions);
     this.presences = options?.stores?.presences ?? new Container<IDPresence>();

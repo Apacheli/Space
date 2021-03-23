@@ -16,6 +16,6 @@ The library is unstable, so expect dramatic changes to occur in the future.
 
 ### Fixed
 
-- Fixed HTTP rate limiting bugs
-- Made several/reverse changes on Client's stores
-- Fixed `Shard.listen` type bug
+- Fixed HTTP rate limit bugs
+- Made several reverse changes to `ClientStores`
+- Fixed `Shard.listen` interface bug
