@@ -1,277 +1,281 @@
 import {
-  GatewayApplicationCommandCreateDispatch,
-  GatewayApplicationCommandDeleteDispatch,
-  GatewayApplicationCommandUpdateDispatch,
-  GatewayChannelCreateDispatch,
-  GatewayChannelDeleteDispatch,
-  GatewayChannelPinsUpdateDispatch,
-  GatewayChannelUpdateDispatch,
-  GatewayGuildBanAddDispatch,
-  GatewayGuildBanRemoveDispatch,
-  GatewayGuildCreateDispatch,
-  GatewayGuildDeleteDispatch,
-  GatewayGuildEmojisUpdateDispatch,
-  GatewayGuildIntegrationsUpdateDispatch,
-  GatewayGuildMemberAddDispatch,
-  GatewayGuildMemberRemoveDispatch,
-  GatewayGuildMembersChunkDispatch,
-  GatewayGuildMemberUpdateDispatch,
-  GatewayGuildRoleCreateDispatch,
-  GatewayGuildRoleDeleteDispatch,
-  GatewayGuildRoleUpdateDispatch,
-  GatewayGuildUpdateDispatch,
-  GatewayInteractionCreateDispatch,
-  GatewayInviteCreateDispatch,
-  GatewayInviteDeleteDispatch,
-  GatewayMessageCreateDispatch,
-  GatewayMessageDeleteBulkDispatch,
-  GatewayMessageDeleteDispatch,
-  GatewayMessageReactionAddDispatch,
-  GatewayMessageReactionRemoveAllDispatch,
-  GatewayMessageReactionRemoveDispatch,
-  GatewayMessageReactionRemoveEmojiDispatch,
-  GatewayMessageUpdateDispatch,
-  GatewayPresenceUpdateDispatch,
-  GatewayReadyDispatch,
-  GatewayResumedDispatch,
-  GatewayTypingStartDispatch,
-  GatewayUserUpdateDispatch,
-  GatewayVoiceServerUpdateDispatch,
-  GatewayVoiceStateUpdateDispatch,
-  GatewayWebhooksUpdateDispatch,
+  GatewayApplicationCommandCreateDispatchData,
+  GatewayApplicationCommandDeleteDispatchData,
+  GatewayApplicationCommandUpdateDispatchData,
+  GatewayChannelCreateDispatchData,
+  GatewayChannelDeleteDispatchData,
+  GatewayChannelPinsUpdateDispatchData,
+  GatewayChannelUpdateDispatchData,
+  GatewayGuildBanAddDispatchData,
+  GatewayGuildBanRemoveDispatchData,
+  GatewayGuildCreateDispatchData,
+  GatewayGuildDeleteDispatchData,
+  GatewayGuildEmojisUpdateDispatchData,
+  GatewayGuildIntegrationsUpdateDispatchData,
+  GatewayGuildMemberAddDispatchData,
+  GatewayGuildMemberRemoveDispatchData,
+  GatewayGuildMembersChunkDispatchData,
+  GatewayGuildMemberUpdateDispatchData,
+  GatewayGuildRoleCreateDispatchData,
+  GatewayGuildRoleDeleteDispatchData,
+  GatewayGuildRoleUpdateDispatchData,
+  GatewayGuildUpdateDispatchData,
+  GatewayInteractionCreateDispatchData,
+  GatewayInviteCreateDispatchData,
+  GatewayInviteDeleteDispatchData,
+  GatewayMessageCreateDispatchData,
+  GatewayMessageDeleteBulkDispatchData,
+  GatewayMessageDeleteDispatchData,
+  GatewayMessageReactionAddDispatchData,
+  GatewayMessageReactionRemoveAllDispatchData,
+  GatewayMessageReactionRemoveDispatchData,
+  GatewayMessageReactionRemoveEmojiDispatchData,
+  GatewayMessageUpdateDispatchData,
+  GatewayPresenceUpdateDispatchData,
+  GatewayReadyDispatchData,
+  // GatewayResumedDispatchData,
+  GatewayTypingStartDispatchData,
+  GatewayUserUpdateDispatchData,
+  GatewayVoiceServerUpdateDispatchData,
+  GatewayVoiceStateUpdateDispatchData,
+  GatewayWebhooksUpdateDispatchData,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+
 import Client from "./Client.ts";
 
 export const onApplicationCommandCreate = (
   client: Client,
-  data: GatewayApplicationCommandCreateDispatch,
+  data: GatewayApplicationCommandCreateDispatchData,
 ) => {
 };
 
 export const onApplicationCommandUpdate = (
   client: Client,
-  data: GatewayApplicationCommandUpdateDispatch,
+  data: GatewayApplicationCommandUpdateDispatchData,
 ) => {
 };
 
 export const onApplicationCommandDelete = (
   client: Client,
-  data: GatewayApplicationCommandDeleteDispatch,
+  data: GatewayApplicationCommandDeleteDispatchData,
 ) => {
 };
 
 export const onChannelCreate = (
   client: Client,
-  data: GatewayChannelCreateDispatch,
+  data: GatewayChannelCreateDispatchData,
 ) => {
 };
 
 export const onChannelDelete = (
   client: Client,
-  data: GatewayChannelDeleteDispatch,
+  data: GatewayChannelDeleteDispatchData,
 ) => {
 };
 
 export const onChannelPinsUpdate = (
   client: Client,
-  data: GatewayChannelPinsUpdateDispatch,
+  data: GatewayChannelPinsUpdateDispatchData,
 ) => {
 };
 
 export const onChannelUpdate = (
   client: Client,
-  data: GatewayChannelUpdateDispatch,
+  data: GatewayChannelUpdateDispatchData,
 ) => {
 };
 
 export const onGuildBanAdd = (
   client: Client,
-  data: GatewayGuildBanAddDispatch,
+  data: GatewayGuildBanAddDispatchData,
 ) => {
 };
 
 export const onGuildBanRemove = (
   client: Client,
-  data: GatewayGuildBanRemoveDispatch,
+  data: GatewayGuildBanRemoveDispatchData,
 ) => {
 };
 
 export const onGuildCreate = (
   client: Client,
-  data: GatewayGuildCreateDispatch,
+  data: GatewayGuildCreateDispatchData,
 ) => {
 };
 
 export const onGuildDelete = (
   client: Client,
-  data: GatewayGuildDeleteDispatch,
+  data: GatewayGuildDeleteDispatchData,
 ) => {
 };
 
 export const onGuildEmojisUpdate = (
   client: Client,
-  data: GatewayGuildEmojisUpdateDispatch,
+  data: GatewayGuildEmojisUpdateDispatchData,
 ) => {
 };
 
 export const onGuildIntegrationsUpdate = (
   client: Client,
-  data: GatewayGuildIntegrationsUpdateDispatch,
+  data: GatewayGuildIntegrationsUpdateDispatchData,
 ) => {
 };
 
 export const onGuildMemberAdd = (
   client: Client,
-  data: GatewayGuildMemberAddDispatch,
+  data: GatewayGuildMemberAddDispatchData,
 ) => {
 };
 
 export const onGuildMemberRemove = (
   client: Client,
-  data: GatewayGuildMemberRemoveDispatch,
+  data: GatewayGuildMemberRemoveDispatchData,
 ) => {
 };
 
 export const onGuildMembersChunk = (
   client: Client,
-  data: GatewayGuildMembersChunkDispatch,
+  data: GatewayGuildMembersChunkDispatchData,
 ) => {
 };
 
 export const onGuildMemberUpdate = (
   client: Client,
-  data: GatewayGuildMemberUpdateDispatch,
+  data: GatewayGuildMemberUpdateDispatchData,
 ) => {
 };
 
 export const onGuildRoleCreate = (
   client: Client,
-  data: GatewayGuildRoleCreateDispatch,
+  data: GatewayGuildRoleCreateDispatchData,
 ) => {
 };
 
 export const onGuildRoleDelete = (
   client: Client,
-  data: GatewayGuildRoleDeleteDispatch,
+  data: GatewayGuildRoleDeleteDispatchData,
 ) => {
 };
 
 export const onGuildRoleUpdate = (
   client: Client,
-  data: GatewayGuildRoleUpdateDispatch,
+  data: GatewayGuildRoleUpdateDispatchData,
 ) => {
 };
 
 export const onGuildUpdate = (
   client: Client,
-  data: GatewayGuildUpdateDispatch,
+  data: GatewayGuildUpdateDispatchData,
 ) => {
 };
 
 export const onInteractionCreate = (
   client: Client,
-  data: GatewayInteractionCreateDispatch,
+  data: GatewayInteractionCreateDispatchData,
 ) => {
 };
 
 export const onInviteCreate = (
   client: Client,
-  data: GatewayInviteCreateDispatch,
+  data: GatewayInviteCreateDispatchData,
 ) => {
 };
 
 export const onInviteDelete = (
   client: Client,
-  data: GatewayInviteDeleteDispatch,
+  data: GatewayInviteDeleteDispatchData,
 ) => {
 };
 
 export const onMessageCreate = (
   client: Client,
-  data: GatewayMessageCreateDispatch,
+  data: GatewayMessageCreateDispatchData,
 ) => {
 };
 
 export const onMessageDelete = (
   client: Client,
-  data: GatewayMessageDeleteDispatch,
+  data: GatewayMessageDeleteDispatchData,
 ) => {
 };
 
 export const onMessageDeleteBulk = (
   client: Client,
-  data: GatewayMessageDeleteBulkDispatch,
+  data: GatewayMessageDeleteBulkDispatchData,
 ) => {
 };
 
 export const onMessageReactionAdd = (
   client: Client,
-  data: GatewayMessageReactionAddDispatch,
+  data: GatewayMessageReactionAddDispatchData,
 ) => {
 };
 
 export const onMessageReactionRemove = (
   client: Client,
-  data: GatewayMessageReactionRemoveDispatch,
+  data: GatewayMessageReactionRemoveDispatchData,
 ) => {
 };
 
 export const onMessageReactionRemoveAll = (
   client: Client,
-  data: GatewayMessageReactionRemoveAllDispatch,
+  data: GatewayMessageReactionRemoveAllDispatchData,
 ) => {
 };
 
 export const onMessageReactionRemoveEmoji = (
   client: Client,
-  data: GatewayMessageReactionRemoveEmojiDispatch,
+  data: GatewayMessageReactionRemoveEmojiDispatchData,
 ) => {
 };
 
 export const onMessageUpdate = (
   client: Client,
-  data: GatewayMessageUpdateDispatch,
+  data: GatewayMessageUpdateDispatchData,
 ) => {
 };
 
 export const onPresenceUpdate = (
   client: Client,
-  data: GatewayPresenceUpdateDispatch,
+  data: GatewayPresenceUpdateDispatchData,
 ) => {
 };
 
-export const onReady = (client: Client, data: GatewayReadyDispatch) => {
+export const onReady = (client: Client, data: GatewayReadyDispatchData) => {
 };
 
-export const onResumed = (client: Client, data: GatewayResumedDispatch) => {
+export const onResumed = (
+  client: Client,
+  data: never, // GatewayResumedDispatchData
+) => {
 };
 
 export const onTypingStart = (
   client: Client,
-  data: GatewayTypingStartDispatch,
+  data: GatewayTypingStartDispatchData,
 ) => {
 };
 
 export const onUserUpdate = (
   client: Client,
-  data: GatewayUserUpdateDispatch,
+  data: GatewayUserUpdateDispatchData,
 ) => {
 };
 
 export const onVoiceServerUpdate = (
   client: Client,
-  data: GatewayVoiceServerUpdateDispatch,
+  data: GatewayVoiceServerUpdateDispatchData,
 ) => {
 };
 
 export const onVoiceStateUpdate = (
   client: Client,
-  data: GatewayVoiceStateUpdateDispatch,
+  data: GatewayVoiceStateUpdateDispatchData,
 ) => {
 };
 
 export const onWebhooksUpdate = (
   client: Client,
-  data: GatewayWebhooksUpdateDispatch,
+  data: GatewayWebhooksUpdateDispatchData,
 ) => {
 };
