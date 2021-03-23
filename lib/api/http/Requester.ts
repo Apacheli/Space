@@ -2703,9 +2703,6 @@ export default class Requester extends Map<string, RateLimitBucket> {
 
   /**
    * https://discord.dev/resources/webhook#execute-slackcompatible-webhook
-   *
-   *
-   *
    * Refer to [Slack's documentation](https://api.slack.com/incoming-webhooks) for
    * more information. We do not support Slack's `channel`, `icon_emoji`, `mrkdwn`,
    * or `mrkdwn_in` properties.
@@ -2728,9 +2725,6 @@ export default class Requester extends Map<string, RateLimitBucket> {
 
   /**
    * https://discord.dev/resources/webhook#execute-githubcompatible-webhook
-   *
-   *
-   *
    * Add a new webhook to your GitHub repo (in the repo's settings), and use this
    * endpoint as the "Payload URL." You can choose what events your Discord channel
    * receives by choosing the "Let me select individual events" option and selecting
