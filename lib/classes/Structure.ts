@@ -4,7 +4,7 @@ import Client from "../client/Client.ts";
 export const DISCORD_EPOCH = 1420070400000; // 2015-01-01
 export const TIMESTAMP_SHIFT = 4194304;
 
-export default class Base {
+export default class Structure {
   constructor(public id: Snowflake, public client: Client) {
   }
 

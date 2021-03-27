@@ -1643,6 +1643,13 @@ export default class Requester extends Map<string, RateLimitBucket> {
    * Content if the user is already a member of the guild. Fires a
    * [Guild Member Add](https://discord.dev/topics/gateway#guild-member-add) Gateway event.
    *
+   * For guilds with
+   * [Membership Screening](https://discord.dev/resources/guild#membership-screening-object)
+   * enabled, this endpoint will default to adding new members as `pending` in the
+   * [guild member object](https://discord.dev/resources/guild#guild-member-object). Members that
+   * are `pending` will have to complete membership screening before they become full
+   * members that can talk.
+   *
    * > ℹ️ All parameters to this endpoint except for `access_token` are optional.
    *
    * > ℹ️ The Authorization header must be a Bot token (belonging to the same
@@ -1755,11 +1762,17 @@ export default class Requester extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    * @param roleID https://discord.dev/topics/permissions#role-object
    */
-  removeGuildMemberRole(guildID: string, userID: string, roleID: string) {
+  removeGuildMemberRole(
+    guildID: string,
+    userID: string,
+    roleID: string,
+    reason?: string,
+  ) {
     return this.request<RESTDeleteAPIGuildMemberRoleResult>(
       `guilds/${guildID}/members/${userID}/roles/${roleID}`,
       {
         method: "DELETE",
+        reason,
       },
     );
   }
