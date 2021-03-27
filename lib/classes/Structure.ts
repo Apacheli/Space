@@ -11,4 +11,8 @@ export default class Structure {
   get createdAt() {
     return parseInt(this.id) / TIMESTAMP_SHIFT + DISCORD_EPOCH;
   }
+
+  // TODO: Somehow make this update dynamically... TypeScript moment.
+  update() {
+  }
 }
