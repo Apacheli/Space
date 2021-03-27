@@ -1,6 +1,6 @@
 export interface ResponseError {
   code: number;
-  errors?: Record<string, { _errors: Omit<ResponseError, "errors"> }[]>;
+  errors?: Record<string, { _errors: Omit<ResponseError, "errors">[] }>;
   message: string;
 }
 
