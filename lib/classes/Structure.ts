@@ -5,14 +5,18 @@ export const DISCORD_EPOCH = 1420070400000; // 2015-01-01
 export const TIMESTAMP_SHIFT = 4194304;
 
 export default class Structure {
-  constructor(public id: Snowflake, public client: Client) {
+  id: Snowflake;
+
+  constructor(data: any, public client: Client) {
+    this.id = data.id;
+
+    this.update(data);
   }
 
   get createdAt() {
     return parseInt(this.id) / TIMESTAMP_SHIFT + DISCORD_EPOCH;
   }
 
-  // TODO: Somehow make this update dynamically... TypeScript moment.
-  update() {
+  update(data: any) {
   }
 }

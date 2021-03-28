@@ -96,16 +96,22 @@ export const onGuildBanRemove = (
 ) => {
 };
 
-export const onGuildCreate = (
+export const onGuildCreate = async (
   client: Client,
   data: GatewayGuildCreateDispatchData,
 ) => {
+  return await client.guilds.has(data.id)
+    ? client.guilds.update(data)
+    : client.guilds.add(data);
 };
 
 export const onGuildDelete = (
   client: Client,
   data: GatewayGuildDeleteDispatchData,
 ) => {
+  return data.unavailable
+    ? client.guilds.update(data)
+    : client.guilds.remove(data.id);
 };
 
 export const onGuildEmojisUpdate = (
