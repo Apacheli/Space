@@ -41,6 +41,8 @@ import {
   GatewayWebhooksUpdateDispatchData,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import Client from "./Client.ts";
+import Member from "../classes/guild/Member.ts";
+import { RequiredKeys } from "../util/util.ts";
 
 export const onApplicationCommandCreate = (
   client: Client,
@@ -88,6 +90,7 @@ export const onGuildBanAdd = (
   client: Client,
   data: GatewayGuildBanAddDispatchData,
 ) => {
+  return onGuildMemberRemove(client, data);
 };
 
 export const onGuildBanRemove = (
@@ -126,16 +129,21 @@ export const onGuildIntegrationsUpdate = (
 ) => {
 };
 
-export const onGuildMemberAdd = (
+export const onGuildMemberAdd = async (
   client: Client,
-  data: GatewayGuildMemberAddDispatchData,
+  data: RequiredKeys<GatewayGuildMemberAddDispatchData, "user">,
 ) => {
+  return (await client.guilds.get(data.guild_id))
+    ?.members.add({ id: data.user.id, ...data }) ??
+    new Member({ id: data.user.id, ...data }, client);
 };
 
-export const onGuildMemberRemove = (
+export const onGuildMemberRemove = async (
   client: Client,
   data: GatewayGuildMemberRemoveDispatchData,
 ) => {
+  return (await client.guilds.get(data.guild_id))
+    ?.members.remove(data.user.id) ?? data;
 };
 
 export const onGuildMembersChunk = (
@@ -144,10 +152,12 @@ export const onGuildMembersChunk = (
 ) => {
 };
 
-export const onGuildMemberUpdate = (
+export const onGuildMemberUpdate = async (
   client: Client,
-  data: GatewayGuildMemberUpdateDispatchData,
+  data: RequiredKeys<GatewayGuildMemberUpdateDispatchData, "user">,
 ) => {
+  return (await client.guilds.get(data.guild_id))
+    ?.members.update({ id: data.user.id, ...data });
 };
 
 export const onGuildRoleCreate = (

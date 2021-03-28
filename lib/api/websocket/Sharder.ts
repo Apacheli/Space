@@ -26,7 +26,7 @@ export default class Sharder extends EventPipeline {
       throw new Error("Invalid number of shards to spawn.");
     }
     const firstShardID = data.firstShardID ?? 0;
-    this.spawnShards(firstShardID, lastShardID);
+    this.spawnShards(lastShardID, firstShardID);
     const shards = data.shards ?? lastShardID - firstShardID;
     logger.debug?.(
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,

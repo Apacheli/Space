@@ -1,38 +1,59 @@
 import { Snowflake } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import { PossiblePromise } from "./util.ts";
 import Structure from "../classes/Structure.ts";
+import Client from "../client/Client.ts";
 
-export default class Cache<V extends Structure> extends Map<Snowflake, V>
+export type Key = bigint | Snowflake;
+
+export interface Storable<V> {
+  add(item: { id: Key }): PossiblePromise<V>;
+  get(id: Key): PossiblePromise<V | undefined>;
+  has(id: Key): PossiblePromise<boolean>;
+  remove(id: Key): PossiblePromise<V | undefined>;
+  update(item: { id: Key }): PossiblePromise<V>;
+}
+
+export default class Cache<V extends Structure> extends Map<Key, V>
   implements Storable<V> {
-  add(item: V): V {
+  constructor(
+    public baseClass: new (data: any, client: Client) => V,
+    public client: Client,
+  ) {
+    super();
+  }
+
+  add(item: { id: Snowflake } | V): V {
     const existing = this.get(item.id);
-    if (existing) {
-      return this.update(item);
+    if (!(item instanceof this.baseClass)) {
+      if (existing) {
+        return this.update(item);
+      }
+      item = new this.baseClass(item, this.client);
     }
     this.set(item.id, item);
     return item;
   }
 
-  remove(id: Snowflake) {
+  get(id: Key) {
+    return super.get(BigInt(id));
+  }
+
+  has(id: Key) {
+    return super.has(BigInt(id));
+  }
+
+  remove(id: Key) {
     const item = this.get(id);
-    this.delete(id);
+    this.delete(BigInt(id));
     return item;
   }
 
-  update(item: V) {
+  update(item: { id: Snowflake } | V) {
     const existing = this.get(item.id);
-    if (!existing) {
+    if (!existing || item instanceof this.baseClass) {
       return this.add(item);
     }
     existing.update(item);
     return existing;
   }
-}
-
-export interface Storable<V> {
-  add(item: { id: Snowflake }): PossiblePromise<V>;
-  get(id: Snowflake): PossiblePromise<V | undefined>;
-  has(id: Snowflake): PossiblePromise<boolean>;
-  remove(id: Snowflake): PossiblePromise<V | undefined>;
-  update(item: { id: Snowflake }): PossiblePromise<V>;
 }
