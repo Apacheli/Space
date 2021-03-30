@@ -1,4 +1,4 @@
-import { Snowflake } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+import { Snowflake } from "../deps.ts";
 import Client from "../client/client.ts";
 
 export const DISCORD_EPOCH = 1420070400000; // 2015-01-01

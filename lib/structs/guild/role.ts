@@ -1,5 +1,5 @@
-import { APIRole } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-import Struct from "../structure.ts";
+import { APIRole } from "../../deps.ts";
+import Struct from "../struct.ts";
 
 export default class Role extends Struct {
   name!: APIRole["name"];

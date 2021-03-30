@@ -1,4 +1,4 @@
-import { APIGuild } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+import { APIGuild } from "../../deps.ts";
 import Member from "./member.ts";
 import Struct from "../struct.ts";
 import Client from "../../client/client.ts";

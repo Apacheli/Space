@@ -1,4 +1,4 @@
-import { APIGuildMember } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+import { APIGuildMember } from "../../deps.ts";
 import Struct from "../struct.ts";
 
 export default class Member extends Struct {

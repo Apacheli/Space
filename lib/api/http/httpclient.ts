@@ -165,7 +165,7 @@ import {
   RESTPutAPIGuildMemberResult,
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
-} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+} from "../../deps.ts";
 import HTTPError from "./httperror.ts";
 import { repository, version } from "../../meta.ts";
 import RateLimitBucket from "../../util/ratelimitbucket.ts";

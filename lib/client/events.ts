@@ -39,9 +39,9 @@ import {
   GatewayVoiceServerUpdateDispatchData,
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
-} from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
+} from "../deps.ts";
 import Client from "./client.ts";
-import Member from "../classes/guild/member.ts";
+import Member from "../structs/guild/member.ts";
 import { RequiredKeys } from "../util/util.ts";
 
 export const onApplicationCommandCreate = (
