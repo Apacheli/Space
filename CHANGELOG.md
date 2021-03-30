@@ -4,8 +4,23 @@ A document of notable changes throughout Space's development.
 
 | **0**<sup>Current</sup>                |
 | -------------------------------------- |
+| [0.3.4-alpha](#040-alpha---2021-03-29) |
 | [0.3.3-alpha](#033-alpha---2021-03-23) |
 | [0.3.2-alpha](#032-alpha---2021-03-22) |
+
+## [0.3.4-alpha](https://github.com/Apacheli/Space/compare/183d3aa...0633844) - 2021-03-29
+
+### Added
+
+- Added `Member` and `Role` structures
+- Use `bigint` for `Struct`s' snowflakes
+- Added `timestamp`, `internalWorkerID`, `internalProcessID`, and `increment` getters to `Struct`
+- Added some gateway guild event support
+
+### Changed
+
+- Renamed a few classes
+- Lowercased filenames
 
 ## [0.3.3-alpha](https://github.com/Apacheli/Space/compare/cdf0a49...16c7e1c) - 2021-03-23
 
