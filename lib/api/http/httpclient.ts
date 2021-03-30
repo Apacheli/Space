@@ -166,11 +166,11 @@ import {
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-import HTTPError from "./HTTPError.ts";
+import HTTPError from "./httperror.ts";
 import { repository, version } from "../../meta.ts";
-import RateLimitBucket from "../../util/RateLimitBucket.ts";
+import RateLimitBucket from "../../util/ratelimitbucket.ts";
 
-export interface RequesterOptions {
+export interface HTTPClientOptions {
   delay?: number;
   retries?: number;
   userAgent?: string;
@@ -200,8 +200,8 @@ export const parseRateLimitRoute = (route: string, method?: string) => {
   return route;
 };
 
-export default class Requester extends Map<string, RateLimitBucket> {
-  constructor(public token: string, public options?: RequesterOptions) {
+export default class HTTPClient extends Map<string, RateLimitBucket> {
+  constructor(public token: string, public options?: HTTPClientOptions) {
     super();
   }
 

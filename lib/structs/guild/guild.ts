@@ -1,10 +1,10 @@
 import { APIGuild } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-import Member from "./Member.ts";
-import Structure from "../Structure.ts";
-import Client from "../../client/Client.ts";
-import Cache, { Storable } from "../../util/Cache.ts";
+import Member from "./member.ts";
+import Struct from "../struct.ts";
+import Client from "../../client/client.ts";
+import Cache, { Storable } from "../../util/cache.ts";
 
-export default class Guild extends Structure {
+export default class Guild extends Struct {
   owner;
   permissions;
 

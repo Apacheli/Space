@@ -1,7 +1,6 @@
 import {
   GatewayCloseCodes,
   GatewayDispatchEvents,
-  GatewayDispatchPayload,
   GatewayGuildMembersChunkDispatchData,
   GatewayIdentifyData,
   GatewayOPCodes,
@@ -11,7 +10,7 @@ import {
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
 } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
-import EventPipeline from "../../util/EventPipeline.ts";
+import EventPipeline from "../../util/eventpipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { PartialExcept, PartialKeys } from "../../util/util.ts";
 

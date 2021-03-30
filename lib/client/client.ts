@@ -1,12 +1,12 @@
-import Requester, { RequesterOptions } from "../api/http/Requester.ts";
-import Sharder, { SharderConnectData } from "../api/websocket/Sharder.ts";
-import Guild from "../classes/guild/Guild.ts";
-import Cache, { Storable } from "../util/Cache.ts";
+import Requester, { HTTPClientOptions } from "../api/http/httpclient.ts";
+import Sharder, { GatewayClientConnectData } from "../api/websocket/gatewayclient.ts";
+import Guild from "../structs/guild/guild.ts";
+import Cache, { Storable } from "../util/cache.ts";
 import { PartialKeys } from "../util/util.ts";
 
 export interface ClientOptions {
   guilds?: Storable<Guild>;
-  restOptions?: RequesterOptions;
+  restOptions?: HTTPClientOptions;
 }
 
 export default class Client {
@@ -20,7 +20,7 @@ export default class Client {
     this.rest = new Requester(token, options?.restOptions);
   }
 
-  async connect(data: PartialKeys<SharderConnectData, "url">) {
+  async connect(data: PartialKeys<GatewayClientConnectData, "url">) {
     // @ts-ignore: TypeScript is being annoying
     this.gateway.connect({
       shards: 1,

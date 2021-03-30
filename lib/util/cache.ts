@@ -1,7 +1,7 @@
 import { Snowflake } from "https://raw.githubusercontent.com/discordjs/discord-api-types/main/deno/v8/mod.ts";
 import { PossiblePromise } from "./util.ts";
-import Structure from "../classes/Structure.ts";
-import Client from "../client/Client.ts";
+import Struct from "../structs/struct.ts";
+import Client from "../client/client.ts";
 
 export interface Storable<V> {
   add(item: { id: Snowflake }): PossiblePromise<V>;
@@ -11,7 +11,7 @@ export interface Storable<V> {
   update(item: { id: Snowflake }): PossiblePromise<V>;
 }
 
-export default class Cache<V extends Structure> extends Map<bigint, V>
+export default class Cache<V extends Struct> extends Map<bigint, V>
   implements Storable<V> {
   constructor(
     public baseClass: new (data: any, client: Client) => V,
