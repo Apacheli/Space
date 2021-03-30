@@ -3,17 +3,15 @@ import { PossiblePromise } from "./util.ts";
 import Structure from "../classes/Structure.ts";
 import Client from "../client/Client.ts";
 
-export type Key = bigint | Snowflake;
-
 export interface Storable<V> {
-  add(item: { id: Key }): PossiblePromise<V>;
-  get(id: Key): PossiblePromise<V | undefined>;
-  has(id: Key): PossiblePromise<boolean>;
-  remove(id: Key): PossiblePromise<V | undefined>;
-  update(item: { id: Key }): PossiblePromise<V>;
+  add(item: { id: Snowflake }): PossiblePromise<V>;
+  get(id: Snowflake): PossiblePromise<V | undefined>;
+  has(id: Snowflake): PossiblePromise<boolean>;
+  remove(id: Snowflake): PossiblePromise<V | undefined>;
+  update(item: { id: Snowflake }): PossiblePromise<V>;
 }
 
-export default class Cache<V extends Structure> extends Map<Key, V>
+export default class Cache<V extends Structure> extends Map<bigint, V>
   implements Storable<V> {
   constructor(
     public baseClass: new (data: any, client: Client) => V,
@@ -34,15 +32,15 @@ export default class Cache<V extends Structure> extends Map<Key, V>
     return item;
   }
 
-  get(id: Key) {
+  get(id: bigint | Snowflake) {
     return super.get(BigInt(id));
   }
 
-  has(id: Key) {
+  has(id: bigint | Snowflake) {
     return super.has(BigInt(id));
   }
 
-  remove(id: Key) {
+  remove(id: Snowflake) {
     const item = this.get(id);
     this.delete(BigInt(id));
     return item;
