@@ -9,3 +9,4 @@ export * from "./storechannel.ts";
 export * from "./textchannel.ts";
 export * from "./voicechannel.ts";
 export * from "./experimental/mod.ts";
+export * from "./fromtype.ts";

@@ -13,7 +13,7 @@ import {
 } from "./mod.ts";
 import Client from "../../client/client.ts";
 
-export const from = (channel: APIChannel, client: Client) => {
+export const fromType = (channel: APIChannel, client: Client) => {
   switch (channel.type) {
     case ChannelType.GUILD_TEXT: {
       return new TextChannel(channel, client);
@@ -53,4 +53,4 @@ export const from = (channel: APIChannel, client: Client) => {
   }
 };
 
-export default from;
+export default fromType;

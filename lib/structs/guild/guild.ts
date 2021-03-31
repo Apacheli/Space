@@ -3,7 +3,7 @@ import { Member, Struct } from "../mod.ts";
 import { GuildChannel } from "../channels/mod.ts";
 import Client from "../../client/client.ts";
 import Cache, { Storable } from "../../util/cache.ts";
-import f from "../channels/from.ts";
+import f from "../channels/fromtype.ts";
 
 export class Guild extends Struct {
   owner;

@@ -39,9 +39,11 @@ import {
   GatewayVoiceServerUpdateDispatchData,
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
+
+  ChannelType,
 } from "../deps.ts";
 import { Client } from "./mod.ts";
-import { Member } from "../structs/mod.ts";
+import { Member, fromType } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
@@ -62,16 +64,27 @@ export const onApplicationCommandDelete = (
 ) => {
 };
 
-export const onChannelCreate = (
+export const onChannelCreate = async (
   client: Client,
   data: GatewayChannelCreateDispatchData,
 ) => {
+  const channel = fromType(data, client);
+  if (data.guild_id) {
+    const guild = await client.guilds.get(data.guild_id);
+    return guild?.channels.add(channel);
+  }
+  return channel;
 };
 
-export const onChannelDelete = (
+export const onChannelDelete = async (
   client: Client,
   data: GatewayChannelDeleteDispatchData,
 ) => {
+  if (data.guild_id) {
+    const guild = await client.guilds.get(data.guild_id);
+    return guild?.channels.remove(data.id);
+  }
+  return data;
 };
 
 export const onChannelPinsUpdate = (
@@ -80,17 +93,21 @@ export const onChannelPinsUpdate = (
 ) => {
 };
 
-export const onChannelUpdate = (
+export const onChannelUpdate = async (
   client: Client,
   data: GatewayChannelUpdateDispatchData,
 ) => {
+  if (data.guild_id) {
+    const guild = await client.guilds.get(data.guild_id);
+    return guild?.channels.update(data);
+  }
+  return data;
 };
 
 export const onGuildBanAdd = (
   client: Client,
   data: GatewayGuildBanAddDispatchData,
 ) => {
-  return onGuildMemberRemove(client, data);
 };
 
 export const onGuildBanRemove = (
