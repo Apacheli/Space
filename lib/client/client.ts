@@ -1,5 +1,7 @@
 import Requester, { HTTPClientOptions } from "../api/http/httpclient.ts";
-import Sharder, { GatewayClientConnectData } from "../api/websocket/gatewayclient.ts";
+import Sharder, {
+  GatewayClientConnectData,
+} from "../api/websocket/gatewayclient.ts";
 import Guild from "../structs/guild/guild.ts";
 import Cache, { Storable } from "../util/cache.ts";
 import { PartialKeys } from "../util/util.ts";

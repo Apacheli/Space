@@ -14,7 +14,8 @@ A document of notable changes throughout Space's development.
 
 - Added `Member` and `Role` structures
 - Use `bigint` for `Struct`s' snowflakes
-- Added `timestamp`, `internalWorkerID`, `internalProcessID`, and `increment` getters to `Struct`
+- Added `timestamp`, `internalWorkerID`, `internalProcessID`, and `increment`
+  getters to `Struct`
 - Added some gateway guild event support
 
 ### Changed

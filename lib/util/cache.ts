@@ -42,8 +42,10 @@ export default class Cache<V extends Struct> extends Map<bigint, V>
 
   remove(id: Snowflake) {
     const item = this.get(id);
-    this.delete(BigInt(id));
-    return item;
+    if (item) {
+      this.delete(item.id);
+      return item;
+    }
   }
 
   update(item: { id: Snowflake } | V) {

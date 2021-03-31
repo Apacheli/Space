@@ -115,4 +115,20 @@ export default class Guild extends Struct {
     this.approximatePresenceCount = data.approximate_presence_count;
     this.welcomeScreen = data.welcome_screen;
   }
+
+  get afkChannel() {
+    return;
+  }
+
+  get widgetChannel() {
+  }
+
+  get systemChannel() {
+  }
+
+  get rulesChannel() {
+  }
+
+  get publicUpdatesChannel() {
+  }
 }
