@@ -11,7 +11,7 @@ export interface Storable<V> {
   update(item: { id: Snowflake }): PossiblePromise<V>;
 }
 
-export class Cache<V extends Struct> extends Map<bigint, V>
+export class Cache<V extends Struct> extends Map<V["id"], V>
   implements Storable<V> {
   constructor(
     public baseClass: new (data: any, client: Client) => V,
@@ -40,7 +40,7 @@ export class Cache<V extends Struct> extends Map<bigint, V>
     return super.has(BigInt(id));
   }
 
-  remove(id: Snowflake) {
+  remove(id: bigint | Snowflake) {
     const item = this.get(id);
     if (item) {
       this.delete(item.id);

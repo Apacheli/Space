@@ -1,7 +1,9 @@
 import { APIGuild } from "../../deps.ts";
 import { Member, Struct } from "../mod.ts";
-import { Client } from "../../client/mod.ts";
+import { GuildChannel } from "../channels/mod.ts";
+import Client from "../../client/client.ts";
 import Cache, { Storable } from "../../util/cache.ts";
+import f from "../channels/from.ts";
 
 export class Guild extends Struct {
   owner;
@@ -13,7 +15,7 @@ export class Guild extends Struct {
   memberCount;
   // voiceStates;
   members: Storable<Member>;
-  // channels;
+  channels: Storable<GuildChannel>;
   // presences;
 
   name!: APIGuild["name"];
@@ -67,6 +69,8 @@ export class Guild extends Struct {
     data.members?.forEach((member) =>
       member.user && this.members.add({ id: member.user.id, ...member })
     );
+    this.channels = new Cache<GuildChannel>(GuildChannel, client);
+    data.channels?.forEach((channel) => this.channels.add(f(channel, client)));
     // this.channels = data.channels;
     // this.presences = data.presences;
   }
