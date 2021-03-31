@@ -1,4 +1,6 @@
 import Struct from "../struct.ts";
 
-export default class Emoji extends Struct {
+export class Emoji extends Struct {
 }
+
+export default Emoji;

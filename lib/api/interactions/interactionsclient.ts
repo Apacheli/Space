@@ -1,2 +1,4 @@
-export default class InteractionsClient {
+export class InteractionsClient {
 }
+
+export default InteractionsClient;

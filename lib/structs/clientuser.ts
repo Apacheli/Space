@@ -1,4 +1,6 @@
 import User from "./user.ts";
 
-export default class ClientUser extends User {
+export class ClientUser extends User {
 }
+
+export default ClientUser;

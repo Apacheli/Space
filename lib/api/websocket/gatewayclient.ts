@@ -13,7 +13,7 @@ export type GatewayClientConnectData =
 
 export const SHARD_CONNECT_DELAY = 5000;
 
-export default class GatewayClient extends EventPipeline {
+export class GatewayClient extends EventPipeline {
   shards: Shard[] = [];
 
   constructor(public token: string) {
@@ -58,3 +58,5 @@ export default class GatewayClient extends EventPipeline {
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
 }
+
+export default GatewayClient;

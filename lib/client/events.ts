@@ -40,9 +40,9 @@ import {
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
 } from "../deps.ts";
-import Client from "./client.ts";
-import Member from "../structs/guild/member.ts";
-import { RequiredKeys } from "../util/util.ts";
+import { Client } from "./mod.ts";
+import { Member } from "../structs/mod.ts";
+import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
   client: Client,

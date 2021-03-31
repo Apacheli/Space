@@ -1,25 +1,25 @@
-import Requester, { HTTPClientOptions } from "../api/http/httpclient.ts";
-import Sharder, {
+import { HTTPClientOptions, RESTClient } from "../api/http/mod.ts";
+import {
+  GatewayClient,
   GatewayClientConnectData,
-} from "../api/websocket/gatewayclient.ts";
-import Guild from "../structs/guild/guild.ts";
-import Cache, { Storable } from "../util/cache.ts";
-import { PartialKeys } from "../util/util.ts";
+} from "../api/websocket/mod.ts";
+import { Guild } from "../structs/mod.ts";
+import { Cache, PartialKeys, Storable } from "../util/mod.ts";
 
 export interface ClientOptions {
   guilds?: Storable<Guild>;
   restOptions?: HTTPClientOptions;
 }
 
-export default class Client {
+export class Client {
   gateway;
   guilds;
   rest;
 
   constructor(token: string, options?: ClientOptions) {
-    this.gateway = new Sharder(token);
+    this.gateway = new GatewayClient(token);
     this.guilds = options?.guilds ?? new Cache<Guild>(Guild, this);
-    this.rest = new Requester(token, options?.restOptions);
+    this.rest = new RESTClient(token, options?.restOptions);
   }
 
   async connect(data: PartialKeys<GatewayClientConnectData, "url">) {
@@ -31,3 +31,5 @@ export default class Client {
     });
   }
 }
+
+export default Client;

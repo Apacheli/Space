@@ -1,4 +1,4 @@
-export default class EventPipeline extends Map<string, Handler[]> {
+export class EventPipeline extends Map<string, Handler[]> {
   listen(event: string, ...handlers: Handler[]) {
     const existing = this.get(event);
     if (existing?.push(...handlers) === undefined) {
@@ -21,5 +21,7 @@ export default class EventPipeline extends Map<string, Handler[]> {
       ?.reduce(async (result, handler) => handler(await result), data);
   }
 }
+
+export default EventPipeline;
 
 export type Handler = (...args: any) => any;

@@ -1,7 +1,7 @@
 import { APIGuildMember } from "../../deps.ts";
 import Struct from "../struct.ts";
 
-export default class Member extends Struct {
+export class Member extends Struct {
   user?: APIGuildMember["user"];
   nick: APIGuildMember["nick"];
   roles!: APIGuildMember["roles"];
@@ -24,3 +24,5 @@ export default class Member extends Struct {
     // this.permissions = data.permissions;
   }
 }
+
+export default Member;

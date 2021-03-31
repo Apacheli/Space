@@ -200,7 +200,7 @@ export const parseRateLimitRoute = (route: string, method?: string) => {
   return route;
 };
 
-export default class HTTPClient extends Map<string, RateLimitBucket> {
+export class HTTPClient extends Map<string, RateLimitBucket> {
   constructor(public token: string, public options?: HTTPClientOptions) {
     super();
   }
@@ -2864,3 +2864,5 @@ export default class HTTPClient extends Map<string, RateLimitBucket> {
     );
   }
 }
+
+export default HTTPClient;

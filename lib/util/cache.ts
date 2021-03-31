@@ -11,7 +11,7 @@ export interface Storable<V> {
   update(item: { id: Snowflake }): PossiblePromise<V>;
 }
 
-export default class Cache<V extends Struct> extends Map<bigint, V>
+export class Cache<V extends Struct> extends Map<bigint, V>
   implements Storable<V> {
   constructor(
     public baseClass: new (data: any, client: Client) => V,
@@ -57,3 +57,5 @@ export default class Cache<V extends Struct> extends Map<bigint, V>
     return existing;
   }
 }
+
+export default Cache;

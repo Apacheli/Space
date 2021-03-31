@@ -1,7 +1,7 @@
 import { APIRole } from "../../deps.ts";
 import Struct from "../struct.ts";
 
-export default class Role extends Struct {
+export class Role extends Struct {
   name!: APIRole["name"];
   color!: APIRole["color"];
   hoist!: APIRole["hoist"];
@@ -24,3 +24,5 @@ export default class Role extends Struct {
     this.tags = data.tags;
   }
 }
+
+export default Role;

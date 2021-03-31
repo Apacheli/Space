@@ -1,4 +1,6 @@
 import Struct from "./struct.ts";
 
-export default class User extends Struct {
+export class User extends Struct {
 }
+
+export default User;

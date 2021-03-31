@@ -1,10 +1,9 @@
 import { APIGuild } from "../../deps.ts";
-import Member from "./member.ts";
-import Struct from "../struct.ts";
-import Client from "../../client/client.ts";
+import { Member, Struct } from "../mod.ts";
+import { Client } from "../../client/mod.ts";
 import Cache, { Storable } from "../../util/cache.ts";
 
-export default class Guild extends Struct {
+export class Guild extends Struct {
   owner;
   permissions;
 
@@ -136,3 +135,5 @@ export default class Guild extends Struct {
     return;
   }
 }
+
+export default Guild;

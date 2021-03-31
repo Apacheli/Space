@@ -5,7 +5,7 @@ export interface ResponseError {
 }
 
 // TODO: Discord errors are like a chain of properties
-export default class HTTPError extends Error implements ResponseError {
+export class HTTPError extends Error implements ResponseError {
   #message;
 
   code;
@@ -21,3 +21,5 @@ export default class HTTPError extends Error implements ResponseError {
     this.errors = body.errors;
   }
 }
+
+export default HTTPError;
