@@ -121,14 +121,18 @@ export default class Guild extends Struct {
   }
 
   get widgetChannel() {
+    return;
   }
 
   get systemChannel() {
+    return;
   }
 
   get rulesChannel() {
+    return;
   }
 
   get publicUpdatesChannel() {
+    return;
   }
 }
