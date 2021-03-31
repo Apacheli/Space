@@ -1,4 +1,4 @@
-import Client from "../../lib/client/Client.ts";
+import Client from "../../lib/client/client.ts";
 import { onGuildCreate, onGuildDelete } from "../../lib/client/events.ts";
 
 const token = prompt("token -");
