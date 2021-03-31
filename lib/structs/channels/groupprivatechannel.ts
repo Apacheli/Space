@@ -7,6 +7,8 @@ export class GroupPrivateChannel extends PrivateChannel {
   applicationID?: bigint;
 
   update(data: APIChannel) {
+    super.update(data);
+
     this.icon = data.icon;
     this.ownerID = data.owner_id && BigInt(data.owner_id);
     this.applicationID = data.application_id && BigInt(data.application_id);

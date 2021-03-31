@@ -7,6 +7,8 @@ export class PrivateChannel extends Channel {
   recipients: APIChannel["recipients"];
 
   update(data: APIChannel) {
+    super.update(data);
+
     this.lastMessageID = data.last_message_id && BigInt(data.last_message_id);
     this.lastPinTimestamp = data.last_pin_timestamp;
     this.recipients = data.recipients;
