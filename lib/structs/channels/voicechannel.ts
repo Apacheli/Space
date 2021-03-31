@@ -7,18 +7,18 @@ export enum VideoQualityMode {
   FULL,
 }
 
+export interface APIVoiceChannel extends APIChannel {
+  rtc_region: APIVoiceRegion | null;
+  video_quality_mode?: VideoQualityMode;
+}
+
 export class VoiceChannel extends GuildChannel {
   bitrate: APIChannel["bitrate"];
   rtcRegion!: APIVoiceRegion | null;
   userLimit: APIChannel["user_limit"];
   videoQualityMode?: VideoQualityMode;
 
-  update(
-    data: APIChannel & {
-      rtc_region: APIVoiceRegion | null;
-      video_quality_mode?: VideoQualityMode;
-    },
-  ) {
+  update(data: APIVoiceChannel) {
     super.update(data);
 
     this.bitrate = data.bitrate;

@@ -3,12 +3,14 @@ import { PossiblePromise } from "./util.ts";
 import Struct from "../structs/struct.ts";
 import Client from "../client/client.ts";
 
+export type StorableKey = bigint | Snowflake;
+
 export interface Storable<V> {
-  add(item: { id: Snowflake }): PossiblePromise<V>;
-  get(id: Snowflake): PossiblePromise<V | undefined>;
-  has(id: Snowflake): PossiblePromise<boolean>;
-  remove(id: Snowflake): PossiblePromise<V | undefined>;
-  update(item: { id: Snowflake }): PossiblePromise<V>;
+  add(item: { id: StorableKey }): PossiblePromise<V>;
+  get(id: StorableKey): PossiblePromise<V | undefined>;
+  has(id: StorableKey): PossiblePromise<boolean>;
+  remove(id: StorableKey): PossiblePromise<V | undefined>;
+  update(item: { id: StorableKey }): PossiblePromise<V>;
 }
 
 export class Cache<V extends Struct> extends Map<V["id"], V>
@@ -20,7 +22,7 @@ export class Cache<V extends Struct> extends Map<V["id"], V>
     super();
   }
 
-  add(item: { id: Snowflake } | V): V {
+  add(item: { id: StorableKey } | V): V {
     const existing = this.get(item.id);
     if (!(item instanceof this.baseClass)) {
       if (existing) {
@@ -28,19 +30,21 @@ export class Cache<V extends Struct> extends Map<V["id"], V>
       }
       item = new this.baseClass(item, this.client);
     }
+    // @ts-ignore: This is checked
     this.set(item.id, item);
+    // @ts-ignore: ^
     return item;
   }
 
-  get(id: bigint | Snowflake) {
+  get(id: StorableKey) {
     return super.get(BigInt(id));
   }
 
-  has(id: bigint | Snowflake) {
+  has(id: StorableKey) {
     return super.has(BigInt(id));
   }
 
-  remove(id: bigint | Snowflake) {
+  remove(id: StorableKey) {
     const item = this.get(id);
     if (item) {
       this.delete(item.id);
@@ -48,7 +52,7 @@ export class Cache<V extends Struct> extends Map<V["id"], V>
     }
   }
 
-  update(item: { id: Snowflake } | V) {
+  update(item: { id: StorableKey } | V) {
     const existing = this.get(item.id);
     if (!existing || item instanceof this.baseClass) {
       return this.add(item);

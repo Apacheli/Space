@@ -70,6 +70,7 @@ export class Guild extends Struct {
       member.user && this.members.add({ id: member.user.id, ...member })
     );
     this.channels = new Cache<GuildChannel>(GuildChannel, client);
+    // @ts-ignore: This is valid, but will fix
     data.channels?.forEach((channel) => this.channels.add(f(channel, client)));
     // this.channels = data.channels;
     // this.presences = data.presences;
@@ -119,24 +120,25 @@ export class Guild extends Struct {
     this.welcomeScreen = data.welcome_screen;
   }
 
-  get afkChannel() {
-    return;
+  getAFKChannel() {
+    return this.afkChannelID && this.channels.get(this.afkChannelID);
   }
 
-  get widgetChannel() {
-    return;
+  getWidgetChannel() {
+    return this.widgetChannelID && this.channels.get(this.widgetChannelID);
   }
 
-  get systemChannel() {
-    return;
+  getSystemChannel() {
+    return this.systemChannelID && this.channels.get(this.systemChannelID);
   }
 
-  get rulesChannel() {
-    return;
+  getRulesChannel() {
+    return this.rulesChannelID && this.channels.get(this.rulesChannelID);
   }
 
-  get publicUpdatesChannel() {
-    return;
+  getPublicUpdatesChannel() {
+    return this.publicUpdatesChannelID &&
+      this.channels.get(this.publicUpdatesChannelID);
   }
 }
 

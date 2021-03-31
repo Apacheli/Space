@@ -1,4 +1,5 @@
 import {
+  ChannelType,
   GatewayApplicationCommandCreateDispatchData,
   GatewayApplicationCommandDeleteDispatchData,
   GatewayApplicationCommandUpdateDispatchData,
@@ -39,11 +40,9 @@ import {
   GatewayVoiceServerUpdateDispatchData,
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
-
-  ChannelType,
 } from "../deps.ts";
 import { Client } from "./mod.ts";
-import { Member, fromType } from "../structs/mod.ts";
+import { fromType, Member } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
@@ -71,6 +70,7 @@ export const onChannelCreate = async (
   const channel = fromType(data, client);
   if (data.guild_id) {
     const guild = await client.guilds.get(data.guild_id);
+    // @ts-ignore: fix later
     return guild?.channels.add(channel);
   }
   return channel;
