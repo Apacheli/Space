@@ -4,7 +4,7 @@ A document of notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
-| [0.4.0-alpha](#034-alpha---2021-03-31) |
+| [0.4.0-alpha](#040-alpha---2021-03-31) |
 | [0.3.4-alpha](#034-alpha---2021-03-29) |
 | [0.3.3-alpha](#033-alpha---2021-03-23) |
 | [0.3.2-alpha](#032-alpha---2021-03-22) |
