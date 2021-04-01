@@ -2,11 +2,26 @@
 
 A document of notable changes throughout Space's development.
 
-| **0**<sup>Current</sup>                |
+| **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.4.0-alpha](#034-alpha---2021-03-31) |
 | [0.3.4-alpha](#034-alpha---2021-03-29) |
 | [0.3.3-alpha](#033-alpha---2021-03-23) |
 | [0.3.2-alpha](#032-alpha---2021-03-22) |
+
+## [0.4.0-alpha](https://github.com/Apacheli/Space/compare/b19f218...84fb6d4) - 2021-03-31
+
+### Added
+
+- Added channel structures
+- `EventPipeline.dispatch` can now accept multiple arguments
+- HTTP error messages are more useful to read
+- `Storable` can accept `bigint`s
+
+### Fixed
+
+- Guild channel getters are methods due to the Promise nature of `Storable`
+- Properly export a `mod.ts` for each directory
 
 ## [0.3.4-alpha](https://github.com/Apacheli/Space/compare/183d3aa...0633844) - 2021-03-29
 
