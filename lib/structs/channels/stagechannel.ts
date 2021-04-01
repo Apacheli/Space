@@ -1,7 +1,7 @@
 import { APIChannel } from "../../deps.ts";
 import VoiceChannel, { APIVoiceChannel } from "./voicechannel.ts";
 
-export class StageVoiceChannel extends VoiceChannel {
+export class StageChannel extends VoiceChannel {
   topic: APIChannel["topic"];
 
   update(data: APIVoiceChannel) {
@@ -11,4 +11,4 @@ export class StageVoiceChannel extends VoiceChannel {
   }
 }
 
-export default StageVoiceChannel;
+export default StageChannel;
