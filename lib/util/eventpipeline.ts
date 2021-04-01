@@ -16,9 +16,12 @@ export class EventPipeline extends Map<string, Handler[]> {
     }
   }
 
-  dispatch(event: string, data?: unknown) {
+  dispatch(event: string, ...args: any) {
     return this.get(event)
-      ?.reduce(async (result, handler) => handler(await result), data);
+      ?.reduce(async (result, handler) => {
+        const data = await result;
+        return handler(...Array.isArray(data) ? data : [data]);
+      }, args);
   }
 }
 

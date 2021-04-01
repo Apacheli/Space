@@ -1,5 +1,4 @@
-import Client from "../../lib/client/client.ts";
-import { onGuildCreate, onGuildDelete } from "../../lib/client/events.ts";
+import { Client, onGuildCreate, onGuildDelete } from "../../lib/mod.ts";
 
 const token = prompt("token -");
 if (!token) {
@@ -11,17 +10,13 @@ const client = new Client(`Bot ${token}`);
 client.gateway.listen(
   "GUILD_CREATE",
   ({ data }) => onGuildCreate(client, data),
-  (guild) => {
-    console.log(guild);
-  },
+  (guild) => console.log(guild),
 );
 
 client.gateway.listen(
   "GUILD_DELETE",
   ({ data }) => onGuildDelete(client, data),
-  (guild) => {
-    console.log(guild);
-  },
+  (guild) => console.log(guild),
 );
 
 client.gateway.listen("MESSAGE_CREATE", ({ data: message }) => {

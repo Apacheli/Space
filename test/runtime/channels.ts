@@ -16,34 +16,37 @@ const client = new Client(`Bot ${token}`);
 
 client.gateway.listen(
   "CHANNEL_CREATE",
-  ({ data }) => onChannelCreate(client, data),
+  (channel) => {
+    console.log(channel);
+    return channel;
+  },
+  (channel) => onChannelCreate(client, channel),
   (channel) => console.log(channel),
 );
 
 client.gateway.listen(
   "CHANNEL_DELETE",
-  ({ data }) => onChannelDelete(client, data),
+  (channel) => {
+    console.log(channel);
+    return channel;
+  },
+  (channel) => onChannelDelete(client, channel),
   (channel) => console.log(channel),
 );
 
 client.gateway.listen(
   "CHANNEL_UPDATE",
-  ({ data }) => onChannelUpdate(client, data),
+  (channel) => {
+    console.log(channel);
+    return channel;
+  },
+  (channel) => onChannelUpdate(client, channel),
   (channel) => console.log(channel),
 );
 
-client.gateway.listen(
-  "GUILD_CREATE",
-  ({ data }) => onGuildCreate(client, data),
-  (guild) => console.log(guild),
-);
-
-client.gateway.listen(
-  "GUILD_DELETE",
-  ({ data }) => onGuildDelete(client, data),
-  (guild) => console.log(guild),
-);
+client.gateway.listen("GUILD_CREATE", (guild) => onGuildCreate(client, guild));
+client.gateway.listen("GUILD_DELETE", (guild) => onGuildDelete(client, guild));
 
 client.connect({
-  intents: (1 << 1),
+  intents: (1 << 0),
 });

@@ -70,7 +70,6 @@ export const onChannelCreate = async (
   const channel = fromType(data, client);
   if (data.guild_id) {
     const guild = await client.guilds.get(data.guild_id);
-    // @ts-ignore: fix later
     return guild?.channels.add(channel);
   }
   return channel;

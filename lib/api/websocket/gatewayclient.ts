@@ -43,7 +43,7 @@ export class GatewayClient extends EventPipeline {
       const shard = new Shard(this.token, i);
       shard.listen(
         "DISPATCH",
-        (payload) => this.dispatch(payload.t, { data: payload.d, shard }),
+        (payload) => this.dispatch(payload.t, payload.d, shard),
       );
       this.shards.push(shard);
     }
