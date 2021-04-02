@@ -1,4 +1,4 @@
-import { Snowflake } from "../deps.ts";
+import { Snowflake } from "../../deps.ts";
 import { PossiblePromise } from "./util.ts";
 import Struct from "../structs/struct.ts";
 import Client from "../client/client.ts";

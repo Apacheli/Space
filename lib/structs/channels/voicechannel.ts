@@ -1,4 +1,4 @@
-import { APIChannel, APIVoiceRegion } from "../../deps.ts";
+import { APIChannel, APIVoiceRegion } from "../../../deps.ts";
 import GuildChannel from "./guildchannel.ts";
 
 // discord-api-types add this please

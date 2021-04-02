@@ -1,4 +1,4 @@
-import { APIChannel } from "../../deps.ts";
+import { APIChannel } from "../../../deps.ts";
 import VoiceChannel, { APIVoiceChannel } from "./voicechannel.ts";
 
 export class StageChannel extends VoiceChannel {

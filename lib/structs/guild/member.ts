@@ -1,8 +1,8 @@
-import { APIGuildMember } from "../../deps.ts";
+import { APIGuildMember } from "../../../deps.ts";
 import Struct from "../struct.ts";
 
 export class Member extends Struct {
-  user?: APIGuildMember["user"];
+  user: APIGuildMember["user"];
   nick: APIGuildMember["nick"];
   roles!: APIGuildMember["roles"];
   joinedAt!: APIGuildMember["joined_at"];

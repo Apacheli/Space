@@ -8,7 +8,7 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 
 ### Features
 
-- 99% coverage over Discord's HTTP and websocket APIs.
+- 100% coverage over Discord's rest and websocket APIs.
 - Secure by default. Client-side checks are in place to prevent `4xx`s.
 - Written in TypeScript to guarantee type safety.
 - Built-in logger with colors, unless explicitly disabled (`--no-logs`).
@@ -16,13 +16,13 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space/lib/mod.ts";
+export * from "https://deno.land/x/space/mod.ts";
 ```
 
 Click [here](https://deno.land/manual/examples/manage_dependencies) to read more
 about dependency management.
 
-If you wish to install a specific version, you import/export `space@version`.
+If you wish to install a specific version, you can import `space@version`.
 
 ### Resources
 

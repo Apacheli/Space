@@ -1,4 +1,4 @@
-import { APIChannel } from "../../deps.ts";
+import { APIChannel } from "../../../deps.ts";
 import Channel from "./channel.ts";
 
 export class PrivateChannel extends Channel {

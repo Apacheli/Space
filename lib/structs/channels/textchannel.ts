@@ -1,4 +1,4 @@
-import { APIChannel } from "../../deps.ts";
+import { APIChannel } from "../../../deps.ts";
 import GuildChannel from "./guildchannel.ts";
 
 export class TextChannel extends GuildChannel {

@@ -1,5 +1,4 @@
 import {
-  ChannelType,
   GatewayApplicationCommandCreateDispatchData,
   GatewayApplicationCommandDeleteDispatchData,
   GatewayApplicationCommandUpdateDispatchData,
@@ -40,7 +39,7 @@ import {
   GatewayVoiceServerUpdateDispatchData,
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
-} from "../deps.ts";
+} from "../../deps.ts";
 import { Client } from "./mod.ts";
 import { fromType, Member } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";

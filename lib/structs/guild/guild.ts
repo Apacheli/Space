@@ -1,4 +1,4 @@
-import { APIGuild } from "../../deps.ts";
+import { APIGuild } from "../../../deps.ts";
 import { Member, Struct } from "../mod.ts";
 import { GuildChannel } from "../channels/mod.ts";
 import Client from "../../client/client.ts";
@@ -66,9 +66,12 @@ export class Guild extends Struct {
     this.memberCount = data.member_count;
     // this.voiceStates = data.voice_states;
     this.members = new Cache<Member>(Member, client);
-    data.members?.forEach((member) =>
-      member.user && this.members.add({ id: member.user.id, ...member })
-    );
+    data.members?.forEach((member) => {
+      if (member.user) { // member.user should probably exist but check anyway
+        this.members.add({ id: member.user.id, ...member });
+        client.users.add(member.user);
+      }
+    });
     this.channels = new Cache<GuildChannel>(GuildChannel, client);
     // @ts-ignore: This is valid, but will fix
     data.channels?.forEach((channel) => this.channels.add(f(channel, client)));
