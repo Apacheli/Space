@@ -24,6 +24,10 @@ client.gateway.listen("MESSAGE_CREATE", async (message) => {
     result = `${error}`;
   }
   client.rest.createMessage(message.channel_id, {
-    content: `\`\`\`ts\n${Deno.inspect(result, { depth: 0 })}\n\`\`\``,
+    content: `\`\`\`ts\n${Deno.inspect(result, { depth: 1 })}\n\`\`\``,
   });
+});
+
+client.connect({
+  intents: 1 << 0 | 1 << 9,
 });

@@ -187,7 +187,7 @@ export interface RequestInput {
 }
 
 export const DELAY = 15_000;
-export const USER_AGENT =`DiscordBot (${meta.repo}, ${meta.version})`;
+export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
 export const VERSION = 8;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {

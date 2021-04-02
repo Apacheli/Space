@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.4.1-alpha](#041-alpha---2021-04-02) |
 | [0.4.0-alpha](#040-alpha---2021-03-31) |
 | [0.3.4-alpha](#034-alpha---2021-03-29) |
 | [0.3.3-alpha](#033-alpha---2021-03-23) |
@@ -12,6 +13,28 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.4.1-alpha](https://github.com/Apacheli/Space/compare/2f8dad5...2d66d3b) - 2021-04-02
+
+Mostly development-related changes.
+
+### Added
+
+- ([`df6fad3`](https://github.com/Apacheli/Space/commit/df6fad3),
+  [`2d66d3b`](https://github.com/Apacheli/Space/commit/2d66d3b)) Added
+  future-proof support for thread channel types.
+- ([`8341857`](https://github.com/Apacheli/Space/commit/8341857))
+  - Updated HTTP methods to use `Snowflake`s instead of `string`s
+  - Added `HTTPClient.bulkOverwriteGlobalApplicationCommands` and
+    `HTTPClient.bulkOverwriteGuildApplicationCommands`
+- ([`2d66d3b`](https://github.com/Apacheli/Space/commit/2d66d3b)) Added `User`
+  structure and `Client.users`
+
+### Changed
+
+- ([`c79e517`](https://github.com/Apacheli/Space/commit/c79e517),
+  [`7c913e4`](https://github.com/Apacheli/Space/commit/7c913e4)) README has more
+  useful information
 
 ## [0.4.0-alpha](https://github.com/Apacheli/Space/compare/b19f218...84fb6d4) - 2021-03-31
 
