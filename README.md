@@ -2,6 +2,8 @@
 
 [![](https://canary.discord.com/api/guilds/812458966357377067/widget.png)](https://discord.gg/UQuA3EwXCV)
 
+<img align=right src=assets/space_logo.png height=150px>
+
 A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 
 ### Features
