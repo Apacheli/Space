@@ -16,13 +16,19 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.4.0-alpha/lib/mod.ts";
+export * from "https://deno.land/x/space/lib/mod.ts";
 ```
 
-### Useful Links
+Click [here](https://deno.land/manual/examples/manage_dependencies) to read more
+about dependency management.
+
+If you wish to install a specific version, you import/export `space@version`.
+
+### Resources
 
 - [Deno](https://deno.land/)
 - [Discord API Types](https://github.com/discordjs/discord-api-types)
 - [Discord Developer Documentation](https://discord.dev/)
 - [Discord Server](https://discord.gg/UQuA3EwXCV)
+- [Documentation](https://doc.deno.land/https/deno.land/x/space/lib/mod.ts)
 - [TypeScript](https://www.typescriptlang.org/)
