@@ -1,4 +1,9 @@
-import { APIChannel, ChannelType } from "../../deps.ts";
+import {
+  APIChannel,
+  ChannelType,
+  RESTPostAPIChannelMessageJSONBody,
+  Snowflake,
+} from "../../deps.ts";
 import {
   CategoryChannel,
   Channel,
@@ -14,6 +19,11 @@ import {
   VoiceChannel,
 } from "./mod.ts";
 import Client from "../../client/client.ts";
+
+export interface TextableChannel {
+  getMessage(id: Snowflake);
+  createMessage: (data: RESTPostAPIChannelMessageJSONBody) => Promise<any>;
+}
 
 export const fromType = (channel: APIChannel, client: Client) => {
   switch (channel.type) {

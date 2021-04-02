@@ -165,6 +165,7 @@ import {
   RESTPutAPIGuildMemberResult,
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
+  Snowflake,
 } from "../../deps.ts";
 import HTTPError from "./httperror.ts";
 import { repository, version } from "../../meta.ts";
@@ -281,7 +282,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > behavior is now deprecated and will be removed on March 1, 2019.
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    */
-  getEntitlements(applicationID: string, data: unknown) {
+  getEntitlements(applicationID: Snowflake, data: unknown) {
     return this.request(`applications/${applicationID}/entitlements`, {
       data,
     });
@@ -295,7 +296,11 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
-  getEntitlement(applicationID: string, entitlementID: string, data: unknown) {
+  getEntitlement(
+    applicationID: Snowflake,
+    entitlementID: Snowflake,
+    data: unknown,
+  ) {
     return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}`,
       {
@@ -310,7 +315,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Get all SKUs for an application.
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    */
-  getSKUs(applicationID: string) {
+  getSKUs(applicationID: Snowflake) {
     return this.request(`applications/${applicationID}/skus`);
   }
 
@@ -323,7 +328,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
-  consumeSKU(applicationID: string, entitlementID: string) {
+  consumeSKU(applicationID: Snowflake, entitlementID: Snowflake) {
     return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}/consume`,
       {
@@ -342,7 +347,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    * @param entitlementID https://discord.dev/game-sdk/store#data-models-entitlement-struct
    */
-  deleteTestEntitlement(applicationID: string, entitlementID: string) {
+  deleteTestEntitlement(applicationID: Snowflake, entitlementID: Snowflake) {
     return this.request(
       `applications/${applicationID}/entitlements/${entitlementID}`,
       {
@@ -363,7 +368,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param skuID https://discord.dev/game-sdk/store#data-models-sku-struct
    * @param userID https://discord.dev/resources/user#user-object
    */
-  createPurchaseDiscount(skuID: string, userID: string, data: unknown) {
+  createPurchaseDiscount(skuID: Snowflake, userID: Snowflake, data: unknown) {
     return this.request(`store/skus/${skuID}/discounts/${userID}`, {
       data,
       method: "PUT",
@@ -380,7 +385,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param skuID https://discord.dev/game-sdk/store#data-models-sku-struct
    * @param userID https://discord.dev/resources/user#user-object
    */
-  deletePurchaseDiscount(skuID: string, userID: string) {
+  deletePurchaseDiscount(skuID: Snowflake, userID: Snowflake) {
     return this.request(`store/skus/${skuID}/discounts/${userID}`, {
       method: "DELETE",
     });
@@ -394,7 +399,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects.
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    */
-  getGlobalApplicationCommands(applicationID: string) {
+  getGlobalApplicationCommands(applicationID: Snowflake) {
     return this.request<RESTGetAPIApplicationCommandsResult>(
       `applications/${applicationID}/commands`,
     );
@@ -413,7 +418,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    */
   createGlobalApplicationCommand(
-    applicationID: string,
+    applicationID: Snowflake,
     data: RESTPostAPIApplicationCommandsJSONBody,
   ) {
     return this.request<RESTPostAPIApplicationCommandsResult>(
@@ -434,7 +439,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
-  getGlobalApplicationCommand(applicationID: string, commandID: string) {
+  getGlobalApplicationCommand(applicationID: Snowflake, commandID: Snowflake) {
     return this.request<RESTGetAPIApplicationCommandResult>(
       `applications/${applicationID}/commands/${commandID}`,
     );
@@ -453,8 +458,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
   editGlobalApplicationCommand(
-    applicationID: string,
-    commandID: string,
+    applicationID: Snowflake,
+    commandID: Snowflake,
     data: RESTPatchAPIApplicationCommandJSONBody,
   ) {
     return this.request<RESTPatchAPIApplicationCommandResult>(
@@ -473,7 +478,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
-  deleteGlobalApplicationCommand(applicationID: string, commandID: string) {
+  deleteGlobalApplicationCommand(
+    applicationID: Snowflake,
+    commandID: Snowflake,
+  ) {
     return this.request(`applications/${applicationID}/commands/${commandID}`, {
       method: "DELETE",
     });
@@ -489,10 +497,31 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildApplicationCommands(applicationID: string, guildID: string) {
+  getGuildApplicationCommands(applicationID: Snowflake, guildID: Snowflake) {
     return this.request<RESTGetAPIApplicationGuildCommandsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands`,
     );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#bulk-overwrite-global-application-commands
+   *
+   * Takes a list of application commands, overwriting existing commands that are
+   * registered globally for this application. Updates will be available in all
+   * guilds after 1 hour. Returns `200` and a list of
+   * [ApplicationCommand](https://discord.dev/interactions/slash-commands#applicationcommand)
+   * objects. Commands that do not already exist will count toward daily application
+   * command create limits.
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   */
+  bulkOverwriteGlobalApplicationCommands(
+    applicationID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(`applications/${applicationID}/commands`, {
+      data,
+      method: "PUT",
+    });
   }
 
   /**
@@ -504,13 +533,14 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Create a new guild command. New guild commands will be available in the guild
    * immediately. Returns `201` and an
    * [ApplicationCommand](https://discord.dev/interactions/slash-commands#applicationcommand)
-   * object.
+   * object. If the command did not already exist, it will count toward daily
+   * application command create limits.
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildApplicationCommand(
-    applicationID: string,
-    guildID: string,
+    applicationID: Snowflake,
+    guildID: Snowflake,
     data: RESTPostAPIApplicationGuildCommandsJSONBody,
   ) {
     return this.request<RESTPostAPIApplicationGuildCommandsResult>(
@@ -533,9 +563,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
   getGuildApplicationCommand(
-    applicationID: string,
-    guildID: string,
-    commandID: string,
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    commandID: Snowflake,
   ) {
     return this.request<RESTGetAPIApplicationGuildCommandResult>(
       `applications/${applicationID}/guilds/${guildID}/commands/${commandID}`,
@@ -556,9 +586,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
   editGuildApplicationCommand(
-    applicationID: string,
-    guildID: string,
-    commandID: string,
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    commandID: Snowflake,
     data: RESTPatchAPIApplicationGuildCommandJSONBody,
   ) {
     return this.request<RESTPatchAPIApplicationGuildCommandResult>(
@@ -579,14 +609,38 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
    */
   deleteGuildApplicationCommand(
-    applicationID: string,
-    guildID: string,
-    commandID: string,
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    commandID: Snowflake,
   ) {
     return this.request(
       `applications/${applicationID}/guilds/${guildID}/commands/${commandID}`,
       {
         method: "DELETE",
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#bulk-overwrite-guild-application-commands
+   *
+   * Takes a list of application commands, overwriting existing commands for the
+   * guild. Returns `200` and a list of
+   * [ApplicationCommand](https://discord.dev/interactions/slash-commands#applicationcommand)
+   * objects.
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  bulkOverwriteGuildApplicationCommands(
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `applications/${applicationID}/guilds/${guildID}/commands`,
+      {
+        data,
+        method: "PUT",
       },
     );
   }
@@ -600,7 +654,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
    */
   createInteractionResponse(
-    interactionID: string,
+    interactionID: Snowflake,
     interactionToken: string,
     data: RESTPostAPIInteractionCallbackJSONBody,
   ) {
@@ -622,7 +676,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
    */
   editOriginalInteractionResponse(
-    applicationID: string,
+    applicationID: Snowflake,
     interactionToken: string,
     data: unknown,
   ) {
@@ -643,7 +697,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
    */
   deleteOriginalInteractionResponse(
-    applicationID: string,
+    applicationID: Snowflake,
     interactionToken: string,
     data: unknown,
   ) {
@@ -666,7 +720,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
    */
   createFollowupMessage(
-    applicationID: string,
+    applicationID: Snowflake,
     interactionToken: string,
     data: unknown,
   ) {
@@ -686,9 +740,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   editFollowupMessage(
-    applicationID: string,
+    applicationID: Snowflake,
     interactionToken: string,
-    messageID: string,
+    messageID: Snowflake,
     data: unknown,
   ) {
     return this.request(
@@ -709,9 +763,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   deleteFollowupMessage(
-    applicationID: string,
+    applicationID: Snowflake,
     interactionToken: string,
-    messageID: string,
+    messageID: Snowflake,
     data: unknown,
   ) {
     return this.request(
@@ -730,7 +784,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * the guild. Requires the 'VIEW_AUDIT_LOG' permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildAuditLog(guildID: string, query: RESTGetAPIAuditLogQuery) {
+  getGuildAuditLog(guildID: Snowflake, query: RESTGetAPIAuditLogQuery) {
     return this.request<RESTGetAPIAuditLogResult>(
       `guilds/${guildID}/audit-logs`,
       {
@@ -746,7 +800,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * object.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  getChannel(channelID: string) {
+  getChannel(channelID: Snowflake) {
     return this.request<RESTGetAPIChannelResult>(`channels/${channelID}`);
   }
 
@@ -766,7 +820,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   editChannel(
-    channelID: string,
+    channelID: Snowflake,
     data: RESTPatchAPIChannelJSONBody,
     reason?: string,
   ) {
@@ -797,7 +851,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > Updates channel cannot be deleted.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  deleteChannel(channelID: string, reason?: string) {
+  deleteChannel(channelID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIChannelResult>(`channels/${channelID}`, {
       method: "DELETE",
       reason,
@@ -818,7 +872,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > be passed at a time.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  getChannelMessages(channelID: string, query: RESTGetAPIChannelMessagesQuery) {
+  getChannelMessages(
+    channelID: Snowflake,
+    query: RESTGetAPIChannelMessagesQuery,
+  ) {
     return this.request<RESTGetAPIChannelMessagesResult>(
       `channels/${channelID}/messages`,
       {
@@ -837,7 +894,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  getChannelMessage(channelID: string, messageID: string) {
+  getChannelMessage(channelID: Snowflake, messageID: Snowflake) {
     return this.request<RESTGetAPIChannelMessageResult>(
       `channels/${channelID}/messages/${messageID}`,
     );
@@ -863,7 +920,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   createMessage(
-    channelID: string,
+    channelID: Snowflake,
     data: RESTPostAPIChannelMessageJSONBody,
     files?: File[],
   ) {
@@ -892,7 +949,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  crosspostMessage(channelID: string, messageID: string) {
+  crosspostMessage(channelID: Snowflake, messageID: Snowflake) {
     return this.request<RESTPostAPIChannelMessageCrosspostResult>(
       `channels/${channelID}/messages/${messageID}/crosspost`,
       {
@@ -915,7 +972,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
    */
-  createReaction(channelID: string, messageID: string, emoji: string) {
+  createReaction(channelID: Snowflake, messageID: Snowflake, emoji: string) {
     return this.request<RESTPutAPIChannelMessageReactionResult>(
       `channels/${channelID}/messages/${messageID}/reactions/${emoji}/@me`,
       {
@@ -935,7 +992,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
    */
-  deleteOwnReaction(channelID: string, messageID: string, emoji: string) {
+  deleteOwnReaction(channelID: Snowflake, messageID: Snowflake, emoji: string) {
     return this.request<RESTDeleteAPIChannelMessageOwnReaction>(
       `channels/${channelID}/messages/${messageID}/reactions/${emoji}/@me`,
       {
@@ -958,10 +1015,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    */
   deleteUserReaction(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     emoji: string,
-    userID: string,
+    userID: Snowflake,
   ) {
     return this.request<RESTDeleteAPIChannelMessageUserReactionResult>(
       `channels/${channelID}/messages/${messageID}/reactions/${emoji}/${userID}`,
@@ -983,8 +1040,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param emoji https://discord.dev/resources/emoji#emoji-object
    */
   getReactions(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     emoji: string,
     query: RESTGetAPIChannelMessageReactionUsersQuery,
   ) {
@@ -1006,7 +1063,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  deleteAllReactions(channelID: string, messageID: string) {
+  deleteAllReactions(channelID: Snowflake, messageID: Snowflake) {
     return this.request<RESTDeleteAPIChannelAllMessageReactionsResult>(
       `channels/${channelID}/messages/${messageID}/reactions`,
       {
@@ -1029,8 +1086,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param emoji https://discord.dev/resources/emoji#emoji-object
    */
   deleteAllReactionsforEmoji(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     emoji: string,
   ) {
     return this.request<RESTDeleteAPIChannelMessageReactionResult>(
@@ -1060,8 +1117,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   editMessage(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     data: RESTPatchAPIChannelMessageJSONBody,
   ) {
     return this.request<RESTPatchAPIChannelMessageResult>(
@@ -1083,7 +1140,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  deleteMessage(channelID: string, messageID: string) {
+  deleteMessage(channelID: Snowflake, messageID: Snowflake) {
     return this.request<RESTDeleteAPIChannelMessageResult>(
       `channels/${channelID}/messages/${messageID}`,
       {
@@ -1109,7 +1166,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   bulkDeleteMessages(
-    channelID: string,
+    channelID: Snowflake,
     data: RESTPostAPIChannelMessagesBulkDeleteJSONBody,
   ) {
     return this.request<RESTPostAPIChannelMessagesBulkDeleteResult>(
@@ -1134,8 +1191,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param overwriteID https://discord.dev/resources/channel#overwrite-object
    */
   editChannelPermissions(
-    channelID: string,
-    overwriteID: string,
+    channelID: Snowflake,
+    overwriteID: Snowflake,
     data: RESTPutAPIChannelPermissionJSONBody,
     reason?: string,
   ) {
@@ -1158,7 +1215,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * permission.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  getChannelInvites(channelID: string) {
+  getChannelInvites(channelID: Snowflake) {
     return this.request<RESTGetAPIChannelInvitesResult>(
       `channels/${channelID}/invites`,
     );
@@ -1177,7 +1234,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   createChannelInvite(
-    channelID: string,
+    channelID: Snowflake,
     data: RESTPostAPIChannelInviteJSONBody,
     reason?: string,
   ) {
@@ -1202,8 +1259,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param overwriteID https://discord.dev/resources/channel#overwrite-object
    */
   deleteChannelPermission(
-    channelID: string,
-    overwriteID: string,
+    channelID: Snowflake,
+    overwriteID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTDeleteAPIChannelPermissionResult>(
@@ -1224,7 +1281,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   followNewsChannel(
-    channelID: string,
+    channelID: Snowflake,
     data: RESTPostAPIChannelFollowersJSONBody,
   ) {
     return this.request<RESTPostAPIChannelFollowersResult>(
@@ -1247,7 +1304,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * event.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  triggerTypingIndicator(channelID: string) {
+  triggerTypingIndicator(channelID: Snowflake) {
     return this.request<RESTPostAPIChannelTypingResult>(
       `channels/${channelID}/typing`,
       {
@@ -1263,7 +1320,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * [message](https://discord.dev/resources/channel#message-object) objects.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  getPinnedMessages(channelID: string) {
+  getPinnedMessages(channelID: Snowflake) {
     return this.request<RESTGetAPIChannelPinsResult>(
       `channels/${channelID}/pins`,
     );
@@ -1280,8 +1337,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   addPinnedChannelMessage(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTPutAPIChannelPinResult>(
@@ -1302,8 +1359,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   deletePinnedChannelMessage(
-    channelID: string,
-    messageID: string,
+    channelID: Snowflake,
+    messageID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTDeleteAPIChannelPinResult>(
@@ -1323,8 +1380,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    */
   groupPrivateChannelAddRecipient(
-    channelID: string,
-    userID: string,
+    channelID: Snowflake,
+    userID: Snowflake,
     data: RESTPutAPIChannelRecipientJSONBody,
   ) {
     return this.request<RESTPutAPIChannelRecipientResult>(
@@ -1343,7 +1400,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param userID https://discord.dev/resources/user#user-object
    */
-  groupPrivateChannelRemoveRecipient(channelID: string, userID: string) {
+  groupPrivateChannelRemoveRecipient(channelID: Snowflake, userID: Snowflake) {
     return this.request<RESTDeleteAPIChannelRecipientResult>(
       `channels/${channelID}/recipients/${userID}`,
       {
@@ -1359,7 +1416,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * given guild.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildEmojis(guildID: string) {
+  getGuildEmojis(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildEmojisResult>(
       `guilds/${guildID}/emojis`,
     );
@@ -1373,7 +1430,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param emojiID https://discord.dev/resources/emoji#emoji-object
    */
-  getGuildEmoji(guildID: string, emojiID: string) {
+  getGuildEmoji(guildID: Snowflake, emojiID: Snowflake) {
     return this.request<RESTGetAPIGuildEmojiResult>(
       `guilds/${guildID}/emojis/${emojiID}`,
     );
@@ -1394,7 +1451,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildEmoji(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildEmojiJSONBody,
     reason?: string,
   ) {
@@ -1420,8 +1477,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param emojiID https://discord.dev/resources/emoji#emoji-object
    */
   editGuildEmoji(
-    guildID: string,
-    emojiID: string,
+    guildID: Snowflake,
+    emojiID: Snowflake,
     data: RESTPatchAPIGuildEmojiJSONBody,
     reason?: string,
   ) {
@@ -1444,7 +1501,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param emojiID https://discord.dev/resources/emoji#emoji-object
    */
-  deleteGuildEmoji(guildID: string, emojiID: string, reason?: string) {
+  deleteGuildEmoji(guildID: Snowflake, emojiID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIGuildEmojiResult>(
       `guilds/${guildID}/emojis/${emojiID}`,
       {
@@ -1478,7 +1535,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * `approximate_member_count` and `approximate_presence_count` for the guild.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuild(guildID: string, query: RESTGetAPIGuildQuery) {
+  getGuild(guildID: Snowflake, query: RESTGetAPIGuildQuery) {
     return this.request<RESTGetAPIGuildResult>(`guilds/${guildID}`, {
       query,
     });
@@ -1492,7 +1549,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Discoverable.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildPreview(guildID: string) {
+  getGuildPreview(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildPreviewResult>(
       `guilds/${guildID}/preview`,
     );
@@ -1508,7 +1565,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > ℹ️ All parameters to this endpoint are optional
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  editGuild(guildID: string, data: RESTPatchAPIGuildJSONBody) {
+  editGuild(guildID: Snowflake, data: RESTPatchAPIGuildJSONBody) {
     return this.request<RESTPatchAPIGuildResult>(`guilds/${guildID}`, {
       data,
       method: "PATCH",
@@ -1523,7 +1580,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * event.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  deleteGuild(guildID: string) {
+  deleteGuild(guildID: Snowflake) {
     return this.request<RESTDeleteAPIGuildResult>(`guilds/${guildID}`, {
       method: "DELETE",
     });
@@ -1536,7 +1593,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildChannels(guildID: string) {
+  getGuildChannels(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildChannelsResult>(
       `guilds/${guildID}/channels`,
     );
@@ -1557,7 +1614,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildChannel(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildChannelJSONBody,
     reason?: string,
   ) {
@@ -1587,7 +1644,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   editGuildChannelPositions(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPatchAPIGuildChannelPositionsJSONBody,
   ) {
     return this.request<RESTPatchAPIGuildChannelPositionsResult>(
@@ -1607,7 +1664,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param userID https://discord.dev/resources/user#user-object
    */
-  getGuildMember(guildID: string, userID: string) {
+  getGuildMember(guildID: Snowflake, userID: Snowflake) {
     return this.request<RESTGetAPIGuildMemberResult>(
       `guilds/${guildID}/members/${userID}`,
     );
@@ -1625,7 +1682,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > ℹ️ All parameters to this endpoint are optional
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildMembers(guildID: string, query: RESTGetAPIGuildMembersQuery) {
+  getGuildMembers(guildID: Snowflake, query: RESTGetAPIGuildMembersQuery) {
     return this.request<RESTGetAPIGuildMembersResult>(
       `guilds/${guildID}/members`,
       {
@@ -1659,8 +1716,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    */
   addGuildMember(
-    guildID: string,
-    userID: string,
+    guildID: Snowflake,
+    userID: Snowflake,
     data: RESTPutAPIGuildMemberJSONBody,
   ) {
     return this.request<RESTPutAPIGuildMemberResult>(
@@ -1689,8 +1746,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    */
   editGuildMember(
-    guildID: string,
-    userID: string,
+    guildID: Snowflake,
+    userID: Snowflake,
     data: RESTPatchAPIGuildMemberJSONBody,
     reason?: string,
   ) {
@@ -1713,7 +1770,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   editCurrentUserNick(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPatchAPICurrentGuildMemberNicknameJSONBody,
   ) {
     return this.request<RESTPatchAPICurrentGuildMemberNicknameResult>(
@@ -1737,9 +1794,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param roleID https://discord.dev/topics/permissions#role-object
    */
   addGuildMemberRole(
-    guildID: string,
-    userID: string,
-    roleID: string,
+    guildID: Snowflake,
+    userID: Snowflake,
+    roleID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTPutAPIGuildMemberRoleResult>(
@@ -1763,9 +1820,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param roleID https://discord.dev/topics/permissions#role-object
    */
   removeGuildMemberRole(
-    guildID: string,
-    userID: string,
-    roleID: string,
+    guildID: Snowflake,
+    userID: Snowflake,
+    roleID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTDeleteAPIGuildMemberRoleResult>(
@@ -1786,7 +1843,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param userID https://discord.dev/resources/user#user-object
    */
-  removeGuildMember(guildID: string, userID: string, reason?: string) {
+  removeGuildMember(guildID: Snowflake, userID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIGuildMemberResult>(
       `guilds/${guildID}/members/${userID}`,
       {
@@ -1803,7 +1860,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * banned from this guild. Requires the `BAN_MEMBERS` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildBans(guildID: string) {
+  getGuildBans(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildBansResult>(`guilds/${guildID}/bans`);
   }
 
@@ -1815,7 +1872,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param userID https://discord.dev/resources/user#user-object
    */
-  getGuildBan(guildID: string, userID: string) {
+  getGuildBan(guildID: Snowflake, userID: Snowflake) {
     return this.request<RESTGetAPIGuildBanResult>(
       `guilds/${guildID}/bans/${userID}`,
     );
@@ -1832,8 +1889,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param userID https://discord.dev/resources/user#user-object
    */
   createGuildBan(
-    guildID: string,
-    userID: string,
+    guildID: Snowflake,
+    userID: Snowflake,
     data: RESTPutAPIGuildBanJSONBody,
     reason?: string,
   ) {
@@ -1856,7 +1913,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param userID https://discord.dev/resources/user#user-object
    */
-  removeGuildBan(guildID: string, userID: string, reason?: string) {
+  removeGuildBan(guildID: Snowflake, userID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIGuildBanResult>(
       `guilds/${guildID}/bans/${userID}`,
       {
@@ -1873,7 +1930,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * guild.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildRoles(guildID: string) {
+  getGuildRoles(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildRolesResult>(`guilds/${guildID}/roles`);
   }
 
@@ -1888,7 +1945,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildRole(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildRoleJSONBody,
     reason?: string,
   ) {
@@ -1912,7 +1969,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   editGuildRolePositions(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPatchAPIGuildRolePositionsJSONBody,
   ) {
     return this.request<RESTPatchAPIGuildRolePositionsResult>(
@@ -1936,8 +1993,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param roleID https://discord.dev/topics/permissions#role-object
    */
   editGuildRole(
-    guildID: string,
-    roleID: string,
+    guildID: Snowflake,
+    roleID: Snowflake,
     data: RESTPatchAPIGuildRoleJSONBody,
     reason?: string,
   ) {
@@ -1960,7 +2017,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param roleID https://discord.dev/topics/permissions#role-object
    */
-  deleteGuildRole(guildID: string, roleID: string, reason?: string) {
+  deleteGuildRole(guildID: Snowflake, roleID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIGuildRoleResult>(
       `guilds/${guildID}/roles/${roleID}`,
       {
@@ -1982,7 +2039,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * prune and users with additional roles will not.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildPruneCount(guildID: string, query: RESTGetAPIGuildPruneCountQuery) {
+  getGuildPruneCount(
+    guildID: Snowflake,
+    query: RESTGetAPIGuildPruneCountQuery,
+  ) {
     return this.request<RESTGetAPIGuildPruneCountResult>(
       `guilds/${guildID}/prune`,
       {
@@ -2008,7 +2068,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   beginGuildPrune(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildPruneJSONBody,
     reason?: string,
   ) {
@@ -2030,7 +2090,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * servers when the guild is VIP-enabled.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildVoiceRegions(guildID: string) {
+  getGuildVoiceRegions(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildVoiceRegionsResult>(
       `guilds/${guildID}/regions`,
     );
@@ -2044,7 +2104,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Requires the `MANAGE_GUILD` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildInvites(guildID: string) {
+  getGuildInvites(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildInvitesResult>(
       `guilds/${guildID}/invites`,
     );
@@ -2057,7 +2117,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects for the guild. Requires the `MANAGE_GUILD` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildIntegrations(guildID: string) {
+  getGuildIntegrations(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildIntegrationsResult>(
       `guilds/${guildID}/integrations`,
     );
@@ -2074,7 +2134,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildIntegration(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildIntegrationJSONBody,
     reason?: string,
   ) {
@@ -2103,8 +2163,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param integrationID https://discord.dev/resources/guild#integration-object
    */
   editGuildIntegration(
-    guildID: string,
-    integrationID: string,
+    guildID: Snowflake,
+    integrationID: Snowflake,
     data: RESTPatchAPIGuildIntegrationJSONBody,
     reason?: string,
   ) {
@@ -2131,8 +2191,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param integrationID https://discord.dev/resources/guild#integration-object
    */
   deleteGuildIntegration(
-    guildID: string,
-    integrationID: string,
+    guildID: Snowflake,
+    integrationID: Snowflake,
     reason?: string,
   ) {
     return this.request<RESTDeleteAPIGuildIntegrationResult>(
@@ -2152,7 +2212,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param integrationID https://discord.dev/resources/guild#integration-object
    */
-  syncGuildIntegration(guildID: string, integrationID: string) {
+  syncGuildIntegration(guildID: Snowflake, integrationID: Snowflake) {
     return this.request<RESTPostAPIGuildIntegrationSyncResult>(
       `guilds/${guildID}/integrations/${integrationID}/sync`,
       {
@@ -2168,7 +2228,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Requires the `MANAGE_GUILD` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildWidgetSettings(guildID: string) {
+  getGuildWidgetSettings(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildWidgetSettingsResult>(
       `guilds/${guildID}/widget`,
     );
@@ -2184,7 +2244,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   editGuildWidget(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPatchAPIGuildWidgetSettingsJSONBody,
   ) {
     return this.request<RESTPatchAPIGuildWidgetSettingsResult>(
@@ -2202,7 +2262,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Returns the widget for the guild.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildWidget(guildID: string) {
+  getGuildWidget(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildWidgetJSONResult>(
       `guilds/${guildID}/widget.json`,
     );
@@ -2216,7 +2276,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * will be null if a vanity url for the guild is not set.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildVanityURL(guildID: string) {
+  getGuildVanityURL(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildVanityUrlResult>(
       `guilds/${guildID}/vanity-url`,
     );
@@ -2231,7 +2291,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > ℹ️ All parameters to this endpoint are optional.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildWidgetImage(guildID: string, query: RESTGetAPIGuildWidgetImageQuery) {
+  getGuildWidgetImage(
+    guildID: Snowflake,
+    query: RESTGetAPIGuildWidgetImageQuery,
+  ) {
     return this.request<RESTGetAPIGuildWidgetImageResult>(
       `guilds/${guildID}/widget.png`,
       {
@@ -2312,7 +2375,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects. Requires the `MANAGE_GUILD` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildTemplates(guildID: string) {
+  getGuildTemplates(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildTemplatesResult>(
       `guilds/${guildID}/templates`,
     );
@@ -2327,7 +2390,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   createGuildTemplate(
-    guildID: string,
+    guildID: Snowflake,
     data: RESTPostAPIGuildTemplatesJSONBody,
   ) {
     return this.request<RESTPostAPIGuildTemplatesResult>(
@@ -2348,7 +2411,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param templateCode https://discord.dev/resources/template#template-object
    */
-  syncGuildTemplate(guildID: string, templateCode: string) {
+  syncGuildTemplate(guildID: Snowflake, templateCode: string) {
     return this.request<RESTPutAPIGuildTemplateSyncResult>(
       `guilds/${guildID}/templates/${templateCode}`,
       {
@@ -2367,7 +2430,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param templateCode https://discord.dev/resources/template#template-object
    */
   editGuildTemplate(
-    guildID: string,
+    guildID: Snowflake,
     templateCode: string,
     data: RESTPatchAPIGuildTemplateJSONBody,
   ) {
@@ -2388,7 +2451,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param templateCode https://discord.dev/resources/template#template-object
    */
-  deleteGuildTemplate(guildID: string, templateCode: string) {
+  deleteGuildTemplate(guildID: Snowflake, templateCode: string) {
     return this.request<RESTDeleteAPIGuildTemplateResult>(
       `guilds/${guildID}/templates/${templateCode}`,
       {
@@ -2415,7 +2478,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Returns a [user](https://discord.dev/resources/user#user-object) object for a given user ID.
    * @param userID https://discord.dev/resources/user#user-object
    */
-  getUser(userID: string) {
+  getUser(userID: Snowflake) {
     return this.request<RESTGetAPIUserResult>(`users/${userID}`);
   }
 
@@ -2452,7 +2515,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Leave a guild. Returns a 204 empty response on success.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  leaveGuild(guildID: string) {
+  leaveGuild(guildID: Snowflake) {
     return this.request<RESTDeleteAPICurrentUserGuildResult>(
       `users/@me/guilds/${guildID}`,
       {
@@ -2544,7 +2607,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * - Webhook names cannot be: 'clyde'
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  createWebhook(channelID: string, data: RESTPostAPIChannelWebhookJSONBody) {
+  createWebhook(channelID: Snowflake, data: RESTPostAPIChannelWebhookJSONBody) {
     return this.request<RESTPostAPIChannelWebhookResult>(
       `channels/${channelID}/webhooks`,
       {
@@ -2561,7 +2624,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects. Requires the `MANAGE_WEBHOOKS` permission.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
-  getChannelWebhooks(channelID: string) {
+  getChannelWebhooks(channelID: Snowflake) {
     return this.request<RESTGetAPIChannelWebhooksResult>(
       `channels/${channelID}/webhooks`,
     );
@@ -2574,7 +2637,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * objects. Requires the `MANAGE_WEBHOOKS` permission.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildWebhooks(guildID: string) {
+  getGuildWebhooks(guildID: Snowflake) {
     return this.request<RESTGetAPIGuildWebhooksResult>(
       `guilds/${guildID}/webhooks`,
     );
@@ -2587,7 +2650,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * given id.
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
    */
-  getWebhook(webhookID: string) {
+  getWebhook(webhookID: Snowflake) {
     return this.request<RESTGetAPIWebhookResult>(`webhooks/${webhookID}`);
   }
 
@@ -2599,7 +2662,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
-  getWebhookwithToken(webhookID: string, webhookToken: string) {
+  getWebhookwithToken(webhookID: Snowflake, webhookToken: string) {
     return this.request<RESTGetAPIWebhookWithTokenResult>(
       `webhooks/${webhookID}/${webhookToken}`,
     );
@@ -2615,7 +2678,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
    */
   editWebhook(
-    webhookID: string,
+    webhookID: Snowflake,
     data: RESTPatchAPIWebhookJSONBody,
     reason?: string,
   ) {
@@ -2636,7 +2699,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
   editWebhookwithToken(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
     data: RESTPatchAPIWebhookWithTokenJSONBody,
     reason?: string,
@@ -2658,7 +2721,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * a 204 NO CONTENT response on success.
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
    */
-  deleteWebhook(webhookID: string, reason?: string) {
+  deleteWebhook(webhookID: Snowflake, reason?: string) {
     return this.request<RESTDeleteAPIWebhookResult>(`webhooks/${webhookID}`, {
       method: "DELETE",
       reason,
@@ -2673,7 +2736,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
   deleteWebhookwithToken(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
     reason?: string,
   ) {
@@ -2699,7 +2762,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
   executeWebhook(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
     data: RESTPostAPIWebhookWithTokenJSONBody,
     files?: File[],
@@ -2724,7 +2787,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
   executeSlackCompatibleWebhook(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
     query: RESTPostAPIWebhookWithTokenSlackQuery,
   ) {
@@ -2748,7 +2811,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
   executeGitHubCompatibleWebhook(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
     query: RESTPostAPIWebhookWithTokenGitHubQuery,
   ) {
@@ -2773,9 +2836,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   editWebhookMessage(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
-    messageID: string,
+    messageID: Snowflake,
     data: RESTPatchAPIWebhookWithTokenMessageJSONBody,
   ) {
     return this.request<RESTPatchAPIWebhookWithTokenMessageResult>(
@@ -2797,9 +2860,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * @param messageID https://discord.dev/resources/channel#message-object
    */
   deleteWebhookMessage(
-    webhookID: string,
+    webhookID: Snowflake,
     webhookToken: string,
-    messageID: string,
+    messageID: Snowflake,
   ) {
     return this.request<RESTDeleteAPIWebhookWithTokenMessageResult>(
       `webhooks/${webhookID}/${webhookToken}/messages/${messageID}`,
