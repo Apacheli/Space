@@ -1,7 +1,7 @@
 import { APIChannel } from "../../deps.ts";
 import Channel from "./channel.ts";
 
-export class DMChannel extends Channel {
+export class PrivateChannel extends Channel {
   lastMessageID?: bigint | null;
   lastPinTimestamp: APIChannel["last_pin_timestamp"];
   recipients: APIChannel["recipients"];
@@ -15,4 +15,4 @@ export class DMChannel extends Channel {
   }
 }
 
-export default DMChannel;
+export default PrivateChannel;

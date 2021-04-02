@@ -1,7 +1,7 @@
 import { APIChannel } from "../../deps.ts";
-import DMChannel from "./dmchannel.ts";
+import PrivateChannel from "./privatechannel.ts";
 
-export class GroupDMChannel extends DMChannel {
+export class GroupPrivateChannel extends PrivateChannel {
   icon?: APIChannel["icon"];
   ownerID?: bigint;
   applicationID?: bigint;
@@ -15,4 +15,4 @@ export class GroupDMChannel extends DMChannel {
   }
 }
 
-export default GroupDMChannel;
+export default GroupPrivateChannel;

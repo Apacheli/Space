@@ -2,10 +2,12 @@ import { APIChannel, ChannelType } from "../../deps.ts";
 import {
   CategoryChannel,
   Channel,
-  DMChannel,
-  GroupDMChannel,
+  GroupPrivateChannel,
   GuildChannel,
   NewsChannel,
+  PrivateChannel,
+  PrivateThreadChannel,
+  PublicThreadChannel,
   StageChannel,
   StoreChannel,
   TextChannel,
@@ -19,13 +21,13 @@ export const fromType = (channel: APIChannel, client: Client) => {
       return new TextChannel(channel, client);
     }
     case ChannelType.DM: {
-      return new DMChannel(channel, client);
+      return new PrivateChannel(channel, client);
     }
     case ChannelType.GUILD_VOICE: {
       return new VoiceChannel(channel, client);
     }
     case ChannelType.GROUP_DM: {
-      return new GroupDMChannel(channel, client);
+      return new GroupPrivateChannel(channel, client);
     }
     case ChannelType.GUILD_CATEGORY: {
       return new CategoryChannel(channel, client);
@@ -35,6 +37,12 @@ export const fromType = (channel: APIChannel, client: Client) => {
     }
     case ChannelType.GUILD_STORE: {
       return new StoreChannel(channel, client);
+    }
+    case /* ChannelType.PUBLIC_THREAD */ 11: {
+      return new PublicThreadChannel(channel, client);
+    }
+    case /* ChannelType.PRIVATE_THREAD */ 12: {
+      return new PrivateThreadChannel(channel, client);
     }
     case /* ChannelType.GUILD_STAGE_VOICE */ 13: {
       return new StageChannel(channel, client);
