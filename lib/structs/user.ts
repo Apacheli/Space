@@ -1,20 +1,27 @@
 import { APIUser } from "../../deps.ts";
+import Client from "../client/client.ts";
 import Struct from "./struct.ts";
 
 export class User extends Struct {
+  bot;
+  system;
+
   username!: APIUser["username"];
   discriminator!: APIUser["discriminator"];
   avatar!: APIUser["avatar"] | null;
-  bot: APIUser["bot"];
-  system: APIUser["system"];
   public publicFlags: APIUser["public_flags"];
+
+  constructor(data: APIUser, client: Client) {
+    super(data, client);
+
+    this.bot = data.bot;
+    this.system = data.system;
+  }
 
   update(data: APIUser) {
     this.username = data.username;
     this.discriminator = data.discriminator;
     this.avatar = data.avatar;
-    this.bot = data.bot;
-    this.system = data.system;
     this.publicFlags = data.public_flags;
   }
 

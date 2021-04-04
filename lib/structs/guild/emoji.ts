@@ -19,6 +19,10 @@ export class Emoji extends Struct {
     this.animated = data.animated;
     this.available = data.available;
   }
+
+  get mention() {
+    return `<${this.animated ? "a" : ""}:${this.name}:${this.id}>`;
+  }
 }
 
 export default Emoji;
