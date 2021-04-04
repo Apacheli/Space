@@ -67,7 +67,7 @@ export class Guild extends Struct {
     data.members?.forEach((member) => {
       if (member.user) {
         this.members.add({ id: member.user.id, ...member });
-        client.users.add(member.user);
+        client.users.update(member.user);
       }
     });
     this.channels = new Cache<GuildChannel>(client, GuildChannel);
@@ -82,11 +82,6 @@ export class Guild extends Struct {
         await client.presences.update({ id: presence.user.id, ...presence }),
       )
     );
-    data.presences?.forEach(async (presence) => {
-      if (await client.presences.has(presence.user.id)) {
-      }
-    });
-    // this.presences = data.presences;
   }
 
   update(data: APIGuild) {
