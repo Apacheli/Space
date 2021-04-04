@@ -102,7 +102,7 @@ export const onChannelUpdate = async (
   return data;
 };
 
-export const onGuildBanAdd = async (
+export const onGuildBanAdd = (
   client: Client,
   data: GatewayGuildBanAddDispatchData,
 ) => {

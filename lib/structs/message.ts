@@ -22,7 +22,7 @@ export class Message extends Struct {
   interaction;
 
   content!: APIMessage["content"];
-  editedTimestamp!: APIMessage["edited_timestamp"];
+  editedTimestamp!: number | null;
   mentionEveryone!: APIMessage["mention_everyone"];
   mentions!: APIMessage["mentions"];
   mentionRoles!: APIMessage["mention_roles"];
@@ -36,7 +36,7 @@ export class Message extends Struct {
 
     this.channelID = BigInt(data.channel_id);
     this.guildID = data.guild_id && BigInt(data.guild_id);
-    this.author = data.author;
+    this.author = data.author; // TODO: cache without the Promise thing
     this.member = data.member;
     this.tts = data.tts;
     this.attachments = data.attachments;
@@ -48,13 +48,16 @@ export class Message extends Struct {
     this.application = data.application;
     this.messageReference = data.message_reference;
     this.stickers = data.stickers;
-    this.referencedMessage = data.referenced_message;
+    this.referencedMessage = data.referenced_message &&
+      new Message(data.referenced_message, client);
     this.interaction = data.interaction;
   }
 
   update(data: APIMessage) {
     this.content = data.content;
-    this.editedTimestamp = data.edited_timestamp;
+    this.editedTimestamp = data.edited_timestamp
+      ? Date.parse(data.edited_timestamp)
+      : null;
     this.mentionEveryone = data.mention_everyone;
     this.mentions = data.mentions;
     this.mentionRoles = data.mention_roles;

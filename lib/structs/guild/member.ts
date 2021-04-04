@@ -1,23 +1,30 @@
-import { APIGuildMember, GatewayPresenceUpdate } from "../../../deps.ts";
+import { APIGuildMember } from "../../../deps.ts";
+import Client from "../../client/client.ts";
 import Struct from "../struct.ts";
+import { RequiredKeys } from "../../util/mod.ts";
 
 export class Member extends Struct {
   user: APIGuildMember["user"];
+  joinedAt: number;
+
   nick: APIGuildMember["nick"];
   roles!: APIGuildMember["roles"];
-  joinedAt!: APIGuildMember["joined_at"];
   premiumSince: APIGuildMember["premium_since"];
   deaf!: APIGuildMember["deaf"];
   mute!: APIGuildMember["mute"];
   pending: APIGuildMember["pending"];
-  presence?: GatewayPresenceUpdate;
   // permissions;
 
-  update(data: APIGuildMember) {
+  constructor(data: RequiredKeys<APIGuildMember, "user">, client: Client) {
+    super({ id: data.user.id }, client);
+
     this.user = data.user;
+    this.joinedAt = Date.parse(data.joined_at);
+  }
+
+  update(data: APIGuildMember) {
     this.nick = data.nick;
     this.roles = data.roles;
-    this.joinedAt = data.joined_at;
     this.premiumSince = data.premium_since;
     this.deaf = data.deaf;
     this.mute = data.mute;

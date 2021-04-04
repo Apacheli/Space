@@ -6,7 +6,7 @@ export class Role extends Struct {
   color!: APIRole["color"];
   hoist!: APIRole["hoist"];
   position!: APIRole["position"];
-  permissions!: APIRole["permissions"];
+  permissions!: bigint;
   managed!: APIRole["managed"];
   mentionable!: APIRole["mentionable"];
   tags: APIRole["tags"];
@@ -18,7 +18,7 @@ export class Role extends Struct {
     this.color = data.color;
     this.hoist = data.hoist;
     this.position = data.position;
-    this.permissions = data.permissions;
+    this.permissions = BigInt(data.permissions);
     this.managed = data.managed;
     this.mentionable = data.mentionable;
     this.tags = data.tags;
