@@ -22,7 +22,7 @@ Mostly development-related changes.
 
 - ([`df6fad3`](https://github.com/Apacheli/Space/commit/df6fad3),
   [`2d66d3b`](https://github.com/Apacheli/Space/commit/2d66d3b)) Added
-  future-proof support for thread channel types.
+  future-proof support for thread channel types
 - ([`8341857`](https://github.com/Apacheli/Space/commit/8341857))
   - Updated HTTP methods to use `Snowflake`s instead of `string`s
   - Added `HTTPClient.bulkOverwriteGlobalApplicationCommands` and

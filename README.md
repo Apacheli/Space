@@ -23,6 +23,7 @@ Click [here](https://deno.land/manual/examples/manage_dependencies) to read more
 about dependency management.
 
 If you wish to install a specific version, you can import `space@version`.
+[Read the release notes](RELEASES.md) to see all available versions.
 
 ### Resources
 

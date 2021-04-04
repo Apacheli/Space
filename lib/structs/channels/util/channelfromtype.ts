@@ -1,4 +1,4 @@
-import { APIChannel, ChannelType } from "../../../deps.ts";
+import { APIChannel, ChannelType } from "../../../../deps.ts";
 import {
   CategoryChannel,
   Channel,
@@ -12,10 +12,10 @@ import {
   StoreChannel,
   TextChannel,
   VoiceChannel,
-} from "./mod.ts";
-import Client from "../../client/client.ts";
+} from "../mod.ts";
+import Client from "../../../client/client.ts";
 
-export const fromType = (channel: APIChannel, client: Client) => {
+export const channelFromType = (channel: APIChannel, client: Client) => {
   switch (channel.type) {
     case ChannelType.GUILD_TEXT: {
       return new TextChannel(channel, client);
@@ -56,4 +56,4 @@ export const fromType = (channel: APIChannel, client: Client) => {
   }
 };
 
-export default fromType;
+export default channelFromType;

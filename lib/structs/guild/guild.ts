@@ -1,7 +1,6 @@
 import { APIGuild } from "../../../deps.ts";
-import { Member, Struct } from "../mod.ts";
-import { fromType as f, GuildChannel } from "../channels/mod.ts";
-import Client from "../../client/client.ts";
+import { channelFromType, GuildChannel, Member, Role, Struct } from "../mod.ts";
+import Client, { APIPresence } from "../../client/client.ts";
 import Cache, { Storable } from "../../util/cache.ts";
 
 export class Guild extends Struct {
@@ -15,7 +14,7 @@ export class Guild extends Struct {
   // voiceStates;
   members: Storable<Member>;
   channels: Storable<GuildChannel>;
-  // presences;
+  presences: Storable<APIPresence>;
 
   name!: APIGuild["name"];
   icon!: APIGuild["icon"];
@@ -31,7 +30,7 @@ export class Guild extends Struct {
   verificationLevel!: APIGuild["verification_level"];
   defaultMessageNotifications!: APIGuild["default_message_notifications"];
   explicitContentFilter!: APIGuild["explicit_content_filter"];
-  // roles;
+  roles: Storable<Role>;
   // emojis;
   features!: APIGuild["features"];
   mfaLevel!: APIGuild["mfa_level"];
@@ -64,17 +63,29 @@ export class Guild extends Struct {
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
     // this.voiceStates = data.voice_states;
-    this.members = new Cache<Member>(Member, client);
+    this.members = new Cache<Member>(client, Member);
     data.members?.forEach((member) => {
-      if (member.user) { // member.user should probably exist but check anyway
+      if (member.user) {
         this.members.add({ id: member.user.id, ...member });
         client.users.add(member.user);
       }
     });
-    this.channels = new Cache<GuildChannel>(GuildChannel, client);
-    // @ts-ignore: This is valid, but will fix
-    data.channels?.forEach((channel) => this.channels.add(f(channel, client)));
-    // this.channels = data.channels;
+    this.channels = new Cache<GuildChannel>(client, GuildChannel);
+    data.channels?.forEach((channel) =>
+      this.channels.add(channelFromType(channel, client))
+    );
+    this.roles = new Cache<Role>(client, Role);
+    data.roles?.forEach((role) => this.roles.add(role));
+    this.presences = new Cache<APIPresence>(client);
+    data.presences?.forEach(async (presence) =>
+      this.presences.add(
+        await client.presences.update({ id: presence.user.id, ...presence }),
+      )
+    );
+    data.presences?.forEach(async (presence) => {
+      if (await client.presences.has(presence.user.id)) {
+      }
+    });
     // this.presences = data.presences;
   }
 

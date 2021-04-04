@@ -1,4 +1,4 @@
-import { APIGuildMember } from "../../../deps.ts";
+import { APIGuildMember, GatewayPresenceUpdate } from "../../../deps.ts";
 import Struct from "../struct.ts";
 
 export class Member extends Struct {
@@ -10,6 +10,7 @@ export class Member extends Struct {
   deaf!: APIGuildMember["deaf"];
   mute!: APIGuildMember["mute"];
   pending: APIGuildMember["pending"];
+  presence?: GatewayPresenceUpdate;
   // permissions;
 
   update(data: APIGuildMember) {

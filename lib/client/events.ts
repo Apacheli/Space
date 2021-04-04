@@ -41,7 +41,7 @@ import {
   GatewayWebhooksUpdateDispatchData,
 } from "../../deps.ts";
 import { Client } from "./mod.ts";
-import { fromType, Member } from "../structs/mod.ts";
+import { channelFromType, Message } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
@@ -66,7 +66,7 @@ export const onChannelCreate = async (
   client: Client,
   data: GatewayChannelCreateDispatchData,
 ) => {
-  const channel = fromType(data, client);
+  const channel = channelFromType(data, client);
   if (data.guild_id) {
     const guild = await client.guilds.get(data.guild_id);
     return guild?.channels.add(channel);
@@ -149,8 +149,7 @@ export const onGuildMemberAdd = async (
   data: RequiredKeys<GatewayGuildMemberAddDispatchData, "user">,
 ) => {
   return (await client.guilds.get(data.guild_id))
-    ?.members.add({ id: data.user.id, ...data }) ??
-    new Member({ id: data.user.id, ...data }, client);
+    ?.members.add({ id: data.user.id, ...data }) ?? data;
 };
 
 export const onGuildMemberRemove = async (
@@ -172,7 +171,7 @@ export const onGuildMemberUpdate = async (
   data: RequiredKeys<GatewayGuildMemberUpdateDispatchData, "user">,
 ) => {
   return (await client.guilds.get(data.guild_id))
-    ?.members.update({ id: data.user.id, ...data });
+    ?.members.update({ id: data.user.id, ...data }) ?? data;
 };
 
 export const onGuildRoleCreate = (
@@ -197,6 +196,7 @@ export const onGuildUpdate = (
   client: Client,
   data: GatewayGuildUpdateDispatchData,
 ) => {
+  return client.guilds.update(data);
 };
 
 export const onInteractionCreate = (
@@ -221,6 +221,7 @@ export const onMessageCreate = (
   client: Client,
   data: GatewayMessageCreateDispatchData,
 ) => {
+  return new Message(data, client);
 };
 
 export const onMessageDelete = (
@@ -269,6 +270,8 @@ export const onPresenceUpdate = (
   client: Client,
   data: GatewayPresenceUpdateDispatchData,
 ) => {
+  // TODO: Bots' presence are different per shard
+  return client.presences.update({ id: data.user.id, ...data });
 };
 
 export const onReady = (client: Client, data: GatewayReadyDispatchData) => {

@@ -2,11 +2,10 @@ import { green, yellow } from "../../util/logger.ts";
 
 export interface ResponseError {
   code: number;
-  errors?: any; // TODO: get this type right
+  errors?: any; // TODO: Get this type correct
   message: string;
 }
 
-// TODO: Discord errors are like a chain of properties
 export class HTTPError extends Error implements ResponseError {
   #message;
 
@@ -27,21 +26,17 @@ export class HTTPError extends Error implements ResponseError {
     const code = yellow(`${this.code}`);
     const errors = this.formatErrors()
       .replace(/'.+?'/g, (str) => green(str))
-      .replace(/\b\d+\b/g, (int) => yellow(int))
-      .slice(0, -1);
-    return `[${code}] ${this.#message}\n${errors}`;
+      .replace(/\b\d+\b/g, (int) => yellow(int));
+    return `[${code}] ${this.#message}\n${errors.slice(0, -1)}`;
   }
 
-  private formatErrors(errors = this.errors, key = "") {
+  // https://github.com/abalabahaha/eris/blob/master/lib/errors/DiscordRESTError.js#L49
+  private formatErrors(errors = this.errors, x = "") {
     let str = "";
     for (const k in errors) {
-      const thing = errors[k];
-      if (thing._errors) {
-        for (const e of thing._errors) {
-          str += `[${e.code}] ${key}${k}: ${e.message}\n`;
-        }
-      } else if (thing) {
-        str += this.formatErrors(errors[k], `${key}${k}.`);
+      if (errors[k]) {
+        str += errors[k]._errors?.map((e: any) => `${x}${k}: ${e.message}\n`) ??
+          this.formatErrors(errors[k], `${x}${k}.`);
       }
     }
     return str;

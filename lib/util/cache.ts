@@ -1,6 +1,5 @@
 import { Snowflake } from "../../deps.ts";
 import { PossiblePromise } from "./util.ts";
-import Struct from "../structs/struct.ts";
 import Client from "../client/client.ts";
 
 export type StorableKey = bigint | Snowflake;
@@ -13,26 +12,30 @@ export interface Storable<V> {
   update(item: { id: StorableKey }): PossiblePromise<V>;
 }
 
-export class Cache<V extends Struct> extends Map<V["id"], V>
+interface CacheEntry {
+  id: bigint;
+  update?(data: any): void;
+}
+
+export class Cache<V extends CacheEntry> extends Map<StorableKey, V>
   implements Storable<V> {
   constructor(
-    public baseClass: new (data: any, client: Client) => V,
-    public client: Client,
+    public client?: Client,
+    public baseClass?: new (data: any, client: Client) => V,
   ) {
     super();
   }
 
-  add(item: { id: StorableKey } | V): V {
+  add(item: V): V {
     const existing = this.get(item.id);
-    if (!(item instanceof this.baseClass)) {
+    if (this.client && this.baseClass && !(item instanceof this.baseClass)) {
       if (existing) {
         return this.update(item);
       }
       item = new this.baseClass(item, this.client);
     }
-    // @ts-ignore: This is checked
+    item.id = BigInt(item.id);
     this.set(item.id, item);
-    // @ts-ignore: ^
     return item;
   }
 
@@ -52,12 +55,16 @@ export class Cache<V extends Struct> extends Map<V["id"], V>
     }
   }
 
-  update(item: { id: StorableKey } | V) {
+  update(item: V) {
     const existing = this.get(item.id);
-    if (!existing || item instanceof this.baseClass) {
+    if (!existing || this.baseClass && item instanceof this.baseClass) {
       return this.add(item);
     }
-    existing.update(item);
+    if (existing.update) {
+      existing.update(item);
+    } else {
+      this.set(item.id, item);
+    }
     return existing;
   }
 }
