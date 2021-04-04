@@ -25,8 +25,8 @@ export class Message extends Struct {
   editedTimestamp!: number | null;
   mentionEveryone!: APIMessage["mention_everyone"];
   mentions!: APIMessage["mentions"];
-  mentionRoles!: APIMessage["mention_roles"];
-  mentionChannels: APIMessage["mention_channels"];
+  mentionRoles!: bigint[];
+  mentionChannels?: bigint[];
   embeds!: APIMessage["embeds"];
   pinned!: APIMessage["pinned"];
   flags: APIMessage["flags"];
@@ -60,8 +60,8 @@ export class Message extends Struct {
       : null;
     this.mentionEveryone = data.mention_everyone;
     this.mentions = data.mentions;
-    this.mentionRoles = data.mention_roles;
-    this.mentionChannels = data.mention_channels;
+    this.mentionRoles = data.mention_roles.map(BigInt);
+    this.mentionChannels = data.mention_channels?.map(BigInt);
     this.embeds = data.embeds;
     this.pinned = data.pinned;
     this.flags = data.flags;

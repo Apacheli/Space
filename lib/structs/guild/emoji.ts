@@ -3,7 +3,7 @@ import Struct from "../struct.ts";
 
 export class Emoji extends Struct {
   name!: APIEmoji["name"];
-  roles: APIEmoji["roles"];
+  roles?: bigint[];
   user: APIEmoji["user"];
   requireColons: APIEmoji["require_colons"];
   managed: APIEmoji["managed"];
@@ -12,7 +12,7 @@ export class Emoji extends Struct {
 
   update(data: APIEmoji) {
     this.name = data.name;
-    this.roles = data.roles;
+    this.roles = data.roles?.map(BigInt);
     this.user = data.user;
     this.requireColons = data.require_colons;
     this.managed = data.managed;

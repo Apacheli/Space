@@ -3,14 +3,16 @@ import Channel from "./channel.ts";
 
 export class PrivateChannel extends Channel {
   lastMessageID?: bigint | null;
-  lastPinTimestamp: APIChannel["last_pin_timestamp"];
+  lastPinTimestamp?: number | null;
   recipients: APIChannel["recipients"];
 
   update(data: APIChannel) {
     super.update(data);
 
     this.lastMessageID = data.last_message_id && BigInt(data.last_message_id);
-    this.lastPinTimestamp = data.last_pin_timestamp;
+    this.lastPinTimestamp = data.last_pin_timestamp
+      ? Date.parse(data.last_pin_timestamp)
+      : null;
     this.recipients = data.recipients;
   }
 }

@@ -8,7 +8,7 @@ export class Member extends Struct {
   joinedAt: number;
 
   nick: APIGuildMember["nick"];
-  roles!: APIGuildMember["roles"];
+  roles?: bigint[];
   premiumSince: APIGuildMember["premium_since"];
   deaf!: APIGuildMember["deaf"];
   mute!: APIGuildMember["mute"];
@@ -16,7 +16,7 @@ export class Member extends Struct {
   // permissions;
 
   constructor(data: RequiredKeys<APIGuildMember, "user">, client: Client) {
-    super({ id: data.user.id }, client);
+    super({ id: data.user.id, ...data }, client);
 
     this.user = data.user;
     this.joinedAt = Date.parse(data.joined_at);
@@ -24,7 +24,7 @@ export class Member extends Struct {
 
   update(data: APIGuildMember) {
     this.nick = data.nick;
-    this.roles = data.roles;
+    this.roles = data.roles.map(BigInt);
     this.premiumSince = data.premium_since;
     this.deaf = data.deaf;
     this.mute = data.mute;
