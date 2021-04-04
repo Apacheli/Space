@@ -23,6 +23,10 @@ export class Role extends Struct {
     this.mentionable = data.mentionable;
     this.tags = data.tags;
   }
+
+  get mention() {
+    return `<@${this.id}>`;
+  }
 }
 
 export default Role;
