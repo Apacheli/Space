@@ -1,4 +1,4 @@
-import { GatewayPresenceUpdate, Snowflake } from "../../deps.ts";
+import { GatewayPresenceUpdate } from "../../deps.ts";
 import { HTTPClientOptions, RESTClient } from "../api/http/mod.ts";
 import {
   GatewayClient,
