@@ -21,6 +21,8 @@ export default class Webhook extends Struct {
   }
 
   update(data: APIWebhook) {
+    super.update(data);
+
     this.type = data.type;
     this.channelID = BigInt(data.channel_id);
     this.user = data.user;

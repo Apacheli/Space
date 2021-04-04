@@ -11,6 +11,8 @@ export class Emoji extends Struct {
   available: APIEmoji["available"];
 
   update(data: APIEmoji) {
+    super.update(data);
+
     this.name = data.name;
     this.roles = data.roles?.map(BigInt);
     this.user = data.user;

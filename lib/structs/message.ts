@@ -54,6 +54,8 @@ export class Message extends Struct {
   }
 
   update(data: APIMessage) {
+    super.update(data);
+
     this.content = data.content;
     this.editedTimestamp = data.edited_timestamp
       ? Date.parse(data.edited_timestamp)

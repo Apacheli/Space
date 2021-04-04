@@ -23,11 +23,10 @@ export class HTTPError extends Error implements ResponseError {
   }
 
   get message() {
-    const code = yellow(`${this.code}`);
-    const errors = this.formatErrors()
-      .replace(/'.+?'/g, (str) => green(str))
-      .replace(/\b\d+\b/g, (int) => yellow(int));
-    return `[${code}] ${this.#message}\n${errors.slice(0, -1)}`;
+    return `[${this.code}] ${this.#message}\n${this.formatErrors()}`
+      .replace(/".+?"|'.+?'/g, (str) => green(str))
+      .replace(/\b\d+\b|true|false/g, (int) => yellow(int))
+      .slice(0, -1);
   }
 
   // https://github.com/abalabahaha/eris/blob/master/lib/errors/DiscordRESTError.js#L49

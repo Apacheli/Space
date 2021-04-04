@@ -19,6 +19,8 @@ export class User extends Struct {
   }
 
   update(data: APIUser) {
+    super.update(data);
+
     this.username = data.username;
     this.discriminator = data.discriminator;
     this.avatar = data.avatar;

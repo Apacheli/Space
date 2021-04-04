@@ -23,6 +23,8 @@ export class Member extends Struct {
   }
 
   update(data: APIGuildMember) {
+    super.update(data);
+
     this.nick = data.nick;
     this.roles = data.roles.map(BigInt);
     this.premiumSince = data.premium_since;

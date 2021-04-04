@@ -263,7 +263,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
 
     clearTimeout(timeout);
 
-    const result = await response.json();
+    const result = response.headers.get("content-type") === "application/json"
+      ? await response.json()
+      : undefined;
     if (response.ok) {
       return result as T;
     }
