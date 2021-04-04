@@ -13,7 +13,7 @@ export interface Storable<V> {
 }
 
 interface CacheEntry {
-  id: bigint;
+  id: StorableKey;
   update?(data: any): void;
 }
 
@@ -34,7 +34,9 @@ export class Cache<V extends CacheEntry> extends Map<StorableKey, V>
       }
       item = new this.baseClass(item, this.client);
     }
-    item.id = BigInt(item.id);
+    if (!this.baseClass && typeof item.id !== "bigint") {
+      item.id = BigInt(item.id);
+    }
     this.set(item.id, item);
     return item;
   }
