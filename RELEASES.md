@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.4.2-alpha](#042-alpha---2021-04-04) |
 | [0.4.1-alpha](#041-alpha---2021-04-02) |
 | [0.4.0-alpha](#040-alpha---2021-03-31) |
 | [0.3.4-alpha](#034-alpha---2021-03-29) |
@@ -13,6 +14,33 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.4.2-alpha](https://github.com/Apacheli/Space/compare/4cf9c3a...e5eb4fb) - 2021-04-04
+
+### Added
+
+- ([`026443b`](https://github.com/Apacheli/Space/commit/026443b),
+  [`1f1d72b`](https://github.com/Apacheli/Space/commit/1f1d72b))
+  - Added support for `GUILD_ROLE_*` events
+  - Added `Guild.emojis`
+  - Added `mention` getter to `Emoji`, `Member`, `Role`, and `User`
+
+### Changed
+
+- ([`3da4042`](https://github.com/Apacheli/Space/commit/3da4042)) Date
+  properties are now numbers instead of ISO format
+- ([`087d5e9`](https://github.com/Apacheli/Space/commit/087d5e9)) Most
+  `Snowflake`s should be a `bigint` now
+
+### Fixed
+
+- ([`3cb02d1`](https://github.com/Apacheli/Space/commit/3cb02d1)) Use `update`
+  instead of `add` for caching users in a guild
+- ([`e5eb4fb`](https://github.com/Apacheli/Space/commit/e5eb4fb))
+  - Corrected some coloring in `HTTPError` messages
+  - Fixed a bug when serializing a
+    [`204`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204)
+    response
 
 ## [0.4.1-alpha](https://github.com/Apacheli/Space/compare/2f8dad5...2d66d3b) - 2021-04-02
 
