@@ -25,7 +25,7 @@ export class Role extends Struct {
   }
 
   get mention() {
-    return `<@${this.id}>`;
+    return `<@&${this.id}>`;
   }
 }
 

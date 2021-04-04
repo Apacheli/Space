@@ -102,10 +102,11 @@ export const onChannelUpdate = async (
   return data;
 };
 
-export const onGuildBanAdd = (
+export const onGuildBanAdd = async (
   client: Client,
   data: GatewayGuildBanAddDispatchData,
 ) => {
+  return onGuildMemberRemove(client, data);
 };
 
 export const onGuildBanRemove = (
@@ -174,16 +175,20 @@ export const onGuildMemberUpdate = async (
     ?.members.update({ id: data.user.id, ...data }) ?? data;
 };
 
-export const onGuildRoleCreate = (
+export const onGuildRoleCreate = async (
   client: Client,
   data: GatewayGuildRoleCreateDispatchData,
 ) => {
+  return (await client.guilds.get(data.guild_id))
+    ?.roles.add(data.role) ?? data;
 };
 
-export const onGuildRoleDelete = (
+export const onGuildRoleDelete = async (
   client: Client,
   data: GatewayGuildRoleDeleteDispatchData,
 ) => {
+  return (await client.guilds.get(data.guild_id))
+    ?.roles.remove(data.role_id);
 };
 
 export const onGuildRoleUpdate = (

@@ -24,6 +24,10 @@ export class Member extends Struct {
     this.pending = data.pending;
     // this.permissions = data.permissions;
   }
+
+  get mention() {
+    return `<@${this.nick ? "!" : ""}${this.id}>`;
+  }
 }
 
 export default Member;

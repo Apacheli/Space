@@ -1,5 +1,12 @@
 import { APIGuild } from "../../../deps.ts";
-import { channelFromType, GuildChannel, Member, Role, Struct } from "../mod.ts";
+import {
+  channelFromType,
+  Emoji,
+  GuildChannel,
+  Member,
+  Role,
+  Struct,
+} from "../mod.ts";
 import Client, { APIPresence } from "../../client/client.ts";
 import Cache, { Storable } from "../../util/cache.ts";
 
@@ -31,7 +38,7 @@ export class Guild extends Struct {
   defaultMessageNotifications!: APIGuild["default_message_notifications"];
   explicitContentFilter!: APIGuild["explicit_content_filter"];
   roles: Storable<Role>;
-  // emojis;
+  emojis: Storable<Emoji>;
   features!: APIGuild["features"];
   mfaLevel!: APIGuild["mfa_level"];
   applicationID!: bigint | null;
@@ -76,6 +83,8 @@ export class Guild extends Struct {
     );
     this.roles = new Cache<Role>(client, Role);
     data.roles?.forEach((role) => this.roles.add(role));
+    this.emojis = new Cache<Emoji>(client, Emoji);
+    data.emojis?.forEach((emoji: any) => this.emojis.add(emoji));
     this.presences = new Cache<APIPresence>(client);
     data.presences?.forEach(async (presence) =>
       this.presences.add(
@@ -102,8 +111,6 @@ export class Guild extends Struct {
     this.verificationLevel = data.verification_level;
     this.defaultMessageNotifications = data.default_message_notifications;
     this.explicitContentFilter = data.explicit_content_filter;
-    // this.roles = data.roles;
-    // this.emojis = data.emojis;
     this.features = data.features;
     this.mfaLevel = data.mfa_level;
     this.applicationID = data.application_id && BigInt(data.application_id);
