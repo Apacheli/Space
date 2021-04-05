@@ -8,7 +8,13 @@ import {
   Struct,
 } from "../mod.ts";
 import Client, { APIPresence } from "../../client/client.ts";
-import Cache, { Storable } from "../../util/cache.ts";
+import {
+  Cache,
+  CDNFormatURL,
+  guildIconURL,
+  ImageFormats,
+  Storable,
+} from "../../util/mod.ts";
 
 export class Guild extends Struct {
   owner;
@@ -154,6 +160,10 @@ export class Guild extends Struct {
   getPublicUpdatesChannel() {
     return this.publicUpdatesChannelID &&
       this.channels.get(this.publicUpdatesChannelID);
+  }
+
+  getIconURL(format?: ImageFormats, size?: number) {
+    return this.icon && guildIconURL(`${this.id}`, this.icon);
   }
 }
 
