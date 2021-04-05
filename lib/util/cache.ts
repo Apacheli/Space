@@ -12,7 +12,8 @@ export interface Storable<V> {
   update(item: { id: StorableKey }): PossiblePromise<V>;
 }
 
-interface CacheEntry {
+// Only used with `Cache` you don't have to use this with `Storable`
+export interface CacheEntry {
   id: StorableKey;
   update?(data: any): void;
 }

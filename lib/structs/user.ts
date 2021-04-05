@@ -1,6 +1,12 @@
 import { APIUser } from "../../deps.ts";
 import Client from "../client/client.ts";
 import Struct from "./struct.ts";
+import {
+  CDNFormatURL,
+  defaultUserAvatarURL,
+  ImageFormats,
+  userAvatarURL,
+} from "../util/cdn.ts";
 
 export class User extends Struct {
   bot;
@@ -25,6 +31,19 @@ export class User extends Struct {
     this.discriminator = data.discriminator;
     this.avatar = data.avatar;
     this.publicFlags = data.public_flags;
+  }
+
+  avatarURL(format?: ImageFormats, size?: number) {
+    return this.avatar &&
+      CDNFormatURL(userAvatarURL(`${this.id}`, this.avatar), format, size);
+  }
+
+  defaultAvatarURL(format?: ImageFormats, size?: number) {
+    return CDNFormatURL(
+      defaultUserAvatarURL(`${parseInt(this.discriminator) % 5}`),
+      format,
+      size,
+    );
   }
 
   get mention() {
