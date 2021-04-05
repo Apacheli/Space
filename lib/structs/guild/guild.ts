@@ -11,7 +11,10 @@ import Client, { APIPresence } from "../../client/client.ts";
 import {
   Cache,
   CDNFormatURL,
+  guildBannerURL,
+  guildDiscoverySplashURL,
   guildIconURL,
+  guildSplashURL,
   ImageFormats,
   Storable,
 } from "../../util/mod.ts";
@@ -162,8 +165,28 @@ export class Guild extends Struct {
       this.channels.get(this.publicUpdatesChannelID);
   }
 
-  getIconURL(format?: ImageFormats, size?: number) {
-    return this.icon && guildIconURL(`${this.id}`, this.icon);
+  iconURL(format?: ImageFormats, size?: number) {
+    return this.icon &&
+      CDNFormatURL(guildIconURL(`${this.id}`, this.icon), format, size);
+  }
+
+  splashURL(format?: ImageFormats, size?: number) {
+    return this.splash &&
+      CDNFormatURL(guildSplashURL(`${this.id}`, this.splash), format, size);
+  }
+
+  discoverySplashURL(format?: ImageFormats, size?: number) {
+    return this.discoverySplash &&
+      CDNFormatURL(
+        guildDiscoverySplashURL(`${this.id}`, this.discoverySplash),
+        format,
+        size,
+      );
+  }
+
+  bannerURL(format?: ImageFormats, size?: number) {
+    return this.banner &&
+      CDNFormatURL(guildBannerURL(`${this.id}`, this.banner), format, size);
   }
 }
 

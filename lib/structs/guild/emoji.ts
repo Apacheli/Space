@@ -1,5 +1,6 @@
 import { APIEmoji } from "../../../deps.ts";
 import Struct from "../struct.ts";
+import { CDNFormatURL, customEmojiURL, ImageFormats } from "../../util/cdn.ts";
 
 export class Emoji extends Struct {
   name!: APIEmoji["name"];
@@ -24,6 +25,10 @@ export class Emoji extends Struct {
 
   get mention() {
     return `<${this.animated ? "a" : ""}:${this.name}:${this.id}>`;
+  }
+
+  cdnURL(format?: ImageFormats, size?: number) {
+    return CDNFormatURL(customEmojiURL(`${this.id}`), format, size);
   }
 }
 

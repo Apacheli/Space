@@ -33,6 +33,14 @@ export class User extends Struct {
     this.publicFlags = data.public_flags;
   }
 
+  get mention() {
+    return `<@${this.id}>`;
+  }
+
+  get tag() {
+    return `${this.username}#${this.discriminator}`;
+  }
+
   avatarURL(format?: ImageFormats, size?: number) {
     return this.avatar &&
       CDNFormatURL(userAvatarURL(`${this.id}`, this.avatar), format, size);
@@ -44,14 +52,6 @@ export class User extends Struct {
       format,
       size,
     );
-  }
-
-  get mention() {
-    return `<@${this.id}>`;
-  }
-
-  get tag() {
-    return `${this.username}#${this.discriminator}`;
   }
 }
 
