@@ -284,7 +284,7 @@ export const onReady = (client: Client, data: GatewayReadyDispatchData) => {
   if (client.user) {
     client.user.update(data.user);
   } else {
-    client.user = new User(data, client);
+    client.user = new User(data.user, client);
   }
   return data;
 };
