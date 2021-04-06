@@ -1,5 +1,6 @@
 import { APIWebhook } from "../../../deps.ts";
 import Client from "../../client/client.ts";
+import { CDNFormatURL, ImageFormats, userAvatarURL } from "../../util/cdn.ts";
 import Struct from "../struct.ts";
 
 export default class Webhook extends Struct {
@@ -29,5 +30,10 @@ export default class Webhook extends Struct {
     this.name = data.name;
     this.avatar = data.avatar;
     this.token = data.token;
+  }
+
+  avatarURL(format?: ImageFormats, size?: number) {
+    return this.avatar &&
+      CDNFormatURL(userAvatarURL(`${this.id}`, this.avatar), format, size);
   }
 }
