@@ -83,11 +83,11 @@ export class Shard extends EventPipeline {
     }
   }
 
-  async onSocketClose(event: CloseEvent) {
+  async onSocketClose({ code, reason }: CloseEvent) {
     let reconnectable = false;
     let resumable = false;
 
-    switch (event.code) {
+    switch (code) {
       case 0: // Cloudflare(?)
       case 1001: // "Discord WebSocket requesting client reconnect."
       case GatewayCloseCodes.UnknownError: {
@@ -104,13 +104,10 @@ export class Shard extends EventPipeline {
       }
     }
 
-    logger.warn?.(`Shard ${this.id} disconnected.`);
-    this.dispatch("DISCONNECT", {
-      code: event.code,
-      reason: event.reason,
-      reconnectable,
-      resumable,
-    });
+    logger.warn?.(
+      `[${code}] Shard ${this.id} disconnected with reason "${reason}".`,
+    );
+    this.dispatch("DISCONNECT", { code, reason, reconnectable, resumable });
     this.reset(resumable);
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.

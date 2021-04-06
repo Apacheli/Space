@@ -35,7 +35,7 @@ This format was adapted from
 ### Fixed
 
 - ([`3cb02d1`](https://github.com/Apacheli/Space/commit/3cb02d1)) Use `update`
-  instead of `add` for caching users in a guild
+  instead of `add` when caching users in a guild
 - ([`e5eb4fb`](https://github.com/Apacheli/Space/commit/e5eb4fb))
   - Corrected some coloring in `HTTPError` messages
   - Fixed a bug when serializing a
