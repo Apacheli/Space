@@ -41,7 +41,7 @@ import {
   GatewayWebhooksUpdateDispatchData,
 } from "../../deps.ts";
 import { Client } from "./mod.ts";
-import { channelFromType, Message } from "../structs/mod.ts";
+import { channelFromType, Message, User } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
@@ -280,6 +280,13 @@ export const onPresenceUpdate = (
 };
 
 export const onReady = (client: Client, data: GatewayReadyDispatchData) => {
+  client.application = data.application;
+  if (client.user) {
+    client.user.update(data.user);
+  } else {
+    client.user = new User(data, client);
+  }
+  return data;
 };
 
 export const onResumed = (

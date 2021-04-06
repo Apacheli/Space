@@ -1,4 +1,4 @@
-import { GatewayPresenceUpdate } from "../../deps.ts";
+import { APIApplication, GatewayPresenceUpdate } from "../../deps.ts";
 import { HTTPClientOptions, RESTClient } from "../api/http/mod.ts";
 import {
   GatewayClient,
@@ -19,10 +19,12 @@ export interface ClientOptions {
 }
 
 export class Client {
+  application?: Pick<APIApplication, "id" | "flags">;
   gateway;
   guilds;
   presences;
   rest;
+  user?: User;
   users;
 
   constructor(token: string, options?: ClientOptions) {
