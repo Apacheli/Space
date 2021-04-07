@@ -60,14 +60,10 @@ export class Cache<V extends CacheEntry> extends Map<StorableKey, V>
 
   update(item: V) {
     const existing = this.get(item.id);
-    if (!existing || this.baseClass && item instanceof this.baseClass) {
+    if (!existing?.update || this.baseClass && item instanceof this.baseClass) {
       return this.add(item);
     }
-    if (existing.update) {
-      existing.update(item);
-    } else {
-      this.set(item.id, item);
-    }
+    existing.update(item);
     return existing;
   }
 }

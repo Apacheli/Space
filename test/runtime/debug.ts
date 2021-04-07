@@ -1,4 +1,9 @@
-import { Client, onGuildCreate, onMessageCreate } from "../../lib/mod.ts";
+import {
+  Client,
+  onGuildCreate,
+  onMessageCreate,
+  onReady,
+} from "../../lib/mod.ts";
 
 const token = prompt("token:");
 if (!token) {
@@ -7,6 +12,7 @@ if (!token) {
 
 const client = new Client(`Bot ${token}`);
 
+client.gateway.listen("READY", (data) => onReady(client, data));
 client.gateway.listen("GUILD_CREATE", (guild) => onGuildCreate(client, guild));
 
 client.gateway.listen(

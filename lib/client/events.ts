@@ -67,22 +67,18 @@ export const onChannelCreate = async (
   data: GatewayChannelCreateDispatchData,
 ) => {
   const channel = channelFromType(data, client);
-  if (data.guild_id) {
-    const guild = await client.guilds.get(data.guild_id);
-    return guild?.channels.add(channel);
-  }
-  return channel;
+  return data.guild_id
+    ? (await client.guilds.get(data.guild_id))?.channels.add(channel)
+    : channel;
 };
 
 export const onChannelDelete = async (
   client: Client,
   data: GatewayChannelDeleteDispatchData,
 ) => {
-  if (data.guild_id) {
-    const guild = await client.guilds.get(data.guild_id);
-    return guild?.channels.remove(data.id);
-  }
-  return data;
+  return data.guild_id
+    ? (await client.guilds.get(data.guild_id))?.channels.remove(data.id)
+    : data;
 };
 
 export const onChannelPinsUpdate = (
@@ -95,11 +91,10 @@ export const onChannelUpdate = async (
   client: Client,
   data: GatewayChannelUpdateDispatchData,
 ) => {
-  if (data.guild_id) {
-    const guild = await client.guilds.get(data.guild_id);
-    return guild?.channels.update(data);
-  }
-  return data;
+  return data.guild_id
+    ? (await client.guilds.get(data.guild_id))
+      ?.channels.update(data)
+    : data;
 };
 
 export const onGuildBanAdd = (
@@ -279,14 +274,13 @@ export const onPresenceUpdate = (
   return client.presences.update({ id: data.user.id, ...data });
 };
 
-export const onReady = (client: Client, data: GatewayReadyDispatchData) => {
-  client.application = data.application;
-  if (client.user) {
-    client.user.update(data.user);
-  } else {
-    client.user = new User(data.user, client);
-  }
-  return data;
+export const onReady = async (
+  client: Client,
+  data: GatewayReadyDispatchData,
+) => {
+  client.application ??= data.application;
+  return client.user?.update(data.user) ??
+    (client.user ??= await client.users.add(data.user));
 };
 
 export const onResumed = (
