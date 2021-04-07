@@ -1,4 +1,8 @@
-import { APIGuild } from "../../../deps.ts";
+import {
+  APIGuild,
+  GatewayVoiceStateUpdateDispatchData,
+  Snowflake,
+} from "../../../deps.ts";
 import {
   channelFromType,
   Emoji,
@@ -19,6 +23,12 @@ import {
   Storable,
 } from "../../util/mod.ts";
 
+// https://github.com/discord/discord-api-docs/pull/2751
+export interface APIVoiceState extends GatewayVoiceStateUpdateDispatchData {
+  id: Snowflake;
+  // request_to_speak_timestamp: number | null;
+}
+
 export class Guild extends Struct {
   owner;
   permissions;
@@ -27,7 +37,7 @@ export class Guild extends Struct {
   large;
   unavailable;
   memberCount;
-  // voiceStates;
+  voiceStates;
   members: Storable<Member>;
   channels: Storable<GuildChannel>;
   presences: Storable<APIPresence>;
@@ -78,7 +88,10 @@ export class Guild extends Struct {
     this.large = data.large;
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
-    // this.voiceStates = data.voice_states;
+    this.voiceStates = new Cache<APIVoiceState>(client);
+    data.voice_states?.forEach((data) =>
+      this.voiceStates.add({ id: data.user_id, ...data })
+    );
     this.members = new Cache<Member>(client, Member);
     data.members?.forEach((member) => {
       if (member.user) {
