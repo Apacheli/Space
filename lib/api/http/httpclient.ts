@@ -717,7 +717,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    *
    * Create a followup message for an Interaction. Functions the same as
    * [Execute Webhook](https://discord.dev/resources/webhook#execute-webhook), but `wait` is always
-   * true.
+   * true, and `flags` can be set to `64` in the body to send an ephemeral message.
    * @param applicationID https://discord.dev/topics/oauth2#application-object
    * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
    */
@@ -775,6 +775,110 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       {
         data,
         method: "DELETE",
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#get-guild-application-command-permissions
+   *
+   * Fetches command permissions for all commands for your application in a guild.
+   * Returns an array of
+   * [GuildApplicationCommandPermissions](https://discord.dev/interactions/slash-commands#guildapplicationcommandpermissions)
+   * objects.
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  getGuildApplicationCommandPermissions(
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `applications/${applicationID}/guilds/${guildID}/commands/permissions`,
+      {
+        data,
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#get-application-command-permissions
+   *
+   * Fetches command permissions for a specific command for your application in a
+   * guild. Returns a
+   * [GuildApplicationCommandPermissions](https://discord.dev/interactions/slash-commands#guildapplicationcommandpermissions)
+   * object.
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
+   */
+  getApplicationCommandPermissions(
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    commandID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `applications/${applicationID}/guilds/${guildID}/commands/${commandID}/permissions`,
+      {
+        data,
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#edit-application-command-permissions
+   *
+   * > ⚠️ This endpoint will overwrite existing permissions for the command in that
+   * > guild
+   *
+   * Edits command permissions for a specific command for your application in a
+   * guild.
+   *
+   * > ⚠️ Deleting or renaming a command will permanently delete all permissions
+   * > for that command
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   * @param commandID https://discord.dev/interactions/slash-commands#applicationcommand
+   */
+  editApplicationCommandPermissions(
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    commandID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `applications/${applicationID}/guilds/${guildID}/commands/${commandID}/permissions`,
+      {
+        data,
+        method: "PUT",
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/interactions/slash-commands#batch-edit-application-command-permissions
+   *
+   * > ⚠️ This endpoint will overwrite all existing permissions for all commands in
+   * > a guild
+   *
+   * Batch edits permissions for all commands in a guild. Takes an array of partial
+   * [GuildApplicationCommandPermissions](https://discord.dev/interactions/slash-commands#guildapplicationcommandpermissions)
+   * objects including `id` and `permissions`.
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  batchEditApplicationCommandPermissions(
+    applicationID: Snowflake,
+    guildID: Snowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `applications/${applicationID}/guilds/${guildID}/commands/permissions`,
+      {
+        data,
+        method: "PUT",
       },
     );
   }
@@ -945,9 +1049,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * present for the current user.
    *
    * Returns a [message](https://discord.dev/resources/channel#message-object) object.
-   *
-   * > ℹ️ For the following endpoints, `emoji` takes the form of `name:id` for
-   * > custom guild emoji, or Unicode characters.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    */
@@ -969,7 +1070,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * endpoint requires the 'ADD_REACTIONS' permission to be present on the current
    * user. Returns a 204 empty response on success. The `emoji` must be
    * [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request
-   * will fail with `10014: Unknown Emoji`.
+   * will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it
+   * in the format `name:id` with the emoji name and emoji id.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
@@ -989,7 +1091,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Delete a reaction the current user has made for the message. Returns a 204 empty
    * response on success. The `emoji` must be
    * [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request
-   * will fail with `10014: Unknown Emoji`.
+   * will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it
+   * in the format `name:id` with the emoji name and emoji id.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
@@ -1010,7 +1113,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * permission to be present on the current user. Returns a 204 empty response on
    * success. The `emoji` must be
    * [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request
-   * will fail with `10014: Unknown Emoji`.
+   * will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it
+   * in the format `name:id` with the emoji name and emoji id.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
@@ -1036,7 +1140,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Get a list of users that reacted with this emoji. Returns an array of
    * [user](https://discord.dev/resources/user#user-object) objects on success. The `emoji` must be
    * [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request
-   * will fail with `10014: Unknown Emoji`.
+   * will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it
+   * in the format `name:id` with the emoji name and emoji id.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
@@ -1082,7 +1187,8 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * [Message Reaction Remove Emoji](https://discord.dev/topics/gateway#message-reaction-remove-emoji)
    * Gateway event. The `emoji` must be
    * [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request
-   * will fail with `10014: Unknown Emoji`.
+   * will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it
+   * in the format `name:id` with the emoji name and emoji id.
    * @param channelID https://discord.dev/resources/channel#channel-object
    * @param messageID https://discord.dev/resources/channel#message-object
    * @param emoji https://discord.dev/resources/emoji#emoji-object
@@ -1678,8 +1784,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Returns a list of [guild member](https://discord.dev/resources/guild#guild-member-object)
    * objects that are members of the guild.
    *
-   * > ⚠️ In the future, this endpoint will be restricted in line with our
-   * > [Privileged Intents](https://discord.dev/topics/gateway#privileged-intents)
+   * > ⚠️ This endpoint is restricted according to whether the `GUILD_MEMBERS`
+   * > [Privileged Intent](https://discord.dev/topics/gateway#privileged-intents) is enabled for
+   * > your application.
    *
    * > ℹ️ All parameters to this endpoint are optional
    * @param guildID https://discord.dev/resources/guild#guild-object
@@ -1691,6 +1798,21 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
         query,
       },
     );
+  }
+
+  /**
+   * https://discord.dev/resources/guild#search-guild-members
+   *
+   * Returns a list of [guild member](https://discord.dev/resources/guild#guild-member-object)
+   * objects whose username or nickname starts with a provided string.
+   *
+   * > ℹ️ All parameters to this endpoint except for `query` are optional
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  searchGuildMembers(guildID: Snowflake, data: unknown) {
+    return this.request(`guilds/${guildID}/members/search`, {
+      data,
+    });
   }
 
   /**
@@ -2126,61 +2248,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   }
 
   /**
-   * https://discord.dev/resources/guild#create-guild-integration
-   *
-   * Attach an [integration](https://discord.dev/resources/guild#integration-object) object from
-   * the current user to the guild. Requires the `MANAGE_GUILD` permission. Returns a
-   * 204 empty response on success. Fires a
-   * [Guild Integrations Update](https://discord.dev/topics/gateway#guild-integrations-update)
-   * Gateway event.
-   * @param guildID https://discord.dev/resources/guild#guild-object
-   */
-  createGuildIntegration(
-    guildID: Snowflake,
-    data: RESTPostAPIGuildIntegrationJSONBody,
-    reason?: string,
-  ) {
-    return this.request<RESTPostAPIGuildIntegrationResult>(
-      `guilds/${guildID}/integrations`,
-      {
-        data,
-        method: "POST",
-        reason,
-      },
-    );
-  }
-
-  /**
-   * https://discord.dev/resources/guild#modify-guild-integration
-   *
-   * Modify the behavior and settings of an
-   * [integration](https://discord.dev/resources/guild#integration-object) object for the guild.
-   * Requires the `MANAGE_GUILD` permission. Returns a 204 empty response on success.
-   * Fires a
-   * [Guild Integrations Update](https://discord.dev/topics/gateway#guild-integrations-update)
-   * Gateway event.
-   *
-   * > ℹ️ All parameters to this endpoint are optional and nullable.
-   * @param guildID https://discord.dev/resources/guild#guild-object
-   * @param integrationID https://discord.dev/resources/guild#integration-object
-   */
-  editGuildIntegration(
-    guildID: Snowflake,
-    integrationID: Snowflake,
-    data: RESTPatchAPIGuildIntegrationJSONBody,
-    reason?: string,
-  ) {
-    return this.request<RESTPatchAPIGuildIntegrationResult>(
-      `guilds/${guildID}/integrations/${integrationID}`,
-      {
-        data,
-        method: "PATCH",
-        reason,
-      },
-    );
-  }
-
-  /**
    * https://discord.dev/resources/guild#delete-guild-integration
    *
    * Delete the attached [integration](https://discord.dev/resources/guild#integration-object)
@@ -2202,23 +2269,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       {
         method: "DELETE",
         reason,
-      },
-    );
-  }
-
-  /**
-   * https://discord.dev/resources/guild#sync-guild-integration
-   *
-   * Sync an integration. Requires the `MANAGE_GUILD` permission. Returns a 204 empty
-   * response on success.
-   * @param guildID https://discord.dev/resources/guild#guild-object
-   * @param integrationID https://discord.dev/resources/guild#integration-object
-   */
-  syncGuildIntegration(guildID: Snowflake, integrationID: Snowflake) {
-    return this.request<RESTPostAPIGuildIntegrationSyncResult>(
-      `guilds/${guildID}/integrations/${integrationID}/sync`,
-      {
-        method: "POST",
       },
     );
   }
@@ -2303,6 +2353,64 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
         query,
       },
     );
+  }
+
+  /**
+   * https://discord.dev/resources/guild#get-guild-welcome-screen
+   *
+   * Returns the [Welcome Screen](https://discord.dev/resources/guild#welcome-screen-object) object
+   * for the guild.
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  getGuildWelcomeScreen(guildID: Snowflake, data: unknown) {
+    return this.request(`guilds/${guildID}/welcome-screen`, {
+      data,
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/guild#modify-guild-welcome-screen
+   *
+   * Modify the guild's
+   * [Welcome Screen](https://discord.dev/resources/guild#welcome-screen-object). Requires the
+   * `MANAGE_GUILD` permission. Returns the updated
+   * [Welcome Screen](https://discord.dev/resources/guild#welcome-screen-object) object.
+   *
+   * > ℹ️ All parameters to this endpoint are optional and nullable
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  editGuildWelcomeScreen(guildID: Snowflake, data: unknown) {
+    return this.request(`guilds/${guildID}/welcome-screen`, {
+      data,
+      method: "PATCH",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/guild#update-current-user-voice-state
+   *
+   * Updates the current user's voice state.
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   */
+  updateCurrentUserVoiceState(guildID: Snowflake, data: unknown) {
+    return this.request(`guilds/${guildID}/voice-states/@me`, {
+      data,
+      method: "PATCH",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/guild#update-user-voice-state
+   *
+   * Updates another user's voice state.
+   * @param guildID https://discord.dev/resources/guild#guild-object
+   * @param userID https://discord.dev/resources/user#user-object
+   */
+  updateUserVoiceState(guildID: Snowflake, userID: Snowflake, data: unknown) {
+    return this.request(`guilds/${guildID}/voice-states/${userID}`, {
+      data,
+      method: "PATCH",
+    });
   }
 
   /**
@@ -2524,17 +2632,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
         method: "DELETE",
       },
     );
-  }
-
-  /**
-   * https://discord.dev/resources/user#get-user-dms
-   *
-   * Returns a list of [DM channel](https://discord.dev/resources/channel#channel-object) objects.
-   * For bots, this is no longer a supported method of getting recent DMs, and will
-   * return an empty array.
-   */
-  getUserPrivateChannels() {
-    return this.request("users/@me/channels");
   }
 
   /**
@@ -2906,12 +3003,12 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   }
 
   /**
-   * https://discord.dev/topics/oauth2#get-current-application-information
+   * https://discord.dev/topics/oauth2#get-current-bot-application-information
    *
-   * Returns the bot's OAuth2
-   * [application object](https://discord.dev/topics/oauth2#application-object) without `flags`.
+   * Returns the bot's OAuth2 [application](https://discord.dev/topics/oauth2#application) object
+   * without `flags`.
    */
-  getCurrentApplicationInformation() {
+  getCurrentBotApplicationInformation() {
     return this.request<RESTGetAPIOauth2CurrentApplicationResult>(
       "oauth2/applications/@me",
     );
