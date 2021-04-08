@@ -68,6 +68,10 @@ export class Message extends Struct {
     this.pinned = data.pinned;
     this.flags = data.flags;
   }
+
+  /* crosspost() {
+    return this.client.rest.crosspostMessage(`${this.channelID}`, `${this.id}`);
+  } */
 }
 
 export default Message;
