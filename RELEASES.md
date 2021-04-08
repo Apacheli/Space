@@ -1,4 +1,4 @@
-# Space Changelog
+# Space Releases
 
 This document contains notable changes throughout Space's development.
 

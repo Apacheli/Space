@@ -1,5 +1,6 @@
 import {
   APIGuild,
+  GatewayPresenceUpdate,
   GatewayVoiceStateUpdateDispatchData,
   Snowflake,
 } from "../../../deps.ts";
@@ -11,7 +12,7 @@ import {
   Role,
   Struct,
 } from "../mod.ts";
-import Client, { APIPresence } from "../../client/client.ts";
+import Client, { cacheCheck } from "../../client/client.ts";
 import {
   Cache,
   CDNFormatURL,
@@ -22,6 +23,10 @@ import {
   ImageFormats,
   Storable,
 } from "../../util/mod.ts";
+
+export interface APIPresence extends GatewayPresenceUpdate {
+  id: Snowflake;
+}
 
 // https://github.com/discord/discord-api-docs/pull/2751
 export interface APIVoiceState extends GatewayVoiceStateUpdateDispatchData {
@@ -37,10 +42,12 @@ export class Guild extends Struct {
   large;
   unavailable;
   memberCount;
-  voiceStates;
-  members: Storable<Member>;
-  channels: Storable<GuildChannel>;
-  presences: Storable<APIPresence>;
+  voiceStates?: Storable<APIVoiceState>;
+  members?: Storable<Member>;
+  channels?: Storable<GuildChannel>;
+  roles?: Storable<Role>;
+  emojis?: Storable<Emoji>;
+  presences?: Storable<APIPresence>;
 
   name!: APIGuild["name"];
   icon!: APIGuild["icon"];
@@ -56,8 +63,6 @@ export class Guild extends Struct {
   verificationLevel!: APIGuild["verification_level"];
   defaultMessageNotifications!: APIGuild["default_message_notifications"];
   explicitContentFilter!: APIGuild["explicit_content_filter"];
-  roles: Storable<Role>;
-  emojis: Storable<Emoji>;
   features!: APIGuild["features"];
   mfaLevel!: APIGuild["mfa_level"];
   applicationID!: bigint | null;
@@ -77,6 +82,7 @@ export class Guild extends Struct {
   approximateMemberCount: APIGuild["approximate_member_count"];
   approximatePresenceCount: APIGuild["approximate_presence_count"];
   welcomeScreen: APIGuild["welcome_screen"];
+  nsfw?: boolean;
 
   constructor(data: APIGuild, client: Client) {
     super(data, client);
@@ -88,34 +94,39 @@ export class Guild extends Struct {
     this.large = data.large;
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
-    this.voiceStates = new Cache<APIVoiceState>(client);
-    data.voice_states?.forEach((data) =>
-      this.voiceStates.add({ id: data.user_id, ...data })
+
+    const cacheOptions = client.options?.cacheOptions?.guilds;
+    this.voiceStates = cacheCheck(cacheOptions?.voiceStates);
+    data.voice_states?.forEach((voiceState) =>
+      this.voiceStates?.add({ id: voiceState.user_id, ...voiceState })
     );
-    this.members = new Cache<Member>(client, Member);
+
+    this.members = cacheCheck(cacheOptions?.members, client, Member);
     data.members?.forEach((member) => {
       if (member.user) {
-        this.members.add({ id: member.user.id, ...member });
-        client.users.update(member.user);
+        this.members?.add({ id: member.user.id, ...member });
+        client.users?.update(member.user);
       }
     });
-    this.channels = new Cache<GuildChannel>(client, GuildChannel);
+
+    this.channels = cacheCheck(cacheOptions?.channels, client, GuildChannel);
     data.channels?.forEach((channel) =>
-      this.channels.add(channelFromType(channel, client))
+      this.channels?.add(channelFromType(channel, client))
     );
-    this.roles = new Cache<Role>(client, Role);
-    data.roles?.forEach((role) => this.roles.add(role));
-    this.emojis = new Cache<Emoji>(client, Emoji);
-    data.emojis?.forEach((emoji: any) => this.emojis.add(emoji));
+
+    this.roles = cacheCheck(cacheOptions?.roles, client, Role);
+    data.roles?.forEach((role) => this.roles?.add(role));
+
+    this.emojis = cacheCheck(cacheOptions?.emojis, client, Emoji);
+    data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
+
     this.presences = new Cache<APIPresence>(client);
-    data.presences?.forEach(async (presence) =>
-      this.presences.add(
-        await client.presences.update({ id: presence.user.id, ...presence }),
-      )
+    data.presences?.forEach((presence) =>
+      this.presences?.add({ id: presence.user.id, ...presence })
     );
   }
 
-  update(data: APIGuild) {
+  update(data: APIGuild & { nsfw?: boolean }) {
     super.update(data);
 
     this.name = data.name;
@@ -155,27 +166,33 @@ export class Guild extends Struct {
     this.approximateMemberCount = data.approximate_member_count;
     this.approximatePresenceCount = data.approximate_presence_count;
     this.welcomeScreen = data.welcome_screen;
+    this.nsfw = data.nsfw;
   }
 
   getAFKChannel() {
-    return this.afkChannelID && this.channels.get(this.afkChannelID);
+    return this.afkChannelID ? this.channels?.get(this.afkChannelID) : null;
   }
 
   getWidgetChannel() {
-    return this.widgetChannelID && this.channels.get(this.widgetChannelID);
+    return this.widgetChannelID
+      ? this.channels?.get(this.widgetChannelID)
+      : null;
   }
 
   getSystemChannel() {
-    return this.systemChannelID && this.channels.get(this.systemChannelID);
+    return this.systemChannelID
+      ? this.channels?.get(this.systemChannelID)
+      : null;
   }
 
   getRulesChannel() {
-    return this.rulesChannelID && this.channels.get(this.rulesChannelID);
+    return this.rulesChannelID ? this.channels?.get(this.rulesChannelID) : null;
   }
 
   getPublicUpdatesChannel() {
-    return this.publicUpdatesChannelID &&
-      this.channels.get(this.publicUpdatesChannelID);
+    return this.publicUpdatesChannelID
+      ? this.channels?.get(this.publicUpdatesChannelID)
+      : null;
   }
 
   iconURL(format?: ImageFormats, size?: number) {

@@ -7,9 +7,10 @@ export enum VideoQualityMode {
   FULL,
 }
 
+// ^
 export interface APIVoiceChannel extends APIChannel {
-  rtc_region: APIVoiceRegion | null;
-  video_quality_mode?: VideoQualityMode;
+  "rtc_region": APIVoiceRegion | null;
+  "video_quality_mode"?: VideoQualityMode;
 }
 
 export class VoiceChannel extends GuildChannel {

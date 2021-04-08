@@ -1,38 +1,77 @@
-import { APIApplication, GatewayPresenceUpdate } from "../../deps.ts";
+import { APIApplication } from "../../deps.ts";
 import { HTTPClientOptions, RESTClient } from "../api/http/mod.ts";
 import {
   GatewayClient,
   GatewayClientConnectData,
 } from "../api/websocket/mod.ts";
-import { Guild, User } from "../structs/mod.ts";
-import { Cache, PartialKeys, Storable } from "../util/mod.ts";
-
-export interface APIPresence extends GatewayPresenceUpdate {
-  id: bigint;
-}
+import {
+  APIPresence,
+  APIVoiceState,
+  Emoji,
+  Guild,
+  GuildChannel,
+  Member,
+  Role,
+  User,
+} from "../structs/mod.ts";
+import {
+  Cache,
+  PartialKeys,
+  RequiredKeys,
+  Storable,
+  StorableKey,
+} from "../util/mod.ts";
 
 export interface ClientOptions {
-  guilds?: Storable<Guild>;
-  presences: Storable<APIPresence>;
+  cacheOptions?: ClientCacheOptions;
   restOptions?: HTTPClientOptions;
-  users?: Storable<User>;
 }
+
+export interface ClientCacheOptions {
+  guilds?: ClientCacheGuildOptions;
+  users?: CacheCheckInput<User>;
+}
+
+export interface ClientCacheGuildOptions {
+  enabled?: CacheCheckInput<Guild>;
+  emojis?: CacheCheckInput<RequiredKeys<Emoji, "id">>;
+  channels?: CacheCheckInput<GuildChannel>;
+  members?: CacheCheckInput<Member>;
+  presences?: CacheCheckInput<APIPresence>;
+  roles?: CacheCheckInput<Role>;
+  voiceStates?: CacheCheckInput<APIVoiceState>;
+}
+
+export const cacheCheck = <V extends { id: StorableKey }>(
+  input?: CacheCheckInput<V>,
+  client?: Client,
+  ...args: any[]
+) =>
+  input === false
+    ? undefined
+    : typeof input === "function"
+    ? input(client, ...args)
+    : new Cache<V>(client, ...args);
+
+export type CacheCheckInput<V> = boolean | ((...args: any) => Storable<V>);
 
 export class Client {
   application?: Pick<APIApplication, "id" | "flags">;
   gateway;
-  guilds;
-  presences;
+  guilds?: Storable<Guild>;
   rest;
   user?: User;
-  users;
+  users?: Storable<User>;
 
-  constructor(token: string, options?: ClientOptions) {
+  constructor(token: string, public options?: ClientOptions) {
     this.gateway = new GatewayClient(token);
-    this.guilds = options?.guilds ?? new Cache<Guild>(this, Guild);
-    this.presences = options?.presences ?? new Cache<APIPresence>(this);
+    this.guilds = cacheCheck(
+      options?.cacheOptions?.guilds?.enabled,
+      this,
+      Guild,
+    );
     this.rest = new RESTClient(token, options?.restOptions);
-    this.users = options?.users ?? new Cache<User>(this, User);
+    this.users = cacheCheck(options?.cacheOptions?.users, this, User);
   }
 
   async connect(data: PartialKeys<GatewayClientConnectData, "url">) {

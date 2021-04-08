@@ -41,7 +41,7 @@ import {
   GatewayWebhooksUpdateDispatchData,
 } from "../../deps.ts";
 import { Client } from "./mod.ts";
-import { channelFromType, Message, User } from "../structs/mod.ts";
+import { channelFromType, Message } from "../structs/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
@@ -68,7 +68,8 @@ export const onChannelCreate = async (
 ) => {
   const channel = channelFromType(data, client);
   return data.guild_id
-    ? (await client.guilds.get(data.guild_id))?.channels.add(channel)
+    ? (await client.guilds?.get(data.guild_id))
+      ?.channels?.add(channel)
     : channel;
 };
 
@@ -77,7 +78,8 @@ export const onChannelDelete = async (
   data: GatewayChannelDeleteDispatchData,
 ) => {
   return data.guild_id
-    ? (await client.guilds.get(data.guild_id))?.channels.remove(data.id)
+    ? (await client.guilds?.get(data.guild_id))
+      ?.channels?.remove(data.id)
     : data;
 };
 
@@ -92,8 +94,8 @@ export const onChannelUpdate = async (
   data: GatewayChannelUpdateDispatchData,
 ) => {
   return data.guild_id
-    ? (await client.guilds.get(data.guild_id))
-      ?.channels.update(data)
+    ? (await client.guilds?.get(data.guild_id))
+      ?.channels?.update(data)
     : data;
 };
 
@@ -114,18 +116,18 @@ export const onGuildCreate = async (
   client: Client,
   data: GatewayGuildCreateDispatchData,
 ) => {
-  return await client.guilds.has(data.id)
-    ? client.guilds.update(data)
-    : client.guilds.add(data);
+  return await client.guilds?.has(data.id)
+    ? client.guilds?.update(data)
+    : client.guilds?.add(data);
 };
 
 export const onGuildDelete = (
   client: Client,
   data: GatewayGuildDeleteDispatchData,
 ) => {
-  return data.unavailable
-    ? client.guilds.update(data)
-    : client.guilds.remove(data.id);
+  return (data.unavailable
+    ? client.guilds?.update(data)
+    : client.guilds?.remove(data.id)) ?? data;
 };
 
 export const onGuildEmojisUpdate = (
@@ -144,16 +146,16 @@ export const onGuildMemberAdd = async (
   client: Client,
   data: RequiredKeys<GatewayGuildMemberAddDispatchData, "user">,
 ) => {
-  return (await client.guilds.get(data.guild_id))
-    ?.members.add({ id: data.user.id, ...data }) ?? data;
+  return (await client.guilds?.get(data.guild_id))
+    ?.members?.add({ id: data.user.id, ...data }) ?? data;
 };
 
 export const onGuildMemberRemove = async (
   client: Client,
   data: GatewayGuildMemberRemoveDispatchData,
 ) => {
-  return (await client.guilds.get(data.guild_id))
-    ?.members.remove(data.user.id) ?? data;
+  return (await client.guilds?.get(data.guild_id))
+    ?.members?.remove(data.user.id) ?? data;
 };
 
 export const onGuildMembersChunk = (
@@ -166,24 +168,24 @@ export const onGuildMemberUpdate = async (
   client: Client,
   data: RequiredKeys<GatewayGuildMemberUpdateDispatchData, "user">,
 ) => {
-  return (await client.guilds.get(data.guild_id))
-    ?.members.update({ id: data.user.id, ...data }) ?? data;
+  return (await client.guilds?.get(data.guild_id))
+    ?.members?.update({ id: data.user.id, ...data }) ?? data;
 };
 
 export const onGuildRoleCreate = async (
   client: Client,
   data: GatewayGuildRoleCreateDispatchData,
 ) => {
-  return (await client.guilds.get(data.guild_id))
-    ?.roles.add(data.role) ?? data;
+  return (await client.guilds?.get(data.guild_id))
+    ?.roles?.add(data.role) ?? data;
 };
 
 export const onGuildRoleDelete = async (
   client: Client,
   data: GatewayGuildRoleDeleteDispatchData,
 ) => {
-  return (await client.guilds.get(data.guild_id))
-    ?.roles.remove(data.role_id);
+  return (await client.guilds?.get(data.guild_id))
+    ?.roles?.remove(data.role_id) ?? data;
 };
 
 export const onGuildRoleUpdate = (
@@ -196,7 +198,7 @@ export const onGuildUpdate = (
   client: Client,
   data: GatewayGuildUpdateDispatchData,
 ) => {
-  return client.guilds.update(data);
+  return client.guilds?.update(data) ?? data;
 };
 
 export const onInteractionCreate = (
@@ -270,8 +272,7 @@ export const onPresenceUpdate = (
   client: Client,
   data: GatewayPresenceUpdateDispatchData,
 ) => {
-  // TODO: Bots' presence are different per shard
-  return client.presences.update({ id: data.user.id, ...data });
+  return data;
 };
 
 export const onReady = async (
@@ -280,7 +281,7 @@ export const onReady = async (
 ) => {
   client.application ??= data.application;
   return client.user?.update(data.user) ??
-    (client.user ??= await client.users.add(data.user));
+    (client.user ??= await client.users?.add(data.user)) ?? data.user;
 };
 
 export const onResumed = (
