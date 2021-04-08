@@ -1,24 +1,21 @@
-import { Snowflake } from "../../deps.ts";
-import { PossiblePromise } from "./util.ts";
+import { ActualSnowflake, PossiblePromise } from "./util.ts";
 import Client from "../client/client.ts";
 
-export type StorableKey = bigint | Snowflake;
-
 export interface Storable<V> {
-  add(item: { id: StorableKey }): PossiblePromise<V>;
-  get(id: StorableKey): PossiblePromise<V | undefined>;
-  has(id: StorableKey): PossiblePromise<boolean>;
-  remove(id: StorableKey): PossiblePromise<V | undefined>;
-  update(item: { id: StorableKey }): PossiblePromise<V>;
+  add(item: { id: ActualSnowflake }): PossiblePromise<V>;
+  get(id: ActualSnowflake): PossiblePromise<V | undefined>;
+  has(id: ActualSnowflake): PossiblePromise<boolean>;
+  remove(id: ActualSnowflake): PossiblePromise<V | undefined>;
+  update(item: { id: ActualSnowflake }): PossiblePromise<V>;
 }
 
 // Only used with `Cache` you don't have to use this with `Storable`
 export interface CacheEntry {
-  id: StorableKey;
+  id: ActualSnowflake;
   update?(data: any): void;
 }
 
-export class Cache<V extends CacheEntry> extends Map<StorableKey, V>
+export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
   implements Storable<V> {
   constructor(
     public client?: Client,
@@ -42,15 +39,15 @@ export class Cache<V extends CacheEntry> extends Map<StorableKey, V>
     return item;
   }
 
-  get(id: StorableKey) {
+  get(id: ActualSnowflake) {
     return super.get(BigInt(id));
   }
 
-  has(id: StorableKey) {
+  has(id: ActualSnowflake) {
     return super.has(BigInt(id));
   }
 
-  remove(id: StorableKey) {
+  remove(id: ActualSnowflake) {
     const item = this.get(id);
     if (item) {
       this.delete(item.id);

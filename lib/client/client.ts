@@ -15,11 +15,11 @@ import {
   User,
 } from "../structs/mod.ts";
 import {
+  ActualSnowflake,
   Cache,
   PartialKeys,
   RequiredKeys,
   Storable,
-  StorableKey,
 } from "../util/mod.ts";
 
 export interface ClientOptions {
@@ -42,7 +42,7 @@ export interface ClientCacheGuildOptions {
   voiceStates?: CacheCheckInput<APIVoiceState>;
 }
 
-export const cacheCheck = <V extends { id: StorableKey }>(
+export const cacheCheck = <V extends { id: ActualSnowflake }>(
   input?: CacheCheckInput<V>,
   client?: Client,
   ...args: any[]
