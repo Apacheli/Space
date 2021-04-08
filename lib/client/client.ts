@@ -55,6 +55,9 @@ export const cacheCheck = <V extends { id: StorableKey }>(
 
 export type CacheCheckInput<V> = boolean | ((...args: any) => Storable<V>);
 
+/**
+ * Class representing a client
+ */
 export class Client {
   application?: Pick<APIApplication, "id" | "flags">;
   gateway;
@@ -63,6 +66,11 @@ export class Client {
   user?: User;
   users?: Storable<User>;
 
+  /**
+   * Construct a new client
+   * @param token Bot authentication token
+   * @param options Client options
+   */
   constructor(token: string, public options?: ClientOptions) {
     this.gateway = new GatewayClient(token);
     this.guilds = cacheCheck(
@@ -74,6 +82,10 @@ export class Client {
     this.users = cacheCheck(options?.cacheOptions?.users, this, User);
   }
 
+  /**
+   * Connect to Discord's gateway
+   * @param data Gateway connection data. You must at least specify `intents`
+   */
   async connect(data: PartialKeys<GatewayClientConnectData, "url">) {
     // @ts-ignore: TypeScript is being annoying
     this.gateway.connect({
