@@ -197,18 +197,18 @@ export class Guild extends Struct {
 
   iconURL(format?: ImageFormats, size?: number) {
     return this.icon &&
-      CDNFormatURL(guildIconURL(`${this.id}`, this.icon), format, size);
+      CDNFormatURL(guildIconURL(this.id, this.icon), format, size);
   }
 
   splashURL(format?: ImageFormats, size?: number) {
     return this.splash &&
-      CDNFormatURL(guildSplashURL(`${this.id}`, this.splash), format, size);
+      CDNFormatURL(guildSplashURL(this.id, this.splash), format, size);
   }
 
   discoverySplashURL(format?: ImageFormats, size?: number) {
     return this.discoverySplash &&
       CDNFormatURL(
-        guildDiscoverySplashURL(`${this.id}`, this.discoverySplash),
+        guildDiscoverySplashURL(this.id, this.discoverySplash),
         format,
         size,
       );
@@ -216,7 +216,7 @@ export class Guild extends Struct {
 
   bannerURL(format?: ImageFormats, size?: number) {
     return this.banner &&
-      CDNFormatURL(guildBannerURL(`${this.id}`, this.banner), format, size);
+      CDNFormatURL(guildBannerURL(this.id, this.banner), format, size);
   }
 }
 

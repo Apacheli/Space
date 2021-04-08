@@ -1,6 +1,6 @@
 export type GenericFunction = (...args: any) => any;
 
-export default class RateLimitBucket {
+export class RateLimitBucket {
   lastRequestAt = 0;
   locked = false;
   queue: GenericFunction[] = [];
@@ -42,3 +42,5 @@ export default class RateLimitBucket {
     }
   }
 }
+
+export default RateLimitBucket;

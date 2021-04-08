@@ -1,5 +1,9 @@
+import { Snowflake } from "../../deps.ts";
+
 export const sleep = <T>(delay?: number, value?: T) =>
   new Promise((resolve) => setTimeout(resolve, delay, value));
+
+export type ActualSnowflake = bigint | Snowflake;
 
 export type PossiblePromise<V> = V | Promise<V>;
 

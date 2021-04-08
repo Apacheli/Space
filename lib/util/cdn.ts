@@ -1,45 +1,47 @@
-import { Snowflake } from "../../deps.ts";
+import { ActualSnowflake } from "./util.ts";
 
 export type ImageFormats = "jpg" | "jpeg" | "png" | "webp" | "gif";
 
-export const customEmojiURL = (emojiID: Snowflake) => `emojis/${emojiID}`;
+export const customEmojiURL = (emojiID: ActualSnowflake) => `emojis/${emojiID}`;
 
-export const guildIconURL = (guildID: Snowflake, guildIcon: string) =>
+export const guildIconURL = (guildID: ActualSnowflake, guildIcon: string) =>
   `icons/${guildID}/${guildIcon}`;
 
-export const guildSplashURL = (guildID: Snowflake, guildSplash: string) =>
+export const guildSplashURL = (guildID: ActualSnowflake, guildSplash: string) =>
   `splashes/${guildID}/${guildSplash}`;
 
 export const guildDiscoverySplashURL = (
-  guildID: Snowflake,
+  guildID: ActualSnowflake,
   guildDiscoverySplash: string,
 ) => `discovery-splashes/${guildID}/${guildDiscoverySplash}`;
 
-export const guildBannerURL = (guildID: Snowflake, guildBanner: string) =>
+export const guildBannerURL = (guildID: ActualSnowflake, guildBanner: string) =>
   `banners/${guildID}/${guildBanner}`;
 
 export const defaultUserAvatarURL = (userDiscriminator: string) =>
   `embed/avatars/${userDiscriminator}`;
 
-export const userAvatarURL = (userID: Snowflake, userAvatar: string) =>
+export const userAvatarURL = (userID: ActualSnowflake, userAvatar: string) =>
   `avatars/${userID}/${userAvatar}`;
 
-export const applicationIconURL = (applicationID: Snowflake, icon: string) =>
-  `app-icons/${applicationID}/${icon}`;
+export const applicationIconURL = (
+  applicationID: ActualSnowflake,
+  icon: string,
+) => `app-icons/${applicationID}/${icon}`;
 
 export const applicationAssetURL = (
-  applicationID: Snowflake,
-  assetID: Snowflake,
+  applicationID: ActualSnowflake,
+  assetID: ActualSnowflake,
 ) => `app-assets/${applicationID}/${assetID}`;
 
 export const achievementIconURL = (
-  applicationID: Snowflake,
-  achievementID: Snowflake,
+  applicationID: ActualSnowflake,
+  achievementID: ActualSnowflake,
   iconHash: string,
 ) =>
   `app-assets/${applicationID}/achievements/${achievementID}/icons/${iconHash}`;
 
-export const teamIconURL = (teamID: Snowflake, teamIcon: string) =>
+export const teamIconURL = (teamID: ActualSnowflake, teamIcon: string) =>
   `team-icons/${teamID}/${teamIcon}`;
 
 export const CDNFormatURL = (

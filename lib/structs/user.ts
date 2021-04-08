@@ -43,7 +43,7 @@ export class User extends Struct {
 
   avatarURL(format?: ImageFormats, size?: number) {
     return this.avatar &&
-      CDNFormatURL(userAvatarURL(`${this.id}`, this.avatar), format, size);
+      CDNFormatURL(userAvatarURL(this.id, this.avatar), format, size);
   }
 
   defaultAvatarURL(format?: ImageFormats, size?: number) {

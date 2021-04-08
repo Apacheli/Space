@@ -28,7 +28,7 @@ export class Emoji extends Struct {
   }
 
   cdnURL(format?: ImageFormats, size?: number) {
-    return CDNFormatURL(customEmojiURL(`${this.id}`), format, size);
+    return CDNFormatURL(customEmojiURL(this.id), format, size);
   }
 }
 
