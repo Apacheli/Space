@@ -16,14 +16,41 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space/mod.ts";
+export * from "https://deno.land/x/space@0.5.0-alpha/mod.ts";
 ```
 
-Click [here](https://deno.land/manual/examples/manage_dependencies) to read more
-about dependency management.
-
-If you wish to install a specific version, you can import `space@version`.
 [Read the release notes](RELEASES.md) to see all available versions.
+
+### Getting Started
+
+Basic program to get you started:
+
+```ts
+import { Client, GatewayIntentsBits, onMessageCreate } from "./deps.ts";
+
+const token = prompt("token:");
+if (!token) {
+  throw new Error("bad token");
+}
+
+const client = new Client(token);
+
+client.gateway.listen(
+  "MESSAGE_CREATE",
+  (data) => onMessageCreate(client, data),
+  (message) => {
+    if (message.content === "!ping") {
+      client.rest.createMessage(message.channelID, {
+        content: "pong!",
+      });
+    }
+  },
+);
+
+client.connect({
+  intents: GatewayIntentsBits.GUILD_MESSAGES,
+});
+```
 
 ### Resources
 
@@ -31,5 +58,5 @@ If you wish to install a specific version, you can import `space@version`.
 - [Discord API Types](https://github.com/discordjs/discord-api-types)
 - [Discord Developer Documentation](https://discord.dev/)
 - [Discord Server](https://discord.gg/UQuA3EwXCV)
-- [Documentation](https://doc.deno.land/https/deno.land/x/space/lib/mod.ts)
+- [Documentation](https://doc.deno.land/https://deno.land/x/space@0.5.0-alpha/mod.ts)
 - [TypeScript](https://www.typescriptlang.org/)
