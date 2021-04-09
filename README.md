@@ -8,10 +8,10 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 
 ### Features
 
-- 100% coverage over Discord's rest and websocket APIs.
-- Secure by default. Client-side checks are in place to prevent `4xx`s.
+- 100% coverage over Discord's HTTP and websocket APIs.
+- Secure by default. Client-side checks prevent `4xx`s for occuring.
 - Written in TypeScript to guarantee type safety.
-- Built-in logger with colors, unless explicitly disabled (`--no-logs`).
+- Built-in utilities such as a colorful logger.
 
 ### Install
 
@@ -19,7 +19,7 @@ A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
 export * from "https://deno.land/x/space@0.5.0-alpha/mod.ts";
 ```
 
-[Read the release notes](RELEASES.md) to see all available versions.
+[See the release notes](RELEASES.md) for all available versions.
 
 ### Getting Started
 
@@ -52,11 +52,13 @@ client.connect({
 });
 ```
 
+See the
+[documentation](https://doc.deno.land/https://deno.land/x/space@0.5.0-alpha/mod.ts)
+for reference.
+
 ### Resources
 
 - [Deno](https://deno.land/)
 - [Discord API Types](https://github.com/discordjs/discord-api-types)
 - [Discord Developer Documentation](https://discord.dev/)
-- [Discord Server](https://discord.gg/UQuA3EwXCV)
-- [Documentation](https://doc.deno.land/https://deno.land/x/space@0.5.0-alpha/mod.ts)
 - [TypeScript](https://www.typescriptlang.org/)
