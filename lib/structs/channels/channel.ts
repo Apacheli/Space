@@ -8,6 +8,8 @@ export class Channel extends Struct {
   constructor(data: APIChannel, client: Client) {
     super(data, client);
 
+    client.channels?.update(this);
+
     this.type = data.type;
   }
 

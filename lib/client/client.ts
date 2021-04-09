@@ -7,6 +7,7 @@ import {
 import {
   APIPresence,
   APIVoiceState,
+  Channel,
   Emoji,
   Guild,
   GuildChannel,
@@ -28,6 +29,7 @@ export interface ClientOptions {
 }
 
 export interface ClientCacheOptions {
+  channels?: CacheCheckInput<Channel>;
   guilds?: ClientCacheGuildOptions;
   users?: CacheCheckInput<User>;
 }
@@ -59,6 +61,7 @@ export type CacheCheckInput<V> = boolean | ((...args: any) => Storable<V>);
  * Class representing a client
  */
 export class Client {
+  channels?: Storable<Channel>;
   application?: Pick<APIApplication, "id" | "flags">;
   gateway;
   guilds?: Storable<Guild>;
@@ -72,6 +75,7 @@ export class Client {
    * @param options Client options
    */
   constructor(token: string, public options?: ClientOptions) {
+    this.channels = cacheCheck(options?.cacheOptions?.channels, this, Channel);
     this.gateway = new GatewayClient(token);
     this.guilds = cacheCheck(
       options?.cacheOptions?.guilds?.enabled,
