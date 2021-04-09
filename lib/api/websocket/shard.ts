@@ -105,7 +105,7 @@ export class Shard extends EventPipeline {
     }
 
     logger.warn?.(
-      `[${code}] Shard ${this.id} disconnected with reason "${reason}".`,
+      `[${code}] Shard ${this.id} disconnected with reason "${reason}"`,
     );
     this.dispatch("DISCONNECT", { code, reason, reconnectable, resumable });
     this.reset(resumable);
