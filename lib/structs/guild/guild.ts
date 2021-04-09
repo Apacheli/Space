@@ -95,7 +95,8 @@ export class Guild extends Struct {
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
 
-    const cacheOptions = client.options?.cacheOptions?.guilds;
+    const cacheOptions = client.options?.cache?.guilds;
+
     this.voiceStates = cacheCheck(cacheOptions?.voiceStates);
     data.voice_states?.forEach((voiceState) =>
       this.voiceStates?.add({ id: voiceState.user_id, ...voiceState })
@@ -121,7 +122,7 @@ export class Guild extends Struct {
     data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
 
     this.presences = new Cache<APIPresence>(client);
-    data.presences?.forEach((presence) =>
+    data.presences?.forEach(async (presence) =>
       this.presences?.add({ id: presence.user.id, ...presence })
     );
   }

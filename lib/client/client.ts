@@ -24,14 +24,16 @@ import {
 } from "../util/mod.ts";
 
 export interface ClientOptions {
-  cacheOptions?: ClientCacheOptions;
+  cache?: ClientCacheOptions;
   restOptions?: HTTPClientOptions;
 }
 
 export interface ClientCacheOptions {
   channels?: CacheCheckInput<Channel>;
   guilds?: ClientCacheGuildOptions;
+  presences?: CacheCheckInput<APIPresence>;
   users?: CacheCheckInput<User>;
+  voiceStates?: CacheCheckInput<APIVoiceState>;
 }
 
 export interface ClientCacheGuildOptions {
@@ -75,15 +77,11 @@ export class Client {
    * @param options Client options
    */
   constructor(token: string, public options?: ClientOptions) {
-    this.channels = cacheCheck(options?.cacheOptions?.channels, this, Channel);
+    this.channels = cacheCheck(options?.cache?.channels, this, Channel);
     this.gateway = new GatewayClient(token);
-    this.guilds = cacheCheck(
-      options?.cacheOptions?.guilds?.enabled,
-      this,
-      Guild,
-    );
+    this.guilds = cacheCheck(options?.cache?.guilds?.enabled, this, Guild);
     this.rest = new RESTClient(token, options?.restOptions);
-    this.users = cacheCheck(options?.cacheOptions?.users, this, User);
+    this.users = cacheCheck(options?.cache?.users, this, User);
   }
 
   /**
