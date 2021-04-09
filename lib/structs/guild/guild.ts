@@ -122,7 +122,7 @@ export class Guild extends Struct {
     data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
 
     this.presences = new Cache<APIPresence>(client);
-    data.presences?.forEach(async (presence) =>
+    data.presences?.forEach((presence) =>
       this.presences?.add({ id: presence.user.id, ...presence })
     );
   }
