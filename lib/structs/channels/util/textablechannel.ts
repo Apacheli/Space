@@ -7,6 +7,7 @@ import {
 } from "../../../../deps.ts";
 import { ActualSnowflake } from "../../../util/util.ts";
 
+// TODO: do docs, tomorrow maybe? :flushed:
 export interface TextableChannel {
   getChannelMessages(query: RESTGetAPIChannelMessagesQuery): void;
   getChannelMessage(messageID: ActualSnowflake): void;

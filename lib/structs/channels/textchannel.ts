@@ -10,10 +10,32 @@ import GuildChannel from "./guildchannel.ts";
 import { TextableChannel } from "./util/textablechannel.ts";
 import { ActualSnowflake } from "../../util/util.ts";
 
+/**
+ * Class representing a guild text channel on Discord.
+ */
 export class TextChannel extends GuildChannel implements TextableChannel {
+  /**
+   * the channel topic (0-1024 characters)
+   */
   topic: APIChannel["topic"];
+
+  /**
+   * the id of the last message sent in this channel (may not point to an
+   * existing or valid message)
+   */
   lastMessageID?: bigint | null;
+
+  /**
+	 * amount of seconds a user has to wait before sending another message
+   * (0-21600); bots, as well as users with the permission `manage_messages`
+   * or `manage_channel`, are unaffected
+	 */
   rateLimitPerUser: APIChannel["rate_limit_per_user"];
+
+  /**
+	 * when the last pinned message was pinned. This may be `null` in events such
+   * as `GUILD_CREATE` when a message is not pinned.
+	 */
   lastPinTimestamp?: number | null;
 
   update(data: APIChannel) {

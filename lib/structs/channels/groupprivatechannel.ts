@@ -1,9 +1,23 @@
 import { APIChannel } from "../../../deps.ts";
 import PrivateChannel from "./privatechannel.ts";
 
+/**
+ * Class representing a group DM channel on Discord.
+ */
 export class GroupPrivateChannel extends PrivateChannel {
+  /**
+   * icon hash
+   */
   icon?: APIChannel["icon"];
+
+  /**
+   * id of the DM creator
+   */
   ownerID?: bigint;
+
+  /**
+   * application id of the group DM creator if it is bot-created
+   */
   applicationID?: bigint;
 
   update(data: APIChannel) {
