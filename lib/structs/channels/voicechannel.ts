@@ -20,18 +20,15 @@ export class VoiceChannel extends GuildChannel {
    * the bitrate (in bits) of the voice channel
    */
   bitrate: APIChannel["bitrate"];
-
   /**
    * [voice region](https://discord.dev/resources/voice#voice-region-object) id
    * for the voice channel, automatic when set to null
    */
   rtcRegion!: APIVoiceRegion | null;
-
   /**
    * the user limit of the voice channel
    */
   userLimit: APIChannel["user_limit"];
-
   /**
    * the camera
    * [video quality mode](https://discord.dev/resources/channel-object-video-quality-modes)

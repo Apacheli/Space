@@ -10,27 +10,22 @@ export class GuildChannel extends Channel {
    * the id of the guild
    */
   guildID;
-
   /**
    * sorting position of the channel
    */
   position: APIChannel["position"];
-
   /**
    * explicit permission overwrites for members and roles
    */
   permissionOverwrites: APIChannel["permission_overwrites"];
-
   /**
    * the name of the channel (2-100 characters)
    */
   name: APIChannel["name"];
-
   /**
    * whether the channel is nsfw
    */
   nsfw: APIChannel["nsfw"];
-
   /**
    * id of the parent category for a channel (each parent category can contain
    * up to 50 channels)

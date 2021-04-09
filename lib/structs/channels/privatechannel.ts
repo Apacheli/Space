@@ -19,13 +19,11 @@ export class PrivateChannel extends Channel implements TextableChannel {
    * existing or valid message)
    */
   lastMessageID?: bigint | null;
-
   /**
    * when the last pinned message was pinned. This may be `null` in events such
    * as `GUILD_CREATE` when a message is not pinned.
    */
   lastPinTimestamp?: number | null;
-
   /**
    * the recipients of the DM
    */

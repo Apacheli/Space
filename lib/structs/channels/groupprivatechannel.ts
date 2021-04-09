@@ -9,12 +9,10 @@ export class GroupPrivateChannel extends PrivateChannel {
    * icon hash
    */
   icon?: APIChannel["icon"];
-
   /**
    * id of the DM creator
    */
   ownerID?: bigint;
-
   /**
    * application id of the group DM creator if it is bot-created
    */
