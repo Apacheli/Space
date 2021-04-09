@@ -12,6 +12,8 @@ import { ActualSnowflake } from "../../util/util.ts";
 
 /**
  * Class representing a guild text channel on Discord.
+ *
+ * https://discord.dev/resources/channel#channel-object-example-guild-text-channel
  */
 export class TextChannel extends GuildChannel implements TextableChannel {
   /**
