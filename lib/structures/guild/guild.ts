@@ -170,32 +170,6 @@ export class Guild extends Structure {
     this.nsfw = data.nsfw;
   }
 
-  getAFKChannel() {
-    return this.afkChannelID ? this.channels?.get(this.afkChannelID) : null;
-  }
-
-  getWidgetChannel() {
-    return this.widgetChannelID
-      ? this.channels?.get(this.widgetChannelID)
-      : null;
-  }
-
-  getSystemChannel() {
-    return this.systemChannelID
-      ? this.channels?.get(this.systemChannelID)
-      : null;
-  }
-
-  getRulesChannel() {
-    return this.rulesChannelID ? this.channels?.get(this.rulesChannelID) : null;
-  }
-
-  getPublicUpdatesChannel() {
-    return this.publicUpdatesChannelID
-      ? this.channels?.get(this.publicUpdatesChannelID)
-      : null;
-  }
-
   iconURL(format?: ImageFormats, size?: number) {
     return this.icon &&
       CDNFormatURL(guildIconURL(this.id, this.icon), format, size);

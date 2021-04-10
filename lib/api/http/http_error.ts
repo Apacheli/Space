@@ -1,4 +1,4 @@
-import { highlight } from "../../util/mod.ts";
+import { highlight, cyan } from "../../util/mod.ts";
 
 export interface ResponseError {
   code: number;
@@ -31,10 +31,8 @@ export class HTTPError extends Error implements ResponseError {
   private formatErrors(errors = this.errors, x = "") {
     let str = "";
     for (const k in errors) {
-      if (errors[k]) {
-        str += errors[k]._errors?.map((e: any) => `${x}${k}: ${e.message}\n`) ??
-          this.formatErrors(errors[k], `${x}${k}.`);
-      }
+      str += errors[k]._errors?.map((e: any) => `${x}${k}: ${e.message}\n`) ??
+        this.formatErrors(errors[k], `${x}${k}.`);
     }
     return str;
   }
