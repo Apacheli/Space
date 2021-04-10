@@ -1,5 +1,10 @@
-import { APIMessage } from "../../deps.ts";
+import {
+  APIMessage,
+  RESTGetAPIChannelMessageReactionUsersQuery,
+  RESTPatchAPIChannelMessageJSONBody,
+} from "../../deps.ts";
 import Client from "../client/client.ts";
+import { ActualSnowflake } from "../util/mod.ts";
 import Structure from "./structure.ts";
 
 export class Message extends Structure {
@@ -66,6 +71,58 @@ export class Message extends Structure {
     this.embeds = data.embeds;
     this.pinned = data.pinned;
     this.flags = data.flags;
+  }
+
+  crosspost() {
+    return this.client.rest.crosspostMessage(this.channelID, this.id);
+  }
+
+  react(emoji: string) {
+    return this.client.rest.createReaction(this.channelID, this.id, emoji);
+  }
+
+  unreact(emoji: string) {
+    return this.client.rest.deleteOwnReaction(this.channelID, this.id, emoji);
+  }
+
+  deleteUserReaction(emoji: string, userID: ActualSnowflake) {
+    return this.client.rest.deleteUserReaction(
+      this.channelID,
+      this.id,
+      emoji,
+      userID,
+    );
+  }
+
+  getReactions(
+    emoji: string,
+    query: RESTGetAPIChannelMessageReactionUsersQuery,
+  ) {
+    return this.client.rest.getReactions(this.channelID, this.id, emoji, query);
+  }
+
+  edit(data: RESTPatchAPIChannelMessageJSONBody) {
+    return this.client.rest.editMessage(this.channelID, this.id, data);
+  }
+
+  delete() {
+    return this.client.rest.deleteMessage(this.channelID, this.id);
+  }
+
+  pin(reason?: string) {
+    return this.client.rest.addPinnedChannelMessage(
+      this.channelID,
+      this.id,
+      reason,
+    );
+  }
+
+  unpin(reason?: string) {
+    return this.client.rest.deletePinnedChannelMessage(
+      this.channelID,
+      this.id,
+      reason,
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import { highlight, cyan } from "../../util/mod.ts";
+import { cyan, highlight } from "../../util/mod.ts";
 
 export interface ResponseError {
   code: number;
