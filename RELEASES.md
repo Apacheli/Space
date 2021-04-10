@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.5.0-alpha](#050-alpha---2021-04-10) |
 | [0.4.2-alpha](#042-alpha---2021-04-04) |
 | [0.4.1-alpha](#041-alpha---2021-04-02) |
 | [0.4.0-alpha](#040-alpha---2021-03-31) |
@@ -15,7 +16,58 @@ This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
 
-## [0.4.2-alpha](https://github.com/Apacheli/Space/compare/4cf9c3a...e5eb4fb) - 2021-04-04
+## [0.5.0-alpha](https://github.com/Apacheli/Space/compare/0.4.2-alpha...0.5.0-alpha) - 2021-04-10
+
+### Added
+
+- ([`ba0c340`](https://github.com/Apacheli/Space/commit/ba0c340),
+  [`fac4f79`](https://github.com/Apacheli/Space/commit/fac4f79)) Added CDN
+  endpoints
+- ([`be2c9d3`](https://github.com/Apacheli/Space/commit/be2c9d3)) Log `reason`
+  in gateway disconnect messages
+- ([`75f8716`](https://github.com/Apacheli/Space/commit/75f8716)) Added client
+  gateway event handler for `READY`
+- ([`4021e92`](https://github.com/Apacheli/Space/commit/4021e92)) Updated
+  `HTTPClient` to include `getGuildApplicationCommandPermissions`,
+  `getApplicationCommandPermissions`, `editApplicationCommandPermissions`,
+  `batchEditApplicationCommandPermissions`, `searchGuildMembers`,
+  `getGuildWelcomeScreen`, `editGuildWelcomeScreen`,
+  `updateCurrentUserVoiceState`, `updateUserVoiceState` methods
+- ([`378f6d7`](https://github.com/Apacheli/Space/commit/378f6d7)) Added
+  `Guild.voiceStates`
+- ([`a20ab41`](https://github.com/Apacheli/Space/commit/a20ab41),
+  [`bdb6623`](https://github.com/Apacheli/Space/commit/bdb6623)) Reworked
+  caching system to make it more flexible (this will likely change in the
+  future)
+- ([`dd016e5`](https://github.com/Apacheli/Space/commit/dd016e5),
+  [`1515272`](https://github.com/Apacheli/Space/commit/1515272),
+  [`ff3f83f`](https://github.com/Apacheli/Space/commit/ff3f83f)) Added HTTP
+  channel message methods to textable channels
+- ([`0857e00`](https://github.com/Apacheli/Space/commit/0857e00)) Added
+  `Client.channels`
+- ([`b2ff17b`](https://github.com/Apacheli/Space/commit/b2ff17b)) Added HTTP
+  methods to `Message`
+
+### Changed
+
+- ([`a9129e7`](https://github.com/Apacheli/Space/commit/a9129e7),
+  [`4728ec7`](https://github.com/Apacheli/Space/commit/4728ec7)) More README
+  style changes
+- ([`54ad166`](https://github.com/Apacheli/Space/commit/54ad166)) Every file was
+  renamed again to use underscores to better fit the Deno style convention
+- ([`076ec79`](https://github.com/Apacheli/Space/commit/076ec79))
+  `EventPipeline.dispatch` will `Promise.all` return value(s) now
+- ([`aaeed19`](https://github.com/Apacheli/Space/commit/aaeed19)) Logger will
+  color messages automatically
+
+### Deleted
+
+- ([`4021e92`](https://github.com/Apacheli/Space/commit/4021e92)) Removed HTTP
+  guild integration methods as they are no longer supported
+- ([`0016822`](https://github.com/Apacheli/Space/commit/0016822)) Remove Guild
+  channel getters
+
+## [0.4.2-alpha](https://github.com/Apacheli/Space/compare/0.4.1-alpha...0.4.2-alpha) - 2021-04-04
 
 ### Added
 
@@ -42,7 +94,7 @@ This format was adapted from
     [`204`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204)
     response
 
-## [0.4.1-alpha](https://github.com/Apacheli/Space/compare/2f8dad5...2d66d3b) - 2021-04-02
+## [0.4.1-alpha](https://github.com/Apacheli/Space/compare/0.4.0-alpha...0.4.1-alpha) - 2021-04-02
 
 Mostly development-related changes.
 
@@ -64,7 +116,7 @@ Mostly development-related changes.
   [`7c913e4`](https://github.com/Apacheli/Space/commit/7c913e4)) README has more
   useful information
 
-## [0.4.0-alpha](https://github.com/Apacheli/Space/compare/b19f218...84fb6d4) - 2021-03-31
+## [0.4.0-alpha](https://github.com/Apacheli/Space/compare/0.3.4-alpha...0.4.0-alpha) - 2021-03-31
 
 Guild stage voice channels will likely break as I wasn't able to test them.
 
@@ -89,7 +141,7 @@ Guild stage voice channels will likely break as I wasn't able to test them.
 - ([`06b1d77`](https://github.com/Apacheli/Space/commit/06b1d77)) Export a
   `mod.ts` file for each directory
 
-## [0.3.4-alpha](https://github.com/Apacheli/Space/compare/183d3aa...0633844) - 2021-03-29
+## [0.3.4-alpha](https://github.com/Apacheli/Space/compare/b904152...0633844) - 2021-03-29
 
 ### Added
 
@@ -108,7 +160,7 @@ Guild stage voice channels will likely break as I wasn't able to test them.
 
 - Deleted `ClientStores` as `ClientOptions` now accepts them
 
-## [0.3.3-alpha](https://github.com/Apacheli/Space/compare/cdf0a49...16c7e1c) - 2021-03-23
+## [0.3.3-alpha](https://github.com/Apacheli/Space/compare/89e6d7b...16c7e1c) - 2021-03-23
 
 This update will prepare the 0.4.0-alpha release when all client gateway event
 handlers are complete.
@@ -123,7 +175,7 @@ handlers are complete.
 - Fixed documentation issues for `Requester.executeSlackCompatibleWebhook` and
   `Requester.executeGitHubCompatibleWebhook`
 
-## [0.3.2-alpha](https://github.com/Apacheli/Space/compare/5d8fc8d...17af9c8) - 2021-03-22
+## [0.3.2-alpha](https://github.com/Apacheli/Space/compare/3f07d4b...17af9c8) - 2021-03-22
 
 The library is unstable, so expect dramatic changes to occur in the future.
 
