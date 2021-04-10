@@ -1,4 +1,5 @@
 import { Snowflake } from "../../deps.ts";
+import { green, yellow } from "./logger.ts";
 
 export const sleep = <T>(delay?: number, value?: T) =>
   new Promise((resolve) => setTimeout(resolve, delay, value));
@@ -19,3 +20,8 @@ export type PartialExcept<T, K extends keyof T> =
 export type RequiredExcept<T, K extends keyof T> =
   & Omit<Required<T>, K>
   & Partial<Pick<T, K>>;
+
+export const highlight = (input: string) =>
+  input
+    .replace(/".+?"|'.+?'/g, (str) => green(str))
+    .replace(/\b\d+\b|true|false/g, (int) => yellow(int));

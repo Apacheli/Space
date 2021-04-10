@@ -1,3 +1,5 @@
+import { highlight } from "./util.ts";
+
 export const formatColor = (input: string, open: number, close: number) =>
   `\x1b[${open}m${input}\x1b[${close}m`;
 
@@ -13,7 +15,10 @@ export const formatDate = (date = new Date()) => {
 };
 
 export const log = (level: string, ...args: unknown[]) =>
-  console.log(bold(formatDate()), "|", level, "|", ...args);
+  console.log(
+    `${bold(formatDate())} | ${level} |`,
+    ...args.map((arg) => typeof arg === "string" ? highlight(arg) : arg),
+  );
 
 const noLogs = Deno.args.includes("--no-logs") ? undefined : true;
 
