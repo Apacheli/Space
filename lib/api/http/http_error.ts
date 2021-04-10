@@ -1,4 +1,4 @@
-import { green, yellow } from "../../util/logger.ts";
+import { highlight } from "../../util/mod.ts";
 
 export interface ResponseError {
   code: number;
@@ -23,10 +23,7 @@ export class HTTPError extends Error implements ResponseError {
   }
 
   get message() {
-    return `[${this.code}] ${this.#message}\n${this.formatErrors()}`
-      .replace(/".+?"|'.+?'/g, (str) => green(str))
-      .replace(/\b\d+\b|true|false/g, (int) => yellow(int))
-      .slice(0, -1);
+    return highlight(`[${this.code}] ${this.#message}\n${this.formatErrors()}`);
   }
 
   // https://github.com/abalabahaha/eris/blob/master/lib/errors/DiscordRESTError.js#L49
