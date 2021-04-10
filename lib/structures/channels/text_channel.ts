@@ -46,11 +46,11 @@ export class TextChannel extends GuildChannel implements Textable {
       : null;
   }
 
-  getChannelMessages(query: RESTGetAPIChannelMessagesQuery) {
+  getMessages(query: RESTGetAPIChannelMessagesQuery) {
     return this.client.rest.getChannelMessages(this.id, query);
   }
 
-  getChannelMessage(messageID: ActualSnowflake) {
+  getMessage(messageID: ActualSnowflake) {
     return this.client.rest.getChannelMessage(this.id, messageID);
   }
 
@@ -126,11 +126,11 @@ export class TextChannel extends GuildChannel implements Textable {
     return this.client.rest.getPinnedMessages(this.id);
   }
 
-  addPinnedChannelMessage(messageID: ActualSnowflake, reason?: string) {
+  pinMessage(messageID: ActualSnowflake, reason?: string) {
     return this.client.rest.addPinnedChannelMessage(this.id, messageID, reason);
   }
 
-  deletePinnedChannelMessage(messageID: ActualSnowflake, reason?: string) {
+  unpinMessage(messageID: ActualSnowflake, reason?: string) {
     return this.client.rest.deletePinnedChannelMessage(
       this.id,
       messageID,

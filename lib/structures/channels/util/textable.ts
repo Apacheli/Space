@@ -49,7 +49,8 @@ export interface Textable {
    * > ℹ️ The before, after, and around keys are mutually exclusive, only one may
    * > be passed at a time.
    */
-  getChannelMessages(
+  getMessages(
+    /* getChannelMessages */
     query: RESTGetAPIChannelMessagesQuery,
   ): Promise<RESTGetAPIChannelMessagesResult>;
 
@@ -62,7 +63,8 @@ export interface Textable {
    * on success.
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  getChannelMessage(
+  getMessage(
+    /* getChannelMessage */
     messageID: ActualSnowflake,
   ): Promise<RESTGetAPIChannelMessageResult>;
 
@@ -289,7 +291,8 @@ export interface Textable {
    * > ⚠️ The max pinned messages is 50.
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  addPinnedChannelMessage(
+  pinMessage(
+    /* addPinnedChannelMessage */
     messageID: ActualSnowflake,
     reason?: string,
   ): Promise<RESTPutAPIChannelPinResult>;
@@ -301,7 +304,8 @@ export interface Textable {
    * Returns a 204 empty response on success.
    * @param messageID https://discord.dev/resources/channel#message-object
    */
-  deletePinnedChannelMessage(
+  unpinMessage(
+    /* deletePinnedChannelMessage */
     messageID: ActualSnowflake,
     reason?: string,
   ): Promise<RESTDeleteAPIChannelPinResult>;
