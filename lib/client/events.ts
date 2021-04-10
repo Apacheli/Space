@@ -41,7 +41,7 @@ import {
   GatewayWebhooksUpdateDispatchData,
 } from "../../deps.ts";
 import { Client } from "./mod.ts";
-import { channelFromType, Message } from "../structs/mod.ts";
+import { channelFromType, Message } from "../structures/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (

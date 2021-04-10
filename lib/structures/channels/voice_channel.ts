@@ -1,5 +1,5 @@
 import { APIChannel, APIVoiceRegion } from "../../../deps.ts";
-import GuildChannel from "./guildchannel.ts";
+import GuildChannel from "./guild_channel.ts";
 
 // discord-api-types add this please
 export enum VideoQualityMode {

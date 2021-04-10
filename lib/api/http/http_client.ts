@@ -167,7 +167,7 @@ import {
   RESTPutAPIGuildTemplateSyncResult,
   Snowflake,
 } from "../../../deps.ts";
-import HTTPError from "./httperror.ts";
+import HTTPError from "./http_error.ts";
 import * as meta from "../../../meta.ts";
 import { ActualSnowflake, RateLimitBucket } from "../../util/mod.ts";
 

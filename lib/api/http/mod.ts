@@ -1,3 +1,3 @@
-export * from "./httpclient.ts";
-export * from "./httperror.ts";
-export * from "./restclient.ts";
+export * from "./http_client.ts";
+export * from "./http_error.ts";
+export * from "./rest_client.ts";

@@ -1,7 +1,7 @@
 import { APIRole } from "../../../deps.ts";
-import Struct from "../struct.ts";
+import Structure from "../structure.ts";
 
-export class Role extends Struct {
+export class Role extends Structure {
   name!: APIRole["name"];
   color!: APIRole["color"];
   hoist!: APIRole["hoist"];

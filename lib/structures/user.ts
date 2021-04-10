@@ -1,6 +1,6 @@
 import { APIUser } from "../../deps.ts";
 import Client from "../client/client.ts";
-import Struct from "./struct.ts";
+import Structure from "./structure.ts";
 import {
   CDNFormatURL,
   defaultUserAvatarURL,
@@ -8,7 +8,7 @@ import {
   userAvatarURL,
 } from "../util/cdn.ts";
 
-export class User extends Struct {
+export class User extends Structure {
   bot;
   system;
 

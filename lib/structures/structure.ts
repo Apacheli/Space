@@ -1,7 +1,7 @@
 import { Snowflake } from "../../deps.ts";
 import Client from "../client/client.ts";
 
-export class Struct {
+export class Structure {
   id;
 
   constructor(data: { id: Snowflake }, public client: Client) {
@@ -30,4 +30,4 @@ export class Struct {
   }
 }
 
-export default Struct;
+export default Structure;

@@ -6,14 +6,14 @@ import {
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "../../../deps.ts";
-import GuildChannel from "./guildchannel.ts";
-import { TextableChannel } from "./util/textablechannel.ts";
+import GuildChannel from "./guild_channel.ts";
+import Textable from "./util/textable.ts";
 import { ActualSnowflake } from "../../util/util.ts";
 
 /**
  * Class representing a guild text channel on Discord.
  */
-export class TextChannel extends GuildChannel implements TextableChannel {
+export class TextChannel extends GuildChannel implements Textable {
   /**
    * the channel topic (0-1024 characters)
    */

@@ -1,9 +1,9 @@
 import { APIWebhook } from "../../../deps.ts";
 import Client from "../../client/client.ts";
 import { CDNFormatURL, ImageFormats, userAvatarURL } from "../../util/cdn.ts";
-import Struct from "../struct.ts";
+import Structure from "../structure.ts";
 
-export default class Webhook extends Struct {
+export default class Webhook extends Structure {
   type;
   guildID;
   applicationID;

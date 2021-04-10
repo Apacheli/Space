@@ -7,13 +7,13 @@ import {
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "../../../deps.ts";
 import Channel from "./channel.ts";
-import { TextableChannel } from "./util/textablechannel.ts";
+import Textable from "./util/textable.ts";
 import { ActualSnowflake } from "../../util/util.ts";
 
 /**
  * Class representing a DM (private) channel on Discord.
  */
-export class PrivateChannel extends Channel implements TextableChannel {
+export class PrivateChannel extends Channel implements Textable {
   /**
    * the id of the last message sent in this channel (may not point to an
    * existing or valid message)

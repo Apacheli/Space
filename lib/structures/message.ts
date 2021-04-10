@@ -1,13 +1,12 @@
 import { APIMessage } from "../../deps.ts";
 import Client from "../client/client.ts";
-import Struct from "./struct.ts";
+import Structure from "./structure.ts";
 
-export class Message extends Struct {
+export class Message extends Structure {
   channelID;
   guildID;
   author;
   member;
-  // timestamp; Already exists in `Struct`
   tts;
   attachments;
   reactions; // Probably not changeable by MESSAGE_UPDATE(?)

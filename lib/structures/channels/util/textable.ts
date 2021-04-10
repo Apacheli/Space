@@ -25,9 +25,17 @@ import {
 import { ActualSnowflake } from "../../../util/util.ts";
 
 /**
- * Interface for channels that have messages.
+ * Interface for textable channels.
+ *
+ * This includes:
+ * - guild text
+ * - dm
+ * - group dm
+ * - news (announcements)
+ * - public thread
+ * - private thread
  */
-export interface TextableChannel {
+export interface Textable {
   /**
    * https://discord.dev/resources/channel#get-channel-messages
    *
@@ -299,4 +307,4 @@ export interface TextableChannel {
   ): Promise<RESTDeleteAPIChannelPinResult>;
 }
 
-export default TextableChannel;
+export default Textable;

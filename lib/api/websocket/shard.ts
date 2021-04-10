@@ -10,7 +10,7 @@ import {
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
 } from "../../../deps.ts";
-import EventPipeline from "../../util/eventpipeline.ts";
+import EventPipeline from "../../util/event_pipeline.ts";
 import * as logger from "../../util/logger.ts";
 import { PartialExcept, PartialKeys } from "../../util/util.ts";
 

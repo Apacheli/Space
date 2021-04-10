@@ -1,5 +1,5 @@
 import { APIChannel } from "../../../deps.ts";
-import PrivateChannel from "./privatechannel.ts";
+import PrivateChannel from "./private_channel.ts";
 
 /**
  * Class representing a group DM channel on Discord.

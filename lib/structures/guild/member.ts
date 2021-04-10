@@ -1,9 +1,9 @@
 import { APIGuildMember } from "../../../deps.ts";
 import Client from "../../client/client.ts";
-import Struct from "../struct.ts";
+import Structure from "../structure.ts";
 import { RequiredKeys } from "../../util/mod.ts";
 
-export class Member extends Struct {
+export class Member extends Structure {
   user: APIGuildMember["user"];
   joinedAt: number;
 

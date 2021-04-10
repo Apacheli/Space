@@ -10,7 +10,7 @@ import {
   GuildChannel,
   Member,
   Role,
-  Struct,
+  Structure,
 } from "../mod.ts";
 import Client, { cacheCheck } from "../../client/client.ts";
 import {
@@ -34,7 +34,7 @@ export interface APIVoiceState extends GatewayVoiceStateUpdateDispatchData {
   // request_to_speak_timestamp: number | null;
 }
 
-export class Guild extends Struct {
+export class Guild extends Structure {
   owner;
   permissions;
 

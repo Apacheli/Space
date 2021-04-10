@@ -14,7 +14,7 @@ import {
   Member,
   Role,
   User,
-} from "../structs/mod.ts";
+} from "../structures/mod.ts";
 import {
   ActualSnowflake,
   Cache,
