@@ -12,7 +12,7 @@ export class NewsChannel extends TextChannel {
    * `MANAGE_WEBHOOKS` permission in the target channel. Returns a
    * [followed channel](https://discord.dev/resources/channel#followed-channel-object) object.
    */
-  followNewsChannel(data: RESTPostAPIChannelFollowersJSONBody) {
+  follow(data: RESTPostAPIChannelFollowersJSONBody) {
     return this.client.rest.followNewsChannel(this.id, data);
   }
 }
