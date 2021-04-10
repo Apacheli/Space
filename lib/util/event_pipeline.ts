@@ -20,7 +20,9 @@ export class EventPipeline extends Map<string, Handler[]> {
     return this.get(event)
       ?.reduce(async (result, handler) => {
         const data = await result;
-        return handler(...Array.isArray(data) ? data : [data]);
+        return handler(
+          ...await Promise.all(Array.isArray(data) ? data : [data]),
+        );
       }, args);
   }
 }
