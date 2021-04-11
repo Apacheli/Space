@@ -4,14 +4,15 @@
 
 <img align=right src=assets/space_logo.png height=150px>
 
-A [Discord API](https://discord.dev/) library for [Deno](https://deno.land/).
+A low-level [Deno](https://deno.land/) module for interacting with
+[Discord](https://discord.com/).
 
 ### Features
 
 - 100% coverage over Discord's HTTP and websocket APIs.
-- Secure by default. Client-side checks prevent `4xx`s for occuring.
-- Written in TypeScript to guarantee type safety.
-- Built-in utilities such as a colorful logger.
+- Secure by default. Client-side checks prevent `4xx`s from occuring.
+- Written purely in TypeScript to guarantee type safety.
+- Built-in utilities such as event logging and custom caching.
 
 ### Install
 
@@ -59,6 +60,6 @@ for reference.
 ### Resources
 
 - [Deno](https://deno.land/)
-- [Discord API Types](https://github.com/discordjs/discord-api-types)
+- [Discord API Types](https://github.com/discordjs/discord-api-types/tree/main/deno)
 - [Discord Developer Documentation](https://discord.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
