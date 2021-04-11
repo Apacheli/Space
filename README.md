@@ -53,7 +53,7 @@ client.connect({
 ```
 
 See the
-[documentation](https://doc.deno.land/https://deno.land/x/space@0.5.0-alpha/mod.ts)
+[documentation](https://doc.deno.land/https//deno.land/x/space@0.5.0-alpha/mod.ts)
 for reference.
 
 ### Resources
