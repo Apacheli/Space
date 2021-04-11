@@ -10,9 +10,12 @@ import {
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
 } from "../../../deps.ts";
-import EventPipeline from "../../util/event_pipeline.ts";
-import * as logger from "../../util/logger.ts";
-import { PartialExcept, PartialKeys } from "../../util/util.ts";
+import {
+  EventPipeline,
+  logger,
+  PartialExcept,
+  PartialKeys,
+} from "../../util/mod.ts";
 
 export interface GuildMembersChunkEntry {
   chunks: GatewayGuildMembersChunkDispatchData[];

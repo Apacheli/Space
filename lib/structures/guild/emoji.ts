@@ -1,6 +1,6 @@
 import { APIEmoji } from "../../../deps.ts";
 import Structure from "../structure.ts";
-import { CDNFormatURL, customEmojiURL, ImageFormats } from "../../util/cdn.ts";
+import { CDNFormatURL, customEmojiURL, ImageFormats } from "../../util/mod.ts";
 
 export class Emoji extends Structure {
   name!: APIEmoji["name"];

@@ -23,5 +23,5 @@ export type RequiredExcept<T, K extends keyof T> =
 
 export const highlight = (input: string) =>
   input
-    .replace(/".+?"|'.+?'/g, (str) => green(str))
+    .replace(/"(?:.+?)?"|'(?:.+?)?'/g, (str) => green(str))
     .replace(/\b\d+\b|true|false/g, (int) => yellow(int));
