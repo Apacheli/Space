@@ -27,7 +27,7 @@ See the [release notes](RELEASES.md) for all available versions.
 Simple program to get started:
 
 ```ts
-import { Client, GatewayIntentBits, onMessageCreate, Message } from "./deps.ts";
+import { Client, GatewayIntentBits, Message, onMessageCreate } from "./deps.ts";
 
 const token = prompt("token:");
 if (!token) {

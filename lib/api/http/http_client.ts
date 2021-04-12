@@ -91,8 +91,6 @@ import {
   RESTPatchAPIGuildChannelPositionsResult,
   RESTPatchAPIGuildEmojiJSONBody,
   RESTPatchAPIGuildEmojiResult,
-  RESTPatchAPIGuildIntegrationJSONBody,
-  RESTPatchAPIGuildIntegrationResult,
   RESTPatchAPIGuildJSONBody,
   RESTPatchAPIGuildMemberJSONBody,
   RESTPatchAPIGuildMemberResult,
@@ -133,9 +131,6 @@ import {
   RESTPostAPIGuildChannelResult,
   RESTPostAPIGuildEmojiJSONBody,
   RESTPostAPIGuildEmojiResult,
-  RESTPostAPIGuildIntegrationJSONBody,
-  RESTPostAPIGuildIntegrationResult,
-  RESTPostAPIGuildIntegrationSyncResult,
   RESTPostAPIGuildPruneJSONBody,
   RESTPostAPIGuildPruneResult,
   RESTPostAPIGuildRoleJSONBody,
@@ -165,7 +160,6 @@ import {
   RESTPutAPIGuildMemberResult,
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
-  Snowflake,
 } from "../../../deps.ts";
 import HTTPError from "./http_error.ts";
 import { ActualSnowflake, RateLimitBucket } from "../../util/mod.ts";

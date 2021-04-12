@@ -1,19 +1,5 @@
-import { APIChannel, APIVoiceRegion } from "../../../deps.ts";
+import { APIChannel } from "../../../deps.ts";
 import GuildChannel from "./guild_channel.ts";
-
-// discord-api-types add this please
-export enum VideoQualityMode {
-  AUTO,
-  FULL,
-}
-
-/**
- * Class representing a guild voice channel on Discord.
- */
-export interface APIVoiceChannel extends APIChannel {
-  "rtc_region": APIVoiceRegion | null;
-  "video_quality_mode"?: VideoQualityMode;
-}
 
 export class VoiceChannel extends GuildChannel {
   /**
@@ -24,7 +10,7 @@ export class VoiceChannel extends GuildChannel {
    * [voice region](https://discord.dev/resources/voice#voice-region-object) id
    * for the voice channel, automatic when set to null
    */
-  rtcRegion!: APIVoiceRegion | null;
+  rtcRegion!: APIChannel["rtc_region"];
   /**
    * the user limit of the voice channel
    */
@@ -34,9 +20,9 @@ export class VoiceChannel extends GuildChannel {
    * [video quality mode](https://discord.dev/resources/channel-object-video-quality-modes)
    * of the voice channel, 1 when not present
    */
-  videoQualityMode?: VideoQualityMode;
+  videoQualityMode: APIChannel["video_quality_mode"];
 
-  update(data: APIVoiceChannel) {
+  update(data: APIChannel) {
     super.update(data);
 
     this.bitrate = data.bitrate;

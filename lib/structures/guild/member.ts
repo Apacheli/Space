@@ -4,8 +4,8 @@ import Client from "../../client/client.ts";
 import { RequiredKeys } from "../../util/mod.ts";
 
 export class Member extends Structure {
-  user: APIGuildMember["user"];
-  joinedAt: number;
+  user;
+  joinedAt;
 
   nick: APIGuildMember["nick"];
   roles?: bigint[];
