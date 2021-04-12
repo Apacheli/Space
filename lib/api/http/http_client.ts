@@ -22,6 +22,7 @@ import {
   RESTDeleteAPIWebhookResult,
   RESTDeleteAPIWebhookWithTokenMessageResult,
   RESTDeleteAPIWebhookWithTokenResult,
+  RESTGetAPIApplicationCommandPermissionsResult,
   RESTGetAPIApplicationCommandResult,
   RESTGetAPIApplicationCommandsResult,
   RESTGetAPIApplicationGuildCommandResult,
@@ -43,6 +44,7 @@ import {
   RESTGetAPICurrentUserResult,
   RESTGetAPIGatewayBotResult,
   RESTGetAPIGatewayResult,
+  RESTGetAPIGuildApplicationCommandsPermissionsResult,
   RESTGetAPIGuildBanResult,
   RESTGetAPIGuildBansResult,
   RESTGetAPIGuildChannelsResult,
@@ -53,6 +55,8 @@ import {
   RESTGetAPIGuildMemberResult,
   RESTGetAPIGuildMembersQuery,
   RESTGetAPIGuildMembersResult,
+  RESTGetAPIGuildMembersSearchQuery,
+  RESTGetAPIGuildMembersSearchResult,
   RESTGetAPIGuildPreviewResult,
   RESTGetAPIGuildPruneCountQuery,
   RESTGetAPIGuildPruneCountResult,
@@ -63,6 +67,7 @@ import {
   RESTGetAPIGuildVanityUrlResult,
   RESTGetAPIGuildVoiceRegionsResult,
   RESTGetAPIGuildWebhooksResult,
+  RESTGetAPIGuildWelcomeScreenResult,
   RESTGetAPIGuildWidgetImageQuery,
   RESTGetAPIGuildWidgetImageResult,
   RESTGetAPIGuildWidgetJSONResult,
@@ -101,6 +106,9 @@ import {
   RESTPatchAPIGuildRoleResult,
   RESTPatchAPIGuildTemplateJSONBody,
   RESTPatchAPIGuildTemplateResult,
+  RESTPatchAPIGuildVoiceStateCurrentMemberJSONBody,
+  RESTPatchAPIGuildVoiceStateUserJSONBody,
+  RESTPatchAPIGuildWelcomeScreenJSONBody,
   RESTPatchAPIGuildWidgetSettingsJSONBody,
   RESTPatchAPIGuildWidgetSettingsResult,
   RESTPatchAPIWebhookJSONBody,
@@ -148,12 +156,18 @@ import {
   RESTPostAPIWebhookWithTokenResult,
   RESTPostAPIWebhookWithTokenSlackQuery,
   RESTPostAPIWebhookWithTokenSlackResult,
+  RESTPutAPIApplicationCommandPermissionsJSONBody,
+  RESTPutAPIApplicationCommandPermissionsResult,
+  RESTPutAPIApplicationCommandsJSONBody,
+  RESTPutAPIApplicationCommandsResult,
   RESTPutAPIChannelMessageReactionResult,
   RESTPutAPIChannelPermissionJSONBody,
   RESTPutAPIChannelPermissionResult,
   RESTPutAPIChannelPinResult,
   RESTPutAPIChannelRecipientJSONBody,
   RESTPutAPIChannelRecipientResult,
+  RESTPutAPIGuildApplicationCommandsPermissionsJSONBody,
+  RESTPutAPIGuildApplicationCommandsPermissionsResult,
   RESTPutAPIGuildBanJSONBody,
   RESTPutAPIGuildBanResult,
   RESTPutAPIGuildMemberJSONBody,
@@ -272,10 +286,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Gets entitlements for a given user. You can use this on your game backend to
    * check entitlements of an arbitrary user, or perhaps in an administrative panel
    * for your support team.
-   *
-   * > ❗ The previous behavior on this endpoint was that not specifying a
-   * > user_id or limit would return an unlimited amount of entitlements. That
-   * > behavior is now deprecated and will be removed on March 1, 2019.
    * @param applicationID https://discord.dev/game-sdk/sdk-starter-guide#get-set-up
    */
   getEntitlements(applicationID: ActualSnowflake, data: unknown) {
@@ -454,7 +464,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   /**
    * https://discord.dev/interactions/slash-commands#edit-global-application-command
    *
-   * > ℹ️ All parameters for this endpoint are optional. `options` is nullable.
+   * > ℹ️ All parameters for this endpoint are optional.
    *
    * Edit a global command. Updates will be available in all guilds after 1 hour.
    * Returns `200` and an
@@ -584,7 +594,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   /**
    * https://discord.dev/interactions/slash-commands#edit-guild-application-command
    *
-   * > ℹ️ All parameters for this endpoint are optional. `options` is nullable.
+   * > ℹ️ All parameters for this endpoint are optional.
    *
    * Edit a guild command. Updates for guild commands will be available immediately.
    * Returns `200` and an
@@ -643,9 +653,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   bulkOverwriteGuildApplicationCommands(
     applicationID: ActualSnowflake,
     guildID: ActualSnowflake,
-    data: unknown,
+    data: RESTPutAPIApplicationCommandsJSONBody,
   ) {
-    return this.request(
+    return this.request<RESTPutAPIApplicationCommandsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands`,
       {
         data,
@@ -799,13 +809,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   getGuildApplicationCommandPermissions(
     applicationID: ActualSnowflake,
     guildID: ActualSnowflake,
-    data: unknown,
   ) {
-    return this.request(
+    return this.request<RESTGetAPIGuildApplicationCommandsPermissionsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands/permissions`,
-      {
-        data,
-      },
     );
   }
 
@@ -824,13 +830,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     applicationID: ActualSnowflake,
     guildID: ActualSnowflake,
     commandID: ActualSnowflake,
-    data: unknown,
   ) {
-    return this.request(
+    return this.request<RESTGetAPIApplicationCommandPermissionsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands/${commandID}/permissions`,
-      {
-        data,
-      },
     );
   }
 
@@ -853,9 +855,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     applicationID: ActualSnowflake,
     guildID: ActualSnowflake,
     commandID: ActualSnowflake,
-    data: unknown,
+    data: RESTPutAPIApplicationCommandPermissionsJSONBody,
   ) {
-    return this.request(
+    return this.request<RESTPutAPIApplicationCommandPermissionsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands/${commandID}/permissions`,
       {
         data,
@@ -879,9 +881,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   batchEditApplicationCommandPermissions(
     applicationID: ActualSnowflake,
     guildID: ActualSnowflake,
-    data: unknown,
+    data: RESTPutAPIGuildApplicationCommandsPermissionsJSONBody,
   ) {
-    return this.request(
+    return this.request<RESTPutAPIGuildApplicationCommandsPermissionsResult>(
       `applications/${applicationID}/guilds/${guildID}/commands/permissions`,
       {
         data,
@@ -1224,13 +1226,21 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   /**
    * https://discord.dev/resources/channel#edit-message
    *
-   * Edit a previously sent message. The fields `content`, `embed`,
-   * `allowed_mentions` and `flags` can be edited by the original message author.
-   * Other users can only edit `flags` and only if they have the `MANAGE_MESSAGES`
-   * permission in the corresponding channel. When specifying flags, ensure to
-   * include all previously set flags/bits in addition to ones that you are
-   * modifying. Only `flags` documented in the table below may be modified by users
-   * (unsupported flag changes are currently ignored without error).
+   * Edit a previously sent message. The fields `content`, `embed`, and `flags` can
+   * be edited by the original message author. Other users can only edit `flags` and
+   * only if they have the `MANAGE_MESSAGES` permission in the corresponding channel.
+   * When specifying flags, ensure to include all previously set flags/bits in
+   * addition to ones that you are modifying. Only `flags` documented in the table
+   * below may be modified by users (unsupported flag changes are currently ignored
+   * without error).
+   *
+   * When the `content` field is edited, the `mentions` array in the message object
+   * will be reconstructed from scratch based on the new content. The
+   * `allowed_mentions` field of the edit request controls how this happens. If there
+   * is no explicit `allowed_mentions` in the edit request, the content will be
+   * parsed with _default_ allowances, that is, without regard to whether or not an
+   * `allowed_mentions` was present in the request that originally created the
+   * message.
    *
    * Returns a [message](https://discord.dev/resources/channel#message-object) object. Fires a
    * [Message Update](https://discord.dev/topics/gateway#message-update) Gateway event.
@@ -1834,10 +1844,16 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > ℹ️ All parameters to this endpoint except for `query` are optional
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  searchGuildMembers(guildID: ActualSnowflake, data: unknown) {
-    return this.request(`guilds/${guildID}/members/search`, {
-      data,
-    });
+  searchGuildMembers(
+    guildID: ActualSnowflake,
+    query: RESTGetAPIGuildMembersSearchQuery,
+  ) {
+    return this.request<RESTGetAPIGuildMembersSearchResult>(
+      `guilds/${guildID}/members/search`,
+      {
+        query,
+      },
+    );
   }
 
   /**
@@ -2399,10 +2415,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * for the guild.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  getGuildWelcomeScreen(guildID: ActualSnowflake, data: unknown) {
-    return this.request(`guilds/${guildID}/welcome-screen`, {
-      data,
-    });
+  getGuildWelcomeScreen(guildID: ActualSnowflake) {
+    return this.request<RESTGetAPIGuildWelcomeScreenResult>(
+      `guilds/${guildID}/welcome-screen`,
+    );
   }
 
   /**
@@ -2416,10 +2432,15 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * > ℹ️ All parameters to this endpoint are optional and nullable
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  editGuildWelcomeScreen(guildID: ActualSnowflake, data: unknown) {
+  editGuildWelcomeScreen(
+    guildID: ActualSnowflake,
+    data: RESTPatchAPIGuildWelcomeScreenJSONBody,
+    reason?: string,
+  ) {
     return this.request(`guilds/${guildID}/welcome-screen`, {
       data,
       method: "PATCH",
+      reason,
     });
   }
 
@@ -2429,7 +2450,10 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * Updates the current user's voice state.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
-  updateCurrentUserVoiceState(guildID: ActualSnowflake, data: unknown) {
+  updateCurrentUserVoiceState(
+    guildID: ActualSnowflake,
+    data: RESTPatchAPIGuildVoiceStateCurrentMemberJSONBody,
+  ) {
     return this.request(`guilds/${guildID}/voice-states/@me`, {
       data,
       method: "PATCH",
@@ -2446,11 +2470,13 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   updateUserVoiceState(
     guildID: ActualSnowflake,
     userID: ActualSnowflake,
-    data: unknown,
+    data: RESTPatchAPIGuildVoiceStateUserJSONBody,
+    reason?: string,
   ) {
     return this.request(`guilds/${guildID}/voice-states/${userID}`, {
       data,
       method: "PATCH",
+      reason,
     });
   }
 
@@ -2972,6 +2998,14 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    *
    * Edits a previously-sent webhook message from the same token. Returns a
    * [message](https://discord.dev/resources/channel#message-object) object on success.
+   *
+   * When the `content` field is edited, the `mentions` array in the message object
+   * will be reconstructed from scratch based on the new content. The
+   * `allowed_mentions` field of the edit request controls how this happens. If there
+   * is no explicit `allowed_mentions` in the edit request, the content will be
+   * parsed with _default_ allowances, that is, without regard to whether or not an
+   * `allowed_mentions` was present in the request that originally created the
+   * message.
    *
    * > ℹ️ All parameters to this endpoint are optional and nullable.
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
