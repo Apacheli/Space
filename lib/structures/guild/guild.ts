@@ -103,28 +103,38 @@ export class Guild extends Structure {
     );
 
     this.members = cacheCheck(cacheOptions?.members, client, Member);
-    data.members?.forEach((member) => {
-      if (member.user) {
-        this.members?.add({ id: member.user.id, ...member });
-        client.users?.update(member.user);
-      }
-    });
+    if (this.members) {
+      data.members?.forEach((member) => {
+        if (member.user) {
+          this.members?.add({ id: member.user.id, ...member });
+          client.users?.update(member.user);
+        }
+      });
+    }
 
     this.channels = cacheCheck(cacheOptions?.channels, client, GuildChannel);
-    data.channels?.forEach((channel) =>
-      this.channels?.add(channelFromType(channel, client))
-    );
+    if (this.channels) {
+      data.channels?.forEach((channel) =>
+        this.channels?.add(channelFromType(channel, client))
+      );
+    }
 
     this.roles = cacheCheck(cacheOptions?.roles, client, Role);
-    data.roles?.forEach((role) => this.roles?.add(role));
+    if (this.roles) {
+      data.roles?.forEach((role) => this.roles?.add(role));
+    }
 
     this.emojis = cacheCheck(cacheOptions?.emojis, client, Emoji);
-    data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
+    if (this.emojis) {
+      data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
+    }
 
     this.presences = new Cache<APIPresence>(client);
-    data.presences?.forEach((presence) =>
-      this.presences?.add({ id: presence.user.id, ...presence })
-    );
+    if (this.presences) {
+      data.presences?.forEach((presence) =>
+        this.presences?.add({ id: presence.user.id, ...presence })
+      );
+    }
   }
 
   update(data: APIGuild & { nsfw?: boolean }) {

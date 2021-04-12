@@ -1,6 +1,9 @@
 import { APIChannel } from "../../../deps.ts";
 import GuildChannel from "./guild_channel.ts";
 
+/**
+ * Class representing a guild voice channel on Discord.
+ */
 export class VoiceChannel extends GuildChannel {
   /**
    * the bitrate (in bits) of the voice channel
