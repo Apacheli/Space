@@ -20,26 +20,26 @@ A low-level [Deno](https://deno.land/) module for interacting with
 export * from "https://deno.land/x/space@0.5.0-alpha/mod.ts";
 ```
 
-[See the release notes](RELEASES.md) for all available versions.
+See the [release notes](RELEASES.md) for all available versions.
 
 ### Getting Started
 
-Basic program to get you started:
+Simple program to get started:
 
 ```ts
-import { Client, GatewayIntentsBits, onMessageCreate } from "./deps.ts";
+import { Client, GatewayIntentBits, onMessageCreate, Message } from "./deps.ts";
 
 const token = prompt("token:");
 if (!token) {
   throw new Error("bad token");
 }
 
-const client = new Client(token);
+const client = new Client(`Bot ${token}`);
 
 client.gateway.listen(
   "MESSAGE_CREATE",
-  (data) => onMessageCreate(client, data),
-  (message) => {
+  (message) => onMessageCreate(client, message),
+  (message: Message) => {
     if (message.content === "!ping") {
       client.rest.createMessage(message.channelID, {
         content: "pong!",
@@ -49,7 +49,7 @@ client.gateway.listen(
 );
 
 client.connect({
-  intents: GatewayIntentsBits.GUILD_MESSAGES,
+  intents: GatewayIntentBits.GUILD_MESSAGES,
 });
 ```
 
