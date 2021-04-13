@@ -1,3 +1,4 @@
+import { InteractionResponseType, InteractionType } from "../../../deps.ts";
 import { decodeString, serve, ServerRequest, verify } from "./deps.ts";
 
 export class Server {
@@ -35,8 +36,23 @@ export class Server {
     }
 
     const data = JSON.parse(new TextDecoder().decode(body));
-    console.log(data);
-    req.respond({ status: 200, body: "" });
+    switch (data.type) {
+      case InteractionType.Ping: {
+        req.respond({ status: 200, body: JSON.stringify({ type: 1 }) });
+        break;
+      }
+      case InteractionType.ApplicationCommand: {
+        req.respond({
+          status: 200,
+          body: JSON.stringify({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+              content: "hi this is a test message",
+            },
+          }),
+        });
+      }
+    }
   }
 }
 
