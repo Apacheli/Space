@@ -1,5 +1,3 @@
-import { highlight } from "./util.ts";
-
 export const formatColor = (input: string, open: number, close: number) =>
   `\x1b[${open}m${input}\x1b[${close}m`;
 
@@ -69,3 +67,8 @@ export const
   brightMagentaBackground = (input: string) => formatColor(input, 105, 49),
   brightCyanBackground    = (input: string) => formatColor(input, 106, 49),
   brightWhiteBackground   = (input: string) => formatColor(input, 107, 49);
+
+export const highlight = (input: string) =>
+  input
+    .replace(/"(?:.+?)?"|'(?:.+?)?'/g, (str) => green(str))
+    .replace(/\b\d+\b|true|false/g, (int) => yellow(int));
