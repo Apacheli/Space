@@ -7,6 +7,6 @@ if (!(token && publicKey)) {
   throw new Error("bad input");
 }
 
-const server = new Server(`Bot ${token}`, publicKey);
+const server = new Server(publicKey, `Bot ${token}`);
 
 server.start(8080);

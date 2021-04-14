@@ -16,23 +16,27 @@ export const respond = (req: ServerRequest, status: number, body: any) =>
 
 // TODO: Make guild commands work
 export class Server {
-  application?: RESTGetAPIOauth2CurrentApplicationResult;
-  http: HTTPClient;
+  application?: { id: Snowflake } | RESTGetAPIOauth2CurrentApplicationResult;
+  http;
   globalCommands: Storable<Command> = new Cache<Command>(undefined, Command);
 
   constructor(
-    token: string,
     public publicKey: string,
+    token: string,
     options?: HTTPClientOptions,
+    applicationID?: Snowflake,
   ) {
     this.http = new HTTPClient(token, options);
+    if (applicationID) {
+      this.application = { id: applicationID };
+    }
   }
 
   async createGlobalApplicationCommand(
     data: RESTPostAPIApplicationCommandsJSONBody,
   ) {
     if (!this.application) {
-      throw new Error("No application");
+      throw new Error("Missing application");
     }
     const command = await this.http.createGlobalApplicationCommand(
       this.application.id,
@@ -43,12 +47,13 @@ export class Server {
   }
 
   async start(port: number) {
-    const application = await this.http.getCurrentBotApplicationInformation();
+    if (!this.application) {
+      this.application = await this.http.getCurrentBotApplicationInformation();
+    }
     const commands = await this.http.getGlobalApplicationCommands(
-      application.id,
+      this.application.id,
     );
     commands.forEach((command) => this.globalCommands.add(command));
-    this.application = application;
 
     return this.connect(port);
   }
@@ -96,7 +101,7 @@ export class Server {
 
   async onInteraction(interaction: APIInteraction) {
     if (!interaction.data) {
-      return; // idk why there isn't data
+      throw new Error("data is missing tell apacheli to fix pls");
     }
     const command = await this.globalCommands.get(interaction.data.id);
     return command?.run(interaction);
