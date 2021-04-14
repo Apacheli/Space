@@ -9,6 +9,7 @@ import {
 import { decodeString, serve, ServerRequest, Status, verify } from "./deps.ts";
 import { HTTPClient, HTTPClientOptions } from "../http/http_client.ts";
 import Command from "./command.ts";
+import Cache, { Storable } from "../../util/cache.ts";
 
 export const respond = (req: ServerRequest, status: number, body: any) =>
   req.respond({ status, body: JSON.stringify(body) });
@@ -17,7 +18,7 @@ export const respond = (req: ServerRequest, status: number, body: any) =>
 export class Server {
   application?: RESTGetAPIOauth2CurrentApplicationResult;
   http: HTTPClient;
-  globalCommands = new Map<Snowflake, Command>();
+  globalCommands: Storable<Command> = new Cache<Command>(undefined, Command);
 
   constructor(
     token: string,
@@ -37,7 +38,7 @@ export class Server {
       this.application.id,
       data,
     );
-    this.globalCommands.set(command.id, new Command(command));
+    await this.globalCommands.add(command);
     return command;
   }
 
@@ -46,14 +47,8 @@ export class Server {
     const commands = await this.http.getGlobalApplicationCommands(
       application.id,
     );
-
-    for (const command of commands) {
-      this.globalCommands.set(command.id, new Command(command));
-    }
-
+    commands.forEach((command) => this.globalCommands.add(command));
     this.application = application;
-
-    console.log(this.globalCommands);
 
     return this.connect(port);
   }
@@ -93,18 +88,17 @@ export class Server {
       }
 
       case InteractionType.ApplicationCommand: {
-        const callbackData = this.onInteraction(data);
+        const callbackData = await this.onInteraction(data);
         return respond(req, Status.OK, callbackData);
       }
     }
   }
 
-  onInteraction(interaction: APIInteraction) {
+  async onInteraction(interaction: APIInteraction) {
     if (!interaction.data) {
       return; // idk why there isn't data
     }
-    const command = this.globalCommands.get(interaction.data.id);
-    console.log(command);
+    const command = await this.globalCommands.get(interaction.data.id);
     return command?.run(interaction);
   }
 }
