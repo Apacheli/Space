@@ -1,24 +1,12 @@
-import { HTTPClient, Server } from "../../mod.ts";
+import { Server } from "../../mod.ts";
 
-const important = ["public key", "token"].map((x) => prompt(`${x}:`));
+const token = prompt("token:");
+const publicKey = prompt("public key:");
 
-if (important.some((x) => x === null)) {
+if (!(token && publicKey)) {
   throw new Error("bad input");
 }
 
-const server = new Server(important[0] as string);
-const http = new HTTPClient(`Bot ${important[1]}`);
+const server = new Server(`Bot ${token}`, publicKey);
 
-const application = await http.getCurrentBotApplicationInformation();
-
-const commands = await http.getGlobalApplicationCommands(application.id);
-
-let command = commands.find((command) => command.name === "ping") ??
-  await http.createGlobalApplicationCommand(application.id, {
-    name: "ping",
-    description: "says pong",
-  });
-
-command;
-
-server.connect(8080);
+server.start(8080);

@@ -1,27 +1,76 @@
-import { InteractionResponseType, InteractionType } from "../../../deps.ts";
+import {
+  APIInteraction,
+  InteractionResponseType,
+  InteractionType,
+  RESTGetAPIOauth2CurrentApplicationResult,
+  RESTPostAPIApplicationCommandsJSONBody,
+  Snowflake,
+} from "../../../deps.ts";
 import { decodeString, serve, ServerRequest, Status, verify } from "./deps.ts";
+import { HTTPClient, HTTPClientOptions } from "../http/http_client.ts";
+import Command from "./command.ts";
 
-export const respond = (req: ServerRequest, status: number, body: any) => {
+export const respond = (req: ServerRequest, status: number, body: any) =>
   req.respond({ status, body: JSON.stringify(body) });
-};
 
+// TODO: Make guild commands work
 export class Server {
-  constructor(public publicKey: string) {
+  application?: RESTGetAPIOauth2CurrentApplicationResult;
+  http: HTTPClient;
+  globalCommands = new Map<Snowflake, Command>();
+
+  constructor(
+    token: string,
+    public publicKey: string,
+    options?: HTTPClientOptions,
+  ) {
+    this.http = new HTTPClient(token, options);
   }
 
-  async connect(port: number) {
+  async createGlobalApplicationCommand(
+    data: RESTPostAPIApplicationCommandsJSONBody,
+  ) {
+    if (!this.application) {
+      throw new Error("No application");
+    }
+    const command = await this.http.createGlobalApplicationCommand(
+      this.application.id,
+      data,
+    );
+    this.globalCommands.set(command.id, new Command(command));
+    return command;
+  }
+
+  async start(port: number) {
+    const application = await this.http.getCurrentBotApplicationInformation();
+    const commands = await this.http.getGlobalApplicationCommands(
+      application.id,
+    );
+
+    for (const command of commands) {
+      this.globalCommands.set(command.id, new Command(command));
+    }
+
+    this.application = application;
+
+    console.log(this.globalCommands);
+
+    return this.connect(port);
+  }
+
+  private async connect(port: number) {
     const server = serve({ port });
     for await (const req of server) {
       this.onRequest(req);
     }
   }
 
-  async onRequest(req: ServerRequest) {
+  private async onRequest(req: ServerRequest) {
     const signature = req.headers.get("X-Signature-Ed25519");
     const timestamp = req.headers.get("X-Signature-Timestamp");
 
     if (!(signature && timestamp)) {
-      return req.respond({ status: 400, body: "bad request" });
+      return respond(req, Status.BadRequest, "bad request");
     }
 
     const body = await Deno.readAll(req.body);
@@ -33,10 +82,10 @@ export class Server {
     );
 
     if (!isVerified) {
-      return req.respond({ status: 401, body: "invalid request signature" });
+      return respond(req, Status.Unauthorized, "invalid request signature");
     }
 
-    const data = JSON.parse(new TextDecoder().decode(body));
+    const data: APIInteraction = JSON.parse(new TextDecoder().decode(body));
 
     switch (data.type) {
       case InteractionType.Ping: {
@@ -44,12 +93,19 @@ export class Server {
       }
 
       case InteractionType.ApplicationCommand: {
-        return respond(req, Status.OK, {
-          type: InteractionResponseType.ChannelMessageWithSource,
-          data: { content: "hello" },
-        });
+        const callbackData = this.onInteraction(data);
+        return respond(req, Status.OK, callbackData);
       }
     }
+  }
+
+  onInteraction(interaction: APIInteraction) {
+    if (!interaction.data) {
+      return; // idk why there isn't data
+    }
+    const command = this.globalCommands.get(interaction.data.id);
+    console.log(command);
+    return command?.run(interaction);
   }
 }
 
