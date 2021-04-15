@@ -82,7 +82,7 @@ export class Guild extends Structure {
   approximateMemberCount: APIGuild["approximate_member_count"];
   approximatePresenceCount: APIGuild["approximate_presence_count"];
   welcomeScreen: APIGuild["welcome_screen"];
-  nsfw?: boolean;
+  nsfw?: APIGuild["nsfw"];
 
   constructor(data: APIGuild, client: Client) {
     super(data, client);
@@ -95,14 +95,14 @@ export class Guild extends Structure {
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
 
-    const cacheOptions = client.options?.cache?.guilds;
+    const cache = client.options?.cache?.guilds;
 
-    this.voiceStates = cacheCheck(cacheOptions?.voiceStates);
+    this.voiceStates = cacheCheck(cache?.voiceStates);
     data.voice_states?.forEach((voiceState) =>
       this.voiceStates?.add({ id: voiceState.user_id, ...voiceState })
     );
 
-    this.members = cacheCheck(cacheOptions?.members, client, Member);
+    this.members = cacheCheck(cache?.members, client, Member);
     if (this.members) {
       data.members?.forEach((member) => {
         if (member.user) {
@@ -112,19 +112,19 @@ export class Guild extends Structure {
       });
     }
 
-    this.channels = cacheCheck(cacheOptions?.channels, client, GuildChannel);
+    this.channels = cacheCheck(cache?.channels, client, GuildChannel);
     if (this.channels) {
       data.channels?.forEach((channel) =>
         this.channels?.add(channelFromType(channel, client))
       );
     }
 
-    this.roles = cacheCheck(cacheOptions?.roles, client, Role);
+    this.roles = cacheCheck(cache?.roles, client, Role);
     if (this.roles) {
       data.roles?.forEach((role) => this.roles?.add(role));
     }
 
-    this.emojis = cacheCheck(cacheOptions?.emojis, client, Emoji);
+    this.emojis = cacheCheck(cache?.emojis, client, Emoji);
     if (this.emojis) {
       data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
     }
@@ -137,7 +137,7 @@ export class Guild extends Structure {
     }
   }
 
-  update(data: APIGuild & { nsfw?: boolean }) {
+  update(data: APIGuild) {
     super.update(data);
 
     this.name = data.name;
