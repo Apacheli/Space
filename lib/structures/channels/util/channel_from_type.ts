@@ -1,4 +1,4 @@
-import { APIChannel, ChannelType } from "../../../../deps.ts";
+import { APIChannel, ChannelType } from "../../deps.ts";
 import {
   CategoryChannel,
   Channel,

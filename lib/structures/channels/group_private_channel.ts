@@ -1,4 +1,4 @@
-import { APIChannel } from "../../../deps.ts";
+import { APIChannel } from "../deps.ts";
 import PrivateChannel from "./private_channel.ts";
 
 /**

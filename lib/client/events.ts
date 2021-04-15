@@ -39,7 +39,7 @@ import {
   GatewayVoiceServerUpdateDispatchData,
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
-} from "../../deps.ts";
+} from "./deps.ts";
 import { Client } from "./mod.ts";
 import { channelFromType, Message } from "../structures/mod.ts";
 import { RequiredKeys } from "../util/mod.ts";

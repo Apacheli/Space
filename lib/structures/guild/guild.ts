@@ -3,7 +3,7 @@ import {
   GatewayPresenceUpdate,
   GatewayVoiceStateUpdateDispatchData,
   Snowflake,
-} from "../../../deps.ts";
+} from "../deps.ts";
 import {
   channelFromType,
   Emoji,

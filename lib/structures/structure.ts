@@ -1,4 +1,4 @@
-import { Snowflake } from "../../deps.ts";
+import { Snowflake } from "./deps.ts";
 import Client from "../client/client.ts";
 
 export class Structure {

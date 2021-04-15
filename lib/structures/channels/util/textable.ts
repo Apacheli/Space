@@ -21,7 +21,7 @@ import {
   RESTPostAPIChannelTypingResult,
   RESTPutAPIChannelMessageReactionResult,
   RESTPutAPIChannelPinResult,
-} from "../../../../deps.ts";
+} from "../../deps.ts";
 import { ActualSnowflake } from "../../../util/util.ts";
 
 /**

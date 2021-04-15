@@ -5,7 +5,7 @@ import {
   RESTPatchAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
-} from "../../../deps.ts";
+} from "../deps.ts";
 import Channel from "./channel.ts";
 import Textable from "./util/textable.ts";
 import { ActualSnowflake } from "../../util/util.ts";

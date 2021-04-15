@@ -1,4 +1,4 @@
-import { RESTPostAPIChannelFollowersJSONBody } from "../../../deps.ts";
+import { RESTPostAPIChannelFollowersJSONBody } from "../deps.ts";
 import TextChannel from "./text_channel.ts";
 
 /**
