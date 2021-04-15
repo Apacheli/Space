@@ -89,7 +89,7 @@ if (!publicKey) {
 
 const server = new Server(publicKey);
 
-server.listen("INTERACTION_CREATE", (interaction) => {
+server.listen(GatewayDispatchEvents.InteractionCreate, (interaction) => {
   if (interaction.data.name === "ping") {
     return {
       type: InteractionResponseType.ChannelMessageWithSource,
