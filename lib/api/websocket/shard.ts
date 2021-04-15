@@ -9,7 +9,7 @@ import {
   GatewayRequestGuildMembersData,
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
-} from "../../../deps.ts";
+} from "./deps.ts";
 import {
   EventPipeline,
   logger,

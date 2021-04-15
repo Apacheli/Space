@@ -1,4 +1,4 @@
-import { InteractionResponseType, InteractionType } from "../../../deps.ts";
+import { InteractionResponseType, InteractionType } from "./deps.ts";
 import {
   decodeString,
   readAll,
