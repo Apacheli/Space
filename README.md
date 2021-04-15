@@ -17,7 +17,25 @@ A low-level [Deno](https://deno.land/) module for interacting with
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.5.0-alpha/mod.ts";
+export * from "https://deno.land/x/space@0.6.0-alpha/mod.ts";
+```
+
+If you only want to use HTTP:
+
+```ts
+export * from "https://deno.land/x/space@0.6.0-alpha/lib/api/http/mod.ts";
+```
+
+If you only want to use interactions:
+
+```ts
+export * from "https://deno.land/x/space@0.6.0-alpha/lib/api/interactions/mod.ts";
+```
+
+If you only want to use the Gateway:
+
+```ts
+export * from "https://deno.land/x/space@0.6.0-alpha/lib/api/websocket/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.
@@ -27,7 +45,13 @@ See the [release notes](RELEASES.md) for all available versions.
 Simple program to get started:
 
 ```ts
-import { Client, GatewayIntentBits, Message, onMessageCreate } from "./deps.ts";
+import {
+  Client,
+  GatewayDispatchEvents,
+  GatewayIntentBits,
+  Message,
+  onMessageCreate,
+} from "./deps.ts";
 
 const token = prompt("token:");
 if (!token) {
@@ -37,7 +61,7 @@ if (!token) {
 const client = new Client(`Bot ${token}`);
 
 client.gateway.listen(
-  "MESSAGE_CREATE",
+  GatewayDispatchEvents.MessageCreate,
   (message) => onMessageCreate(client, message),
   (message: Message) => {
     if (message.content === "!ping") {
@@ -53,8 +77,32 @@ client.connect({
 });
 ```
 
+Simple interactions program:
+
+```ts
+import { InteractionResponseType, Server } from "./deps.ts";
+
+const publicKey = prompt("public key:");
+if (!publicKey) {
+  throw new Error("bad public key");
+}
+
+const server = new Server(publicKey);
+
+server.listen("INTERACTION_CREATE", (interaction) => {
+  if (interaction.data.name === "ping") {
+    return {
+      type: InteractionResponseType.ChannelMessageWithSource,
+      data: { content: "pong" },
+    };
+  }
+});
+
+server.connect(8080);
+```
+
 See the
-[documentation](https://doc.deno.land/https//deno.land/x/space@0.5.0-alpha/mod.ts)
+[documentation](https://doc.deno.land/https//deno.land/x/space@0.6.0-alpha/mod.ts)
 for reference.
 
 ### Resources
