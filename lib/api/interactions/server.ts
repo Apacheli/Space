@@ -7,22 +7,14 @@ import {
   Status,
   verify,
 } from "./deps.ts";
-import { HTTPClient, HTTPClientOptions } from "../http/http_client.ts";
 import EventPipeline from "../../util/event_pipeline.ts";
 
 export const respond = (req: ServerRequest, status: number, body: any) =>
   req.respond({ status, body: JSON.stringify(body) });
 
 export class Server extends EventPipeline {
-  http;
-
-  constructor(
-    public publicKey: string,
-    token: string,
-    options?: HTTPClientOptions,
-  ) {
+  constructor(public publicKey: string) {
     super();
-    this.http = new HTTPClient(token, options);
   }
 
   async connect(port: number) {
