@@ -1,5 +1,5 @@
 import { APIApplication } from "../../deps.ts";
-import { HTTPClientOptions, RESTClient } from "../api/http/mod.ts";
+import RESTClient, { RESTClientOptions } from "./rest_client.ts";
 import {
   GatewayClient,
   GatewayClientConnectData,
@@ -25,7 +25,7 @@ import {
 
 export interface ClientOptions {
   cache?: ClientCacheOptions;
-  restOptions?: HTTPClientOptions;
+  restOptions?: RESTClientOptions;
 }
 
 export interface ClientCacheOptions {
