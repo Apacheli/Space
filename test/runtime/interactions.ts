@@ -9,4 +9,13 @@ if (!(token && publicKey)) {
 
 const server = new Server(publicKey, `Bot ${token}`);
 
-server.start(8080);
+server.connect(8080);
+
+server.listen("INTERACTION_CREATE", (interaction) => {
+  if (interaction.data.name === "ping") {
+    return {
+      type: 4,
+      data: { content: "hello world" },
+    };
+  }
+});
