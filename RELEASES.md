@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.6.0-alpha](#060-alpha---2021-04-15) |
 | [0.5.0-alpha](#050-alpha---2021-04-10) |
 | [0.4.2-alpha](#042-alpha---2021-04-04) |
 | [0.4.1-alpha](#041-alpha---2021-04-02) |
@@ -15,6 +16,28 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.6.0-alpha](https://github.com/Apacheli/Space/compare/0.5.0-alpha...0.6.0-alpha) - 2021-04-15
+
+### Added
+
+- ([`7808363`](https://github.com/Apacheli/Space/commit/7808363),
+  [`e530689`](https://github.com/Apacheli/Space/commit/e530689),
+  [`bf1a7d0`](https://github.com/Apacheli/Space/commit/bf1a7d0),
+  [`ef8aa8a`](https://github.com/Apacheli/Space/commit/ef8aa8a)) Added support
+  for slash commands
+
+### Changed
+
+- Made a bunch of meta changes. See all commits
+  [here]((https://github.com/Apacheli/Space/compare/0.5.0-alpha...0.6.0-alpha))
+
+### Fixed
+
+- ([`b765876`](https://github.com/Apacheli/Space/commit/b765876)) Fixed types
+  for some HTTP methods that were added in the previous update
+- ([`54f6914`](https://github.com/Apacheli/Space/commit/54f6914)) Check if
+  caching is available so no useless loops are made
 
 ## [0.5.0-alpha](https://github.com/Apacheli/Space/compare/0.4.2-alpha...0.5.0-alpha) - 2021-04-10
 
