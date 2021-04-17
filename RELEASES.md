@@ -30,7 +30,7 @@ This format was adapted from
 ### Changed
 
 - Made a bunch of meta changes. See all commits
-  [here]((https://github.com/Apacheli/Space/compare/0.5.0-alpha...0.6.0-alpha))
+  [here](https://github.com/Apacheli/Space/compare/0.5.0-alpha...0.6.0-alpha)
 
 ### Fixed
 
