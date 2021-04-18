@@ -23,11 +23,19 @@ client.gateway.listen("VOICE_SERVER_UPDATE", async (data, shard) => {
   voice.identify();
 });
 
-client.connect({ intents: 512 });
+// client.connect({ intents: 512 });
 
 export default class VoiceClient {
   #interval?: number;
   private socket?: WebSocket;
+
+  modes?: string[];
+  port?: number;
+  ssrc?: number;
+
+  #ip?: string;
+
+  private udpSocket?: any;
 
   constructor(
     public voiceToken: string,
@@ -59,7 +67,24 @@ export default class VoiceClient {
         }
 
         case 2: { // Identify
-          console.log(payload);
+          console.log("identify complete");
+          break;
+        }
+
+        case 8: { // READY
+          this.modes = payload.d.modes;
+          this.port = payload.d.port;
+          this.ssrc = payload.d.ssrc;
+          this.#ip = payload.d.ip;
+          // https://doc.deno.land/https/raw.githubusercontent.com/denoland/deno/main/cli/dts/lib.deno.unstable.d.ts#Deno.listenDatagram
+          // @ts-ignore: https://stackoverflow.com/a/65206419/13778639
+          const udpSocket = this.udpSocket = Deno.listenDatagram({
+            port: 8080,
+            transport: "udp",
+            hostname: "0.0.0.0",
+          });
+
+          // https://doc.deno.land/https/raw.githubusercontent.com/denoland/deno/main/cli/dts/lib.deno.unstable.d.ts#Deno.DatagramConn
           break;
         }
       }
