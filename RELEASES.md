@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.6.1-alpha](#061-alpha---2021-04-18) |
 | [0.6.0-alpha](#060-alpha---2021-04-15) |
 | [0.5.0-alpha](#050-alpha---2021-04-10) |
 | [0.4.2-alpha](#042-alpha---2021-04-04) |
@@ -16,6 +17,12 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.6.1-alpha](https://github.com/Apacheli/Space/compare/0.6.0-alpha...0.6.1-alpha) - 2021-04-18
+
+### Fixed
+
+- Fixed `useDefineForClassFields` bug when upgrading to Deno 1.9
 
 ## [0.6.0-alpha](https://github.com/Apacheli/Space/compare/0.5.0-alpha...0.6.0-alpha) - 2021-04-15
 
