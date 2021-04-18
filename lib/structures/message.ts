@@ -58,7 +58,6 @@ export class Message extends Structure {
   }
 
   update(data: APIMessage) {
-    console.log(typeof data === "object" && data.content ? "yes, it exists." : "what?");
     super.update(data);
 
     this.content = data.content;

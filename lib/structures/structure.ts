@@ -27,6 +27,7 @@ export class Structure {
   }
 
   update(data: any) {
+    console.log(data);
   }
 }
 
