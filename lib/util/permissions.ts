@@ -20,7 +20,7 @@ export const computeBasePermissions = async (member: Member, guild: Guild) => {
     : permissions;
 };
 
-export const computeOverwrites = (
+export const computeOverwrites = async (
   permissions: bigint,
   member: Member,
   channel: GuildChannel,
@@ -31,12 +31,11 @@ export const computeOverwrites = (
   ) {
     return ALL;
   }
-  if (!(channel.permissionOverwrites && member.roles)) {
+  if (!(channel.guildID && member.roles)) {
     return 0n;
   }
-  // let everyoneOverwrite = channel.permissionOverwrites.get(channel.guildID);
-  let everyoneOverwrite = channel.permissionOverwrites.find((overwrite) =>
-    BigInt(overwrite.id) === channel.guildID
+  let everyoneOverwrite = await channel.permissionOverwrites.get(
+    channel.guildID,
   );
   if (everyoneOverwrite) {
     permissions |= BigInt(everyoneOverwrite.allow);
@@ -45,18 +44,13 @@ export const computeOverwrites = (
   let allow = 0n;
   let deny = 0n;
   for (const roleID of member.roles) {
-    // // const roleOverwrite = channel.permissionOverwrites.get(roleID;
-    const roleOverwrite = channel.permissionOverwrites.find((overwrite) =>
-      BigInt(overwrite.id) === roleID
-    );
+    const roleOverwrite = await channel.permissionOverwrites.get(roleID);
     allow |= roleOverwrite?.allow ? BigInt(roleOverwrite.allow) : 0n;
     deny |= roleOverwrite?.deny ? BigInt(roleOverwrite.deny) : 0n;
   }
   permissions |= allow;
   permissions &= ~deny;
-  const memberOverwrite = channel.permissionOverwrites.find((overwrite) =>
-    BigInt(overwrite.id) === member.id
-  );
+  const memberOverwrite = await channel.permissionOverwrites.get(member.id);
   if (memberOverwrite) {
     permissions |= BigInt(memberOverwrite.allow);
     permissions &= ~BigInt(memberOverwrite.deny);

@@ -1,6 +1,7 @@
-import { APIChannel } from "../deps.ts";
+import { APIChannel, APIOverwrite } from "../deps.ts";
 import Channel from "./channel.ts";
 import Client from "../../client/client.ts";
+import Cache, { Storable } from "../../util/cache.ts";
 
 /**
  * Class representing a guild channel on Discord.
@@ -17,7 +18,7 @@ export class GuildChannel extends Channel {
   /**
    * explicit permission overwrites for members and roles
    */
-  permissionOverwrites: APIChannel["permission_overwrites"];
+  permissionOverwrites!: Storable<APIOverwrite>;
   /**
    * the name of the channel (2-100 characters)
    */
@@ -42,7 +43,10 @@ export class GuildChannel extends Channel {
     super.update(data);
 
     this.position = data.position;
-    this.permissionOverwrites = data.permission_overwrites;
+    this.permissionOverwrites = new Cache<APIOverwrite>();
+    data.permission_overwrites?.forEach((overwrite) =>
+      this.permissionOverwrites.add(overwrite)
+    );
     this.name = data.name;
     this.nsfw = data.nsfw;
     this.parentID = data.parent_id && BigInt(data.parent_id);
