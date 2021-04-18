@@ -115,9 +115,11 @@ export class Guild extends Structure {
 
     this.channels = cacheCheck(cache?.channels, client, GuildChannel);
     if (this.channels) {
-      data.channels?.forEach((channel) =>
-        this.channels?.add(channelFromType(channel, client))
-      );
+      data.channels?.forEach((data) => {
+        const channel = channelFromType(data, client);
+        channel.update(data);
+        this.channels?.add(channel);
+      });
     }
 
     this.roles = cacheCheck(cache?.roles, client, Role);
