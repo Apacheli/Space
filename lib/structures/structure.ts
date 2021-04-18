@@ -1,13 +1,15 @@
 import { Snowflake } from "./deps.ts";
 import Client from "../client/client.ts";
 
+export interface StructureData {
+  id: Snowflake;
+}
+
 export class Structure {
   id;
 
-  constructor(data: { id: Snowflake }, public client: Client) {
+  constructor(data: StructureData, public client: Client) {
     this.id = BigInt(data.id);
-
-    this.update(data);
   }
 
   get timestamp() {
@@ -26,7 +28,7 @@ export class Structure {
     return this.id & 0xFFFn;
   }
 
-  update(data: any) {
+  update(_data: any) {
   }
 }
 

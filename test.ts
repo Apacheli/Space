@@ -4,7 +4,7 @@ import {
   GatewayIntentBits,
   Message,
   onMessageCreate,
-} from "../../mod.ts";
+} from "./mod.ts";
 
 const token = prompt("token:");
 if (!token) {

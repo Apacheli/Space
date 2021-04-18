@@ -1,17 +1,19 @@
 import { ActualSnowflake, PossiblePromise } from "./util.ts";
 import Client from "../client/client.ts";
 
+export interface StructureDataBigInt {
+  id: ActualSnowflake;
+}
+
 export interface Storable<V> {
-  add(item: { id: ActualSnowflake }): PossiblePromise<V>;
+  add(item: StructureDataBigInt): PossiblePromise<V>;
   get(id: ActualSnowflake): PossiblePromise<V | undefined>;
   has(id: ActualSnowflake): PossiblePromise<boolean>;
   remove(id: ActualSnowflake): PossiblePromise<V | undefined>;
-  update(item: { id: ActualSnowflake }): PossiblePromise<V>;
+  update(item: StructureDataBigInt): PossiblePromise<V>;
 }
 
-// Only used with `Cache` you don't have to use this with `Storable`
-export interface CacheEntry {
-  id: ActualSnowflake;
+export interface CacheEntry extends StructureDataBigInt {
   update?(data: any): void;
 }
 
@@ -31,6 +33,7 @@ export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
         return this.update(item, existing);
       }
       item = new this.baseClass(item, this.client);
+      item.update?.(item);
     }
     if (!this.baseClass && typeof item.id !== "bigint") {
       item.id = BigInt(item.id);

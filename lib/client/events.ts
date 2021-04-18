@@ -223,7 +223,9 @@ export const onMessageCreate = (
   client: Client,
   data: GatewayMessageCreateDispatchData,
 ) => {
-  return new Message(data, client);
+  const message = new Message(data, client);
+  message.update(data);
+  return message;
 };
 
 export const onMessageDelete = (
