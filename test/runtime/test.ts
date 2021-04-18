@@ -15,13 +15,8 @@ const client = new Client(`Bot ${token}`);
 
 client.gateway.listen(
   GatewayDispatchEvents.MessageCreate,
-  async (_message) => {
-    const message = await onMessageCreate(client, _message);
-    const messageFromStructure = new Message(_message, client);
-    message.update(_message);
-    messageFromStructure.update(_message);
-    console.log(message.content, messageFromStructure.content);
-
+  (message) => onMessageCreate(client, message),
+  (message: Message) => {
     if (message.content === "!ping") {
       client.rest.createMessage(message.channelID, {
         content: "pong!",
