@@ -262,10 +262,6 @@ export class Shard extends EventPipeline {
   updateVoiceState(
     data: PartialKeys<GatewayVoiceStateUpdateData, "self_deaf" | "self_mute">,
   ) {
-    // TODO: Queue until the guild is available.
-    if (this.unavailableGuilds.has(data.guild_id)) {
-      throw new Error("STOP! SPACE DOES NOT SUPPORT THIS YET!");
-    }
     const payload: GatewayVoiceStateUpdateData = {
       "self_deaf": false,
       "self_mute": false,
@@ -289,10 +285,6 @@ export class Shard extends EventPipeline {
   requestGuildMembers(
     data: PartialKeys<GatewayRequestGuildMembersData, "limit">,
   ) {
-    // TODO: Queue until the guild is available.
-    if (this.unavailableGuilds.has(data.guild_id)) {
-      throw new Error("Cannot request members from an navailable guild.");
-    }
     const nonce = data.nonce ?? `${Date.now()}`.padStart(16, "0");
     const payload: GatewayRequestGuildMembersData = {
       limit: 0,
