@@ -5,10 +5,10 @@ export interface StructureData {
   id: Snowflake;
 }
 
-export class Structure {
+export class Structure<T extends StructureData = StructureData> {
   id;
 
-  constructor(data: StructureData, public client: Client) {
+  constructor(data: T, public client: Client) {
     this.id = BigInt(data.id);
   }
 
