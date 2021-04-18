@@ -19,6 +19,9 @@ client.gateway.listen(
   "MESSAGE_CREATE",
   (message) => onMessageCreate(client, message),
   async (message) => {
+    if (!message.content) {
+      return; // Why did this start erroring?
+    }
     if (message.author.id !== "460612586061430806") {
       return;
     }
