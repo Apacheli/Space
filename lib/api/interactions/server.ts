@@ -1,6 +1,7 @@
-import { InteractionResponseType, InteractionType } from "./deps.ts";
 import {
   decodeString,
+  InteractionResponseType,
+  InteractionType,
   readAll,
   serve,
   ServerRequest,

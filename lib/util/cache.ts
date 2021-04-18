@@ -32,10 +32,10 @@ export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
       if (existing) {
         return this.update(item, existing);
       }
-      item = new this.baseClass(item, this.client);
-      item.update?.(item);
-    }
-    if (!this.baseClass && typeof item.id !== "bigint") {
+      const data = item;
+      item = new this.baseClass(data, this.client);
+      item.update?.(data);
+    } else {
       item.id = BigInt(item.id);
     }
     this.set(item.id, item);

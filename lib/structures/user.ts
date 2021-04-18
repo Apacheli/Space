@@ -14,7 +14,7 @@ export class User extends Structure {
 
   username!: APIUser["username"];
   discriminator!: APIUser["discriminator"];
-  avatar!: APIUser["avatar"] | null;
+  avatar!: APIUser["avatar"];
   public publicFlags: APIUser["public_flags"];
 
   constructor(data: APIUser, client: Client) {

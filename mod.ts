@@ -6,4 +6,5 @@ export {
   GatewayDispatchEvents,
   GatewayIntentBits,
   InteractionResponseType,
+  PermissionFlagsBits,
 } from "./lib/client/deps.ts";
