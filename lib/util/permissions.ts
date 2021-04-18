@@ -37,14 +37,18 @@ export const computeOverwrites = async (
   let allow = 0n;
   let deny = 0n;
   for (const roleID of member.roles) {
-    const roleOverwrite = await channel.permissionOverwrites.get(roleID);
-    allow |= roleOverwrite?.allow ? BigInt(roleOverwrite.allow) : 0n;
-    deny |= roleOverwrite?.deny ? BigInt(roleOverwrite.deny) : 0n;
+    const overwrite = await channel.permissionOverwrites.get(roleID);
+    if (overwrite) {
+      allow |= BigInt(overwrite.allow);
+      deny |= BigInt(overwrite.deny);
+    }
   }
   for (const overwriteID of [channel.guildID, member.id]) {
     const overwrite = await channel.permissionOverwrites.get(overwriteID);
-    permissions |= overwrite?.allow ? BigInt(overwrite.allow) : 0n;
-    permissions &= overwrite?.deny ? ~BigInt(overwrite.deny) : 0n;
+    if (overwrite) {
+      permissions |= BigInt(overwrite.allow);
+      permissions &= ~BigInt(overwrite.deny);
+    }
   }
   return permissions | allow & ~deny;
 };
