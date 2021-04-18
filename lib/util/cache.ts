@@ -24,11 +24,11 @@ export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
     super();
   }
 
-  add(item: V): V {
-    const existing = this.get(item.id);
+  add(item: V, _existing?: V): V {
+    const existing = _existing ?? this.get(item.id);
     if (this.client && this.baseClass && !(item instanceof this.baseClass)) {
       if (existing) {
-        return this.update(item);
+        return this.update(item, existing);
       }
       item = new this.baseClass(item, this.client);
     }
@@ -55,10 +55,10 @@ export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
     }
   }
 
-  update(item: V) {
-    const existing = this.get(item.id);
+  update(item: V, _existing?: V) {
+    const existing = _existing ?? this.get(item.id);
     if (!existing?.update || this.baseClass && item instanceof this.baseClass) {
-      return this.add(item);
+      return this.add(item, existing);
     }
     existing.update(item);
     return existing;

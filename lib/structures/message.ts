@@ -58,6 +58,7 @@ export class Message extends Structure {
   }
 
   update(data: APIMessage) {
+    console.log("THIS SHOULD BE CALLED");
     super.update(data);
 
     this.content = data.content;

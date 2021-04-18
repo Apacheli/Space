@@ -16,6 +16,7 @@ import Client, { cacheCheck } from "../../client/client.ts";
 import {
   Cache,
   CDNFormatURL,
+  computePermissions,
   guildBannerURL,
   guildDiscoverySplashURL,
   guildIconURL,
@@ -202,6 +203,10 @@ export class Guild extends Structure {
   bannerURL(format?: ImageFormats, size?: number) {
     return this.banner &&
       CDNFormatURL(guildBannerURL(this.id, this.banner), format, size);
+  }
+
+  computePermissions(member: Member, channel?: GuildChannel) {
+    return computePermissions(member, this, channel);
   }
 }
 
