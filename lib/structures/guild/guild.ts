@@ -204,10 +204,6 @@ export class Guild extends Structure {
     return this.banner &&
       CDNFormatURL(guildBannerURL(this.id, this.banner), format, size);
   }
-
-  computePermissions(member: Member, channel?: GuildChannel) {
-    return computePermissions(member, this, channel);
-  }
 }
 
 export default Guild;
