@@ -206,6 +206,14 @@ export class Guild extends Structure {
     return this.banner &&
       CDNFormatURL(guildBannerURL(this.id, this.banner), format, size);
   }
+
+  /**
+   * Computes a member's permissions. If `channel` is provided, then it will
+   * also compute their overwrites.
+   */
+  computePermissions(member: Member, channel?: GuildChannel) {
+    return computePermissions(member, this, channel);
+  }
 }
 
 export default Guild;

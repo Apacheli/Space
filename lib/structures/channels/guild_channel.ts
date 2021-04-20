@@ -1,7 +1,8 @@
 import { APIChannel, APIOverwrite } from "../deps.ts";
 import Channel from "./channel.ts";
 import Client from "../../client/client.ts";
-import Cache, { Storable } from "../../util/cache.ts";
+import { Cache, computePermissions, Storable } from "../../util/mod.ts";
+import { Member } from "../mod.ts";
 
 /**
  * Class representing a guild channel on Discord.
@@ -54,6 +55,15 @@ export class GuildChannel extends Channel {
 
   getParentChannel() {
     return this.parentID ? this.client.channels?.get(this.parentID) : null;
+  }
+
+  /**
+   * Computes a member's permissions and overwrites. If you don't need to check
+   * for overwrites, use `Guild.computePermissions` without passing `channel`.
+   */
+  async computePermissions(member: Member) {
+    const guild = this.guildID && await this.client.guilds?.get(this.guildID);
+    return guild ? computePermissions(member, guild, this) : 0n;
   }
 }
 
