@@ -1,4 +1,4 @@
-import Client from "../../client/client.ts";
+import { Client } from "../../client/client.ts";
 import { onReady } from "../../client/events.ts";
 
 const token = "";

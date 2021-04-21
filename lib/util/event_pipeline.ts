@@ -1,3 +1,5 @@
+export type Handler = (...args: any) => any;
+
 export class EventPipeline extends Map<string, Handler[]> {
   listen(event: string, ...handlers: Handler[]) {
     const existing = this.get(event);
@@ -26,5 +28,3 @@ export class EventPipeline extends Map<string, Handler[]> {
       }, args);
   }
 }
-
-export type Handler = (...args: any) => any;

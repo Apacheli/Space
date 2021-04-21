@@ -1,5 +1,5 @@
 import { APIChannel } from "../deps.ts";
-import GuildChannel from "./guild_channel.ts";
+import { GuildChannel } from "./guild_channel.ts";
 
 /**
  * Class representing a guild voice channel on Discord.

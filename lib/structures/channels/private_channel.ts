@@ -6,8 +6,8 @@ import {
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "../deps.ts";
-import Channel from "./channel.ts";
-import Textable from "./util/textable.ts";
+import { Channel } from "./channel.ts";
+import { Textable } from "./util/textable.ts";
 import { ActualSnowflake } from "../../util/util.ts";
 
 /**

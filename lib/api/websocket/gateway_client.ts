@@ -1,4 +1,4 @@
-import Shard, { GatewayIdentifyDataPartial } from "./shard.ts";
+import { Shard, GatewayIdentifyDataPartial } from "./shard.ts";
 import { EventPipeline, logger, sleep } from "../../util/mod.ts";
 
 export type GatewayClientConnectData =

@@ -13,7 +13,7 @@ import {
   TextChannel,
   VoiceChannel,
 } from "../mod.ts";
-import Client from "../../../client/client.ts";
+import { Client } from "../../../client/client.ts";
 
 export const channelFromType = (channel: APIChannel, client: Client) => {
   switch (channel.type) {

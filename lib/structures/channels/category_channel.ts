@@ -1,4 +1,4 @@
-import GuildChannel from "./guild_channel.ts";
+import { GuildChannel } from "./guild_channel.ts";
 
 /**
  * Class representing a guild category channel on Discord.

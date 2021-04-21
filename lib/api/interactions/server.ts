@@ -8,7 +8,7 @@ import {
   Status,
   verify,
 } from "./deps.ts";
-import EventPipeline from "../../util/event_pipeline.ts";
+import { EventPipeline } from "../../util/event_pipeline.ts";
 
 export const respond = (req: ServerRequest, status: number, body: any) =>
   req.respond({ status, body: JSON.stringify(body) });

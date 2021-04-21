@@ -3,8 +3,8 @@ import {
   RESTGetAPIChannelMessageReactionUsersQuery,
   RESTPatchAPIChannelMessageJSONBody,
 } from "./deps.ts";
-import Structure from "./structure.ts";
-import Client from "../client/client.ts";
+import { Structure } from "./structure.ts";
+import { Client } from "../client/client.ts";
 import { ActualSnowflake } from "../util/mod.ts";
 
 export class Message extends Structure {

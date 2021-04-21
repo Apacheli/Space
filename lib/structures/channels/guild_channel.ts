@@ -1,6 +1,6 @@
 import { APIChannel, APIOverwrite } from "../deps.ts";
-import Channel from "./channel.ts";
-import Client from "../../client/client.ts";
+import { Channel } from "./channel.ts";
+import { Client } from "../../client/client.ts";
 import { Cache, computeOverwrites, Storable } from "../../util/mod.ts";
 import { Member } from "../mod.ts";
 

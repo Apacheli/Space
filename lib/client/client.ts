@@ -1,5 +1,5 @@
 import { APIApplication } from "./deps.ts";
-import RESTClient, { RESTClientOptions } from "./rest_client.ts";
+import { RESTClient, RESTClientOptions } from "./rest_client.ts";
 import {
   GatewayClient,
   GatewayClientConnectData,
