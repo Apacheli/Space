@@ -12,7 +12,7 @@ import {
   Role,
   Structure,
 } from "../mod.ts";
-import { Client, cacheCheck } from "../../client/client.ts";
+import { cacheCheck, Client } from "../../client/client.ts";
 import {
   Cache,
   CDNFormatURL,
