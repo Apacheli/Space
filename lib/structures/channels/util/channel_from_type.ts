@@ -55,5 +55,3 @@ export const channelFromType = (channel: APIChannel, client: Client) => {
     }
   }
 };
-
-export default channelFromType;

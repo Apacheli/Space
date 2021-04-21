@@ -16,5 +16,3 @@ export class StageChannel extends VoiceChannel {
     this.topic = data.topic;
   }
 }
-
-export default StageChannel;

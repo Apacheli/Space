@@ -56,5 +56,3 @@ export class GatewayClient extends EventPipeline {
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
 }
-
-export default GatewayClient;

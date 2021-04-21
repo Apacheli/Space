@@ -16,5 +16,3 @@ export class NewsChannel extends TextChannel {
     return this.client.rest.followNewsChannel(this.id, data);
   }
 }
-
-export default NewsChannel;

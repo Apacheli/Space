@@ -21,5 +21,3 @@ export class Channel extends Structure {
     return `<#${this.id}>`;
   }
 }
-
-export default Channel;

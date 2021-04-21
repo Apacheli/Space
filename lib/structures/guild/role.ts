@@ -28,5 +28,3 @@ export class Role extends Structure<APIRole> {
     return `<@&${this.id}>`;
   }
 }
-
-export default Role;

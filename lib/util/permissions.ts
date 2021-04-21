@@ -33,7 +33,7 @@ export const computeOverwrites = async (
     overwriteIDs.push(channel.guildID);
   }
   for (const overwriteID of overwriteIDs) {
-    const overwrite = await channel.permissionOverwrites.get(overwriteID);
+    const overwrite = await channel.permissionOverwrites?.get(overwriteID);
     if (overwrite) {
       permissions |= BigInt(overwrite.allow) & ~BigInt(overwrite.deny);
     }

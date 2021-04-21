@@ -125,5 +125,3 @@ export class Message extends Structure {
     );
   }
 }
-
-export default Message;

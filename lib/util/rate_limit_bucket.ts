@@ -42,5 +42,3 @@ export class RateLimitBucket {
     }
   }
 }
-
-export default RateLimitBucket;

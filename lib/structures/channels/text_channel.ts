@@ -138,5 +138,3 @@ export class TextChannel extends GuildChannel implements Textable {
     );
   }
 }
-
-export default TextChannel;

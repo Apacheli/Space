@@ -5,5 +5,3 @@ import GuildChannel from "./guild_channel.ts";
  */
 export class StoreChannel extends GuildChannel {
 }
-
-export default StoreChannel;

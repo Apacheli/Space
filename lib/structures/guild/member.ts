@@ -38,5 +38,3 @@ export class Member extends Structure {
     return `<@${this.nick ? "!" : ""}${this.id}>`;
   }
 }
-
-export default Member;

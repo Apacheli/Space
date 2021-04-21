@@ -5,5 +5,3 @@ import GuildChannel from "./guild_channel.ts";
  */
 export class PublicThreadChannel extends GuildChannel {
 }
-
-export default PublicThreadChannel;

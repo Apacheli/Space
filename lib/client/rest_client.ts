@@ -5,5 +5,3 @@ export interface RESTClientOptions extends HTTPClientOptions {
 
 export class RESTClient extends HTTPClient {
 }
-
-export default RESTClient;

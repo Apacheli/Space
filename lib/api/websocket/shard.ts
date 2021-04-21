@@ -314,5 +314,3 @@ export class Shard extends EventPipeline {
     }
   }
 }
-
-export default Shard;

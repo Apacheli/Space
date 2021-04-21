@@ -3,7 +3,7 @@ import Structure from "../structure.ts";
 import Client from "../../client/client.ts";
 import { CDNFormatURL, ImageFormats, userAvatarURL } from "../../util/mod.ts";
 
-export default class Webhook extends Structure {
+export class Webhook extends Structure {
   type;
   guildID;
   applicationID;

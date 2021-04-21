@@ -63,5 +63,3 @@ export class Server extends EventPipeline {
     }
   }
 }
-
-export default Server;

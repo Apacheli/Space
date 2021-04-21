@@ -27,6 +27,4 @@ export class EventPipeline extends Map<string, Handler[]> {
   }
 }
 
-export default EventPipeline;
-
 export type Handler = (...args: any) => any;

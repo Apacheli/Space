@@ -8,7 +8,6 @@ export interface ResponseError {
 
 export class HTTPError extends Error implements ResponseError {
   #message;
-
   code;
   errors;
   name = "HTTPError";
@@ -17,7 +16,6 @@ export class HTTPError extends Error implements ResponseError {
     super();
 
     this.#message = body.message;
-
     this.code = body.code;
     this.errors = body.errors;
   }
@@ -37,5 +35,3 @@ export class HTTPError extends Error implements ResponseError {
     return str;
   }
 }
-
-export default HTTPError;

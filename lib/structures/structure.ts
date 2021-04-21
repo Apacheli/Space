@@ -31,5 +31,3 @@ export class Structure<T extends StructureData = StructureData> {
   update(_data: any) {
   }
 }
-
-export default Structure;

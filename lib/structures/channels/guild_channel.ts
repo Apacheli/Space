@@ -66,5 +66,3 @@ export class GuildChannel extends Channel {
     return computeOverwrites(0n, member, this);
   }
 }
-
-export default GuildChannel;

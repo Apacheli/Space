@@ -3104,5 +3104,3 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     );
   }
 }
-
-export default HTTPClient;

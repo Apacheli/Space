@@ -54,5 +54,3 @@ export class User extends Structure {
     );
   }
 }
-
-export default User;

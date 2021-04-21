@@ -215,5 +215,3 @@ export class Guild extends Structure {
     return computePermissions(member, this, channel);
   }
 }
-
-export default Guild;

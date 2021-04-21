@@ -67,5 +67,3 @@ export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
     return existing;
   }
 }
-
-export default Cache;

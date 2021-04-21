@@ -34,5 +34,3 @@ export class VoiceChannel extends GuildChannel {
     this.videoQualityMode = data.video_quality_mode;
   }
 }
-
-export default VoiceChannel;

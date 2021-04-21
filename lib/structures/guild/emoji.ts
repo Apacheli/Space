@@ -31,5 +31,3 @@ export class Emoji extends Structure<APIEmoji & { id: bigint }> {
     return CDNFormatURL(customEmojiURL(this.id), format, size);
   }
 }
-
-export default Emoji;

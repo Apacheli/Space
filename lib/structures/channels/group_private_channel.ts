@@ -26,5 +26,3 @@ export class GroupPrivateChannel extends PrivateChannel {
     this.applicationID = data.application_id && BigInt(data.application_id);
   }
 }
-
-export default GroupPrivateChannel;

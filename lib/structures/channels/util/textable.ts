@@ -310,5 +310,3 @@ export interface Textable {
     reason?: string,
   ): Promise<RESTDeleteAPIChannelPinResult>;
 }
-
-export default Textable;
