@@ -1,7 +1,7 @@
 import { APIChannel, APIOverwrite } from "../deps.ts";
 import Channel from "./channel.ts";
 import Client from "../../client/client.ts";
-import { Cache, computePermissions, Storable } from "../../util/mod.ts";
+import { Cache, computeOverwrites, Storable } from "../../util/mod.ts";
 import { Member } from "../mod.ts";
 
 /**
@@ -58,12 +58,10 @@ export class GuildChannel extends Channel {
   }
 
   /**
-   * Computes a member's permissions and overwrites. If you don't need to check
-   * for overwrites, use `Guild.computePermissions` without passing `channel`.
+   * Computes a member's overwrites.
    */
-  async computePermissions(member: Member) {
-    const guild = this.guildID && await this.client.guilds?.get(this.guildID);
-    return guild ? computePermissions(member, guild, this) : 0n;
+  computeOverwrites(member: Member) {
+    return computeOverwrites(0n, member, this);
   }
 }
 
