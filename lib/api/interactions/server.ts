@@ -1,21 +1,19 @@
+import { InteractionResponseType, InteractionType } from "./deps.ts";
 import {
   decodeString,
-  InteractionResponseType,
-  InteractionType,
   readAll,
   serve,
   ServerRequest,
   Status,
   verify,
 } from "./deps.ts";
-import { EventPipeline } from "../../util/event_pipeline.ts";
+import { AsyncEventTarget } from "../../util/mod.ts";
 
-export const respond = (req: ServerRequest, status: number, body: any) =>
-  req.respond({ status, body: JSON.stringify(body) });
+export const respond = (req: ServerRequest, body: any, status = Status.OK) =>
+  req.respond({ body: JSON.stringify(body), status });
 
-export class Server extends EventPipeline {
+export class Server {
   constructor(public publicKey: string) {
-    super();
   }
 
   async connect(port: number) {
@@ -30,7 +28,7 @@ export class Server extends EventPipeline {
     const timestamp = req.headers.get("X-Signature-Timestamp");
 
     if (!(signature && timestamp)) {
-      return respond(req, Status.BadRequest, "bad request");
+      return respond(req, "bad request", Status.BadRequest);
     }
 
     const body = await readAll(req.body);
@@ -42,23 +40,21 @@ export class Server extends EventPipeline {
     );
 
     if (!isVerified) {
-      return respond(req, Status.Unauthorized, "invalid request signature");
+      return respond(req, "invalid request signature", Status.Unauthorized);
     }
 
     const interaction = JSON.parse(new TextDecoder().decode(body));
 
     switch (interaction.type) {
       case InteractionType.Ping: {
-        return respond(req, Status.OK, { type: InteractionResponseType.Pong });
+        return respond(req, { type: InteractionResponseType.Pong });
       }
 
       case InteractionType.ApplicationCommand: {
-        const result = await this.dispatch("INTERACTION_CREATE", interaction) ??
-          {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: { content: `Bad command \`${interaction.data.name}\`` },
-          };
-        return respond(req, Status.OK, result);
+        return respond(req, {
+          type: InteractionResponseType.ChannelMessageWithSource,
+          data: { content: "test" },
+        });
       }
     }
   }

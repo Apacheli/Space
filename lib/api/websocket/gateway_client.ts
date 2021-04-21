@@ -1,5 +1,5 @@
 import { GatewayIdentifyDataPartial, Shard } from "./shard.ts";
-import { EventPipeline, logger, sleep } from "../../util/mod.ts";
+import { AsyncEventTarget, logger, sleep } from "../../util/mod.ts";
 
 export type GatewayClientConnectData =
   & {
@@ -11,7 +11,7 @@ export type GatewayClientConnectData =
 
 export const SHARD_CONNECT_DELAY = 5000;
 
-export class GatewayClient extends EventPipeline {
+export class GatewayClient extends AsyncEventTarget {
   shards: Shard[] = [];
 
   constructor(public token: string) {
@@ -39,11 +39,12 @@ export class GatewayClient extends EventPipeline {
   spawnShards(lastShardID: number, firstShardID = 0) {
     for (let i = firstShardID; i < lastShardID; i++) {
       const shard = new Shard(this.token, i);
-      shard.listen(
-        "DISPATCH",
-        (payload) => this.dispatch(payload.t, payload.d, shard),
-      );
       this.shards.push(shard);
+      (async () => {
+        for await (const [payload] of shard.listen("DISPATCH")) {
+          this.dispatch(payload.t, payload.d, shard);
+        }
+      })();
     }
   }
 

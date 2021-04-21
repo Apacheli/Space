@@ -45,13 +45,7 @@ See the [release notes](RELEASES.md) for all available versions.
 Simple program to get started:
 
 ```ts
-import {
-  Client,
-  GatewayDispatchEvents,
-  GatewayIntentBits,
-  Message,
-  onMessageCreate,
-} from "./deps.ts";
+import { Client, GatewayIntentBits, onMessageCreate } from "./deps.ts";
 
 const token = prompt("token:");
 if (!token) {
@@ -60,17 +54,14 @@ if (!token) {
 
 const client = new Client(`Bot ${token}`);
 
-client.gateway.listen(
-  GatewayDispatchEvents.MessageCreate,
-  (message) => onMessageCreate(client, message),
-  (message: Message) => {
-    if (message.content === "!ping") {
-      client.rest.createMessage(message.channelID, {
-        content: "pong!",
-      });
-    }
-  },
-);
+for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
+  const message = await onMessageCreate(client, data);
+  if (message.content === "!ping") {
+    client.rest.createMessage(message.channelID, {
+      content: "pong!",
+    });
+  }
+}
 
 client.connect({
   intents: GatewayIntentBits.GUILD_MESSAGES,
@@ -89,14 +80,14 @@ if (!publicKey) {
 
 const server = new Server(publicKey);
 
-server.listen(GatewayDispatchEvents.InteractionCreate, (interaction) => {
+for await (const [interaction, respond] of server) {
   if (interaction.data.name === "ping") {
-    return {
+    return respond({
       type: InteractionResponseType.ChannelMessageWithSource,
       data: { content: "pong" },
-    };
+    });
   }
-});
+}
 
 server.connect(8080);
 ```

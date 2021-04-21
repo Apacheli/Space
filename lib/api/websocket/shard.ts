@@ -11,7 +11,7 @@ import {
   GatewayVoiceStateUpdateData,
 } from "./deps.ts";
 import {
-  EventPipeline,
+  AsyncEventTarget,
   logger,
   PartialExcept,
   PartialKeys,
@@ -27,7 +27,7 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-export class Shard extends EventPipeline {
+export class Shard extends AsyncEventTarget {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
   latency = 0;
@@ -115,7 +115,6 @@ export class Shard extends EventPipeline {
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
-      logger.debug?.(`Shard ${this.id} is reconnecting.`);
       await this.connect(this.url);
       this.resumeOrIdentify(resumable, this.identifyData);
     }
