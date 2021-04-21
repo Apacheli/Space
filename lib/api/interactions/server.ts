@@ -12,8 +12,9 @@ import { AsyncEventTarget } from "../../util/mod.ts";
 export const respond = (req: ServerRequest, body: any, status = Status.OK) =>
   req.respond({ body: JSON.stringify(body), status });
 
-export class Server {
+export class Server extends AsyncEventTarget {
   constructor(public publicKey: string) {
+    super();
   }
 
   async connect(port: number) {
