@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.7.0-alpha](#070-alpha---2021-04-21) |
 | [0.6.1-alpha](#061-alpha---2021-04-18) |
 | [0.6.0-alpha](#060-alpha---2021-04-15) |
 | [0.5.0-alpha](#050-alpha---2021-04-10) |
@@ -17,6 +18,54 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.7.0-alpha](https://github.com/Apacheli/Space/compare/0.6.1-alpha...0.7.0-alpha) - 2021-04-21
+
+0.7.0-alpha is here! Unfortunately, interactions aren't working. I must've
+pushed a broken commit by accident, but hopefully, I'll resolve it.
+
+Also, receiving events has changed to use async generators.
+
+```ts
+for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
+  // ...
+}
+```
+
+### Added
+
+- ([`aa81fa5`](https://github.com/Apacheli/Space/commit/aa81fa5),
+  [`ab40c70`](https://github.com/Apacheli/Space/commit/ab40c70),
+  [`c8cf18c`](https://github.com/Apacheli/Space/commit/c8cf18c),
+  [`6ec382d`](https://github.com/Apacheli/Space/commit/6ec382d),
+  [`abc73b8`](https://github.com/Apacheli/Space/commit/abc73b8),
+  [`a23409d`](https://github.com/Apacheli/Space/commit/a23409d)) Added
+  permission checking utility
+- ([`a4ab9d1`](https://github.com/Apacheli/Space/commit/a4ab9d1),
+  [`c5c890a`](https://github.com/Apacheli/Space/commit/c5c890a))
+  - Added `computePermissions` to `Guild`
+  - Added `computeOverwrites` to `GuildChannel`
+
+### Changed
+
+- ([`999b480`](https://github.com/Apacheli/Space/commit/999b480),
+  [`3268ee9`](https://github.com/Apacheli/Space/commit/3268ee9)) Changed type of
+  `GuildChannel.permissionOverwrites` to `Cache`
+
+### Fixed
+
+- ([`26826de`](https://github.com/Apacheli/Space/commit/26826de)) Fixed a bug
+  when adding items with an `update` method
+- ([`0e62c6a`](https://github.com/Apacheli/Space/commit/0e62c6a)) Fixed
+  `constructor` types for structures that implemented them implicitly
+
+### Removed
+
+- ([`e7fa107`](https://github.com/Apacheli/Space/commit/e7fa107),
+  [`e0fec6ed`](https://github.com/Apacheli/Space/commit/e0fec6ed)) Removed
+  default exports
+- ([`1ac4820`](https://github.com/Apacheli/Space/commit/1ac4820)) Removed
+  `EventPipeline` in favor of `AsyncEventTarget`
 
 ## [0.6.1-alpha](https://github.com/Apacheli/Space/compare/0.6.0-alpha...0.6.1-alpha) - 2021-04-18
 
@@ -94,7 +143,7 @@ This format was adapted from
 
 - ([`4021e92`](https://github.com/Apacheli/Space/commit/4021e92)) Removed HTTP
   guild integration methods as they are no longer supported
-- ([`0016822`](https://github.com/Apacheli/Space/commit/0016822)) Remove Guild
+- ([`0016822`](https://github.com/Apacheli/Space/commit/0016822)) Removed Guild
   channel getters
 
 ## [0.4.2-alpha](https://github.com/Apacheli/Space/compare/0.4.1-alpha...0.4.2-alpha) - 2021-04-04

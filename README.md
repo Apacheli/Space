@@ -17,25 +17,25 @@ A low-level [Deno](https://deno.land/) module for interacting with
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.6.1-alpha/mod.ts";
+export * from "https://deno.land/x/space@0.7.0-alpha/mod.ts";
 ```
 
 If you only want to use HTTP:
 
 ```ts
-export * from "https://deno.land/x/space@0.6.1-alpha/lib/api/http/mod.ts";
+export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/http/mod.ts";
 ```
 
 If you only want to use interactions:
 
 ```ts
-export * from "https://deno.land/x/space@0.6.1-alpha/lib/api/interactions/mod.ts";
+export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/interactions/mod.ts";
 ```
 
 If you only want to use the Gateway:
 
 ```ts
-export * from "https://deno.land/x/space@0.6.1-alpha/lib/api/websocket/mod.ts";
+export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/websocket/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.
@@ -80,20 +80,20 @@ if (!publicKey) {
 
 const server = new Server(publicKey);
 
+server.connect(8080);
+
 for await (const [interaction, respond] of server) {
   if (interaction.data.name === "ping") {
-    return respond({
+    respond({
       type: InteractionResponseType.ChannelMessageWithSource,
       data: { content: "pong" },
     });
   }
 }
-
-server.connect(8080);
 ```
 
 See the
-[documentation](https://doc.deno.land/https//deno.land/x/space@0.6.1-alpha/mod.ts)
+[documentation](https://doc.deno.land/https//deno.land/x/space@0.7.0-alpha/mod.ts)
 for reference.
 
 ### Resources
