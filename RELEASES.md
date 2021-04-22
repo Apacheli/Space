@@ -24,7 +24,7 @@ This format was adapted from
 0.7.0-alpha is here! Unfortunately, interactions aren't working. I must've
 pushed a broken commit by accident, but hopefully, I'll resolve it.
 
-Also, receiving events has changed to use async generators.
+Also, receiving events has changed to use async generators:
 
 ```ts
 for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
@@ -40,7 +40,7 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
   [`6ec382d`](https://github.com/Apacheli/Space/commit/6ec382d),
   [`abc73b8`](https://github.com/Apacheli/Space/commit/abc73b8),
   [`a23409d`](https://github.com/Apacheli/Space/commit/a23409d)) Added
-  permission checking utility
+  computing permission utilities
 - ([`a4ab9d1`](https://github.com/Apacheli/Space/commit/a4ab9d1),
   [`c5c890a`](https://github.com/Apacheli/Space/commit/c5c890a))
   - Added `computePermissions` to `Guild`
