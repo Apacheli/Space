@@ -16,15 +16,8 @@ export const respond = (req: ServerRequest, body: any, status = Status.OK) =>
   req.respond({ body: JSON.stringify(body), status, headers });
 
 export class Server extends AsyncEventTarget {
-  constructor(public publicKey: string) {
+  constructor(public publicKey: string, public port: number) {
     super();
-  }
-
-  async connect(port: number) {
-    const server = serve({ port });
-    for await (const req of server) {
-      this.onRequest(req);
-    }
   }
 
   private async onRequest(req: ServerRequest) {
@@ -62,5 +55,15 @@ export class Server extends AsyncEventTarget {
         return this.dispatch("COMPONENT", interaction, respond.bind(null, req));
       }
     }
+  }
+
+  [Symbol.asyncIterator]() {
+    const server = serve({ port: this.port });
+    (async () => {
+      for await (const req of server) {
+        this.onRequest(req);
+      }
+    })();
+    return super[Symbol.asyncIterator]();
   }
 }
