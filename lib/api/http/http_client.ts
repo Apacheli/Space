@@ -677,7 +677,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     interactionToken: string,
     data: RESTPostAPIInteractionCallbackJSONBody,
   ) {
-    data.type;
     return this.request(
       `interactions/${interactionID}/${interactionToken}/callback`,
       {
