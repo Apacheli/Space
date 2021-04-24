@@ -39,8 +39,8 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
   [`c8cf18c`](https://github.com/Apacheli/Space/commit/c8cf18c),
   [`6ec382d`](https://github.com/Apacheli/Space/commit/6ec382d),
   [`abc73b8`](https://github.com/Apacheli/Space/commit/abc73b8),
-  [`a23409d`](https://github.com/Apacheli/Space/commit/a23409d)) Added
-  computing permission utilities
+  [`a23409d`](https://github.com/Apacheli/Space/commit/a23409d)) Added computing
+  permission utilities
 - ([`a4ab9d1`](https://github.com/Apacheli/Space/commit/a4ab9d1),
   [`c5c890a`](https://github.com/Apacheli/Space/commit/c5c890a))
   - Added `computePermissions` to `Guild`

@@ -4,8 +4,8 @@ import {
   readAll,
   serve,
   ServerRequest,
+  sign,
   Status,
-  verify,
 } from "./deps.ts";
 import { AsyncEventTarget } from "../../util/mod.ts";
 
@@ -34,11 +34,13 @@ export class Server extends AsyncEventTarget {
 
     const body = await readAll(req.body);
 
-    const isVerified = verify(
+    const isVerified = sign.verify(
       decodeString(this.publicKey),
       decodeString(signature),
       Uint8Array.from([...new TextEncoder().encode(timestamp), ...body]),
     );
+
+    console.log(!isVerified);
 
     if (!isVerified) {
       return respond(req, "invalid request signature", Status.Unauthorized);
@@ -52,10 +54,8 @@ export class Server extends AsyncEventTarget {
       }
 
       case InteractionType.ApplicationCommand: {
-        return respond(req, {
-          type: InteractionResponseType.ChannelMessageWithSource,
-          data: { content: "test" },
-        });
+        this.dispatch(interaction.id, interaction, respond.bind(null, req));
+        break;
       }
     }
   }

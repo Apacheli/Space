@@ -54,6 +54,10 @@ if (!token) {
 
 const client = new Client(`Bot ${token}`);
 
+client.connect({
+  intents: GatewayIntentBits.GUILD_MESSAGES,
+});
+
 for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
   const message = await onMessageCreate(client, data);
   if (message.content === "!ping") {
@@ -62,10 +66,6 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
     });
   }
 }
-
-client.connect({
-  intents: GatewayIntentBits.GUILD_MESSAGES,
-});
 ```
 
 Simple interactions program:
