@@ -4,8 +4,8 @@ import {
   readAll,
   serve,
   ServerRequest,
-  sign,
   Status,
+  verify,
 } from "./deps.ts";
 import { AsyncEventTarget } from "../../util/mod.ts";
 
@@ -34,13 +34,11 @@ export class Server extends AsyncEventTarget {
 
     const body = await readAll(req.body);
 
-    const isVerified = sign.verify(
+    const isVerified = verify(
       decodeString(this.publicKey),
       decodeString(signature),
       Uint8Array.from([...new TextEncoder().encode(timestamp), ...body]),
     );
-
-    console.log(!isVerified);
 
     if (!isVerified) {
       return respond(req, "invalid request signature", Status.Unauthorized);
