@@ -55,8 +55,11 @@ export class Server extends AsyncEventTarget {
       }
 
       case InteractionType.ApplicationCommand: {
-        this.dispatch(interaction.id, interaction, respond.bind(null, req));
-        break;
+        return this.dispatch("COMMAND", interaction, respond.bind(null, req));
+      }
+
+      case 3: { // buttons
+        return this.dispatch("COMPONENT", interaction, respond.bind(null, req));
       }
     }
   }
