@@ -7,6 +7,27 @@ import { Structure } from "./structure.ts";
 import { Client } from "../client/client.ts";
 import { ActualSnowflake } from "../util/mod.ts";
 
+interface MessageComponent {
+  custom_id: string;
+  label: string;
+  style: MessageComponentStyle;
+  type: MessageComponentType;
+  url: string;
+}
+
+export enum MessageComponentStyle {
+  A = 1,
+  B,
+  C,
+  D,
+  E,
+}
+
+export enum MessageComponentType {
+  COMPONENTS = 1,
+  BUTTON,
+}
+
 export class Message extends Structure {
   channelID;
   guildID;
@@ -34,6 +55,7 @@ export class Message extends Structure {
   embeds!: APIMessage["embeds"];
   pinned!: APIMessage["pinned"];
   flags: APIMessage["flags"];
+  components?: MessageComponent[];
 
   constructor(data: APIMessage, client: Client) {
     super(data, client);
@@ -57,7 +79,7 @@ export class Message extends Structure {
     this.interaction = data.interaction;
   }
 
-  update(data: APIMessage) {
+  update(data: APIMessage & { components?: MessageComponent[] }) {
     super.update(data);
 
     this.content = data.content;
@@ -71,6 +93,8 @@ export class Message extends Structure {
     this.embeds = data.embeds;
     this.pinned = data.pinned;
     this.flags = data.flags;
+    this.interaction = data.interaction;
+    this.components = data.components;
   }
 
   crosspost() {

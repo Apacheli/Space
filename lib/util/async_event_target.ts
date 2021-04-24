@@ -4,7 +4,7 @@ export class AsyncEventTarget extends Map<string, WritableStreamDefaultWriter> {
   listen(event?: string) {
     const { readable, writable } = new TransformStream();
     const writer = writable.getWriter();
-    this.#writer = event ? void this.set(event, writer) : writer;
+    this.#writer = event ? this.set(event, writer) && this.#writer : writer;
     return readable;
   }
 
