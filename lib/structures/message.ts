@@ -93,7 +93,6 @@ export class Message extends Structure {
     this.embeds = data.embeds;
     this.pinned = data.pinned;
     this.flags = data.flags;
-    this.interaction = data.interaction;
     this.components = data.components;
   }
 
