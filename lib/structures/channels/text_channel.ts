@@ -65,10 +65,12 @@ export class TextChannel extends GuildChannel implements Textable {
   createReaction(messageID: ActualSnowflake, emoji: string) {
     return this.client.rest.createReaction(this.id, messageID, emoji);
   }
+  react = this.createReaction;
 
   deleteOwnReaction(messageID: ActualSnowflake, emoji: string) {
     return this.client.rest.deleteOwnReaction(this.id, messageID, emoji);
   }
+  selfUnreact = this.deleteOwnReaction;
 
   deleteUserReaction(
     messageID: ActualSnowflake,
@@ -82,6 +84,7 @@ export class TextChannel extends GuildChannel implements Textable {
       userID,
     );
   }
+  unreact = this.deleteUserReaction;
 
   getReactions(
     messageID: ActualSnowflake,
