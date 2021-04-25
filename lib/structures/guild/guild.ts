@@ -365,19 +365,19 @@ export class Guild extends Structure {
     return this.client.rest.getGuildEmoji(this.id, emojiID);
   }
 
-  createEmoji(data: RESTPostAPIGuildEmojiJSONBody, reason: string | undefined) {
+  createEmoji(data: RESTPostAPIGuildEmojiJSONBody, reason?: string) {
     return this.client.rest.createGuildEmoji(this.id, data, reason);
   }
 
   editEmoji(
     emojiID: ActualSnowflake,
     data: RESTPatchAPIGuildEmojiJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.editGuildEmoji(this.id, emojiID, data, reason);
   }
 
-  deleteEmoji(emojiID: ActualSnowflake, reason: string | undefined) {
+  deleteEmoji(emojiID: ActualSnowflake, reason?: string) {
     return this.client.rest.deleteGuildEmoji(this.id, emojiID, reason);
   }
 
@@ -397,10 +397,7 @@ export class Guild extends Structure {
     return this.client.rest.getGuildChannels(this.id);
   }
 
-  createChannel(
-    data: RESTPostAPIGuildChannelJSONBody,
-    reason: string | undefined,
-  ) {
+  createChannel(data: RESTPostAPIGuildChannelJSONBody, eason?: string) {
     return this.client.rest.createGuildChannel(this.id, data, reason);
   }
 
@@ -427,7 +424,7 @@ export class Guild extends Structure {
   editMember(
     userID: ActualSnowflake,
     data: RESTPatchAPIGuildMemberJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.editGuildMember(this.id, userID, data, reason);
   }
@@ -439,7 +436,7 @@ export class Guild extends Structure {
   addMemberRole(
     userID: ActualSnowflake,
     roleID: ActualSnowflake,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.addGuildMemberRole(this.id, userID, roleID, reason);
   }
@@ -447,7 +444,7 @@ export class Guild extends Structure {
   removeMemberRole(
     userID: ActualSnowflake,
     roleID: ActualSnowflake,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.removeGuildMemberRole(
       this.id,
@@ -457,7 +454,7 @@ export class Guild extends Structure {
     );
   }
 
-  removeMember(userID: ActualSnowflake, reason: string | undefined) {
+  removeMember(userID: ActualSnowflake, reason?: string) {
     return this.client.rest.removeGuildMember(this.id, userID, reason);
   }
   kickMember = this.removeMember;
@@ -473,13 +470,13 @@ export class Guild extends Structure {
   createBan(
     userID: ActualSnowflake,
     data: RESTPutAPIGuildBanJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.createGuildBan(this.id, userID, data, reason);
   }
   ban = this.createBan;
 
-  removeBan(userID: ActualSnowflake, reason: string | undefined) {
+  removeBan(userID: ActualSnowflake, reason?: string) {
     return this.client.rest.removeGuildBan(this.id, userID, reason);
   }
   unban = this.removeBan;
@@ -488,7 +485,7 @@ export class Guild extends Structure {
     return this.client.rest.getGuildRoles(this.id);
   }
 
-  createRole(data: RESTPostAPIGuildRoleJSONBody, reason: string | undefined) {
+  createRole(data: RESTPostAPIGuildRoleJSONBody, reason?: string) {
     return this.client.rest.createGuildRole(this.id, data, reason);
   }
 
@@ -499,12 +496,12 @@ export class Guild extends Structure {
   editRole(
     roleID: ActualSnowflake,
     data: RESTPatchAPIGuildRoleJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.editGuildRole(this.id, roleID, data, reason);
   }
 
-  deleteRole(roleID: ActualSnowflake, reason: string | undefined) {
+  deleteRole(roleID: ActualSnowflake, reason?: string) {
     return this.client.rest.deleteGuildRole(this.id, roleID, reason);
   }
 
@@ -512,7 +509,7 @@ export class Guild extends Structure {
     return this.client.rest.getGuildPruneCount(this.id, query);
   }
 
-  beginPrune(query: RESTPostAPIGuildPruneJSONBody, reason: string | undefined) {
+  beginPrune(query: RESTPostAPIGuildPruneJSONBody, reason?: string) {
     return this.client.rest.beginGuildPrune(this.id, query, reason);
   }
 
@@ -528,10 +525,7 @@ export class Guild extends Structure {
     return this.client.rest.getGuildIntegrations(this.id);
   }
 
-  deleteIntegration(
-    integrationID: ActualSnowflake,
-    reason: string | undefined,
-  ) {
+  deleteIntegration(integrationID: ActualSnowflake, reason?: string) {
     return this.client.rest.deleteGuildIntegration(
       this.id,
       integrationID,
@@ -565,7 +559,7 @@ export class Guild extends Structure {
 
   editWelcomeScreen(
     data: RESTPatchAPIGuildWelcomeScreenJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.editGuildWelcomeScreen(this.id, data, reason);
   }
@@ -579,7 +573,7 @@ export class Guild extends Structure {
   updateUserVoiceState(
     userID: ActualSnowflake,
     data: RESTPatchAPIGuildVoiceStateUserJSONBody,
-    reason: string | undefined,
+    reason?: string,
   ) {
     return this.client.rest.updateUserVoiceState(this.id, userID, data, reason);
   }
