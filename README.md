@@ -58,7 +58,7 @@ client.connect({
   intents: GatewayIntentBits.GUILD_MESSAGES,
 });
 
-for await (const [data, shard] of client.event("MESSAGE_CREATE")) {
+for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
   const message = await onMessageCreate(client, data);
   if (message.content === "!ping") {
     client.rest.createMessage(message.channelID, {

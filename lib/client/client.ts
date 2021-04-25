@@ -96,8 +96,4 @@ export class Client {
       ...data,
     });
   }
-
-  event(event: string) {
-    return this.gateway.listen(event);
-  }
 }
