@@ -1,6 +1,8 @@
-import { InteractionResponseType, InteractionType } from "./deps.ts";
 import {
+  APIInteraction,
   decodeString,
+  InteractionResponseType,
+  InteractionType,
   readAll,
   serve,
   ServerRequest,
@@ -47,7 +49,9 @@ export class Server extends AsyncEventTarget {
       return respond(req, "invalid request signature", Status.Unauthorized);
     }
 
-    const interaction = JSON.parse(new TextDecoder().decode(body));
+    const interaction: APIInteraction = JSON.parse(
+      new TextDecoder().decode(body),
+    );
 
     switch (interaction.type) {
       case InteractionType.Ping: {
@@ -59,7 +63,7 @@ export class Server extends AsyncEventTarget {
       }
 
       case 3: { // buttons
-        return this.dispatch("COMPONENT", interaction, respond.bind(null, req));
+        return this.dispatch("BUTTON", interaction, respond.bind(null, req));
       }
     }
   }
