@@ -397,7 +397,7 @@ export class Guild extends Structure {
     return this.client.rest.getGuildChannels(this.id);
   }
 
-  createChannel(data: RESTPostAPIGuildChannelJSONBody, eason?: string) {
+  createChannel(data: RESTPostAPIGuildChannelJSONBody, reason?: string) {
     return this.client.rest.createGuildChannel(this.id, data, reason);
   }
 
