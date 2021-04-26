@@ -1,5 +1,5 @@
-import { Snowflake } from "./deps.ts";
-import { Client } from "../client/client.ts";
+import type { Snowflake } from "./deps.ts";
+import type { Client } from "../client/client.ts";
 
 export interface StructureData {
   id: Snowflake;

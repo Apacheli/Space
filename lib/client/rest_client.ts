@@ -1,6 +1,6 @@
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
 import { channelPermissionsDecorator } from "../util/mod.ts";
-import { Client } from "./client.ts";
+import type { Client } from "./client.ts";
 import { PermissionFlagsBits } from "./deps.ts";
 
 export interface RESTClientOptions extends HTTPClientOptions {

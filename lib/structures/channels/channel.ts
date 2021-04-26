@@ -1,6 +1,6 @@
-import { APIChannel } from "../deps.ts";
+import type { APIChannel } from "../deps.ts";
 import { Structure } from "../structure.ts";
-import { Client } from "../../client/client.ts";
+import type { Client } from "../../client/client.ts";
 
 /**
  * Class representing a channel on Discord.

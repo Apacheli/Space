@@ -1,4 +1,4 @@
-import {
+import type {
   GatewayApplicationCommandCreateDispatchData,
   GatewayApplicationCommandDeleteDispatchData,
   GatewayApplicationCommandUpdateDispatchData,
@@ -40,9 +40,9 @@ import {
   GatewayVoiceStateUpdateDispatchData,
   GatewayWebhooksUpdateDispatchData,
 } from "./deps.ts";
-import { Client } from "./mod.ts";
+import type { Client } from "./mod.ts";
 import { channelFromType, Message } from "../structures/mod.ts";
-import { RequiredKeys } from "../util/mod.ts";
+import type { RequiredKeys } from "../util/mod.ts";
 
 export const onApplicationCommandCreate = (
   _client: Client,

@@ -1,4 +1,4 @@
-import { APIChannel } from "../deps.ts";
+import type { APIChannel } from "../deps.ts";
 import { GuildChannel } from "./guild_channel.ts";
 
 /**

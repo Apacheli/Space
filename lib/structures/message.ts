@@ -1,11 +1,11 @@
-import {
+import type {
   APIMessage,
   RESTGetAPIChannelMessageReactionUsersQuery,
   RESTPatchAPIChannelMessageJSONBody,
 } from "./deps.ts";
 import { Structure } from "./structure.ts";
-import { Client } from "../client/client.ts";
-import { ActualSnowflake } from "../util/mod.ts";
+import type { Client } from "../client/client.ts";
+import type { ActualSnowflake } from "../util/mod.ts";
 
 interface MessageComponent {
   custom_id: string;

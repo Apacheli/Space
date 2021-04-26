@@ -1,4 +1,4 @@
-import {
+import type {
   APIGuild,
   APIGuildWidgetSettings,
   GatewayPresenceUpdate,

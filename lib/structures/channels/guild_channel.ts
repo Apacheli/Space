@@ -1,8 +1,8 @@
-import { APIChannel, APIOverwrite } from "../deps.ts";
+import type { APIChannel, APIOverwrite } from "../deps.ts";
 import { Channel } from "./channel.ts";
-import { Client } from "../../client/client.ts";
+import type { Client } from "../../client/client.ts";
 import { Cache, computeOverwrites, Storable } from "../../util/mod.ts";
-import { Member } from "../mod.ts";
+import type { Member } from "../mod.ts";
 
 /**
  * Class representing a guild channel on Discord.

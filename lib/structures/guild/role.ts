@@ -1,4 +1,4 @@
-import { APIRole } from "../deps.ts";
+import type { APIRole } from "../deps.ts";
 import { Structure } from "../structure.ts";
 
 export class Role extends Structure<APIRole> {

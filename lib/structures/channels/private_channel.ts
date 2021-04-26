@@ -1,4 +1,4 @@
-import {
+import type {
   APIChannel,
   RESTGetAPIChannelMessageReactionUsersQuery,
   RESTGetAPIChannelMessagesQuery,
@@ -7,8 +7,8 @@ import {
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "../deps.ts";
 import { Channel } from "./channel.ts";
-import { Textable } from "./util/textable.ts";
-import { ActualSnowflake } from "../../util/util.ts";
+import type { Textable } from "./util/textable.ts";
+import type { ActualSnowflake } from "../../util/util.ts";
 
 /**
  * Class representing a DM (private) channel on Discord.

@@ -1,5 +1,5 @@
-import { ActualSnowflake, PossiblePromise } from "./util.ts";
-import { Client } from "../client/client.ts";
+import type { ActualSnowflake, PossiblePromise } from "./util.ts";
+import type { Client } from "../client/client.ts";
 
 export interface StructureDataBigInt {
   id: ActualSnowflake;

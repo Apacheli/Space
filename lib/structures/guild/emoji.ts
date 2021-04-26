@@ -1,4 +1,4 @@
-import { APIEmoji } from "../deps.ts";
+import type { APIEmoji } from "../deps.ts";
 import { Structure } from "../structure.ts";
 import { CDNFormatURL, customEmojiURL, ImageFormats } from "../../util/mod.ts";
 

@@ -1,3 +1,5 @@
+// deno-lint-ignore-file
+
 import { Client } from "../../client/client.ts";
 import { onReady } from "../../client/events.ts";
 

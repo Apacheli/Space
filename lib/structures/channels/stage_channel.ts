@@ -1,4 +1,4 @@
-import { APIChannel } from "../deps.ts";
+import type { APIChannel } from "../deps.ts";
 import { VoiceChannel } from "./voice_channel.ts";
 
 /**
