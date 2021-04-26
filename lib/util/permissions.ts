@@ -68,10 +68,6 @@ export const channelPermissionsDecorator = (permissions: bigint) => {
       }
       const guild = await this.client.guilds?.get(channel.guildID);
       const member = await guild?.members?.get(this.client.user.id);
-      console.log(
-        permissions &
-          ~await computePermissions(member as any, guild as any, channel),
-      );
       if (
         !(member && guild &&
           !(permissions & ~await computePermissions(member, guild, channel)))
