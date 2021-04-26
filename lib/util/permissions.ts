@@ -1,5 +1,4 @@
 import { PermissionFlagsBits } from "./deps.ts";
-import { ActualSnowflake } from "./mod.ts";
 import { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
 export const ALL = Object.values(PermissionFlagsBits).reduce((a, b) => a | b);

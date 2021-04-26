@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.7.1-alpha](#071-alpha---2021-04-25) |
 | [0.7.0-alpha](#070-alpha---2021-04-21) |
 | [0.6.1-alpha](#061-alpha---2021-04-18) |
 | [0.6.0-alpha](#060-alpha---2021-04-15) |
@@ -18,6 +19,25 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.7.1-alpha](https://github.com/Apacheli/Space/compare/0.7.0-alpha...0.7.1-alpha) - 2021-04-25
+
+### Added
+
+- ([`c6badff`](https://github.com/Apacheli/Space/commit/c6badff)) Added
+  future-proof typings for message buttons
+- ([`885548f`](https://github.com/Apacheli/Space/commit/885548f) Dispatch
+  `COMMAND` and `BUTTON` events in `Server`
+- ([`e4dcd90`](https://github.com/Apacheli/Space/commit/e4dcd90),
+  [`d5b124b`](https://github.com/Apacheli/Space/commit/d5b124b)) Added HTTP
+  methods to `Guild`
+
+### Fixed
+
+- ([`696cd62`](https://github.com/Apacheli/Space/commit/696cd62)) Fixed
+  `AsyncEventTarget` unresolved promise bug
+- ([`9f36189`](https://github.com/Apacheli/Space/commit/9f36189)) Fixed
+  interactions bug by sending the correct headers
 
 ## [0.7.0-alpha](https://github.com/Apacheli/Space/compare/0.6.1-alpha...0.7.0-alpha) - 2021-04-21
 
