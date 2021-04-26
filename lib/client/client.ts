@@ -80,7 +80,7 @@ export class Client {
     this.channels = cacheCheck(options?.cache?.channels, this, Channel);
     this.gateway = new GatewayClient(token);
     this.guilds = cacheCheck(options?.cache?.guilds?.enabled, this, Guild);
-    this.rest = new RESTClient(token, options?.restOptions);
+    this.rest = new RESTClient(this, token, options?.restOptions);
     this.users = cacheCheck(options?.cache?.users, this, User);
   }
 

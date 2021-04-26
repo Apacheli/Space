@@ -1,5 +1,7 @@
 import { PermissionFlagsBits } from "./deps.ts";
-import { Guild, GuildChannel, Member } from "../structures/mod.ts";
+import type { ActualSnowflake } from "./mod.ts";
+import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
+import type { RESTClient } from "../client/rest_client.ts";
 
 export const ALL = Object.values(PermissionFlagsBits).reduce((a, b) => a | b);
 
@@ -50,4 +52,33 @@ export const computePermissions = async (
   return channel
     ? computeOverwrites(basePermissions, member, channel)
     : basePermissions;
+};
+
+export const channelPermissionsDecorator = (permissions: bigint) => {
+  return (_target: any, _key: any, descriptor: any) => {
+    const method = descriptor.value;
+    descriptor.value = async function (
+      this: RESTClient,
+      channelID: ActualSnowflake,
+      ...args: unknown[]
+    ) {
+      const channel = <GuildChannel> await this.client.channels?.get(channelID);
+      if (!(channel?.guildID && this.client.user)) {
+        return method.call(this, channelID, ...args);
+      }
+      const guild = await this.client.guilds?.get(channel.guildID);
+      const member = await guild?.members?.get(this.client.user.id);
+      console.log(
+        permissions &
+          ~await computePermissions(member as any, guild as any, channel),
+      );
+      if (
+        !(member && guild &&
+          !(permissions & ~await computePermissions(member, guild, channel)))
+      ) {
+        throw new Error("INVALID PERMISSIONS");
+      }
+      return method.call(this, channelID, ...args);
+    };
+  };
 };

@@ -147,6 +147,7 @@ export class Guild extends Structure {
         const c = channelFromType({ guild_id: data.id, ...channel }, client);
         c.update(channel);
         this.channels?.add(c);
+        client.channels?.add(c);
       });
     }
 
