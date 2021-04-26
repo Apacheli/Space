@@ -1,7 +1,7 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import type { ActualSnowflake } from "./mod.ts";
-import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
 import type { RESTClient } from "../client/rest_client.ts";
+import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
 export const ALL = Object.values(PermissionFlagsBits).reduce((a, b) => a | b);
 
@@ -56,7 +56,7 @@ export const computePermissions = async (
 };
 
 export const channelPermissionsDecorator = (permissions: bigint) => {
-  return (_target: any, _key: any, descriptor: any) => {
+  return (_target: unknown, _key: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
     descriptor.value = async function (
       this: RESTClient,

@@ -214,14 +214,14 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     super();
   }
 
-  async request<T = any>(path: string, input?: RequestInput) {
+  async request<T = unknown>(path: string, input?: RequestInput) {
     const route = parseRateLimitRoute(path);
     const bucket = this.get(route) ?? new RateLimitBucket();
     this.set(route, bucket);
 
     if (bucket.locked || bucket.rateLimited) {
       return new Promise<T>((resolve, reject) => { // TypeScript return bug
-        bucket.add(() => this.request(path, input).then(resolve, reject));
+        bucket.add(() => this.request<T>(path, input).then(resolve, reject));
       });
     }
 

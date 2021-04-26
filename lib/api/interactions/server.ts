@@ -14,7 +14,7 @@ import { AsyncEventTarget } from "../../util/mod.ts";
 export const headers = new Headers();
 headers.set("content-type", "application/json");
 
-export const respond = (req: ServerRequest, body: any, status = Status.OK) =>
+const respond = (req: ServerRequest, body: unknown, status = Status.OK) =>
   req.respond({ body: JSON.stringify(body), status, headers });
 
 export class Server extends AsyncEventTarget {

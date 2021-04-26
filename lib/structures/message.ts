@@ -8,7 +8,7 @@ import type { Client } from "../client/client.ts";
 import type { ActualSnowflake } from "../util/mod.ts";
 
 interface MessageComponent {
-  custom_id: string;
+  "custom_id": string;
   label: string;
   style: MessageComponentStyle;
   type: MessageComponentType;

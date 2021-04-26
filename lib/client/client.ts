@@ -49,15 +49,18 @@ export interface ClientCacheGuildOptions {
 export const cacheCheck = <V extends { id: ActualSnowflake }>(
   input?: CacheCheckInput<V>,
   client?: Client,
-  ...args: any[]
+  // deno-lint-ignore no-explicit-any
+  baseClass?: new (data: any, client: Client) => V,
 ) =>
   input === false
     ? undefined
     : typeof input === "function"
-    ? input(client, ...args)
-    : new Cache<V>(client, ...args);
+    ? input(client, baseClass)
+    : new Cache<V>(client, baseClass);
 
-export type CacheCheckInput<V> = boolean | ((...args: any) => Storable<V>);
+export type CacheCheckInput<V> =
+  | boolean
+  | ((...args: unknown[]) => Storable<V>);
 
 /**
  * Class representing a client

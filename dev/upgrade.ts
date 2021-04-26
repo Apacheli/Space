@@ -3,7 +3,7 @@ import { version } from "../meta.ts";
 
 const stage = "alpha";
 
-let promptVersion = prompt("new version:");
+const promptVersion = prompt("new version:");
 if (!promptVersion) {
   throw new Error("bad new version");
 }
@@ -18,4 +18,4 @@ const write = async (file: string) => {
 
 const files = ["meta.ts", "README.md"];
 
-await Promise.all(files.map((file) => write(file)));
+await Promise.all(files.map(write));

@@ -158,7 +158,9 @@ export class Guild extends Structure {
 
     this.emojis = cacheCheck(cache?.emojis, client, Emoji);
     if (this.emojis) {
-      data.emojis?.forEach((emoji: any) => this.emojis?.add(emoji));
+      data.emojis?.forEach((emoji) =>
+        this.emojis?.add({ ...emoji, id: emoji.id! })
+      );
     }
 
     this.presences = new Cache<APIPresence>(client);

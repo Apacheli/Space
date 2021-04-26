@@ -2,6 +2,7 @@ import { logger } from "../../util/mod.ts";
 
 export interface ResponseError {
   code: number;
+  // deno-lint-ignore no-explicit-any
   errors?: any; // TODO: Get this type correct
   message: string;
 }
@@ -29,7 +30,7 @@ export class HTTPError extends Error implements ResponseError {
   private formatErrors(errors = this.errors, x = "") {
     let str = "";
     for (const k in errors) {
-      str += errors[k]._errors?.map((e: any) => `${x}${k}: ${e.message}\n`) ??
+      str += errors[k]._errors?.map((e: Error) => `${x}${k}: ${e.message}\n`) ??
         this.formatErrors(errors[k], `${x}${k}.`);
     }
     return str;

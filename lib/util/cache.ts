@@ -14,14 +14,14 @@ export interface Storable<V> {
 }
 
 export interface CacheEntry extends StructureDataBigInt {
-  update?(data: any): void;
+  update?(data: CacheEntry): void;
 }
 
 export class Cache<V extends CacheEntry> extends Map<ActualSnowflake, V>
   implements Storable<V> {
   constructor(
     public client?: Client,
-    public baseClass?: new (data: any, client: Client) => V,
+    public baseClass?: new (data: CacheEntry, client: Client) => V,
   ) {
     super();
   }

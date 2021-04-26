@@ -1,8 +1,12 @@
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
-import { channelPermissionsDecorator } from "../util/mod.ts";
+import { ActualSnowflake, channelPermissionsDecorator } from "../util/mod.ts";
 import type { Client } from "./client.ts";
-import { PermissionFlagsBits } from "./deps.ts";
+import {
+  PermissionFlagsBits,
+  RESTPostAPIChannelMessageJSONBody,
+} from "./deps.ts";
 
+// deno-lint-ignore no-empty-interface
 export interface RESTClientOptions extends HTTPClientOptions {
 }
 
@@ -16,7 +20,11 @@ export class RESTClient extends HTTPClient {
   }
 
   @channelPermissionsDecorator(PermissionFlagsBits.SEND_MESSAGES)
-  createMessage(channelID: any, data: any, files?: any) {
+  createMessage(
+    channelID: ActualSnowflake,
+    data: RESTPostAPIChannelMessageJSONBody,
+    files?: File[],
+  ) {
     return super.createMessage(channelID, data, files);
   }
 }
