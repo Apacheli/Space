@@ -29,5 +29,11 @@ jobs:
       - name: Cache Dependencies
         run: deno cache lib/client/deps.ts
 
+      - name: Lint Code
+        run: deno lint --unstable
+
+      - name: Format Code
+        run: deno fmt
+
       - name: Run Tests
         run: deno test -A --unstable
