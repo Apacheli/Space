@@ -1,6 +1,5 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import { ActualSnowflake } from "./mod.ts";
-import { RESTClient } from "../client/rest_client.ts";
 import { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
 export const ALL = Object.values(PermissionFlagsBits).reduce((a, b) => a | b);
@@ -52,29 +51,4 @@ export const computePermissions = async (
   return channel
     ? computeOverwrites(basePermissions, member, channel)
     : basePermissions;
-};
-
-export const channelPermissionsDecorator = (permissions: bigint) => {
-  return (_target: any, _key: any, descriptor: any) => {
-    const method = descriptor.value;
-    descriptor.value = async function (
-      this: RESTClient,
-      channelID: ActualSnowflake,
-      ...args: unknown[]
-    ) {
-      const channel = await this.client.channels?.get(channelID);
-      if (
-        !(channel instanceof GuildChannel && channel.guildID &&
-          this.client.user)
-      ) {
-        return method(channelID, ...args);
-      }
-      const guild = await this.client.guilds?.get(channel.guildID);
-      const member = await guild?.members?.get(this.client.user.id);
-      if (!(member && await channel.computeOverwrites(member) & ~permissions)) {
-        throw new Error("INVALID PERMISSIONS");
-      }
-      return method(channelID, ...args);
-    };
-  };
 };
