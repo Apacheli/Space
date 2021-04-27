@@ -108,8 +108,8 @@ export class Shard extends AsyncEventTarget {
     }
 
     logger.warn?.(
-      `[${code}] Shard ${this.id} disconnected with reason`,
-      `"${reason ?? "no reason"}`,
+      `[${code}] Shard ${this.id} disconnected`,
+      `with ${reason ? `reason "${reason}"` : "no reason"}`,
     );
     this.dispatch("DISCONNECT", { code, reason, reconnectable, resumable });
     this.reset(resumable);
