@@ -19,3 +19,4 @@ const write = async (file: string) => {
 const files = ["meta.ts", "README.md"];
 
 await Promise.all(files.map(write));
+console.log("Done.");

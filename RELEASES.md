@@ -82,8 +82,8 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
 ### Removed
 
 - ([`e7fa107`](https://github.com/Apacheli/Space/commit/e7fa107),
-  [`e0fec6ed`](https://github.com/Apacheli/Space/commit/e0fec6ed)) Removed
-  default exports
+  [`e0fec6e`](https://github.com/Apacheli/Space/commit/e0fec6e)) Removed default
+  exports
 - ([`1ac4820`](https://github.com/Apacheli/Space/commit/1ac4820)) Removed
   `EventPipeline` in favor of `AsyncEventTarget`
 
