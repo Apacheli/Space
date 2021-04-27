@@ -32,6 +32,7 @@ import type {
   Snowflake,
 } from "../deps.ts";
 import {
+  APIGuildMemberExtra,
   channelFromType,
   Emoji,
   GuildChannel,
@@ -135,6 +136,7 @@ export class Guild extends Structure {
     if (this.members) {
       data.members?.forEach((member) => {
         if (member.user) {
+          (member as APIGuildMemberExtra).guild_id = data.id;
           this.members?.add({ id: member.user.id, ...member });
           client.users?.update(member.user);
         }
@@ -144,10 +146,11 @@ export class Guild extends Structure {
     this.channels = cacheCheck(cache?.channels, client, GuildChannel);
     if (this.channels) {
       data.channels?.forEach((channel) => {
-        const c = channelFromType({ guild_id: data.id, ...channel }, client);
-        c.update(channel);
-        this.channels?.add(c);
-        client.channels?.add(c);
+        channel.guild_id = data.id;
+        const notRawChannel = channelFromType(channel, client);
+        notRawChannel.update(channel);
+        this.channels?.add(notRawChannel);
+        client.channels?.add(notRawChannel);
       });
     }
 

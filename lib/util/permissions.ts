@@ -70,10 +70,10 @@ export const channelPermissionsDecorator = (permissions: bigint) => {
       const guild = await this.client.guilds?.get(channel.guildID);
       const member = await guild?.members?.get(this.client.user.id);
       if (
-        !(member && guild &&
-          !(permissions & ~await computePermissions(member, guild, channel)))
+        !(member && guild) ||
+        permissions & ~await computePermissions(member, guild, channel)
       ) {
-        throw new Error("INVALID PERMISSIONS");
+        throw new Error("INSUFFICIENT PERMISSIONS");
       }
       return method.call(this, channelID, ...args);
     };

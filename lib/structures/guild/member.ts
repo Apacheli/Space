@@ -1,11 +1,16 @@
-import type { APIGuildMember } from "../deps.ts";
+import type { APIGuildMember, Snowflake } from "../deps.ts";
 import { Structure } from "../structure.ts";
 import type { Client } from "../../client/client.ts";
 import type { RequiredKeys } from "../../util/mod.ts";
 
+export type APIGuildMemberExtra = RequiredKeys<APIGuildMember, "user"> & {
+  guild_id?: Snowflake;
+};
+
 export class Member extends Structure {
   user;
   joinedAt;
+  guildID;
 
   nick: APIGuildMember["nick"];
   roles?: bigint[];
@@ -15,11 +20,12 @@ export class Member extends Structure {
   pending: APIGuildMember["pending"];
   // permissions;
 
-  constructor(data: RequiredKeys<APIGuildMember, "user">, client: Client) {
+  constructor(data: APIGuildMemberExtra, client: Client) {
     super({ id: data.user.id, ...data }, client);
 
     this.user = data.user;
     this.joinedAt = Date.parse(data.joined_at);
+    this.guildID = data.guild_id && BigInt(data.guild_id);
   }
 
   update(data: APIGuildMember) {

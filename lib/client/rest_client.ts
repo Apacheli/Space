@@ -1,5 +1,5 @@
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
-import { RESTGetAPIChannelMessagesQuery } from "../structures/deps";
+import { RESTGetAPIChannelMessagesQuery } from "../structures/deps.ts";
 import { ActualSnowflake, channelPermissionsDecorator } from "../util/mod.ts";
 import type { Client } from "./client.ts";
 import {
