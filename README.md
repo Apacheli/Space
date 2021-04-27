@@ -1,6 +1,7 @@
 # Space
 
 [![](https://canary.discord.com/api/guilds/812458966357377067/widget.png)](https://discord.gg/UQuA3EwXCV)
+[![](https://github.com/Apacheli/Space/actions/workflows/deno.yaml/badge.svg)](https://github.com/Apacheli/Space/actions/workflows/deno.yaml)
 
 <img align=right src=assets/space_logo.png height=150px>
 
@@ -18,24 +19,6 @@ A low-level [Deno](https://deno.land/) module for interacting with
 
 ```ts
 export * from "https://deno.land/x/space@0.7.0-alpha/mod.ts";
-```
-
-If you only want to use HTTP:
-
-```ts
-export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/http/mod.ts";
-```
-
-If you only want to use interactions:
-
-```ts
-export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/interactions/mod.ts";
-```
-
-If you only want to use the Gateway:
-
-```ts
-export * from "https://deno.land/x/space@0.7.0-alpha/lib/api/websocket/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.
@@ -80,7 +63,7 @@ if (!publicKey) {
 
 const server = new Server(publicKey);
 
-server.connect(8080);
+server.connect(1337);
 
 for await (const [interaction, respond] of server) {
   if (interaction.data.name === "ping") {
