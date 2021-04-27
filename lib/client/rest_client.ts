@@ -1,4 +1,5 @@
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
+import { RESTGetAPIChannelMessagesQuery } from "../structures/deps";
 import { ActualSnowflake, channelPermissionsDecorator } from "../util/mod.ts";
 import type { Client } from "./client.ts";
 import {
@@ -19,7 +20,22 @@ export class RESTClient extends HTTPClient {
     super(token, options);
   }
 
-  @channelPermissionsDecorator(PermissionFlagsBits.SEND_MESSAGES)
+  @channelPermissionsDecorator(PermissionFlagsBits.VIEW_CHANNEL)
+  getChannelMessages(
+    channelID: ActualSnowflake,
+    query: RESTGetAPIChannelMessagesQuery,
+  ) {
+    return super.getChannelMessages(channelID, query);
+  }
+
+  @channelPermissionsDecorator(PermissionFlagsBits.VIEW_CHANNEL)
+  getChannelMessage(channelID: ActualSnowflake, messageID: ActualSnowflake) {
+    return super.getChannelMessage(channelID, messageID);
+  }
+
+  @channelPermissionsDecorator(
+    PermissionFlagsBits.VIEW_CHANNEL | PermissionFlagsBits.SEND_MESSAGES,
+  )
   createMessage(
     channelID: ActualSnowflake,
     data: RESTPostAPIChannelMessageJSONBody,

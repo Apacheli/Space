@@ -28,6 +28,6 @@ export class Structure<T extends StructureData = StructureData> {
     return this.id & 0xFFFn;
   }
 
-  update(_data: unknown): void | Promise<void> {
+  update(_data: unknown) {
   }
 }
