@@ -23,7 +23,7 @@ export interface GuildMembersChunkEntry {
 }
 
 export type GatewayIdentifyDataPartial = PartialExcept<
-  GatewayIdentifyData & { shards: number },
+  GatewayIdentifyData & { shards: number; displayMobileStatus?: boolean },
   "intents"
 >;
 
@@ -232,7 +232,7 @@ export class Shard extends AsyncEventTarget {
     this.identifyData = data;
     const payload: GatewayIdentifyData = {
       properties: {
-        $browser: "Space",
+        $browser: data.displayMobileStatus ? "Discord Android" : "Space",
         $device: "Space",
         $os: Deno.build.os,
       },
