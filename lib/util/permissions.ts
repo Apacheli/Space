@@ -1,5 +1,6 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import type { ActualSnowflake } from "./mod.ts";
+import PermissionsError from "../client/permissions_error.ts";
 import type { RESTClient } from "../client/rest_client.ts";
 import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
@@ -91,7 +92,7 @@ export const channelPermissionsDecorator = (
         }
       }
       if (missing.length) {
-        throw new Error(`Missing permissions: ${missing.join(", ")}`);
+        throw new PermissionsError(missing);
       }
 
       return method.call(this, channelID, ...args);
