@@ -1,6 +1,6 @@
 import { logger } from "../util/mod.ts";
 
-export default class PermissionsError extends Error {
+export class PermissionsError extends Error {
   constructor(public permissions: string[]) {
     super();
   }

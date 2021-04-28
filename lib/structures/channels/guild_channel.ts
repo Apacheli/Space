@@ -1,7 +1,11 @@
 import type { APIChannel, APIOverwrite } from "../deps.ts";
 import { Channel } from "./channel.ts";
-import type { Client } from "../../client/client.ts";
-import { Cache, computeOverwrites, Storable } from "../../util/mod.ts";
+import {
+  Cache,
+  Client,
+  computeOverwrites,
+  Storable,
+} from "../../client/mod.ts";
 import type { Member } from "../mod.ts";
 
 /**

@@ -1,5 +1,5 @@
 import type { APIApplication } from "./deps.ts";
-import { RESTClient, RESTClientOptions } from "./rest_client.ts";
+import { Cache, RESTClient, RESTClientOptions, Storable } from "./mod.ts";
 import {
   GatewayClient,
   GatewayClientConnectData,
@@ -15,13 +15,7 @@ import {
   Role,
   User,
 } from "../structures/mod.ts";
-import {
-  ActualSnowflake,
-  Cache,
-  PartialKeys,
-  RequiredKeys,
-  Storable,
-} from "../util/mod.ts";
+import { ActualSnowflake, PartialKeys, RequiredKeys } from "../util/mod.ts";
 
 export interface ClientOptions {
   cache?: ClientCacheOptions;

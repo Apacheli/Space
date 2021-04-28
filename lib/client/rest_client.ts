@@ -6,9 +6,9 @@ import {
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "./deps.ts";
+import { channelPermissionsDecorator, Client } from "./mod.ts";
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
-import { ActualSnowflake, channelPermissionsDecorator } from "../util/mod.ts";
-import type { Client } from "./client.ts";
+import { ActualSnowflake } from "../util/mod.ts";
 
 // deno-lint-ignore no-empty-interface
 export interface RESTClientOptions extends HTTPClientOptions {

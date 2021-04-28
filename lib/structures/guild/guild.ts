@@ -40,18 +40,21 @@ import {
   Role,
   Structure,
 } from "../mod.ts";
-import { cacheCheck, Client } from "../../client/client.ts";
+import {
+  Cache,
+  cacheCheck,
+  Client,
+  computePermissions,
+  Storable,
+} from "../../client/mod.ts";
 import {
   ActualSnowflake,
-  Cache,
   CDNFormatURL,
-  computePermissions,
   guildBannerURL,
   guildDiscoverySplashURL,
   guildIconURL,
   guildSplashURL,
   ImageFormats,
-  Storable,
 } from "../../util/mod.ts";
 
 export interface APIPresence extends GatewayPresenceUpdate {
