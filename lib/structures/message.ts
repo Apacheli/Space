@@ -96,6 +96,11 @@ export class Message extends Structure {
     this.components = data.components;
   }
 
+  get link() {
+    return `https://discord.com/channels/${this.guildID ??
+      "@me"}/${this.channelID}/${this.id}`;
+  }
+
   crosspost() {
     return this.client.rest.crosspostMessage(this.channelID, this.id);
   }
