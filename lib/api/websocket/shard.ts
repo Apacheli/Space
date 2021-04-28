@@ -19,7 +19,11 @@ export interface GuildMembersChunkEntry {
 }
 
 export type GatewayIdentifyDataPartial = PartialExcept<
-  GatewayIdentifyData & { shards: number; displayMobileStatus?: boolean },
+  GatewayIdentifyData & {
+    shards: number;
+    displayMobileStatus?: boolean;
+    version?: number;
+  },
   "intents"
 >;
 

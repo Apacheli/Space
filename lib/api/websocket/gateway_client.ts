@@ -9,6 +9,7 @@ export type GatewayClientConnectData =
   }
   & Omit<GatewayIdentifyDataPartial, "shard">;
 
+export const GATEWAY_VERSION = 8;
 export const SHARD_CONNECT_DELAY = 5000;
 
 export class GatewayClient extends AsyncEventTarget {
@@ -26,9 +27,10 @@ export class GatewayClient extends AsyncEventTarget {
     const firstShardID = data.firstShardID ?? 0;
     this.spawnShards(lastShardID, firstShardID);
     const shards = data.shards ?? lastShardID - firstShardID;
+    const url = `${data.url}?v=${GATEWAY_VERSION}`;
     logger.debug?.(
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
-      `(${firstShardID}-${lastShardID - 1})`,
+      `(${firstShardID}-${lastShardID - 1}) to "${url}"`,
     );
     this.connectShards(data.url, {
       shards,

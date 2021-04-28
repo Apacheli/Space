@@ -194,9 +194,10 @@ export interface RequestInput {
   reason?: string;
 }
 
+export const HTTP_URL = `https://discord.com/api`;
 export const DELAY = 15_000;
+export const HTTP_VERSION = 8;
 export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
-export const VERSION = 8;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {
   route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
@@ -246,8 +247,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       headers.set("Content-Type", "application/json");
     }
 
-    const version = this.options?.version ?? VERSION;
-    let url = `https://discord.com/api/v${version}/${path}`;
+    let url = `${HTTP_URL}/v${this.options?.version ?? HTTP_VERSION}/${path}`;
     if (input?.query) {
       url += `?${new URLSearchParams(input.query as Record<string, string>)}`;
     }
