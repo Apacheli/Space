@@ -55,26 +55,45 @@ export const computePermissions = async (
     : basePermissions;
 };
 
-export const channelPermissionsDecorator = (permissions: bigint) => {
+export const channelPermissionsDecorator = (
+  ...permissions: (keyof typeof PermissionFlagsBits)[]
+) => {
   return (_target: unknown, _key: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
+
     descriptor.value = async function (
       this: RESTClient,
       channelID: ActualSnowflake,
       ...args: unknown[]
     ) {
-      const channel = <GuildChannel> await this.client.channels?.get(channelID);
+      const channel = await this.client.channels?.get(
+        channelID,
+      ) as GuildChannel;
       if (!(channel?.guildID && this.client.user)) {
         return method.call(this, channelID, ...args);
       }
+
       const guild = await this.client.guilds?.get(channel.guildID);
       const member = await guild?.members?.get(this.client.user.id);
-      if (
-        !(member && guild) ||
-        permissions & ~await computePermissions(member, guild, channel)
-      ) {
-        throw new Error("INSUFFICIENT PERMISSIONS");
+      if (!(member && guild)) {
+        return method.call(this, channelID, ...args);
       }
+
+      const currentUserPermissions = await computePermissions(
+        member,
+        guild,
+        channel,
+      );
+      const missing = [];
+      for (const permission of permissions) {
+        if (currentUserPermissions & ~PermissionFlagsBits[permission]) {
+          missing.push(permission);
+        }
+      }
+      if (missing.length) {
+        throw new Error(`Missing permissions: ${missing.join(", ")}`);
+      }
+
       return method.call(this, channelID, ...args);
     };
   };
