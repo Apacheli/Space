@@ -10,12 +10,8 @@ import {
   GatewayResumeData,
   GatewayVoiceStateUpdateData,
 } from "./deps.ts";
-import {
-  AsyncEventTarget,
-  logger,
-  PartialExcept,
-  PartialKeys,
-} from "../../util/mod.ts";
+import { logger, PartialExcept, PartialKeys } from "../../util/mod.ts";
+import { DiscordSocket } from "../discord_socket.ts";
 
 export interface GuildMembersChunkEntry {
   chunks: GatewayGuildMembersChunkDispatchData[];
@@ -27,7 +23,7 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-export class Shard extends AsyncEventTarget {
+export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
   latency = 0;
@@ -35,36 +31,19 @@ export class Shard extends AsyncEventTarget {
   resumedAt = 0;
   seq = 0;
   sessionID?: string;
-  socket?: WebSocket;
   unavailableGuilds = new Set<string>();
 
   private lastHeartbeatSent = 0;
   private identifyData?: GatewayIdentifyDataPartial;
-  private url?: string;
 
   constructor(public token: string, public id?: number) {
     super();
   }
 
-  connect(url: string) {
-    this.url = url;
-
+  connect(url: string, protocols?: string | string[]) {
     logger.debug?.(`Shard ${this.id ?? "unknown"} is connecting.`);
 
-    const socket = new WebSocket(url);
-    socket.addEventListener("close", (event) => this.onSocketClose(event));
-    socket.addEventListener("error", (event) => this.onSocketError(event));
-    socket.addEventListener("message", (event) => this.onSocketMessage(event));
-    this.socket = socket;
-
-    return new Promise((resolve) => socket.addEventListener("open", resolve));
-  }
-
-  disconnect(code?: number, reason?: string) {
-    if (!this.socket) {
-      throw new Error("Cannot disconnect if there was no socket connected.");
-    }
-    this.socket.close(code, reason);
+    return super.connect(url, protocols);
   }
 
   reset(soft?: boolean) {
@@ -126,7 +105,7 @@ export class Shard extends AsyncEventTarget {
   }
 
   onSocketMessage(event: MessageEvent<string>) {
-    const payload = this.decode<GatewayReceivePayload>(event.data);
+    const payload = this.decodePayload<GatewayReceivePayload>(event.data);
 
     switch (payload.op) {
       case GatewayOPCodes.Dispatch: {
@@ -202,26 +181,6 @@ export class Shard extends AsyncEventTarget {
         break;
       }
     }
-  }
-
-  sendPayload(opcode: number, data: unknown) {
-    if (!this.socket) {
-      throw new Error("Cannot send payload if no socket exists.");
-    }
-    const payload = {
-      d: data,
-      op: opcode,
-    };
-    this.socket.send(this.encode(payload));
-  }
-
-  // TODO: Maybe support ETF encoding in the future. Can't confirm this.
-  encode(data: unknown) {
-    return JSON.stringify(data);
-  }
-
-  decode<T>(data: string): T {
-    return JSON.parse(data);
   }
 
   heartbeat() {
