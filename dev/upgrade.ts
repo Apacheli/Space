@@ -13,7 +13,7 @@ const write = async (file: string) => {
   const content = await Deno.readTextFile(file);
   const newContent = content.replace(new RegExp(version, "g"), newVersion);
   const { ext, name } = parse(file);
-  await Deno.writeTextFile(`${name}-new.${ext}`, newContent);
+  await Deno.writeTextFile(`${name}-new${ext}`, newContent);
 };
 
 const files = ["meta.ts", "README.md"];

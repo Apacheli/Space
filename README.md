@@ -15,14 +15,14 @@ A low-level [Deno](https://deno.land/) module for interacting with
   from occuring.
 - Written purely in TypeScript to guarantee type safety.
 - Standalone API modules ([HTTP](lib/api/http),
-  [interactions](lib/api/interactions), [websocket](lib/api/websocket))
+  [interactions](lib/api/interactions), [websocket](lib/api/websocket)).
 - Built-in utilities such as event logging and custom caching.
 - 100% coverage over Discord's HTTP and websocket APIs.
 
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.7.0-alpha/mod.ts";
+export * from "https://deno.land/x/space@8.0.0-alpha/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.
@@ -80,7 +80,7 @@ for await (const [interaction, respond] of server) {
 ```
 
 See the
-[documentation](https://doc.deno.land/https//deno.land/x/space@0.7.0-alpha/mod.ts)
+[documentation](https://doc.deno.land/https//deno.land/x/space@8.0.0-alpha/mod.ts)
 for reference.
 
 ### Resources
