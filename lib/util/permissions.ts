@@ -87,7 +87,10 @@ export const channelPermissionsDecorator = (
       );
       const missing = [];
       for (const permission of permissions) {
-        if (currentUserPermissions & ~PermissionFlagsBits[permission]) {
+        if (
+          (currentUserPermissions & PermissionFlagsBits[permission]) !==
+            PermissionFlagsBits[permission]
+        ) {
           missing.push(permission);
         }
       }
