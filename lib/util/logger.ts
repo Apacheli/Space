@@ -69,6 +69,7 @@ export const
   brightWhiteBackground   = (input: string) => formatColor(input, 107, 49);
 
 export const highlight = (input: string) =>
-  input
-    .replace(/"(?:.+?)?"|'(?:.+?)?'/g, (str) => green(str))
-    .replace(/\b\d+\b|true|false/g, (int) => yellow(int));
+  input.replace(
+    /"(?:.+?)?"|'(?:.+?)?'|(\b\d+\b|true|false)/g,
+    (a, b) => b ? yellow(b) : green(a),
+  );

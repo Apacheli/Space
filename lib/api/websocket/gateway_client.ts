@@ -27,7 +27,7 @@ export class GatewayClient extends AsyncEventTarget {
     const firstShardID = data.firstShardID ?? 0;
     this.spawnShards(lastShardID, firstShardID);
     const shards = data.shards ?? lastShardID - firstShardID;
-    const url = `${data.url}?v=${GATEWAY_VERSION}`;
+    const url = `${data.url}?v=${data.version ?? GATEWAY_VERSION}`;
     logger.debug?.(
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1}) to "${url}"`,
