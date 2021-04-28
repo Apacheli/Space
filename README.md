@@ -10,10 +10,14 @@ A low-level [Deno](https://deno.land/) module for interacting with
 
 ### Features
 
-- 100% coverage over Discord's HTTP and websocket APIs.
-- Secure by default. Client-side checks prevent `4xx`s from occuring.
+- Secure by default. Client-side checks prevent
+  [`4xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses)s
+  from occuring.
 - Written purely in TypeScript to guarantee type safety.
+- Standalone API handling ([HTTP](lib/api/http),
+  [interactions](lib/api/interactions), [websocket](lib/api/websocket))
 - Built-in utilities such as event logging and custom caching.
+- 100% coverage over Discord's HTTP and websocket APIs.
 
 ### Install
 
