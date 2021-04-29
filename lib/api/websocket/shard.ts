@@ -27,6 +27,12 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
+export enum ShardEvents {
+  Disconnect = "DISCONNECT",
+  Dispatch = "DISPATCH",
+  Error = "ERROR",
+}
+
 export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
@@ -44,10 +50,9 @@ export class Shard extends DiscordSocket {
     super();
   }
 
-  connect(url: string, protocols?: string | string[]) {
-    logger.debug?.(`Shard ${this.id ?? "unknown"} is connecting.`);
-
-    return super.connect(url, protocols);
+  async connect(url: string, protocols?: string | string[]) {
+    await super.connect(url, protocols);
+    logger.debug?.(`Shard ${this.id ?? "unknown"} connected`);
   }
 
   reset(soft?: boolean) {
@@ -69,11 +74,11 @@ export class Shard extends DiscordSocket {
     }
   }
 
-  async onSocketClose({ code, reason }: CloseEvent) {
+  async onSocketClose(event: CloseEvent) {
     let reconnectable = false;
     let resumable = false;
 
-    switch (code) {
+    switch (event.code) {
       case 0: // Cloudflare(?)
       case 1001: // "Discord WebSocket requesting client reconnect."
       case GatewayCloseCodes.UnknownError: {
@@ -91,10 +96,10 @@ export class Shard extends DiscordSocket {
     }
 
     logger.warn?.(
-      `[${code}] Shard ${this.id} disconnected`,
-      `with ${reason ? `reason "${reason}"` : "no reason"}`,
+      `[${event.code}] Shard ${this.id} disconnected`,
+      `with ${event.reason ? `reason "${event.reason}"` : "no reason"}`,
     );
-    this.dispatch("DISCONNECT", { code, reason, reconnectable, resumable });
+    this.dispatch(ShardEvents.Disconnect, resumable, reconnectable, event);
     this.reset(resumable);
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.
@@ -105,7 +110,7 @@ export class Shard extends DiscordSocket {
   }
 
   onSocketError(event: Event) {
-    this.dispatch("ERROR", event);
+    this.dispatch(ShardEvents.Error, event);
   }
 
   onSocketMessage(event: MessageEvent<string>) {
@@ -159,13 +164,16 @@ export class Shard extends DiscordSocket {
           }
 
           case GatewayDispatchEvents.Resumed: {
-            logger.info?.(`Shard ${this.id} resumed.`);
+            logger.info?.(`Shard ${this.id} resumed`);
             this.resumedAt = Date.now();
             break;
           }
         }
 
-        this.dispatch("DISPATCH", payload);
+        if (!(payload.t in GatewayDispatchEvents)) {
+          logger.debug?.(`Unknown event: "${payload.t}"`);
+        }
+        this.dispatch(ShardEvents.Dispatch, payload);
         break;
       }
 
