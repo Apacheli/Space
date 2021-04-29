@@ -194,8 +194,8 @@ export interface RequestInput {
   reason?: string;
 }
 
-export const HTTP_URL = `https://discord.com/api`;
 export const DELAY = 15_000;
+export const HTTP_URL = `https://discord.com/api`;
 export const HTTP_VERSION = 8;
 export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
 
