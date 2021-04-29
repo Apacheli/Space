@@ -27,6 +27,8 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
+const ShardDispatchEvents = new Set(Object.values(GatewayDispatchEvents));
+
 export enum ShardEvents {
   Disconnect = "DISCONNECT",
   Dispatch = "DISPATCH",
@@ -154,7 +156,7 @@ export class Shard extends DiscordSocket {
 
           case GatewayDispatchEvents.Ready: {
             this.id ??= payload.d.shard?.[0];
-            logger.info?.(`Shard ${this.id} is ready.`);
+            logger.info?.(`Shard ${this.id} is ready`);
             this.readyAt = Date.now();
             this.sessionID = payload.d.session_id;
             for (const unavailableGuild of payload.d.guilds) {
@@ -170,8 +172,8 @@ export class Shard extends DiscordSocket {
           }
         }
 
-        if (!(payload.t in GatewayDispatchEvents)) {
-          logger.debug?.(`Unknown event: "${payload.t}"`);
+        if (!ShardDispatchEvents.has(payload.t)) {
+          logger.warn?.(`Unknown event from shard ${this.id}: "${payload.t}"`);
         }
         this.dispatch(ShardEvents.Dispatch, payload);
         break;
