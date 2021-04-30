@@ -1,1 +1,1 @@
-console.log("sinister rectus");
+export * from "./voice_socket.ts";

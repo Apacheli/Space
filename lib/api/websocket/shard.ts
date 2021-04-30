@@ -35,6 +35,9 @@ export enum ShardEvents {
   Error = "ERROR",
 }
 
+export enum ShardStatus {
+}
+
 export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
@@ -43,6 +46,7 @@ export class Shard extends DiscordSocket {
   resumedAt = 0;
   seq = 0;
   sessionID?: string;
+  status?: ShardStatus;
   unavailableGuilds = new Set<string>();
 
   private lastHeartbeatSent = 0;
