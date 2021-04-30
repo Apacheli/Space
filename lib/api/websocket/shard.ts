@@ -52,9 +52,9 @@ export class Shard extends DiscordSocket {
     super();
   }
 
-  async connect(url: string, protocols?: string | string[]) {
+  async connect(url: string, protocols?: string | string[], _re = false) {
     await super.connect(url, protocols);
-    logger.debug?.(`Shard ${this.id ?? "unknown"} connected`);
+    logger.debug?.(`Shard ${this.id ?? "unknown"} ${_re ? "re" : ""}connected`);
   }
 
   reset(soft?: boolean) {
@@ -99,14 +99,14 @@ export class Shard extends DiscordSocket {
 
     logger.warn?.(
       `[${event.code}] Shard ${this.id} disconnected`,
-      `with ${event.reason ? `reason "${event.reason}"` : "no reason"}`,
+      `with${event.reason ? ` reason "${event.reason}"` : "out a reason"}`,
     );
     this.dispatch(ShardEvents.Disconnect, resumable, reconnectable, event);
     this.reset(resumable);
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
-      await this.connect(this.url);
+      await this.connect(this.url, this.protocols, reconnectable);
       this.resumeOrIdentify(resumable, this.identifyData);
     }
   }
