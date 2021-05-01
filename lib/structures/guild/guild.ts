@@ -61,10 +61,8 @@ export interface APIPresence extends GatewayPresenceUpdate {
   id: Snowflake;
 }
 
-// https://github.com/discord/discord-api-docs/pull/2751
 export interface APIVoiceState extends GatewayVoiceStateUpdateDispatchData {
   id: Snowflake;
-  // request_to_speak_timestamp: number | null;
 }
 
 export class Guild extends Structure {
