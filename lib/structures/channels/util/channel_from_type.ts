@@ -14,6 +14,7 @@ import {
   VoiceChannel,
 } from "../mod.ts";
 import { Client } from "../../../client/client.ts";
+import { logger } from "../../../util/mod.ts";
 
 export const channelFromType = (channel: APIChannel, client: Client) => {
   switch (channel.type) {
@@ -48,6 +49,10 @@ export const channelFromType = (channel: APIChannel, client: Client) => {
       return new StageChannel(channel, client);
     }
     default: {
+      logger.warn?.(
+        `Unknown channel type ${channel.type}`,
+        channel.guild_id ? `from guild ${channel.guild_id}` : "with no guild",
+      );
       if (channel.guild_id) {
         return new GuildChannel(channel, client);
       }
