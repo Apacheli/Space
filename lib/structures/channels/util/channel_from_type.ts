@@ -51,7 +51,7 @@ export const channelFromType = (channel: APIChannel, client: Client) => {
     default: {
       logger.warn?.(
         `Unknown channel type ${channel.type}`,
-        channel.guild_id ? `from guild ${channel.guild_id}` : "with no guild",
+        channel.guild_id ? `from guild ${channel.guild_id}` : "without a guild",
       );
       if (channel.guild_id) {
         return new GuildChannel(channel, client);
