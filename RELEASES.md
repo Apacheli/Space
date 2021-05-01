@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.8.0-alpha](#080-alpha---2021-05-01) |
 | [0.7.1-alpha](#071-alpha---2021-04-25) |
 | [0.7.0-alpha](#070-alpha---2021-04-21) |
 | [0.6.1-alpha](#061-alpha---2021-04-18) |
@@ -19,6 +20,67 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.8.0-alpha](https://github.com/Apacheli/Space/compare/0.7.1-alpha...0.8.0-alpha) - 2021-05-01
+
+Threads are currently in beta at the time of this writing.
+
+### Added
+
+- ([`f6869cb`](https://github.com/Apacheli/Space/commit/f6869cb),
+  [`bb07d26`](https://github.com/Apacheli/Space/commit/bb07d26),
+  [`d4204f2`](https://github.com/Apacheli/Space/commit/d4204f2),
+  [`a929cc7`](https://github.com/Apacheli/Space/commit/a929cc7)) Added
+  `@channelPermissionsDecorator`
+- ([`c37640b`](https://github.com/Apacheli/Space/commit/c37640b)) Added mobile
+  status support
+- ([`2617164`](https://github.com/Apacheli/Space/commit/2617164),
+  [`f9e9b0f`](https://github.com/Apacheli/Space/commit/f9e9b0f)) Added
+  Client-side permission checking for channel HTTP methods
+- ([`45d3ea6`](https://github.com/Apacheli/Space/commit/45d3ea6)) Added
+  `Member.guildID`
+- ([`dfe711b`](https://github.com/Apacheli/Space/commit/dfe711b)) Added
+  `DiscordSocket` for reusability between websockets and voice clients (mostly
+  an internal change)
+- ([`73979b4`](https://github.com/Apacheli/Space/commit/73979b4)) Added
+  `Message.link`
+- ([`2b3e006`](https://github.com/Apacheli/Space/commit/2b3e006),
+  [`c5aeb79`](https://github.com/Apacheli/Space/commit/c5aeb79)) Added
+  `PermissionsError` for client-side permission checking
+- ([`e5c8962`](https://github.com/Apacheli/Space/commit/e5c8962)) Export
+  `GATEWAY_VERSION` and `REST_VERSION`
+- ([`b92cde8`](https://github.com/Apacheli/Space/commit/b92cde8)) Added type
+  support for `AsyncEventTarget`
+- ([`0d4ed8a`](https://github.com/Apacheli/Space/commit/0d4ed8a)) Added HTTP
+  methods `getOriginalInteractionResponse`, `startPublicThread`,
+  `startaprivatethread`, `joinThread`, `addUsertoThread`, `leaveThread`,
+  `removeUserfromThread`, `getThreadMembers`, `getActiveThreads`,
+  `getPublicArchivedThreads`, `getPrivateArchivedThreads`,
+  `getJoinedPrivateArchivedThreads`, and `getWebhookMessage`
+
+### Fixed
+
+- ([`a682f12`](https://github.com/Apacheli/Space/commit/a682f12)) Prefer to use
+  `import type` if types are used only
+- ([`686f202`](https://github.com/Apacheli/Space/commit/686f202)) Fixed
+  incorrect computation in `computeOverwrites`
+- ([`3365373`](https://github.com/Apacheli/Space/commit/3365373),
+  [`26a8976`](https://github.com/Apacheli/Space/commit/26a8976),
+  [`ee39268`](https://github.com/Apacheli/Space/commit/ee39268)) Clean up log
+  messages
+- ([`1956570`](https://github.com/Apacheli/Space/commit/1956570)) Fixed
+  highlighting numbers in strings
+- ([`fe04cd6`](https://github.com/Apacheli/Space/commit/fe04cd6)) Fixed possible
+  circular errors by moving several utilities to `client`
+- ([`c637502`](https://github.com/Apacheli/Space/commit/c637502)) Log unknown
+  events that aren't in sync with `GatewayDispatchEvents`
+- ([`8ebce4a`](https://github.com/Apacheli/Space/commit/8ebce4a)) Warn when
+  creating a channel with an unknown type
+
+### Removed
+
+- ([`e5c8962`](https://github.com/Apacheli/Space/commit/e5c8962)) Removed
+  `VERSION` export from `http_client.ts`
 
 ## [0.7.1-alpha](https://github.com/Apacheli/Space/compare/0.7.0-alpha...0.7.1-alpha) - 2021-04-25
 
@@ -159,7 +221,7 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
 - ([`aaeed19`](https://github.com/Apacheli/Space/commit/aaeed19)) Logger will
   color messages automatically
 
-### Deleted
+### Removed
 
 - ([`4021e92`](https://github.com/Apacheli/Space/commit/4021e92)) Removed HTTP
   guild integration methods as they are no longer supported
@@ -255,9 +317,9 @@ Guild stage voice channels will likely break as I wasn't able to test them.
 - Renamed a few classes
 - Lowercased filenames
 
-### Deleted
+### Removed
 
-- Deleted `ClientStores` as `ClientOptions` now accepts them
+- Removed `ClientStores` as `ClientOptions` now accepts them
 
 ## [0.3.3-alpha](https://github.com/Apacheli/Space/compare/89e6d7b...16c7e1c) - 2021-03-23
 
