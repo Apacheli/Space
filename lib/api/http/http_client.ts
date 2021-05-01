@@ -687,6 +687,27 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   }
 
   /**
+   * https://discord.dev/interactions/slash-commands#get-original-interaction-response
+   *
+   * Returns the initial Interaction response. Functions the same as
+   * [Get Webhook Message](https://discord.dev/resources/webhook#get-webhook-message).
+   * @param applicationID https://discord.dev/topics/oauth2#application-object
+   * @param interactionToken https://discord.dev/interactions/slash-commands#interaction
+   */
+  getOriginalInteractionResponse(
+    applicationID: ActualSnowflake,
+    interactionToken: string,
+    data: unknown,
+  ) {
+    return this.request(
+      `webhooks/${applicationID}/${interactionToken}/messages/@original`,
+      {
+        data,
+      },
+    );
+  }
+
+  /**
    * https://discord.dev/interactions/slash-commands#edit-original-interaction-response
    *
    * Edits the initial Interaction response. Functions the same as
@@ -912,7 +933,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * https://discord.dev/resources/channel#get-channel
    *
    * Get a channel by ID. Returns a [channel](https://discord.dev/resources/channel#channel-object)
-   * object.
+   * object. If the channel is a thread, a
+   * [thread member](https://discord.dev/resources/channel#thread-member-object) object is included
+   * in the returned result.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   getChannel(channelID: ActualSnowflake) {
@@ -922,16 +945,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   /**
    * https://discord.dev/resources/channel#modify-channel
    *
-   * Update a channel's settings. Requires the `MANAGE_CHANNELS` permission for the
-   * guild. Returns a [channel](https://discord.dev/resources/channel#channel-object) on success,
-   * and a 400 BAD REQUEST on invalid parameters. Fires a
-   * [Channel Update](https://discord.dev/topics/gateway#channel-update) Gateway event. If
-   * modifying a category, individual
-   * [Channel Update](https://discord.dev/topics/gateway#channel-update) events will fire for each
-   * child channel that also changes. If modifying permission overwrites, the
-   * `MANAGE_ROLES` permission is required. Only permissions your bot has in the
-   * guild or channel can be allowed/denied (unless your bot has a `MANAGE_ROLES`
-   * overwrite in the channel). All JSON parameters are optional.
+   * Update a channel's settings. Returns a
+   * [channel](https://discord.dev/resources/channel#channel-object) on success, and a 400 BAD
+   * REQUEST on invalid parameters. All JSON parameters are optional.
    * @param channelID https://discord.dev/resources/channel#channel-object
    */
   editChannel(
@@ -950,12 +966,14 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * https://discord.dev/resources/channel#deleteclose-channel
    *
    * Delete a channel, or close a private message. Requires the `MANAGE_CHANNELS`
-   * permission for the guild. Deleting a category does not delete its child
-   * channels; they will have their `parent_id` removed and a
-   * [Channel Update](https://discord.dev/topics/gateway#channel-update) Gateway event will fire
-   * for each of them. Returns a [channel](https://discord.dev/resources/channel#channel-object)
-   * object on success. Fires a [Channel Delete](https://discord.dev/topics/gateway#channel-delete)
-   * Gateway event.
+   * permission for the guild, or `MANAGE_THREADS` if the channel is a thread.
+   * Deleting a category does not delete its child channels; they will have their
+   * `parent_id` removed and a [Channel Update](https://discord.dev/topics/gateway#channel-update)
+   * Gateway event will fire for each of them. Returns a
+   * [channel](https://discord.dev/resources/channel#channel-object) object on success. Fires a
+   * [Channel Delete](https://discord.dev/topics/gateway#channel-delete) Gateway event (or
+   * [Thread Delete](https://discord.dev/topics/gateway#thread-delete) if the channel was a
+   * thread).
    *
    * > ⚠️ Deleting a guild channel cannot be undone. Use this with caution, as it
    * > is impossible to undo this action when performed on a guild channel. In
@@ -1244,6 +1262,16 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    *
    * Returns a [message](https://discord.dev/resources/channel#message-object) object. Fires a
    * [Message Update](https://discord.dev/topics/gateway#message-update) Gateway event.
+   *
+   * > ℹ️ For a `file` attachment, the `Content-Disposition` subpart header MUST
+   * > contain a `filename` parameter.
+   *
+   * > ⚠️ This endpoint supports both `application/json` and `multipart/form-data`
+   * > bodies. When uploading files the `multipart/form-data` content type must be
+   * > used. Note that in multipart form data, the `embed`, `allowed_mentions`, and
+   * > `attachments` fields cannot be used. You can pass a stringified JSON body as a
+   * > form value as `payload_json` instead. **If you supply a `payload_json` form
+   * > value, all fields except for `file` fields will be ignored in the form data**.
    *
    * > ℹ️ All parameters to this endpoint are optional and nullable.
    * @param channelID https://discord.dev/resources/channel#channel-object
@@ -1541,6 +1569,201 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       `channels/${channelID}/recipients/${userID}`,
       {
         method: "DELETE",
+      },
+    );
+  }
+
+  /**
+   * https://discord.dev/resources/channel#start-public-thread
+   *
+   * Creates a new public thread from an existing message. Returns a
+   * [channel](https://discord.dev/resources/channel#channel-object) on success, and a 400 BAD
+   * REQUEST on invalid parameters. Fires a
+   * [Thread Create](https://discord.dev/topics/gateway#thread-create) Gateway event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   * @param messageID https://discord.dev/resources/channel#message-object
+   */
+  startPublicThread(
+    channelID: ActualSnowflake,
+    messageID: ActualSnowflake,
+    data: unknown,
+  ) {
+    return this.request(`channels/${channelID}/messages/${messageID}/threads`, {
+      data,
+      method: "POST",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#start-a-private-thread
+   *
+   * Creates a new private thread. Returns a
+   * [channel](https://discord.dev/resources/channel#channel-object) on success, and a 400 BAD
+   * REQUEST on invalid parameters. Fires a
+   * [Thread Create](https://discord.dev/topics/gateway#thread-create) Gateway event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  startaprivatethread(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/threads`, {
+      data,
+      method: "POST",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#join-thread
+   *
+   * Adds the current user to a thread. Returns a 204 empty response on success. Also
+   * requires the thread is not archived. Fires a
+   * [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update) Gateway
+   * event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  joinThread(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/thread-members/@me`, {
+      data,
+      method: "PUT",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#add-user-to-thread
+   *
+   * Adds another user to a thread. Requires the ability to send messages in the
+   * thread. Also requires the thread is not archived. Returns a 204 empty response
+   * on success. Fires a
+   * [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update) Gateway
+   * event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   * @param userID https://discord.dev/resources/user#user-object
+   */
+  addUsertoThread(
+    channelID: ActualSnowflake,
+    userID: ActualSnowflake,
+    data: unknown,
+  ) {
+    return this.request(`channels/${channelID}/thread-members/${userID}`, {
+      data,
+      method: "PUT",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#leave-thread
+   *
+   * Removes the current user from a thread. Returns a 204 empty response on success.
+   * Fires a [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update)
+   * Gateway event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  leaveThread(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/thread-members/@me`, {
+      data,
+      method: "DELETE",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#remove-user-from-thread
+   *
+   * Removes another user from a thread. Requires the `MANAGE_THREADS` permission or
+   * that you are the creator of the thread. Also requires the thread is not
+   * archived. Returns a 204 empty response on success. Fires a
+   * [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update) Gateway
+   * event.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   * @param userID https://discord.dev/resources/user#user-object
+   */
+  removeUserfromThread(
+    channelID: ActualSnowflake,
+    userID: ActualSnowflake,
+    data: unknown,
+  ) {
+    return this.request(`channels/${channelID}/thread-members/${userID}`, {
+      data,
+      method: "DELETE",
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#list-thread-members
+   *
+   * Returns array of [thread members](https://discord.dev/resources/channel#thread-member-object)
+   * objects that are members of the thread.
+   *
+   * > ⚠️ This endpoint is restricted according to whether the `GUILD_MEMBERS`
+   * > [Privileged Intent](https://discord.dev/topics/gateway#privileged-intents) is enabled for
+   * > your application.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  getThreadMembers(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/threads-members`, {
+      data,
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#list-active-threads
+   *
+   * Returns all active threads in the channel, including public and private threads.
+   * Threads are ordered by their `id`, in descending order. Requires the
+   * `READ_MESSAGE_HISTORY` permission.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  getActiveThreads(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/threads/active`, {
+      data,
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#list-public-archived-threads
+   *
+   * Returns archived threads in the channel that are public. When called on a
+   * `GUILD_TEXT` channel, returns threads of
+   * [type](https://discord.dev/resources/channel#channel-object-channel-types)
+   * `GUILD_PUBLIC_THREAD`. When called on a `GUILD_NEWS` channel returns threads of
+   * [type](https://discord.dev/resources/channel#channel-object-channel-types)
+   * `GUILD_NEWS_THREAD`. Threads are ordered by `archive_timestamp`, in descending
+   * order. Requires the `READ_MESSAGE_HISTORY` permission.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  getPublicArchivedThreads(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/threads/archived/public`, {
+      data,
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#list-private-archived-threads
+   *
+   * Returns archived threads in the channel that are of
+   * [type](https://discord.dev/resources/channel#channel-object-channel-types)
+   * `GUILD_PRIVATE_THREAD`. Threads are ordered by `archive_timestamp`, in
+   * descending order. Requires both the `READ_MESSAGE_HISTORY` and `MANAGE_THREADS`
+   * permissions.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  getPrivateArchivedThreads(channelID: ActualSnowflake, data: unknown) {
+    return this.request(`channels/${channelID}/threads/archived/private`, {
+      data,
+    });
+  }
+
+  /**
+   * https://discord.dev/resources/channel#list-joined-private-archived-threads
+   *
+   * Returns archived threads in the channel that are of
+   * [type](https://discord.dev/resources/channel#channel-object-channel-types)
+   * `GUILD_PRIVATE_THREAD`, and the user has joined. Threads are ordered by their
+   * `id`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
+   * @param channelID https://discord.dev/resources/channel#channel-object
+   */
+  getJoinedPrivateArchivedThreads(channelID: ActualSnowflake, data: unknown) {
+    return this.request(
+      `channels/${channelID}/users/@me/threads/archived/private`,
+      {
+        data,
       },
     );
   }
@@ -2054,6 +2277,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * user. Requires the `BAN_MEMBERS` permission. Returns a 204 empty response on
    * success. Fires a [Guild Ban Add](https://discord.dev/topics/gateway#guild-ban-add) Gateway
    * event.
+   *
+   * > ℹ️ Supplying a reason in the JSON body will override `X-Audit-Log-Reason`
+   * > header if both are provided.
    * @param guildID https://discord.dev/resources/guild#guild-object
    * @param userID https://discord.dev/resources/user#user-object
    */
@@ -2242,6 +2468,9 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * specific roles in your prune by providing the `include_roles` parameter. Any
    * inactive user that has a subset of the provided role(s) will be included in the
    * prune and users with additional roles will not.
+   *
+   * > ℹ️ Supplying a reason in the JSON body will override `X-Audit-Log-Reason`
+   * > header if both are provided.
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   beginGuildPrune(
@@ -2921,12 +3150,18 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   /**
    * https://discord.dev/resources/webhook#execute-webhook
    *
-   * > ⚠️ This endpoint supports both JSON and form data bodies. It does require
-   * > multipart/form-data requests instead of the normal JSON request type when
-   * > uploading files. Make sure you set your `Content-Type` to
-   * > `multipart/form-data` if you're doing that. Note that in that case, the
-   * > `embeds` field cannot be used, but you can pass an url-encoded JSON body as a
-   * > form value for `payload_json`.
+   * > ℹ️ Note that when sending a message, you must provide a value for at **least
+   * > one of** `content`, `embeds`, or `file`.
+   *
+   * > ℹ️ For a `file` attachment, the `Content-Disposition` subpart header MUST
+   * > contain a `filename` parameter.
+   *
+   * > ⚠️ This endpoint supports both `application/json` and `multipart/form-data`
+   * > bodies. When uploading files the `multipart/form-data` content type must be
+   * > used. Note that in multipart form data, the `embed` and `allowed_mentions`
+   * > fields cannot be used. You can pass a stringified JSON body as a form value as
+   * > `payload_json` instead. **If you supply a `payload_json` form value, all
+   * > fields except for `file` fields will be ignored in the form data**.
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object
    */
@@ -2994,6 +3229,29 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   }
 
   /**
+   * https://discord.dev/resources/webhook#get-webhook-message
+   *
+   * Returns a previously-sent webhook message from the same token. Returns a
+   * [message](https://discord.dev/resources/channel#message-object) object on success.
+   * @param webhookID https://discord.dev/resources/webhook#webhook-object
+   * @param webhookToken https://discord.dev/resources/webhook#webhook-object
+   * @param messageID https://discord.dev/resources/channel#message-object
+   */
+  getWebhookMessage(
+    webhookID: ActualSnowflake,
+    webhookToken: string,
+    messageID: ActualSnowflake,
+    data: unknown,
+  ) {
+    return this.request(
+      `webhooks/${webhookID}/${webhookToken}/messages/${messageID}`,
+      {
+        data,
+      },
+    );
+  }
+
+  /**
    * https://discord.dev/resources/webhook#edit-webhook-message
    *
    * Edits a previously-sent webhook message from the same token. Returns a
@@ -3006,6 +3264,16 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * parsed with _default_ allowances, that is, without regard to whether or not an
    * `allowed_mentions` was present in the request that originally created the
    * message.
+   *
+   * > ℹ️ For a `file` attachment, the `Content-Disposition` subpart header MUST
+   * > contain a `filename` parameter.
+   *
+   * > ⚠️ This endpoint supports both `application/json` and `multipart/form-data`
+   * > bodies. When uploading files the `multipart/form-data` content type must be
+   * > used. Note that in multipart form data, the `embed`, `allowed_mentions`, and
+   * > `attachments` fields cannot be used. You can pass a stringified JSON body as a
+   * > form value as `payload_json` instead. **If you supply a `payload_json` form
+   * > value, all fields except for `file` fields will be ignored in the form data**.
    *
    * > ℹ️ All parameters to this endpoint are optional and nullable.
    * @param webhookID https://discord.dev/resources/webhook#webhook-object
