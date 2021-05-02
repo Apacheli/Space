@@ -177,7 +177,9 @@ export class Shard extends DiscordSocket {
         }
 
         if (!ShardDispatchEvents.has(payload.t)) {
-          logger.warn?.(`Unknown event from shard ${this.id}: "${payload.t}"`);
+          logger.warn?.(
+            `Shard ${this.id} received an unknown event "${payload.t}"`,
+          );
         }
         this.dispatch(ShardEvents.Dispatch, payload);
         break;

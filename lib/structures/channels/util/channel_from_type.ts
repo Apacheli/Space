@@ -49,8 +49,8 @@ export const channelFromType = (channel: APIChannel, client: Client) => {
       return new StageChannel(channel, client);
     }
     default: {
-      logger.warn?.(
-        `Unknown channel type ${channel.type}`,
+      logger.trace?.(
+        `Unknown channel type ${channel.type} from channel ${channel.id} `,
         channel.guild_id ? `from guild ${channel.guild_id}` : "without a guild",
       );
       if (channel.guild_id) {
