@@ -45,7 +45,7 @@ export const channelFromType = (channel: APIChannel, client: Client) => {
     case /* ChannelType.PRIVATE_THREAD */ 12: {
       return new PrivateThreadChannel(channel, client);
     }
-    case /* ChannelType.GUILD_STAGE_VOICE */ 13: {
+    case ChannelType.GUILD_STAGE_VOICE: {
       return new StageChannel(channel, client);
     }
     default: {
