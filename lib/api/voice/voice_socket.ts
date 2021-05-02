@@ -21,13 +21,14 @@ export class VoiceSocket extends DiscordSocket {
     super();
   }
 
-  onSocketClose(event: CloseEvent) {
+  onSocketClose(_event: CloseEvent) {
   }
 
-  onSocketError(event: Event) {
+  onSocketError(_event: Event) {
   }
 
   onSocketMessage(event: MessageEvent<string>) {
+    // deno-lint-ignore no-explicit-any
     const payload = this.decodePayload<any>(event.data);
 
     switch (payload.op) {
