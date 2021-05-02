@@ -9,7 +9,7 @@ import {
   Status,
   verify,
 } from "./deps.ts";
-import { AsyncEventTarget } from "../../util/mod.ts";
+import { AsyncEventTarget, decode, encode } from "../../util/mod.ts";
 
 export const headers = new Headers();
 headers.set("content-type", "application/json");
@@ -42,16 +42,14 @@ export class Server extends AsyncEventTarget {
     const isVerified = verify(
       decodeString(this.publicKey),
       decodeString(signature),
-      Uint8Array.from([...new TextEncoder().encode(timestamp), ...body]),
+      Uint8Array.from([...encode(timestamp), ...body]),
     );
 
     if (!isVerified) {
       return respond(req, "invalid request signature", Status.Unauthorized);
     }
 
-    const interaction: APIInteraction = JSON.parse(
-      new TextDecoder().decode(body),
-    );
+    const interaction: APIInteraction = JSON.parse(decode(body));
 
     switch (interaction.type) {
       case InteractionType.Ping: {
