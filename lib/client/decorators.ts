@@ -4,16 +4,12 @@ import type { GuildChannel } from "../structures/mod.ts";
 import type { ActualSnowflake } from "../util/util.ts";
 import { computePermissions } from "./permissions.ts";
 
-export type Permissions = keyof typeof PermissionFlagsBits;
+export type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
 
-export type PermissionsDecorator = (
-  ...permissions: Permissions[]
-) => (_target: unknown, _key: unknown, descriptor: PropertyDescriptor) => void;
-
-export const channelPermissionsDecorator: PermissionsDecorator = (
-  ...permissions
+export const channelPermissionsDecorator = (
+  ...permissions: PermissionFlagsKeys[]
 ) =>
-  (_target, _key, descriptor) => {
+  (_target: unknown, _key: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
 
     descriptor.value = async function (
@@ -43,7 +39,7 @@ export const channelPermissionsDecorator: PermissionsDecorator = (
 
 const computeMissingPermissions = (
   currentUserPermissions: bigint,
-  permissions: Permissions[],
+  permissions: PermissionFlagsKeys[],
 ) =>
   permissions.filter((permission) =>
     (currentUserPermissions & PermissionFlagsBits[permission]) !==
