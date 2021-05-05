@@ -1,11 +1,14 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
-export const ALL = Object.values(PermissionFlagsBits).reduce((a, b) => a | b);
+export type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
+export const PERMISSIONS_ALL = Object
+  .values(PermissionFlagsBits)
+  .reduce((previous, current) => previous | current);
 
 export const computeBasePermissions = async (member: Member, guild: Guild) => {
   if (member.id === guild.ownerID) {
-    return ALL;
+    return PERMISSIONS_ALL;
   }
   let permissions = 0n;
   for (const roleID of [guild.id, ...member.roles ?? []]) {
@@ -13,7 +16,7 @@ export const computeBasePermissions = async (member: Member, guild: Guild) => {
   }
   return (permissions & PermissionFlagsBits.ADMINISTRATOR) ===
       PermissionFlagsBits.ADMINISTRATOR
-    ? ALL
+    ? PERMISSIONS_ALL
     : permissions;
 };
 
@@ -26,7 +29,7 @@ export const computeOverwrites = async (
     (permissions & PermissionFlagsBits.ADMINISTRATOR) ===
       PermissionFlagsBits.ADMINISTRATOR
   ) {
-    return ALL;
+    return PERMISSIONS_ALL;
   }
   const overwriteIDs = [...member.roles ?? [], member.id];
   if (channel.guildID) {
@@ -52,3 +55,12 @@ export const computePermissions = async (
     ? computeOverwrites(basePermissions, member, channel)
     : basePermissions;
 };
+
+export const computeMissingPermissions = (
+  currentUserPermissions: bigint,
+  permissions: PermissionFlagsKeys[],
+) =>
+  permissions.filter((permission) =>
+    (currentUserPermissions & PermissionFlagsBits[permission]) !==
+      PermissionFlagsBits[permission]
+  );

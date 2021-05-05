@@ -1,10 +1,11 @@
-import { PermissionFlagsBits } from "./deps.ts";
 import { PermissionsError, RESTClient } from "../client/mod.ts";
 import type { GuildChannel } from "../structures/mod.ts";
 import type { ActualSnowflake } from "../util/util.ts";
-import { computePermissions } from "./permissions.ts";
-
-export type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
+import {
+  computeMissingPermissions,
+  computePermissions,
+  PermissionFlagsKeys,
+} from "./permissions.ts";
 
 export const channelPermissionsDecorator = (
   ...permissions: PermissionFlagsKeys[]
@@ -36,12 +37,3 @@ export const channelPermissionsDecorator = (
       return method.call(this, channelID, ...args);
     };
   };
-
-const computeMissingPermissions = (
-  currentUserPermissions: bigint,
-  permissions: PermissionFlagsKeys[],
-) =>
-  permissions.filter((permission) =>
-    (currentUserPermissions & PermissionFlagsBits[permission]) !==
-      PermissionFlagsBits[permission]
-  );
