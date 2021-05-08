@@ -200,10 +200,13 @@ export interface RequestInput {
   reason?: string;
 }
 
-export const DELAY = 15_000;
-export const HTTP_URL = `https://discord.com/api`;
-export const HTTP_VERSION = 8;
-export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
+// deno-fmt-ignore-next-line
+export const
+  CANARY = Deno.args.includes("--canary"),
+  DELAY = 15_000,
+  HTTP_URL = `https://${CANARY ? "canary." : ""}discord.com/api`,
+  HTTP_VERSION = 8,
+  USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {
   route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
