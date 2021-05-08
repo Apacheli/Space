@@ -15,13 +15,13 @@ export class User extends Structure {
   username!: APIUser["username"];
   discriminator!: APIUser["discriminator"];
   avatar!: APIUser["avatar"];
-  public publicFlags: APIUser["public_flags"];
+  public publicFlags!: number;
 
   constructor(data: APIUser, client: Client) {
     super(data, client);
 
-    this.bot = data.bot;
-    this.system = data.system;
+    this.bot = !!data.bot;
+    this.system = !!data.system;
   }
 
   update(data: APIUser) {
@@ -30,7 +30,7 @@ export class User extends Structure {
     this.username = data.username;
     this.discriminator = data.discriminator;
     this.avatar = data.avatar;
-    this.publicFlags = data.public_flags;
+    this.publicFlags = data.public_flags ?? 0;
   }
 
   get mention() {
