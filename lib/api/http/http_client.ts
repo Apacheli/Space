@@ -175,8 +175,14 @@ import type {
   RESTPutAPIGuildMemberRoleResult,
   RESTPutAPIGuildTemplateSyncResult,
 } from "./deps.ts";
+import { Status } from "./deps.ts"; // Double import because it's easier to read
 import { HTTPError } from "./http_error.ts";
-import { ActualSnowflake, RateLimitBucket } from "../../util/mod.ts";
+import {
+  ActualSnowflake,
+  logger,
+  RateLimitBucket,
+  sleep,
+} from "../../util/mod.ts";
 import * as meta from "../../../meta.ts";
 
 export interface HTTPClientOptions {
@@ -215,7 +221,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     super();
   }
 
-  async request<T = unknown>(path: string, input?: RequestInput) {
+  async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
     const route = parseRateLimitRoute(path);
     const bucket = this.get(route) ?? new RateLimitBucket();
     this.set(route, bucket);
@@ -263,19 +269,26 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       method: input?.method,
       signal: controller.signal,
     });
+    const resetAfter = response.headers.get("x-ratelimit-reset-after");
     bucket.unlock(
       parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
-      parseFloat(response.headers.get("x-ratelimit-reset-after") ?? "0") * 1000,
+      resetAfter ? parseFloat(resetAfter) * 1000 : 0,
       parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
     );
 
     clearTimeout(timeout);
 
+    if (response.status === Status.TooManyRequests) {
+      logger.warn?.(`Rate limited. Retrying in ${resetAfter} seconds`);
+      await sleep(resetAfter ? parseFloat(resetAfter) * 1000 : 0);
+      return this.request<T>(path, input);
+    }
+
     const result = response.headers.get("content-type") === "application/json"
       ? await response.json()
-      : undefined;
+      : response.text();
     if (response.ok) {
-      return result as T;
+      return result;
     }
     throw new HTTPError(result, response);
   }
