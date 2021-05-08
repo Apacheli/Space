@@ -38,7 +38,7 @@ export const computeOverwrites = async (
     const overwrite = await channel.permissionOverwrites?.get(overwriteID);
     if (overwrite) {
       permissions |= BigInt(overwrite.allow);
-      permissions & ~BigInt(overwrite.deny);
+      permissions &= ~BigInt(overwrite.deny);
     }
   }
   return permissions;
