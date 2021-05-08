@@ -28,17 +28,17 @@ export class RateLimitBucket {
     this.locked = true;
   }
 
-  unlock(max = this.max, reset = this.reset, left = --this.left, next = true) {
+  unlock(max = this.max, reset = this.reset, left = --this.left) {
     this.locked = false;
     this.lastRequestAt = Date.now();
 
     this.max = max;
     this.reset = reset;
     this.left = left;
+  }
 
-    if (next) {
-      const shifted = this.queue.shift();
-      shifted?.();
-    }
+  next() {
+    const shifted = this.queue.shift();
+    shifted?.();
   }
 }

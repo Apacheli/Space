@@ -206,14 +206,19 @@ export const HTTP_VERSION = 8;
 export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {
-  route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
-  if (route.includes("/reactions/")) {
-    return route.replace(/\/reactions\/[^/]+/, "/reactions/:emoji");
+  const idRoute = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
+  if (idRoute.includes("/reactions/")) {
+    return idRoute.replace(/\/reactions\/[^/]+/g, "/reactions/:emoji");
   }
-  if (method === "DELETE" && route.endsWith("messages/:id")) {
-    return `DELETE ${route}`;
+  if (method === "DELETE" && idRoute.endsWith("messages/:id")) {
+    const id = BigInt(route.match(/messages\/(\d+)/)?.[1]);
+    console.log(id);
+    if (BigInt(Date.now()) - ((id >> 22n) + 1420070400000n) > 1209600000) {
+      return `DELETE-${idRoute}-old`;
+    }
+    return `DELETE-${idRoute}`;
   }
-  return route;
+  return idRoute;
 };
 
 export class HTTPClient extends Map<string, RateLimitBucket> {
@@ -222,11 +227,15 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
   }
 
   async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
-    const route = parseRateLimitRoute(path);
+    const route = parseRateLimitRoute(path, input?.method);
     const bucket = this.get(route) ?? new RateLimitBucket();
     this.set(route, bucket);
 
     if (bucket.locked || bucket.rateLimited) {
+      if (bucket.rateLimited) {
+        const reset = bucket.reset / 1000;
+        logger.debug?.(`Preemptive rate limit. Trying in ${reset} seconds`);
+      }
       return new Promise<T>((resolve, reject) => { // TypeScript return bug
         bucket.add(() => this.request<T>(path, input).then(resolve, reject));
       });
@@ -270,10 +279,15 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       signal: controller.signal,
     });
 
-    clearTimeout(timeout);
-
     const resetAfter = response.headers.get("x-ratelimit-reset-after");
     const realResetAfter = resetAfter ? parseFloat(resetAfter) * 1000 : 0;
+
+    bucket.unlock(
+      parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
+      realResetAfter,
+      parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
+    );
+    clearTimeout(timeout);
 
     if (response.status === Status.TooManyRequests) {
       logger.warn?.(`Rate limited. Retrying in ${resetAfter} seconds`);
@@ -281,11 +295,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       return this.request<T>(path, input);
     }
 
-    bucket.unlock(
-      parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
-      realResetAfter,
-      parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
-    );
+    bucket.next();
 
     const result = response.headers.get("content-type") === "application/json"
       ? await response.json()
