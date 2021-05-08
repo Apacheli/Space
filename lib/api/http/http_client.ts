@@ -227,10 +227,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     this.set(route, bucket);
 
     if (bucket.locked || bucket.rateLimited) {
-      if (bucket.rateLimited) {
-        const reset = bucket.reset / 1000;
-        logger.debug?.(`Preemptive rate limit. Trying in ${reset} seconds`);
-      }
       return new Promise<T>((resolve, reject) => { // TypeScript return bug
         bucket.add(() => this.request<T>(path, input).then(resolve, reject));
       });
