@@ -1,7 +1,6 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import type { Guild, GuildChannel, Member } from "../structures/mod.ts";
 
-export type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
 export const PERMISSIONS_ALL = Object
   .values(PermissionFlagsBits)
   .reduce((previous, current) => previous | current);
@@ -55,12 +54,3 @@ export const computePermissions = async (
     ? computeOverwrites(basePermissions, member, channel)
     : basePermissions;
 };
-
-export const computeMissingPermissions = (
-  currentUserPermissions: bigint,
-  permissions: PermissionFlagsKeys[],
-) =>
-  permissions.filter((permission) =>
-    (currentUserPermissions & PermissionFlagsBits[permission]) !==
-      PermissionFlagsBits[permission]
-  );

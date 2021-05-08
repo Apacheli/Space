@@ -23,7 +23,7 @@ export class RESTClient extends HTTPClient {
     super(token, options);
   }
 
-  @channelPermissionsDecorator("MANAGE_CHANNELS", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["MANAGE_CHANNELS", "VIEW_CHANNEL"])
   editChannel(
     channelID: ActualSnowflake,
     data: RESTPatchAPIChannelJSONBody,
@@ -32,12 +32,12 @@ export class RESTClient extends HTTPClient {
     return super.editChannel(channelID, data, reason);
   }
 
-  @channelPermissionsDecorator("MANAGE_CHANNELS", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["MANAGE_CHANNELS", "VIEW_CHANNEL"])
   deleteChannel(channelID: ActualSnowflake, reason?: string) {
     return super.deleteChannel(channelID, reason);
   }
 
-  @channelPermissionsDecorator("VIEW_CHANNEL")
+  @channelPermissionsDecorator(["VIEW_CHANNEL"])
   getChannelMessages(
     channelID: ActualSnowflake,
     query: RESTGetAPIChannelMessagesQuery,
@@ -45,12 +45,12 @@ export class RESTClient extends HTTPClient {
     return super.getChannelMessages(channelID, query);
   }
 
-  @channelPermissionsDecorator("VIEW_CHANNEL")
+  @channelPermissionsDecorator(["VIEW_CHANNEL"])
   getChannelMessage(channelID: ActualSnowflake, messageID: ActualSnowflake) {
     return super.getChannelMessage(channelID, messageID);
   }
 
-  @channelPermissionsDecorator("SEND_MESSAGES", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["SEND_MESSAGES", "VIEW_CHANNEL"])
   createMessage(
     channelID: ActualSnowflake,
     data: RESTPostAPIChannelMessageJSONBody,
@@ -59,21 +59,21 @@ export class RESTClient extends HTTPClient {
     return super.createMessage(channelID, data, files);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "SEND_MESSAGES",
     "VIEW_CHANNEL",
-  )
+  ])
   crosspostMessage(channelID: ActualSnowflake, messageID: ActualSnowflake) {
     return super.crosspostMessage(channelID, messageID);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "ADD_REACTIONS",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   createReaction(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -82,7 +82,7 @@ export class RESTClient extends HTTPClient {
     return super.createReaction(channelID, messageID, emoji);
   }
 
-  @channelPermissionsDecorator("READ_MESSAGE_HISTORY", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
   deleteOwnReaction(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -91,11 +91,11 @@ export class RESTClient extends HTTPClient {
     return super.deleteOwnReaction(channelID, messageID, emoji);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   deleteUserReaction(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -105,7 +105,7 @@ export class RESTClient extends HTTPClient {
     return super.deleteUserReaction(channelID, messageID, emoji, userID);
   }
 
-  @channelPermissionsDecorator("READ_MESSAGE_HISTORY", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
   getReactions(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -115,20 +115,20 @@ export class RESTClient extends HTTPClient {
     return super.getReactions(channelID, messageID, emoji, query);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   deleteAllReactions(channelID: ActualSnowflake, messageID: ActualSnowflake) {
     return super.deleteAllReactions(channelID, messageID);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   deleteAllReactionsforEmoji(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -137,7 +137,7 @@ export class RESTClient extends HTTPClient {
     return super.deleteAllReactionsforEmoji(channelID, messageID, emoji);
   }
 
-  @channelPermissionsDecorator("READ_MESSAGE_HISTORY", "VIEW_CHANNEL")
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
   editMessage(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
@@ -147,20 +147,20 @@ export class RESTClient extends HTTPClient {
     return super.editMessage(channelID, messageID, data);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   deleteMessage(channelID: ActualSnowflake, messageID: ActualSnowflake) {
     return super.deleteMessage(channelID, messageID);
   }
 
-  @channelPermissionsDecorator(
+  @channelPermissionsDecorator([
     "MANAGE_MESSAGES",
     "READ_MESSAGE_HISTORY",
     "VIEW_CHANNEL",
-  )
+  ])
   bulkDeleteMessages(
     channelID: ActualSnowflake,
     data: RESTPostAPIChannelMessagesBulkDeleteJSONBody,

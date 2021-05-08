@@ -1,14 +1,11 @@
-import { PermissionsError, RESTClient } from "../client/mod.ts";
+import { PermissionFlagsBits } from "./deps.ts";
+import { PermissionsError, RESTClient } from "./mod.ts";
 import type { GuildChannel } from "../structures/mod.ts";
 import type { ActualSnowflake } from "../util/util.ts";
-import {
-  computeMissingPermissions,
-  computePermissions,
-  PermissionFlagsKeys,
-} from "./permissions.ts";
+import { computePermissions } from "./permissions.ts";
 
 export const channelPermissionsDecorator = (
-  ...permissions: PermissionFlagsKeys[]
+  permissions: PermissionFlagsKeys[],
 ) =>
   (_target: unknown, _key: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
@@ -37,3 +34,14 @@ export const channelPermissionsDecorator = (
       return method.call(this, channelID, ...args);
     };
   };
+
+type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
+
+const computeMissingPermissions = (
+  currentUserPermissions: bigint,
+  permissions: PermissionFlagsKeys[],
+) =>
+  permissions.filter((permission) =>
+    (currentUserPermissions & PermissionFlagsBits[permission]) !==
+      PermissionFlagsBits[permission]
+  );
