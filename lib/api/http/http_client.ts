@@ -269,20 +269,23 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       method: input?.method,
       signal: controller.signal,
     });
-    const resetAfter = response.headers.get("x-ratelimit-reset-after");
-    bucket.unlock(
-      parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
-      resetAfter ? parseFloat(resetAfter) * 1000 : 0,
-      parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
-    );
 
     clearTimeout(timeout);
 
+    const resetAfter = response.headers.get("x-ratelimit-reset-after");
+    const realResetAfter = resetAfter ? parseFloat(resetAfter) * 1000 : 0;
+
     if (response.status === Status.TooManyRequests) {
       logger.warn?.(`Rate limited. Retrying in ${resetAfter} seconds`);
-      await sleep(resetAfter ? parseFloat(resetAfter) * 1000 : 0);
+      await sleep(realResetAfter);
       return this.request<T>(path, input);
     }
+
+    bucket.unlock(
+      parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
+      realResetAfter,
+      parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
+    );
 
     const result = response.headers.get("content-type") === "application/json"
       ? await response.json()
