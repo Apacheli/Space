@@ -206,19 +206,14 @@ export const HTTP_VERSION = 8;
 export const USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {
-  const idRoute = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
-  if (idRoute.includes("/reactions/")) {
-    return idRoute.replace(/\/reactions\/[^/]+/g, "/reactions/:emoji");
+  route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
+  if (route.includes("/reactions/")) {
+    return route.replace(/\/reactions\/[^/]+/g, "/reactions/:emoji");
   }
-  if (method === "DELETE" && idRoute.endsWith("messages/:id")) {
-    const id = BigInt(route.match(/messages\/(\d+)/)?.[1]);
-    console.log(id);
-    if (BigInt(Date.now()) - ((id >> 22n) + 1420070400000n) > 1209600000) {
-      return `DELETE-${idRoute}-old`;
-    }
-    return `DELETE-${idRoute}`;
+  if (method === "DELETE" && route.endsWith("messages/:id")) {
+    return `DELETE-${route}`;
   }
-  return idRoute;
+  return route;
 };
 
 export class HTTPClient extends Map<string, RateLimitBucket> {
