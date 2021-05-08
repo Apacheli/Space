@@ -3,6 +3,7 @@ import { AsyncEventTarget, logger, sleep } from "../../util/mod.ts";
 
 export type GatewayClientConnectData =
   & {
+    encoding?: "json" | "etf";
     firstShardID?: number;
     lastShardID?: number;
     url: string;
@@ -27,12 +28,13 @@ export class GatewayClient extends AsyncEventTarget {
     const firstShardID = data.firstShardID ?? 0;
     this.spawnShards(lastShardID, firstShardID);
     const shards = data.shards ?? lastShardID - firstShardID;
-    const url = `${data.url}?v=${data.version ?? GATEWAY_VERSION}`;
+    const encoding = `&encoding=json`; // TODO: Support ETF
+    const url = `${data.url}?v=${data.version ?? GATEWAY_VERSION}${encoding}`;
     logger.debug?.(
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1}) to "${url}"`,
     );
-    this.connectShards(data.url, {
+    this.connectShards(url, {
       shards,
       ...data,
     });

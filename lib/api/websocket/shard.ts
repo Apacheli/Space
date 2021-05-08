@@ -35,9 +35,6 @@ export enum ShardEvents {
   Error = "ERROR",
 }
 
-export enum ShardStatus {
-}
-
 export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
@@ -46,7 +43,6 @@ export class Shard extends DiscordSocket {
   resumedAt = 0;
   seq = 0;
   sessionID?: string;
-  status?: ShardStatus;
   unavailableGuilds = new Set<string>();
 
   private lastHeartbeatSent = 0;
@@ -56,9 +52,9 @@ export class Shard extends DiscordSocket {
     super();
   }
 
-  async connect(url: string, protocols?: string | string[], _re = false) {
+  async connect(url: string, protocols?: string | string[], re = false) {
     await super.connect(url, protocols);
-    logger.debug?.(`Shard ${this.id ?? "unknown"} ${_re ? "re" : ""}connected`);
+    logger.debug?.(`Shard ${this.id ?? "unknown"} ${re ? "re" : ""}connected`);
   }
 
   reset(soft?: boolean) {
