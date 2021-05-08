@@ -69,7 +69,7 @@ const server = new Server(publicKey);
 
 server.connect(1337);
 
-for await (const [interaction, respond] of server) {
+for await (const [interaction, respond] of server.listen("COMMAND")) {
   if (interaction.data.name === "ping") {
     respond({
       type: InteractionResponseType.ChannelMessageWithSource,
