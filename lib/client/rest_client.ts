@@ -17,6 +17,11 @@ import { RESTGetAPIAuditLogQuery } from "../structures/deps";
 import { RESTPutAPIChannelPermissionJSONBody } from "../structures/deps";
 import { RESTPostAPIChannelInviteJSONBody } from "../structures/deps";
 import { RESTPostAPIChannelFollowersJSONBody } from "../structures/deps";
+import { RESTPostAPIGuildEmojiJSONBody } from "../structures/deps";
+import { RESTPatchAPIGuildEmojiJSONBody } from "../structures/deps";
+import { RESTPatchAPIGuildJSONBody } from "../structures/deps";
+import { RESTPostAPIGuildChannelJSONBody } from "../structures/deps";
+import { RESTPatchAPIGuildChannelPositionsJSONBody } from "../structures/deps";
 
 // deno-lint-ignore no-empty-interface
 export interface RESTClientOptions extends HTTPClientOptions {
@@ -276,8 +281,82 @@ export class RESTClient extends HTTPClient {
   // removeUserfromThread
   // getThreadMembers
 
-  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY"])
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
   getActiveThreads(channelID: ActualSnowflake, data: unknown) {
     return super.getActiveThreads(channelID, data);
   }
+
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
+  getPublicArchivedThreads(channelID: ActualSnowflake, data: unknown) {
+    return super.getPublicArchivedThreads(channelID, data);
+  }
+
+  @channelPermissionsDecorator(["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"])
+  getJoinedPrivateArchivedThreads(channelID: ActualSnowflake, data: unknown) {
+    return super.getJoinedPrivateArchivedThreads(channelID, data);
+  }
+
+  // getGuildEmojis
+  // getGuildEmoji
+
+  @guildPermissionsDecorator(["MANAGE_EMOJIS"])
+  createGuildEmoji(
+    guildID: ActualSnowflake,
+    data: RESTPostAPIGuildEmojiJSONBody,
+    reason?: string,
+  ) {
+    return super.createGuildEmoji(guildID, data, reason);
+  }
+
+  @guildPermissionsDecorator(["MANAGE_EMOJIS"])
+  editGuildEmoji(
+    guildID: ActualSnowflake,
+    emojiID: ActualSnowflake,
+    data: RESTPatchAPIGuildEmojiJSONBody,
+    reason?: string,
+  ) {
+    return super.editGuildEmoji(guildID, emojiID, data, reason);
+  }
+
+  @guildPermissionsDecorator(["MANAGE_EMOJIS"])
+  deleteGuildEmoji(
+    guildID: ActualSnowflake,
+    emojiID: ActualSnowflake,
+    reason?: string,
+  ) {
+    return super.deleteGuildEmoji(guildID, emojiID, reason);
+  }
+
+  // createGuild
+  // getGuild
+  // getGuildPreview
+
+  @guildPermissionsDecorator(["MANAGE_GUILD"])
+  editGuild(guildID: ActualSnowflake, data: RESTPatchAPIGuildJSONBody) {
+    return super.editGuild(guildID, data);
+  }
+
+  // deleteGuild
+  // getGuildChannels
+
+  @guildPermissionsDecorator(["MANAGE_CHANNELS"])
+  createGuildChannel(
+    guildID: ActualSnowflake,
+    data: RESTPostAPIGuildChannelJSONBody,
+    reason?: string,
+  ) {
+    return super.createGuildChannel(guildID, data, reason);
+  }
+
+  @guildPermissionsDecorator(["MANAGE_CHANNELS"])
+  editGuildChannelPositions(
+    guildID: ActualSnowflake,
+    data: RESTPatchAPIGuildChannelPositionsJSONBody,
+  ) {
+    return super.editGuildChannelPositions(guildID, data);
+  }
+
+  // getGuildMember
+  // getGuildMembers
+  // searchGuildMember
 }
