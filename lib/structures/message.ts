@@ -68,7 +68,7 @@ export class Message extends Structure {
     this.tts = data.tts;
     this.attachments = data.attachments;
     this.reactions = data.reactions;
-    this.nonce = data.nonce;
+    this.nonce = data.nonce ? BigInt(data.nonce) : null;
     this.webhookID = data.webhook_id && BigInt(data.webhook_id);
     this.type = data.type;
     this.activity = data.activity;
