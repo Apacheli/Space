@@ -1,10 +1,19 @@
 import {
+  RESTGetAPIAuditLogQuery,
   RESTGetAPIChannelMessageReactionUsersQuery,
   RESTGetAPIChannelMessagesQuery,
   RESTPatchAPIChannelJSONBody,
   RESTPatchAPIChannelMessageJSONBody,
+  RESTPatchAPIGuildChannelPositionsJSONBody,
+  RESTPatchAPIGuildEmojiJSONBody,
+  RESTPatchAPIGuildJSONBody,
+  RESTPostAPIChannelFollowersJSONBody,
+  RESTPostAPIChannelInviteJSONBody,
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
+  RESTPostAPIGuildChannelJSONBody,
+  RESTPostAPIGuildEmojiJSONBody,
+  RESTPutAPIChannelPermissionJSONBody,
 } from "./deps.ts";
 import {
   channelPermissionsDecorator,
@@ -13,15 +22,6 @@ import {
 } from "./mod.ts";
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
 import { ActualSnowflake } from "../util/mod.ts";
-import { RESTGetAPIAuditLogQuery } from "../structures/deps";
-import { RESTPutAPIChannelPermissionJSONBody } from "../structures/deps";
-import { RESTPostAPIChannelInviteJSONBody } from "../structures/deps";
-import { RESTPostAPIChannelFollowersJSONBody } from "../structures/deps";
-import { RESTPostAPIGuildEmojiJSONBody } from "../structures/deps";
-import { RESTPatchAPIGuildEmojiJSONBody } from "../structures/deps";
-import { RESTPatchAPIGuildJSONBody } from "../structures/deps";
-import { RESTPostAPIGuildChannelJSONBody } from "../structures/deps";
-import { RESTPatchAPIGuildChannelPositionsJSONBody } from "../structures/deps";
 
 // deno-lint-ignore no-empty-interface
 export interface RESTClientOptions extends HTTPClientOptions {
