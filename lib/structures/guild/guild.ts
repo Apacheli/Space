@@ -121,7 +121,7 @@ export class Guild extends Structure {
     this.owner = data.owner;
     this.permissions = data.permissions;
 
-    this.joinedAt = data.joined_at;
+    this.joinedAt = data.joined_at ? Date.parse(data.joined_at) : null;
     this.large = data.large;
     this.unavailable = data.unavailable;
     this.memberCount = data.member_count;
