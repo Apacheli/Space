@@ -34,11 +34,7 @@ Simple program to get started:
 ```ts
 import { Client, GatewayIntentBits, onMessageCreate } from "./deps.ts";
 
-const token = prompt("token:");
-if (!token) {
-  throw new Error("bad token");
-}
-
+const token = Deno.env.get("TOKEN");
 const client = new Client(`Bot ${token}`);
 
 client.connect({
@@ -60,11 +56,7 @@ Simple interactions program:
 ```ts
 import { InteractionResponseType, Server } from "./deps.ts";
 
-const publicKey = prompt("public key:");
-if (!publicKey) {
-  throw new Error("bad public key");
-}
-
+const publicKey = Deno.env.get("PUBLIC_KEY");
 const server = new Server(publicKey);
 
 server.connect(1337);
