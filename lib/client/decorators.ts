@@ -4,10 +4,8 @@ import type { GuildChannel } from "../structures/mod.ts";
 import type { ActualSnowflake } from "../util/util.ts";
 import { computePermissions } from "./permissions.ts";
 
-export const channelPermissionsDecorator = (
-  permissions: PermissionFlagsKeys[],
-) =>
-  (_target: unknown, _key: string, descriptor: PropertyDescriptor) => {
+const channelPermissionsDecorator = (permissions: PermissionFlagsKeys[]) =>
+  (_target: unknown, _key: unknown, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
 
     descriptor.value = async function (
@@ -35,9 +33,39 @@ export const channelPermissionsDecorator = (
     };
   };
 
-type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
+const guildPermissionsDecorator = (permissions: PermissionFlagsKeys[]) =>
+  (_target: unknown, _key: unknown, descriptor: PropertyDescriptor) => {
+    const method = descriptor.value;
 
-const computeMissingPermissions = (
+    descriptor.value = async function (
+      this: RESTClient,
+      guildID: ActualSnowflake,
+      ...args: unknown[]
+    ) {
+      if (!this.client.user) {
+        return method.call(this, guildID, ...args);
+      }
+      const guild = await this.client.guilds?.get(guildID);
+      const member = await guild?.members?.get(this.client.user.id);
+      if (!(member && guild)) {
+        return method.call(this, guildID, ...args);
+      }
+      const missingPermissions = computeMissingPermissions(
+        await computePermissions(member, guild),
+        permissions,
+      );
+      if (missingPermissions.length) {
+        throw new PermissionsError(missingPermissions);
+      }
+      return method.call(this, guildID, ...args);
+    };
+  };
+
+export { channelPermissionsDecorator, guildPermissionsDecorator };
+
+export type PermissionFlagsKeys = keyof typeof PermissionFlagsBits;
+
+export const computeMissingPermissions = (
   currentUserPermissions: bigint,
   permissions: PermissionFlagsKeys[],
 ) =>

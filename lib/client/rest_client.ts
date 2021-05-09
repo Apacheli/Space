@@ -6,7 +6,11 @@ import {
   RESTPostAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessagesBulkDeleteJSONBody,
 } from "./deps.ts";
-import { channelPermissionsDecorator, Client } from "./mod.ts";
+import {
+  channelPermissionsDecorator,
+  Client,
+  guildPermissionsDecorator,
+} from "./mod.ts";
 import { HTTPClient, HTTPClientOptions } from "../api/http/mod.ts";
 import { ActualSnowflake } from "../util/mod.ts";
 
@@ -166,5 +170,14 @@ export class RESTClient extends HTTPClient {
     data: RESTPostAPIChannelMessagesBulkDeleteJSONBody,
   ) {
     return super.bulkDeleteMessages(channelID, data);
+  }
+
+  @guildPermissionsDecorator(["KICK_MEMBERS"])
+  removeGuildMember(
+    guildID: ActualSnowflake,
+    userID: ActualSnowflake,
+    reason?: string,
+  ) {
+    return super.removeGuildMember(guildID, userID, reason);
   }
 }
