@@ -6,6 +6,7 @@ import type {
 import { Structure } from "./structure.ts";
 import type { Client } from "../client/client.ts";
 import type { ActualSnowflake } from "../util/mod.ts";
+import { CANARY } from "../api/http/mod.ts";
 
 interface MessageComponent {
   "custom_id": string;
@@ -97,8 +98,8 @@ export class Message extends Structure {
   }
 
   get link() {
-    return `https://discord.com/channels/${this.guildID ??
-      "@me"}/${this.channelID}/${this.id}`;
+    const discord = `https://${CANARY ? "canary." : ""}.discord.com/channels/`;
+    return `${discord}/${this.guildID ?? "@me"}/${this.channelID}/${this.id}`;
   }
 
   crosspost() {
