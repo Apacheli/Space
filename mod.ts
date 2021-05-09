@@ -2,8 +2,4 @@ export * from "./lib/mod.ts";
 export * from "./meta.ts";
 
 // Export some stuff from discord-api-types as constants
-export {
-  GatewayDispatchEvents,
-  GatewayIntentBits,
-  PermissionFlagsBits,
-} from "./lib/client/deps.ts";
+export { PermissionFlagsBits } from "./lib/client/deps.ts";
