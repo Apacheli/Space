@@ -98,7 +98,7 @@ export class Shard extends DiscordSocket {
     }
 
     logger.warn?.(
-      `[${event.code}] Shard ${this.id} disconnected`,
+      `Shard ${this.id} disconnected with code ${event.code} and`,
       `with${event.reason ? ` reason "${event.reason}"` : "out a reason"}`,
     );
     this.dispatch(ShardEvents.Disconnect, resumable, reconnectable, event);
