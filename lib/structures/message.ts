@@ -98,7 +98,7 @@ export class Message extends Structure {
   }
 
   get link() {
-    const discord = `https://${CANARY ? "canary." : ""}.discord.com/channels/`;
+    const discord = `https://${CANARY ? "canary." : ""}discord.com/channels/`;
     return `${discord}/${this.guildID ?? "@me"}/${this.channelID}/${this.id}`;
   }
 
