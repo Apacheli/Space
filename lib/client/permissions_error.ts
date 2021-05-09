@@ -8,8 +8,7 @@ export class PermissionsError extends Error {
   }
 
   get message() {
-    return logger.highlight(
-      `Missing permissions: "${this.permissions.join('", "')}"`,
-    );
+    const message = `Missing permissions: "${this.permissions.join('", "')}"`;
+    return logger.highlight(message);
   }
 }
