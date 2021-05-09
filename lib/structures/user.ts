@@ -13,7 +13,7 @@ export class User extends Structure {
   system;
 
   username!: APIUser["username"];
-  discriminator!: APIUser["discriminator"];
+  discriminator!: number;
   avatar!: APIUser["avatar"];
   public publicFlags!: number;
 
@@ -28,7 +28,7 @@ export class User extends Structure {
     super.update(data);
 
     this.username = data.username;
-    this.discriminator = data.discriminator;
+    this.discriminator = parseInt(data.discriminator);
     this.avatar = data.avatar;
     this.publicFlags = data.public_flags ?? 0;
   }
