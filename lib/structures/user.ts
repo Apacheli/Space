@@ -48,7 +48,7 @@ export class User extends Structure {
 
   defaultAvatarURL(format?: ImageFormats, size?: number) {
     return CDNFormatURL(
-      defaultUserAvatarURL(`${parseInt(this.discriminator) % 5}`),
+      defaultUserAvatarURL(`${this.discriminator % 5}`),
       format,
       size,
     );
