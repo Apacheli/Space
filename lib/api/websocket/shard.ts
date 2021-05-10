@@ -182,6 +182,10 @@ export class Shard extends DiscordSocket {
       }
 
       case GatewayOPCodes.InvalidSession: {
+        logger.trace?.(
+          `Shard ${this.id} encountered an invalid session. Attempting to`,
+          payload.d ? "resume" : "identify",
+        );
         this.resumeOrIdentify(payload.d, this.identifyData);
         break;
       }
