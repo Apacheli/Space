@@ -20,9 +20,9 @@ export const computeBasePermissions = async (member: Member, guild: Guild) => {
 };
 
 export const computeOverwrites = async (
-  permissions: bigint,
   member: Member,
   channel: GuildChannel,
+  permissions = 0n,
 ) => {
   if (
     (permissions & PermissionFlagsBits.ADMINISTRATOR) ===
@@ -51,6 +51,6 @@ export const computePermissions = async (
 ) => {
   const basePermissions = await computeBasePermissions(member, guild);
   return channel
-    ? computeOverwrites(basePermissions, member, channel)
+    ? computeOverwrites(member, channel, basePermissions)
     : basePermissions;
 };

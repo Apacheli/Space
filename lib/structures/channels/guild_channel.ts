@@ -67,6 +67,6 @@ export class GuildChannel extends Channel {
    * Computes a member's overwrites.
    */
   computeOverwrites(member: Member) {
-    return computeOverwrites(0n, member, this);
+    return computeOverwrites(member, this);
   }
 }
