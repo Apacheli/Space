@@ -563,7 +563,7 @@ export class RESTClient extends HTTPClient {
   // updateUserVoiceState
   // getInvite
 
-  @guildPermissionsDecorator(["MANAGE_CHANNELS" /* "MANAGE_GUILD", */])
+  @guildPermissionsDecorator(["MANAGE_CHANNELS" /* , "MANAGE_GUILD" */])
   deleteInvite(inviteCode: string, reason?: string) {
     return super.deleteInvite(inviteCode, reason);
   }
