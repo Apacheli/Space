@@ -4,6 +4,14 @@ Handles Discord's
 [interactions and slash commands](https://discord.com/developers/docs/interactions/slash-commands)
 API.
 
+### Install
+
+```ts
+export * from "https://deno.land/x/space@0.8.0-alpha/lib/api/interactions/mod.ts";
+```
+
+### Getting Started
+
 ```ts
 import { InteractionResponseType, Server } from "./deps.ts";
 
