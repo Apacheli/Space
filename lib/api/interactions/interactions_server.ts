@@ -12,11 +12,12 @@ import {
 } from "./deps.ts";
 import { AsyncEventTarget, decode, encode } from "../../util/mod.ts";
 
-const headers = new Headers();
-headers.set("content-type", "application/json");
+export const headers = new Headers();
+headers.append("content-type", "application/json");
 
-const respond = (request: ServerRequest, body: unknown, status = Status.OK) =>
-  request.respond({ body: JSON.stringify(body), status, headers });
+export const respondWrapper = (request: ServerRequest) =>
+  (body: unknown, status = Status.OK) =>
+    request.respond({ body: JSON.stringify(body), headers, status });
 
 export class InteractionsServer extends AsyncEventTarget {
   #server?: Server;
@@ -32,38 +33,36 @@ export class InteractionsServer extends AsyncEventTarget {
   }
 
   close() {
-    if (!this.#server) {
-      throw new Error("No server");
-    }
-    this.#server.close();
+    this.#server?.close();
   }
 
-  private async onServerRequest(request: ServerRequest) {
+  async onServerRequest(request: ServerRequest) {
     const signature = request.headers.get("X-Signature-Ed25519");
     const timestamp = request.headers.get("X-Signature-Timestamp");
 
+    const respond = respondWrapper(request);
+
     if (!(signature && timestamp)) {
-      return respond(request, "bad request", Status.BadRequest);
+      return respond("bad request", Status.BadRequest);
     }
 
     const body = await readAll(request.body);
 
     if (!verifyKey(this.publicKey, signature, timestamp, body)) {
-      return respond(request, "invalid request signature", Status.Unauthorized);
+      return respond("invalid request signature", Status.Unauthorized);
     }
 
     const interaction: APIInteraction = JSON.parse(decode(body));
-    const respondd = (body: unknown) => respond(request, body);
 
     switch (interaction.type) {
       case InteractionType.Ping: {
-        return respondd({ type: InteractionResponseType.Pong });
+        return respond({ type: InteractionResponseType.Pong });
       }
       case InteractionType.ApplicationCommand: {
-        return this.dispatch("COMMAND", interaction, respondd);
+        return this.dispatch("APPLICATION_COMMAND", interaction, respond);
       }
       case 3: { // Buttons/Components
-        return this.dispatch("BUTTON", interaction, respondd);
+        return this.dispatch("MESSAGE_COMPONENT", interaction, respond);
       }
     }
   }
