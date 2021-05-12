@@ -59,10 +59,10 @@ export class InteractionsServer extends AsyncEventTarget {
         return respond({ type: InteractionResponseType.Pong });
       }
       case InteractionType.ApplicationCommand: {
-        return this.dispatch("APPLICATION_COMMAND", interaction, respond);
+        return this.dispatch("COMMAND", interaction, respond);
       }
       case 3: { // Buttons/Components
-        return this.dispatch("MESSAGE_COMPONENT", interaction, respond);
+        return this.dispatch("COMPONENT", interaction, respond);
       }
     }
   }
