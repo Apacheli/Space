@@ -1,4 +1,5 @@
 import type { Snowflake } from "../reference.ts";
+import type { Integration } from "./guild.ts";
 import type { User } from "./user.ts";
 import type { Webhook } from "./webhook.ts";
 

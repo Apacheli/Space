@@ -131,6 +131,7 @@ export type GetWebhookMessageBody = Message;
 /** https://discord.dev/resources/webhook#edit-webhook-message */
 export interface EditWebhookMessageJSON
   extends Omit<ExecuteWebhookJSON, "avatar_url" | "tts" | "username"> {
+  /** attached files to keep */
   attachments?: Attachment[];
 }
 
