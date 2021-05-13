@@ -1,10 +1,10 @@
-import { Snowflake } from "./discord.ts";
-import { User } from "./user.ts";
-import { Webhook } from "./webhook.ts";
+import type { Snowflake } from "../reference.ts";
+import type { User } from "./user.ts";
+import type { Webhook } from "./webhook.ts";
 
 // https://discord.dev/resources/audit-log
 
-/** https://discord.dev/resources/audit-log#audit-log-object-audit-log-structure */
+/** https://discord.dev/resources/audit-log#audit-log-object */
 export interface AuditLog {
   /** list of webhooks found in the audit log */
   webhooks: Webhook[];
@@ -16,7 +16,7 @@ export interface AuditLog {
   integrations: Integration[];
 }
 
-/** https://discord.dev/resources/audit-log#audit-log-entry-object-audit-log-entry-structure */
+/** https://discord.dev/resources/audit-log#audit-log-entry-object */
 export interface AuditLogEntry {
   /** id of the affected entity (webhook, user, role, etc.) */
   target_id: string | null;
@@ -24,7 +24,7 @@ export interface AuditLogEntry {
   changes?: AuditLogChange;
   /** the user who made the changes */
   user_id: Snowflake | null;
-  /** id of the entry  */
+  /** id of the entry */
   id: Snowflake;
   /** type of action that occurred */
   action_type: AuditLogEvents;
@@ -93,7 +93,7 @@ export interface OptionalAuditLogInfo {
   role_name: string;
 }
 
-/** https://discord.dev/resources/audit-log#audit-log-change-object-audit-log-change-structure */
+/** https://discord.dev/resources/audit-log#audit-log-change-object */
 export interface AuditLogChange {
   /** new value of the key */
   new_value?: unknown;
@@ -103,7 +103,7 @@ export interface AuditLogChange {
   key: string;
 }
 
-/** https://discord.dev/resources/audit-log#get-guild-audit-log-query-string-params */
+/** https://discord.dev/resources/audit-log#get-guild-audit-log */
 export interface GetGuildAuditLogQuery {
   /** filter the log for actions made by a user */
   user_id: Snowflake;
@@ -114,3 +114,6 @@ export interface GetGuildAuditLogQuery {
   /** how many entries are returned (default 50, minimum 1, maximum 100) */
   limit: number;
 }
+
+/** https://discord.dev/resources/audit-log#get-guild-audit-log */
+export type GetGuildAuditLogBody = AuditLog;
