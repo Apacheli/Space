@@ -43,7 +43,12 @@ export interface CreateGuildEmojiJSON {
 export type CreateGuildEmojiBody = Emoji;
 
 /** https://discord.dev/resources/emoji#modify-guild-emoji */
-export type ModifyGuildEmojiJSON = Omit<CreateGuildEmojiJSON, "image">;
+export interface ModifyGuildEmojiJSON {
+  /** name of the emoji */
+  name?: string;
+  /** roles allowed to use this emoji */
+  roles?: Snowflake[] | null;
+}
 
 /** https://discord.dev/resources/emoji#modify-guild-emoji */
 export type ModifyGuildEmojiBody = Emoji;

@@ -1,5 +1,5 @@
 import type { Snowflake } from "../reference.ts";
-import type { Attachment, Channel } from "./channel.ts";
+import type { AllowedMentions, Attachment, Channel, Embed } from "./channel.ts";
 import type { Guild } from "./guild.ts";
 import type { Message } from "./message.ts";
 import type { User } from "./user.ts";
@@ -94,26 +94,28 @@ export type DeleteWebhookWithTokenBody = void;
 export interface ExecuteWebhookQuery {
   /** waits for server confirmation of message send before response, and returns the created message body (defaults to `false`; when `false` a message that is not saved does not return an error) */
   wait?: boolean;
+  /** Send a message to the specified thread within a webhook's channel. The thread will automatically be unarchived. */
+  thread_id?: Snowflake;
 }
 
 /** https://discord.dev/resources/webhook#execute-webhook */
 export interface ExecuteWebhookJSON {
   /** the message contents (up to 2000 characters) */
-  content: string;
+  content?: string;
   /** override the default username of the webhook */
-  username: string;
+  username?: string;
   /** override the default avatar of the webhook */
-  avatar_url: string;
+  avatar_url?: string;
   /** true if this is a TTS message */
-  tts: boolean;
+  tts?: boolean;
   /** the contents of the file being sent */
-  file: unknown;
+  file?: unknown;
   /** embedded `rich` content */
-  embed: unknown;
+  embed?: Embed;
   /** See [message create](https://discord.dev/resources/channel#create-message) */
-  payload_json: string;
+  payload_json?: string;
   /** allowed mentions for the message */
-  allowed_mentions: unknown;
+  allowed_mentions?: AllowedMentions;
 }
 
 /** https://discord.dev/resources/webhook#execute-webhook */
@@ -129,10 +131,19 @@ export type ExecuteSlackCompatibleWebhookBody = ExecuteWebhookBody;
 export type GetWebhookMessageBody = Message;
 
 /** https://discord.dev/resources/webhook#edit-webhook-message */
-export interface EditWebhookMessageJSON
-  extends Omit<ExecuteWebhookJSON, "avatar_url" | "tts" | "username"> {
+export interface EditWebhookMessageJSON {
+  /** the message contents (up to 2000 characters) */
+  content?: string | null;
+  /** embedded rich content */
+  embeds?: Embed | null;
+  /** the contents of the file being sent/edited */
+  file?: unknown | null;
+  /** JSON encoded body of non-file params (multipart/form-data only) */
+  payload_json?: string | null;
+  /** allowed mentions for the message */
+  allowed_mentions?: AllowedMentions | null;
   /** attached files to keep */
-  attachments?: Attachment[];
+  attachments?: Attachment[] | null;
 }
 
 /** https://discord.dev/resources/webhook#edit-webhook-message */
