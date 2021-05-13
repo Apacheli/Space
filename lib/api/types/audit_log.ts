@@ -95,12 +95,15 @@ export interface OptionalAuditLogInfo {
 
 /** https://discord.dev/resources/audit-log#audit-log-change-object-audit-log-change-structure */
 export interface AuditLogChange {
+  /** new value of the key */
   new_value?: unknown;
+  /** old value of the key */
   old_value?: unknown;
+  /** name of audit log [change key](https://discord.dev/resources/audit-log#audit-log-change-object-audit-log-change-key) */
   key: string;
 }
 
-/** https://discord.dev/resources/audit-log#get-guild-audit-log */
+/** https://discord.dev/resources/audit-log#get-guild-audit-log-query-string-params */
 export interface GetGuildAuditLogQuery {
   /** filter the log for actions made by a user */
   user_id: Snowflake;
