@@ -102,7 +102,7 @@ export class Shard extends DiscordSocket {
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
-      await this.connect();
+      await this.connect(reconnectable);
       this.resumeOrIdentify(resumable);
     }
   }
