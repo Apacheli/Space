@@ -9,7 +9,6 @@ import {
 export interface GatewayClientConnectData extends Omit<ShardOptions, "shard"> {
   firstShardID?: number;
   lastShardID?: number;
-  url: string;
 }
 
 export const GATEWAY_VERSION = 8;
