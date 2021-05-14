@@ -1,21 +1,26 @@
 import { AsyncEventTarget } from "../util/async_event_target.ts";
+import { pack, unpack } from "../util/mod.ts";
+
+export interface DiscordSocketOptions {
+  encoding?: "json" | "etf";
+  protocols?: string | string[];
+}
 
 export abstract class DiscordSocket extends AsyncEventTarget {
-  protocols?: string | string[];
   socket?: WebSocket;
-  url?: string;
 
-  connect(url: string, protocols?: string | string[]) {
-    this.protocols = protocols;
-    this.url = url;
+  constructor(public url: string, public options?: DiscordSocketOptions) {
+    super();
+  }
 
-    const socket = this.socket = new WebSocket(url, protocols);
+  connect() {
+    const ws = this.socket = new WebSocket(this.url, this.options?.protocols);
 
-    socket.addEventListener("close", (event) => this.onSocketClose(event));
-    socket.addEventListener("error", (event) => this.onSocketError(event));
-    socket.addEventListener("message", (event) => this.onSocketMessage(event));
+    ws.addEventListener("close", (event) => this.onSocketClose(event));
+    ws.addEventListener("error", (event) => this.onSocketError(event));
+    ws.addEventListener("message", (event) => this.onSocketMessage(event));
 
-    return new Promise((resolve) => socket.addEventListener("open", resolve));
+    return new Promise((resolve) => ws.addEventListener("open", resolve));
   }
 
   disconnect(code: number, reason: string) {
@@ -37,11 +42,13 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   }
 
   encodePayload(payload: unknown) {
-    return JSON.stringify(payload);
+    return (this.options?.encoding === "etf" ? pack : JSON.stringify)(payload);
   }
 
-  decodePayload<T>(payload: string): T {
-    return JSON.parse(payload);
+  async decodePayload<T>(payload: string | Blob): Promise<T> {
+    return typeof payload === "string"
+      ? JSON.parse(payload)
+      : unpack(new Uint8Array(await payload.arrayBuffer()));
   }
 
   abstract onSocketClose(event: CloseEvent): void;

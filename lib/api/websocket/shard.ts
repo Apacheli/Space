@@ -11,7 +11,7 @@ import {
   GatewayVoiceStateUpdateData,
 } from "./deps.ts";
 import { logger, PartialExcept, PartialKeys } from "../../util/mod.ts";
-import { DiscordSocket } from "../discord_socket.ts";
+import { DiscordSocket, DiscordSocketOptions } from "../discord_socket.ts";
 
 export interface GuildMembersChunkEntry {
   chunks: GatewayGuildMembersChunkDispatchData[];
@@ -27,17 +27,16 @@ export type GatewayIdentifyDataPartial = PartialExcept<
   "intents"
 >;
 
-const ShardDispatchEvents = new Set(Object.values(GatewayDispatchEvents));
-
-export enum ShardEvents {
-  Disconnect = "DISCONNECT",
-  Dispatch = "DISPATCH",
-  Error = "ERROR",
+export interface ShardOptions extends DiscordSocketOptions {
+  id?: number;
 }
+
+const ShardDispatchEvents = new Set(Object.values(GatewayDispatchEvents));
 
 export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
+  id?: number;
   latency = 0;
   readyAt = 0;
   resumedAt = 0;
@@ -48,12 +47,14 @@ export class Shard extends DiscordSocket {
   private lastHeartbeatSent = 0;
   private identifyData?: GatewayIdentifyDataPartial;
 
-  constructor(public token: string, public id?: number) {
-    super();
+  constructor(public token: string, url: string, options?: ShardOptions) {
+    super(url, options);
+
+    this.id = options?.id;
   }
 
-  async connect(url: string, protocols?: string | string[], re = false) {
-    await super.connect(url, protocols);
+  async connect(re?: boolean) {
+    await super.connect();
     logger.debug?.(`Shard ${this.id ?? "unknown"} ${re ? "re" : ""}connected`);
   }
 
@@ -101,22 +102,22 @@ export class Shard extends DiscordSocket {
       `Shard ${this.id} disconnected with code ${event.code} and`,
       `with${event.reason ? ` reason "${event.reason}"` : "out a reason"}`,
     );
-    this.dispatch(ShardEvents.Disconnect, resumable, reconnectable, event);
+    this.dispatch("DISCONNECT", resumable, reconnectable, event);
     this.reset(resumable);
 
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
-      await this.connect(this.url, this.protocols, reconnectable);
+      await this.connect();
       this.resumeOrIdentify(resumable, this.identifyData);
     }
   }
 
   onSocketError(event: Event) {
-    this.dispatch(ShardEvents.Error, event);
+    this.dispatch("ERROR", event);
   }
 
-  onSocketMessage(event: MessageEvent<string>) {
-    const payload = this.decodePayload<GatewayReceivePayload>(event.data);
+  async onSocketMessage(event: MessageEvent<string>) {
+    const payload = await this.decodePayload<GatewayReceivePayload>(event.data);
 
     switch (payload.op) {
       case GatewayOPCodes.Dispatch: {
@@ -177,7 +178,7 @@ export class Shard extends DiscordSocket {
             `Shard ${this.id} received an unknown event "${payload.t}"`,
           );
         }
-        this.dispatch(ShardEvents.Dispatch, payload);
+        this.dispatch("DISPATCH", payload);
         break;
       }
 
