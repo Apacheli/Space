@@ -41,7 +41,7 @@ export class GatewayClient extends AsyncEventTarget {
 
   spawnShards(data: RequiredKeys<GatewayClientConnectData, "lastShardID">) {
     for (let i = data.firstShardID ?? 0; i < data.lastShardID; i++) {
-      const shard = new Shard(this.token, data.url, data, i);
+      const shard = new Shard(this.token, data, i);
       this.shards.push(shard);
       (async () => {
         for await (const [payload] of shard.listen("DISPATCH")) {

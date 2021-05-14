@@ -22,6 +22,7 @@ export interface ShardOptions
   extends DiscordSocketOptions, PartialExcept<GatewayIdentifyData, "intents"> {
   shards?: number;
   displayMobileStatus?: boolean;
+  url: string;
   version?: number;
 }
 
@@ -37,15 +38,14 @@ export class Shard extends DiscordSocket {
   sessionID?: string;
   unavailableGuilds = new Set<string>();
 
-  private lastHeartbeatSent = 0;
+  #lastHeartbeatSent = 0;
 
   constructor(
     public token: string,
-    url: string,
     public options: ShardOptions,
     public id?: number,
   ) {
-    super(url);
+    super(options.url);
   }
 
   async connect(re?: boolean) {
@@ -193,14 +193,14 @@ export class Shard extends DiscordSocket {
       }
 
       case GatewayOPCodes.HeartbeatAck: {
-        this.latency = Date.now() - this.lastHeartbeatSent;
+        this.latency = Date.now() - this.#lastHeartbeatSent;
         break;
       }
     }
   }
 
   heartbeat() {
-    this.lastHeartbeatSent = Date.now();
+    this.#lastHeartbeatSent = Date.now();
     this.sendPayload(GatewayOPCodes.Heartbeat, this.seq);
   }
 
