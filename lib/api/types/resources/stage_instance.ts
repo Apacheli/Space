@@ -1,8 +1,8 @@
 import type { Snowflake } from "../reference.ts";
 
-//
+// https://discord.dev/resources/stage-instance
 
-/** */
+/** https://discord.dev/resources/stage-instance#auto-closing-stage-instance-structure */
 export interface StageInstance {
   /** The id of this Stage instance */
   id: Snowflake;
@@ -14,28 +14,26 @@ export interface StageInstance {
   topic: string;
 }
 
-/** */
-export interface CreateStageInstanceJSON {
+/** https://discord.dev/resources/stage-instance#create-stage-instance */
+export interface CreateStageInstanceJSON extends UpdateStageInstanceJSON {
   /** The id of the Stage channel */
   channel_id: Snowflake;
-  /** The topic of the Stage instance (1-120 characters) */
-  topic: string;
 }
 
-/** */
+/** https://discord.dev/resources/stage-instance#create-stage-instance */
 export type CreateStageInstanceBody = StageInstance;
 
-/** */
+/** https://discord.dev/resources/stage-instance#get-stage-instance */
 export type GetStageInstanceBody = StageInstance;
 
-/** */
+/** https://discord.dev/docs/resources/stage-instance#update-stage-instance */
 export interface UpdateStageInstanceJSON {
   /** The topic of the Stage instance (1-120 characters) */
   topic: string;
 }
 
-/** */
+/** https://discord.dev/docs/resources/stage-instance#update-stage-instance */
 export type UpdateStageInstanceBody = StageInstance;
 
-/** */
+/** https://discord.dev/resources/stage-instance#delete-stage-instance */
 export type DeleteStageInstanceBody = void;

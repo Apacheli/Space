@@ -1,4 +1,3 @@
-import type { Snowflake } from "../reference.ts";
 import type { Channel } from "./channel.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";

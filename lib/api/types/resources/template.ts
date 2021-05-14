@@ -2,9 +2,9 @@ import type { Snowflake } from "../reference.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
 
-//
+// https://discord.dev/resources/template
 
-/** */
+/** https://discord.dev/resources/template#template-object */
 export interface Template {
   /** the template code (unique ID) */
   code: string;
@@ -30,10 +30,10 @@ export interface Template {
   is_dirty: boolean | null;
 }
 
-/** */
+/** https://discord.dev/resources/template#get-template */
 export type GetTemplateBody = Template;
 
-/** */
+/** https://discord.dev/resources/template#create-guild-from-template */
 export interface CreateGuildFromTemplateJSON {
   /** name of the guild (2-100 characters) */
   name: string;
@@ -41,13 +41,13 @@ export interface CreateGuildFromTemplateJSON {
   icon?: string;
 }
 
-/** */
+/** https://discord.dev/resources/template#create-guild-from-template */
 export type CreateGuildFromTemplateBody = Guild;
 
-/** */
+/** https://discord.dev/resources/template#get-guild-templates */
 export type GetGuildTemplatesBody = Template[];
 
-/** */
+/** https://discord.dev/resources/template#create-guild-template */
 export interface CreateGuildTemplateJSON {
   /** name of the template (1-100 characters) */
   name: string;
@@ -55,17 +55,17 @@ export interface CreateGuildTemplateJSON {
   description?: string | null;
 }
 
-/** */
+/** https://discord.dev/resources/template#create-guild-template */
 export type CreateGuildTemplateBody = Template;
 
-/** */
+/** https://discord.dev/resources/template#sync-guild-template */
 export type SyncGuildTemplateBody = Template;
 
-/** */
+/** https://discord.dev/resources/template#modify-guild-template */
 export type ModifyGuildTemplateJSON = Partial<CreateGuildTemplateJSON>;
 
-/** */
+/** https://discord.dev/resources/template#modify-guild-template */
 export type ModifyGuildTemplateBody = Template;
 
-/** */
+/** https://discord.dev/resources/template#delete-guild-template */
 export type DeleteGuildTemplateBody = Template;

@@ -1,9 +1,9 @@
 import type { Snowflake } from "../reference.ts";
 import type { GuildMember } from "./guild.ts";
 
-//
+// https://discord.dev/resources/voice
 
-/** */
+/** https://discord.dev/resources/voice#voice-state-object */
 export interface VoiceState {
   /** the guild id this voice state is for */
   guild_id?: Snowflake;
@@ -33,7 +33,7 @@ export interface VoiceState {
   request_to_speak_timestamp: string | null;
 }
 
-/** */
+/** https://discord.dev/resources/voice#voice-region-object */
 export interface VoiceRegion {
   /** unique ID for the region */
   id: Snowflake;
@@ -49,5 +49,5 @@ export interface VoiceRegion {
   custon: boolean;
 }
 
-/** */
+/** https://discord.dev/resources/voice#list-voice-regions */
 export type ListVoiceRegionsBody = VoiceRegion[];
