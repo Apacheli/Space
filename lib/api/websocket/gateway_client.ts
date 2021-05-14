@@ -1,4 +1,4 @@
-import { GatewayIdentifyDataPartial, Shard, ShardOptions } from "./shard.ts";
+import { Shard, ShardOptions } from "./shard.ts";
 import {
   AsyncEventTarget,
   logger,
@@ -6,8 +6,7 @@ import {
   sleep,
 } from "../../util/mod.ts";
 
-export interface GatewayClientConnectData
-  extends ShardOptions, Omit<GatewayIdentifyDataPartial, "shard"> {
+export interface GatewayClientConnectData extends Omit<ShardOptions, "shard"> {
   firstShardID?: number;
   lastShardID?: number;
   url: string;
@@ -37,12 +36,12 @@ export class GatewayClient extends AsyncEventTarget {
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1}) to "${url}"`,
     );
-    this.connectShards({ shards, ...data });
+    this.connectShards();
   }
 
   spawnShards(data: RequiredKeys<GatewayClientConnectData, "lastShardID">) {
     for (let i = data.firstShardID ?? 0; i < data.lastShardID; i++) {
-      const shard = new Shard(this.token, data.url, { id: i, ...data });
+      const shard = new Shard(this.token, data.url, data, i);
       this.shards.push(shard);
       (async () => {
         for await (const [payload] of shard.listen("DISPATCH")) {
@@ -52,12 +51,12 @@ export class GatewayClient extends AsyncEventTarget {
     }
   }
 
-  async connectShards(identifyData?: GatewayIdentifyDataPartial) {
+  async connectShards() {
     let i = 0;
     do {
       const shard = this.shards[i++];
       await shard.connect();
-      shard.resumeOrIdentify(true, identifyData);
+      shard.resumeOrIdentify(true);
     } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
   }
 }

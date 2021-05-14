@@ -18,17 +18,11 @@ export interface GuildMembersChunkEntry {
   resolve: (value: GatewayGuildMembersChunkDispatchData[]) => void;
 }
 
-export type GatewayIdentifyDataPartial = PartialExcept<
-  GatewayIdentifyData & {
-    shards: number;
-    displayMobileStatus?: boolean;
-    version?: number;
-  },
-  "intents"
->;
-
-export interface ShardOptions extends DiscordSocketOptions {
-  id?: number;
+export interface ShardOptions
+  extends DiscordSocketOptions, PartialExcept<GatewayIdentifyData, "intents"> {
+  shards?: number;
+  displayMobileStatus?: boolean;
+  version?: number;
 }
 
 const ShardDispatchEvents = new Set(Object.values(GatewayDispatchEvents));
@@ -36,7 +30,6 @@ const ShardDispatchEvents = new Set(Object.values(GatewayDispatchEvents));
 export class Shard extends DiscordSocket {
   guildMembersChunkMap = new Map<string, GuildMembersChunkEntry>();
   heartbeatInterval?: number;
-  id?: number;
   latency = 0;
   readyAt = 0;
   resumedAt = 0;
@@ -45,12 +38,14 @@ export class Shard extends DiscordSocket {
   unavailableGuilds = new Set<string>();
 
   private lastHeartbeatSent = 0;
-  private identifyData?: GatewayIdentifyDataPartial;
 
-  constructor(public token: string, url: string, options?: ShardOptions) {
-    super(url, options);
-
-    this.id = options?.id;
+  constructor(
+    public token: string,
+    url: string,
+    public options: ShardOptions,
+    public id?: number,
+  ) {
+    super(url);
   }
 
   async connect(re?: boolean) {
@@ -108,7 +103,7 @@ export class Shard extends DiscordSocket {
     // TODO: Make reconnecting and resuming work in a queue with other shards.
     if (reconnectable && this.url) {
       await this.connect();
-      this.resumeOrIdentify(resumable, this.identifyData);
+      this.resumeOrIdentify(resumable);
     }
   }
 
@@ -187,7 +182,7 @@ export class Shard extends DiscordSocket {
           `Shard ${this.id} encountered an invalid session. Attempting to`,
           payload.d ? "resume" : "identify",
         );
-        this.resumeOrIdentify(payload.d, this.identifyData);
+        this.resumeOrIdentify(payload.d);
         break;
       }
 
@@ -209,21 +204,20 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOPCodes.Heartbeat, this.seq);
   }
 
-  identify(data: GatewayIdentifyDataPartial) {
-    this.identifyData = data;
+  identify() {
     const payload: GatewayIdentifyData = {
       properties: {
-        $browser: data.displayMobileStatus ? "Discord Android" : "Space",
+        $browser: this.options.displayMobileStatus ? "Discord iOS" : "Space",
         $device: "Space",
         $os: Deno.build.os,
       },
-      shard: data.shard ?? (
-        this.id !== undefined && data.shards !== undefined
-          ? [this.id, data.shards]
+      shard: this.options.shard ?? (
+        this.id !== undefined && this.options.shards !== undefined
+          ? [this.id, this.options.shards]
           : undefined
       ),
       token: this.token,
-      ...data,
+      ...this.options,
     };
     this.sendPayload(GatewayOPCodes.Identify, payload);
   }
@@ -281,16 +275,11 @@ export class Shard extends DiscordSocket {
     });
   }
 
-  resumeOrIdentify(
-    resumable?: boolean,
-    identifyData?: GatewayIdentifyDataPartial,
-  ) {
+  resumeOrIdentify(resumable?: boolean) {
     if (resumable && this.sessionID) {
       this.resume();
-    } else if (identifyData) {
-      this.identify(identifyData);
     } else {
-      throw new Error("Failed to resume or identify.");
+      this.identify();
     }
   }
 }
