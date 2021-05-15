@@ -367,7 +367,7 @@ export type EmbedThumbnail = EmbedVideo;
 
 /** https://discord.dev/resources/channel#embed-object-embed-video-structure */
 export interface EmbedVideo {
-  /** source url of thumbnail, video, or image */
+  /** source url of thumbnail, video, or image (only supports http(s) and attachments) */
   url?: string;
   /** a proxied url of the thumbnail, video, or image */
   proxy_url?: string;
@@ -395,7 +395,7 @@ export type EmbedAuthor = EmbedProvider & Omit<EmbedFooter, "text">;
 export interface EmbedFooter {
   /** footer text */
   text: string;
-  /** url of footer icon or author icon */
+  /** url of footer icon or author icon (only supports http(s) and attachments) */
   icon_url?: string;
   /** a proxied url of footer icon or author icon */
   proxy_icon_url?: string;
