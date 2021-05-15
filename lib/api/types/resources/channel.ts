@@ -504,11 +504,11 @@ export interface ModifyChannelJSON {
   topic?: string | null;
   /** whether the channel is nsfw */
   nsfw?: boolean | null;
-  /** 	amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission `manage_messages` or `manage_channel`, are unaffected */
+  /** amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission `manage_messages` or `manage_channel`, are unaffected */
   rate_limit_per_user?: number | null;
   /** the bitrate (in bits) of the voice channel; 8000 to 96000 (128000 for VIP servers) */
   bitrate?: number | null;
-  /** 	the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit */
+  /** the user limit of the voice channel; 0 refers to no limit, 1 to 99 refers to a user limit */
   user_limit?: number | null;
   /** channel or category-specific permissions */
   permission_overwrites?: Overwrite[] | null;
@@ -520,7 +520,7 @@ export interface ModifyChannelJSON {
   video_quality_mode?: number | null;
   /** whether the channel is archived */
   archived?: boolean;
-  /** 	duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080 */
+  /** duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080 */
   auto_archive_duration?: AutoArchiveDuration;
   /** when a thread is locked, only users with MANAGE_THREADS can unarchive it */
   locked?: number;
@@ -642,19 +642,19 @@ export type GetChannelInvitesBody = Invite[];
 
 /** https://discord.com/developers/docs/resources/channel#create-channel-invite */
 export interface CreateChannelInvite {
-  /** 	duration of invite in seconds before expiry, or 0 for never. between 0 and 604800 (7 days) */
+  /** duration of invite in seconds before expiry, or 0 for never. between 0 and 604800 (7 days) */
   max_age: number;
   /** max number of uses or 0 for unlimited. between 0 and 100 */
   max_uses: number;
   /** whether this invite only grants temporary membership */
   temporary: boolean;
-  /** 	if true, don't try to reuse a similar invite (useful for creating many unique one time use invites) */
+  /** if true, don't try to reuse a similar invite (useful for creating many unique one time use invites) */
   unique: boolean;
   /** the [type of target](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types) for this voice channel invite */
   target_type: InviteTargetTypes;
-  /** the id of the user whose stream to display for this invite, required if `target_type` is 1, the user must be streaming in the channel	 */
+  /** the id of the user whose stream to display for this invite, required if `target_type` is 1, the user must be streaming in the channel */
   target_user_id: Snowflake;
-  /** 	the id of the embedded application to open for this invite, required if `target_type` is 2, the application must have the `EMBEDDED` flag */
+  /** the id of the embedded application to open for this invite, required if `target_type` is 2, the application must have the `EMBEDDED` flag */
   target_application_id: Snowflake;
 }
 
@@ -700,7 +700,7 @@ export type GroupDMRemoveRecipientBody = void;
 export interface StartThreadWithMessageJSON {
   /** 2-100 character channel name */
   name: string;
-  /** 	duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080 */
+  /** duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080 */
   auto_archive_duration: AutoArchiveDuration;
 }
 
@@ -734,7 +734,7 @@ export interface ListActiveThreadsBody {
   threads: Channel[];
   /** a thread member object for each returned thread the current user has joined */
   members: ThreadMember[];
-  /** 	whether there are potentially additional threads that could be returned on a subsequent call */
+  /** whether there are potentially additional threads that could be returned on a subsequent call */
   has_more: boolean;
 }
 
