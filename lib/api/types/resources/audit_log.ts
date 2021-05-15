@@ -69,7 +69,7 @@ export enum AuditLogEvents {
   MessageBulkDelete,
   MessagePin,
   MessageUnpin,
-  IntegrationCreate,
+  IntegrationCreate = 80,
   IntegrationUpdate,
   IntegrationDelete,
 }
