@@ -1,10 +1,11 @@
 import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
+import type { Nullable } from "../util.ts";
 import type { Application } from "../application.ts";
 import type { Emoji } from "./emoji.ts";
 import type { GuildMember } from "./guild.ts";
+import type { Invite, InviteTargetTypes } from "./invite.ts";
 import type { User } from "./user.ts";
-import { Nullable } from "../util.ts";
 
 // https://discord.dev/resources/channel
 
@@ -638,6 +639,7 @@ export interface EditChannelPermissionsJSON {
 /** https://discord.dev/resources/channel#edit-channel-permissions */
 export type EditChannelPermissionsBody = void;
 
+/** https://discord.dev/resources/channel#get-channel-invites */
 export type GetChannelInvitesBody = Invite[];
 
 /** https://discord.dev/resources/channel#create-channel-invite */

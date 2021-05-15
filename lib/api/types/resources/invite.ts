@@ -1,7 +1,7 @@
+import type { Application } from "./application.ts";
 import type { Channel } from "./channel.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
-import type { Application } from "../topics/oauth2.ts";
 
 // https://discord.dev/resources/invite
 
