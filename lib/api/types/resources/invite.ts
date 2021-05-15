@@ -3,7 +3,7 @@ import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
 import type { Application } from "../topics/oauth2.ts";
 
-// https://discord.dev/docs/resources/invite
+// https://discord.dev/resources/invite
 
 /** https://discord.dev/resources/invite#invite-object */
 export interface Invite {
@@ -49,12 +49,12 @@ export interface InviteMetadata {
   created_at: string;
 }
 
-/** https://discord.dev/docs/resources/invite#get-invite */
+/** https://discord.dev/resources/invite#get-invite */
 export interface GetInviteQuery {
   with_counts?: boolean;
 }
 
-/** https://discord.dev/docs/resources/invite#get-invite */
+/** https://discord.dev/resources/invite#get-invite */
 export type GetInviteBody = Invite;
 
 /** https://discord.dev/resources/invite#delete-invite */

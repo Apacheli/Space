@@ -26,13 +26,13 @@ export type CreateStageInstanceBody = StageInstance;
 /** https://discord.dev/resources/stage-instance#get-stage-instance */
 export type GetStageInstanceBody = StageInstance;
 
-/** https://discord.dev/docs/resources/stage-instance#update-stage-instance */
+/** https://discord.dev/resources/stage-instance#update-stage-instance */
 export interface UpdateStageInstanceJSON {
   /** The topic of the Stage instance (1-120 characters) */
   topic: string;
 }
 
-/** https://discord.dev/docs/resources/stage-instance#update-stage-instance */
+/** https://discord.dev/resources/stage-instance#update-stage-instance */
 export type UpdateStageInstanceBody = StageInstance;
 
 /** https://discord.dev/resources/stage-instance#delete-stage-instance */

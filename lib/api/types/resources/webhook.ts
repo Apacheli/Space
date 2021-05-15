@@ -4,7 +4,7 @@ import type { Guild } from "./guild.ts";
 import type { Message } from "./message.ts";
 import type { User } from "./user.ts";
 
-// https://discord.com/developers/docs/resources/webhook
+// https://discord.dev/resources/webhook
 
 /** https://discord.dev/resources/webhook#webhook-object */
 export interface Webhook {
@@ -59,7 +59,7 @@ export type GetChannelWebhooksBody = Webhook[];
 /** https://discord.dev/resources/webhook#get-guild-webhooks */
 export type GetGuildWebhooksBody = Webhook[];
 
-/** https://discord.com/developers/docs/resources/webhook#get-webhook */
+/** https://discord.dev/resources/webhook#get-webhook */
 export type GetWebhookBody = Webhook;
 
 /** https://discord.dev/resources/webhook#get-webhook-with-token */

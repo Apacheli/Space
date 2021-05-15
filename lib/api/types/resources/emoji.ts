@@ -1,7 +1,7 @@
 import type { Snowflake } from "../reference.ts";
 import type { User } from "./user.ts";
 
-// https://discord.com/developers/docs/resources/emoji
+// https://discord.dev/resources/emoji
 
 /** https://discord.dev/resources/emoji#emoji-object */
 export interface Emoji {
