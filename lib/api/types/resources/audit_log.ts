@@ -81,17 +81,17 @@ export interface OptionalAuditLogInfo {
   /** number of members removed by the prune */
   members_removed?: string;
   /** channel in which the entities were targeted */
-  channel_id: Snowflake;
+  channel_id?: Snowflake;
   /** id of the message that was targeted */
-  guild_id: Snowflake;
+  guild_id?: Snowflake;
   /** number of entities that were targeted */
-  count: string;
+  count?: string;
   /** id of the overwritten entity */
-  id: Snowflake;
+  id?: Snowflake;
   /** type of overwritten entity - "0" for "role" or "1" for "member" */
-  type: string;
+  type?: string;
   /** name of the role if type is "0" (not present if type is "1") */
-  role_name: string;
+  role_name?: string;
 }
 
 /** https://discord.dev/resources/audit-log#audit-log-change-object */

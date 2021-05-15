@@ -2,10 +2,10 @@ import type { Snowflake } from "../reference.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
 
-// https://discord.dev/resources/template
+// https://discord.dev/resources/guild-template
 
 /** https://discord.dev/resources/template#template-object */
-export interface Template {
+export interface GuildTemplate {
   /** the template code (unique ID) */
   code: string;
   /** template name */
@@ -30,22 +30,22 @@ export interface Template {
   is_dirty: boolean | null;
 }
 
-/** https://discord.dev/resources/template#get-template */
-export type GetTemplateBody = Template;
+/** https://discord.dev/resources/template#get-guild-template */
+export type GetGuildTemplateBody = GuildTemplate;
 
-/** https://discord.dev/resources/template#create-guild-from-template */
-export interface CreateGuildFromTemplateJSON {
+/** https://discord.dev/resources/template#create-guild-from-guild-template */
+export interface CreateGuildFromGuildTemplateJSON {
   /** name of the guild (2-100 characters) */
   name: string;
   /** base64 128x128 image for the guild icon */
   icon?: string;
 }
 
-/** https://discord.dev/resources/template#create-guild-from-template */
-export type CreateGuildFromTemplateBody = Guild;
+/** https://discord.dev/resources/template#create-guild-from-guild-template */
+export type CreateGuildFromGuildTemplateBody = Guild;
 
 /** https://discord.dev/resources/template#get-guild-templates */
-export type GetGuildTemplatesBody = Template[];
+export type GetGuildTemplatesBody = GuildTemplate[];
 
 /** https://discord.dev/resources/template#create-guild-template */
 export interface CreateGuildTemplateJSON {
@@ -56,16 +56,16 @@ export interface CreateGuildTemplateJSON {
 }
 
 /** https://discord.dev/resources/template#create-guild-template */
-export type CreateGuildTemplateBody = Template;
+export type CreateGuildTemplateBody = GuildTemplate;
 
 /** https://discord.dev/resources/template#sync-guild-template */
-export type SyncGuildTemplateBody = Template;
+export type SyncGuildTemplateBody = GuildTemplate;
 
 /** https://discord.dev/resources/template#modify-guild-template */
 export type ModifyGuildTemplateJSON = Partial<CreateGuildTemplateJSON>;
 
 /** https://discord.dev/resources/template#modify-guild-template */
-export type ModifyGuildTemplateBody = Template;
+export type ModifyGuildTemplateBody = GuildTemplate;
 
 /** https://discord.dev/resources/template#delete-guild-template */
-export type DeleteGuildTemplateBody = Template;
+export type DeleteGuildTemplateBody = GuildTemplate;
