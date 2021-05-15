@@ -3,6 +3,7 @@ export * from "./audit_log.ts";
 export * from "./channel.ts";
 export * from "./emoji.ts";
 export * from "./guild_template.ts";
+export * from "./guild.ts";
 export * from "./invite.ts";
 export * from "./stage_instance.ts";
 export * from "./user.ts";
