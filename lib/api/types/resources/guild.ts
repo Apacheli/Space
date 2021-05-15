@@ -1,10 +1,10 @@
 import type { Snowflake } from "../reference.ts";
-import { PresenceUpdate } from "../topics/gateway.ts";
-import { Application } from "./application.ts";
-import { Channel } from "./channel.ts";
-import { Emoji } from "./emoji.ts";
-import { User } from "./user.ts";
-import { VoiceRegion, VoiceState } from "./voice.ts";
+import type { PresenceUpdate } from "../topics/gateway.ts";
+import type { Application } from "./application.ts";
+import type { Channel } from "./channel.ts";
+import type { Emoji } from "./emoji.ts";
+import type { User } from "./user.ts";
+import type { VoiceRegion, VoiceState } from "./voice.ts";
 
 export interface Guild {
   id: Snowflake;
