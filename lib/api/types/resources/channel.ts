@@ -1,10 +1,11 @@
 import type { Snowflake } from "../reference.ts";
+import type { Application } from "../application.ts";
 import type { GuildMember } from "./guild.ts";
 import type { User } from "./user.ts";
 
-// https://discord.com/developers/docs/resources/channel
+// https://discord.dev/resources/channel
 
-// https://discord.com/developers/docs/resources/channel#channel-object
+// https://discord.dev/resources/channel#channel-object
 export interface Channel {
   id: Snowflake;
   type: ChannelTypes;
