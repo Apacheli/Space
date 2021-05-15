@@ -68,11 +68,11 @@ export type GetWebhookWithTokenBody = Webhook;
 /** https://discord.dev/resources/webhook#modify-webhook */
 export interface ModifyWebhookJSON {
   /** the default name of the webhook */
-  name: string;
+  name?: string;
   /** image for the default webhook avatar */
-  avatar: string | null;
+  avatar?: string | null;
   /** the new channel id this webhook should be moved to */
-  channel_id: Snowflake;
+  channel_id?: Snowflake;
 }
 
 /** https://discord.dev/resources/webhook#modify-webhook */

@@ -51,7 +51,10 @@ export interface InviteMetadata {
 
 /** https://discord.dev/resources/invite#get-invite */
 export interface GetInviteQuery {
+  /** whether the invite should contain approximate member counts */
   with_counts?: boolean;
+  /** whether the invite should contain the expiration date */
+  with_expiration?: boolean;
 }
 
 /** https://discord.dev/resources/invite#get-invite */
