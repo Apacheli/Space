@@ -31,7 +31,7 @@ export interface Channel {
   bitrate?: number;
   /** the user limit of the voice channel */
   user_limit?: number;
-  /** 	mount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission `manage_messages` or `manage_channel`, are unaffected */
+  /** mount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission `manage_messages` or `manage_channel`, are unaffected */
   rate_limit_per_user?: number;
   /** the recipients of the DM */
   recipients?: User[];
@@ -41,13 +41,13 @@ export interface Channel {
   owner_id?: Snowflake;
   /** application id of the group DM creator if it is bot-created */
   application_id?: Snowflake;
-  /** 	for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created */
+  /** for guild channels: id of the parent category for a channel (each parent category can contain up to 50 channels), for threads: id of the text channel this thread was created */
   parent_id?: Snowflake | null;
   /** when the last pinned message was pinned. This may be `null` in events such as `GUILD_CREATE` when a message is not pinned. */
   last_pin_timestamp?: string | null;
   /** [voice region](https://discord.dev/resources/voice#voice-region-object) id for the voice channel, automatic when set to null */
   rtc_region?: string | null;
-  /** 	the camera [video quality mode](https://discord.dev/resources/channel#channel-object-video-quality-modes) of the voice channel, 1 when not present */
+  /** the camera [video quality mode](https://discord.dev/resources/channel#channel-object-video-quality-modes) of the voice channel, 1 when not present */
   video_quality_mode?: VideoQualityModes;
   /** an approximate count of messages in a thread, stops counting at 50 */
   message_count?: number;
@@ -71,9 +71,9 @@ export enum ChannelTypes {
   GroupDM,
   /** an [organizational category](https://support.discord.com/hc/en-us/articles/115001580171-Channel-Categories-101) that contains up to 50 channels */
   GuildCategory,
-  /** 	a channel that [users can follow and crosspost into their own server](https://support.discord.com/hc/en-us/articles/360032008192) */
+  /** a channel that [users can follow and crosspost into their own server](https://support.discord.com/hc/en-us/articles/360032008192) */
   GuildNews,
-  /** 	a channel in which game developers can [sell their game on Discord](https://discord.dev/game-and-server-management/special-channels) */
+  /** a channel in which game developers can [sell their game on Discord](https://discord.dev/game-and-server-management/special-channels) */
   GuildStore,
   /** a temporary sub-channel within a GUILD_NEWS channel */
   GuildNewsThread = 10,
@@ -300,7 +300,7 @@ export interface ThreadMetadata {
   auto_archive_duration: number;
   /** timestamp when the thread's archive status was last changed, used for calculating recent activity */
   archive_timestamp: string;
-  /** 	when a thread is locked, only users with MANAGE_THREADS can unarchive it */
+  /** when a thread is locked, only users with MANAGE_THREADS can unarchive it */
   locked?: boolean;
 }
 
@@ -312,7 +312,7 @@ export interface ThreadMember {
   user_id: Snowflake;
   /** the time the current user last joined the thread */
   join_timestamp: string;
-  /** 	any user-thread settings, currently only used for notifications */
+  /** any user-thread settings, currently only used for notifications */
   flags: number;
 }
 
@@ -330,7 +330,7 @@ export interface Embed {
   timestamp?: string;
   /** color code of the embed */
   color?: number;
-  /** 	footer information */
+  /** footer information */
   footer?: EmbedFooter;
   /** image information */
   image?: EmbedImage;
@@ -367,9 +367,9 @@ export type EmbedThumbnail = EmbedVideo;
 
 /** https://discord.dev/resources/channel#embed-object-embed-video-structure */
 export interface EmbedVideo {
-  /** source url of thumbnail, video, or image
+  /** source url of thumbnail, video, or image */
   url?: string;
-  /** 	a proxied url of the thumbnail, video, or image */
+  /** a proxied url of the thumbnail, video, or image */
   proxy_url?: string;
   /** height of thumbnail, video, or image */
   height?: number;
@@ -384,7 +384,7 @@ export type EmbedImage = EmbedVideo;
 export interface EmbedProvider {
   /** name of provider or author */
   name?: string;
-  /** 	url of provider or author */
+  /** url of provider or author */
   url?: string;
 }
 
