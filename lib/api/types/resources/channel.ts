@@ -487,16 +487,16 @@ export enum EmbedLimits {
   Total = 6000,
 }
 
-/** https://discord.com/developers/docs/resources/channel#get-channel */
+/** https://discord.dev/resources/channel#get-channel */
 export type GetChannelBody = Channel;
 
-/** https://discord.com/developers/docs/resources/channel#modify-channel */
+/** https://discord.dev/resources/channel#modify-channel */
 export interface ModifyChannelJSON {
   /** 2-100 character channel name */
   name?: string;
   /** base64 encoded icon */
   icon?: string;
-  /** the [type of channel](https://discord.com/developers/docs/resources/channel#channel-object-channel-types); only conversion between text and news is supported and only in guilds with the "NEWS" feature */
+  /** the [type of channel](https://discord.dev/resources/channel#channel-object-channel-types); only conversion between text and news is supported and only in guilds with the "NEWS" feature */
   type?: ChannelTypes;
   /** the position of the channel in the left-hand listing */
   position?: number | null;
@@ -514,9 +514,9 @@ export interface ModifyChannelJSON {
   permission_overwrites?: Overwrite[] | null;
   /** id of the new parent category for a channel */
   parent_id?: Snowflake | null;
-  /** channel [voice region](https://discord.com/developers/docs/resources/voice#voice-region-object) id, automatic when set to null */
+  /** channel [voice region](https://discord.dev/resources/voice#voice-region-object) id, automatic when set to null */
   rtc_region?: string | null;
-  /** the camera [video quality mode](https://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes) of the voice channel */
+  /** the camera [video quality mode](https://discord.dev/resources/channel#channel-object-video-quality-modes) of the voice channel */
   video_quality_mode?: number | null;
   /** whether the channel is archived */
   archived?: boolean;
@@ -526,13 +526,13 @@ export interface ModifyChannelJSON {
   locked?: number;
 }
 
-/** https://discord.com/developers/docs/resources/channel#modify-channel */
+/** https://discord.dev/resources/channel#modify-channel */
 export type ModifyChannelBody = Channel;
 
-/** https://discord.com/developers/docs/resources/channel#deleteclose-channel */
+/** https://discord.dev/resources/channel#deleteclose-channel */
 export type DeleteChannelBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#get-channel-messages */
+/** https://discord.dev/resources/channel#get-channel-messages */
 export interface GetChannelMessagesQuery {
   /** get messages around this message ID */
   around?: Snowflake;
@@ -544,13 +544,13 @@ export interface GetChannelMessagesQuery {
   limit?: number;
 }
 
-/** https://discord.com/developers/docs/resources/channel#get-channel-messages */
+/** https://discord.dev/resources/channel#get-channel-messages */
 export type GetChannelMessagesBody = Message[];
 
-/** https://discord.com/developers/docs/resources/channel#get-channel-message */
+/** https://discord.dev/resources/channel#get-channel-message */
 export type GetChannelMessageBody = Message;
 
-/** https://discord.com/developers/docs/resources/channel#create-message */
+/** https://discord.dev/resources/channel#create-message */
 export interface CreateMessageJSON {
   /** the message contents (up to 2000 characters) */
   content?: string;
@@ -568,22 +568,22 @@ export interface CreateMessageJSON {
   message_reference?: MessageReference;
 }
 
-/** https://discord.com/developers/docs/resources/channel#create-message */
+/** https://discord.dev/resources/channel#create-message */
 export type CreateMessageBody = Message;
 
-/** https://discord.com/developers/docs/resources/channel#crosspost-message */
+/** https://discord.dev/resources/channel#crosspost-message */
 export type CrosspostMessageBody = Message;
 
-/** https://discord.com/developers/docs/resources/channel#create-reaction */
+/** https://discord.dev/resources/channel#create-reaction */
 export type CreateReactionBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#delete-own-reaction */
+/** https://discord.dev/resources/channel#delete-own-reaction */
 export type DeleteOwnReactionBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#delete-user-reaction */
+/** https://discord.dev/resources/channel#delete-user-reaction */
 export type DeleteUserReactionBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#get-reactions */
+/** https://discord.dev/resources/channel#get-reactions */
 export interface GetReactionsQuery {
   /** get users after this user ID */
   after?: Snowflake;
@@ -591,19 +591,19 @@ export interface GetReactionsQuery {
   limit?: number;
 }
 
-/** https://discord.com/developers/docs/resources/channel#get-reactions */
+/** https://discord.dev/resources/channel#get-reactions */
 export type GetReactionsBody = User[];
 
-/** https://discord.com/developers/docs/resources/channel#delete-all-reactions */
+/** https://discord.dev/resources/channel#delete-all-reactions */
 export type DeleteAllReactionsBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#delete-all-reactions-for-emoji */
+/** https://discord.dev/resources/channel#delete-all-reactions-for-emoji */
 export type DeleteAllReactionsForEmojiBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#edit-message */
+/** https://discord.dev/resources/channel#edit-message */
 export interface EditMessageJSON
   extends Nullable<Omit<CreateMessageJSON, "tts" | "message_reference">> {
-  /** edit the [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) of a message (only `SUPPRESS_EMBEDS` can currently be set/unset) */
+  /** edit the [flags](https://discord.dev/resources/channel#message-object-message-flags) of a message (only `SUPPRESS_EMBEDS` can currently be set/unset) */
   flags?: MessageFlags | null;
   /** the contents of the file being sent/edited */
   file?: string | null;
@@ -613,19 +613,19 @@ export interface EditMessageJSON
   attachments?: Attachment[] | null;
 }
 
-/** https://discord.com/developers/docs/resources/channel#delete-message */
+/** https://discord.dev/resources/channel#delete-message */
 export type DeleteMessageBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#bulk-delete-messages */
+/** https://discord.dev/resources/channel#bulk-delete-messages */
 export interface BulkDeleteMessagesJSON {
   /** an array of message ids to delete (2-100) */
   messages: Snowflake[];
 }
 
-/** https://discord.com/developers/docs/resources/channel#bulk-delete-messages */
+/** https://discord.dev/resources/channel#bulk-delete-messages */
 export type BulkDeleteMessagesBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#edit-channel-permissions */
+/** https://discord.dev/resources/channel#edit-channel-permissions */
 export interface EditChannelPermissionsJSON {
   /** the bitwise value of all allowed permissions */
   allow: string;
@@ -635,12 +635,12 @@ export interface EditChannelPermissionsJSON {
   type: OverwriteTypes;
 }
 
-/** https://discord.com/developers/docs/resources/channel#edit-channel-permissions */
+/** https://discord.dev/resources/channel#edit-channel-permissions */
 export type EditChannelPermissionsBody = void;
 
 export type GetChannelInvitesBody = Invite[];
 
-/** https://discord.com/developers/docs/resources/channel#create-channel-invite */
+/** https://discord.dev/resources/channel#create-channel-invite */
 export interface CreateChannelInvite {
   /** duration of invite in seconds before expiry, or 0 for never. between 0 and 604800 (7 days) */
   max_age: number;
@@ -650,7 +650,7 @@ export interface CreateChannelInvite {
   temporary: boolean;
   /** if true, don't try to reuse a similar invite (useful for creating many unique one time use invites) */
   unique: boolean;
-  /** the [type of target](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types) for this voice channel invite */
+  /** the [type of target](https://discord.dev/resources/invite#invite-object-invite-target-types) for this voice channel invite */
   target_type: InviteTargetTypes;
   /** the id of the user whose stream to display for this invite, required if `target_type` is 1, the user must be streaming in the channel */
   target_user_id: Snowflake;
@@ -658,31 +658,31 @@ export interface CreateChannelInvite {
   target_application_id: Snowflake;
 }
 
-/** https://discord.com/developers/docs/resources/channel#create-channel-invite */
+/** https://discord.dev/resources/channel#create-channel-invite */
 export type CreateChannelInviteBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#delete-channel-permission */
+/** https://discord.dev/resources/channel#delete-channel-permission */
 export type DeleteChannelPermissionBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#follow-news-channel */
+/** https://discord.dev/resources/channel#follow-news-channel */
 export interface FollowNewsChannelJSON {
   /** id of target channel */
   webhook_channel_id: Snowflake;
 }
 
-/** https://discord.com/developers/docs/resources/channel#trigger-typing-indicator */
+/** https://discord.dev/resources/channel#trigger-typing-indicator */
 export type TriggerTypingIndicatorBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#get-pinned-messages */
+/** https://discord.dev/resources/channel#get-pinned-messages */
 export type GetPinnedMessagesBody = Message[];
 
-/** https://discord.com/developers/docs/resources/channel#add-pinned-channel-message */
+/** https://discord.dev/resources/channel#add-pinned-channel-message */
 export type AddPinnedChannelMessageBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#delete-pinned-channel-message */
+/** https://discord.dev/resources/channel#delete-pinned-channel-message */
 export type DeletePinnedChannelMessageBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#group-dm-add-recipient */
+/** https://discord.dev/resources/channel#group-dm-add-recipient */
 export interface GroupDMAddRecipientJSON {
   /** access token of a user that has granted your app the `gdm.join` scope */
   access_token: string;
@@ -690,13 +690,13 @@ export interface GroupDMAddRecipientJSON {
   nick: string;
 }
 
-/** https://discord.com/developers/docs/resources/channel#group-dm-add-recipient */
+/** https://discord.dev/resources/channel#group-dm-add-recipient */
 export type GroupDMAddRecipientBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#group-dm-remove-recipient */
+/** https://discord.dev/resources/channel#group-dm-remove-recipient */
 export type GroupDMRemoveRecipientBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#start-thread-with-message */
+/** https://discord.dev/resources/channel#start-thread-with-message */
 export interface StartThreadWithMessageJSON {
   /** 2-100 character channel name */
   name: string;
@@ -704,31 +704,31 @@ export interface StartThreadWithMessageJSON {
   auto_archive_duration: AutoArchiveDuration;
 }
 
-/** https://discord.com/developers/docs/resources/channel#start-thread-with-message */
+/** https://discord.dev/resources/channel#start-thread-with-message */
 export type StartThreadWithMessageBody = Channel;
 
-/** https://discord.com/developers/docs/resources/channel#start-thread-without-message */
+/** https://discord.dev/resources/channel#start-thread-without-message */
 export type StartThreadWithoutMessageJSON = StartThreadWithMessageJSON;
 
-/** https://discord.com/developers/docs/resources/channel#start-thread-without-message */
+/** https://discord.dev/resources/channel#start-thread-without-message */
 export type StartThreadWithoutMessageBody = Channel;
 
-/** https://discord.com/developers/docs/resources/channel#join-thread */
+/** https://discord.dev/resources/channel#join-thread */
 export type JoinThreadBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#add-thread-member */
+/** https://discord.dev/resources/channel#add-thread-member */
 export type AddThreadMemberBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#leave-thread */
+/** https://discord.dev/resources/channel#leave-thread */
 export type LeaveThreadBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#remove-thread-member */
+/** https://discord.dev/resources/channel#remove-thread-member */
 export type RemoveThreadMemberBody = void;
 
-/** https://discord.com/developers/docs/resources/channel#list-thread-members */
+/** https://discord.dev/resources/channel#list-thread-members */
 export type ListThreadMembersBody = ThreadMember[];
 
-/** https://discord.com/developers/docs/resources/channel#list-active-threads */
+/** https://discord.dev/resources/channel#list-active-threads */
 export interface ListActiveThreadsBody {
   /** the active threads */
   threads: Channel[];
@@ -738,7 +738,7 @@ export interface ListActiveThreadsBody {
   has_more: boolean;
 }
 
-/** https://discord.com/developers/docs/resources/channel#list-public-archived-threads */
+/** https://discord.dev/resources/channel#list-public-archived-threads */
 export interface ListPublicArchivedThreadsQuery {
   /** returns threads before this timestamp */
   before?: string;
@@ -746,18 +746,18 @@ export interface ListPublicArchivedThreadsQuery {
   limit?: number;
 }
 
-/** https://discord.com/developers/docs/resources/channel#list-public-archived-threads */
+/** https://discord.dev/resources/channel#list-public-archived-threads */
 export type ListPublicArchivedThreadsBody = ListActiveThreadsBody;
 
-/** https://discord.com/developers/docs/resources/channel#list-private-archived-threads */
+/** https://discord.dev/resources/channel#list-private-archived-threads */
 export type ListPrivateArchivedThreadsQuery = ListPublicArchivedThreadsQuery;
 
-/** https://discord.com/developers/docs/resources/channel#list-private-archived-threads */
+/** https://discord.dev/resources/channel#list-private-archived-threads */
 export type ListPrivateArchivedThreadsBody = ListActiveThreadsBody;
 
-/** https://discord.com/developers/docs/resources/channel#list-joined-private-archived-threads */
+/** https://discord.dev/resources/channel#list-joined-private-archived-threads */
 export type ListJoinedPrivateArchivedThreadsQuery =
   ListPublicArchivedThreadsQuery;
 
-/** https://discord.com/developers/docs/resources/channel#list-joined-private-archived-threads */
+/** https://discord.dev/resources/channel#list-joined-private-archived-threads */
 export type ListJoinedPrivateArchivedThreadsBody = ListActiveThreadsBody;
