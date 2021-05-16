@@ -20,4 +20,4 @@ const files = ["meta.ts", "README.md"];
 
 console.log("Running 'upgrade' script...");
 await Promise.all(files.map(write));
-console.log(`Done. Upgraded to version '${newVersion}' from ${version}'.`);
+console.log(`Done. Upgraded to version '${newVersion}' from '${version}'.`);

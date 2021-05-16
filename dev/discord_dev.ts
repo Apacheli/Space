@@ -13,7 +13,7 @@ const modifyModText = async (modPath: string) => {
   const newText = modText.replace(/com\/developers\/docs/g, "dev");
   if (newText !== modText) {
     await Deno.writeTextFile(modPath, newText);
-    console.log(`Fixed dev URLs in '${modPath}'`);
+    console.log(`Fixed Discord documentation URLs in '${modPath}'.`);
   }
 };
 

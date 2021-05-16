@@ -20,20 +20,23 @@ export const respondWrapper = (request: ServerRequest) =>
     request.respond({ body: JSON.stringify(body), headers, status });
 
 export class InteractionsServer extends AsyncEventTarget {
-  #server?: Server;
+  server?: Server;
 
   constructor(public publicKey: string) {
     super();
   }
 
   async connect(port: number) {
-    for await (const request of this.#server = serve({ port })) {
+    for await (const request of this.server = serve({ port })) {
       this.onServerRequest(request);
     }
   }
 
   close() {
-    this.#server?.close();
+    if (!this.server) {
+      throw new Error("No server to close.");
+    }
+    this.server.close();
   }
 
   async onServerRequest(request: ServerRequest) {
