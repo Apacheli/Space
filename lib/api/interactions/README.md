@@ -1,7 +1,7 @@
 # Space Interactions
 
 Handles Discord's
-[interactions and slash commands](https://discord.com/developers/docs/interactions/slash-commands)
+[interactions and slash commands](https://discord.dev/interactions/slash-commands)
 API.
 
 ### Install
