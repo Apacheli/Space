@@ -1,5 +1,8 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/application
+
 import type { Snowflake } from "../reference.ts";
-import type { Team } from "../topics/teams.ts";
 import type { User } from "./user.ts";
 
 /** https://discord.dev/resources/application#application-object */

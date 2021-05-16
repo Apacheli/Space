@@ -1,8 +1,10 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/guild-template
+
 import type { Snowflake } from "../reference.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
-
-// https://discord.dev/resources/guild-template
 
 /** https://discord.dev/resources/template#template-object */
 export interface GuildTemplate {

@@ -1,9 +1,11 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/audit-log
+
 import type { Snowflake } from "../reference.ts";
 import type { Integration } from "./guild.ts";
 import type { User } from "./user.ts";
 import type { Webhook } from "./webhook.ts";
-
-// https://discord.dev/resources/audit-log
 
 /** https://discord.dev/resources/audit-log#audit-log-object */
 export interface AuditLog {

@@ -1,6 +1,8 @@
-import type { Snowflake } from "../reference.ts";
+// deno-lint-ignore-file camelcase
 
 // https://discord.dev/resources/stage-instance
+
+import type { Snowflake } from "../reference.ts";
 
 /** https://discord.dev/resources/stage-instance#auto-closing-stage-instance-structure */
 export interface StageInstance {

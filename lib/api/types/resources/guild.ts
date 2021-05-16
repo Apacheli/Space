@@ -1,6 +1,9 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/guild
+
 import type { Snowflake } from "../reference.ts";
 import type { PresenceUpdate } from "../topics/gateway.ts";
-import type { Role } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
@@ -9,27 +12,27 @@ import type { Invite } from "./invite.ts";
 import type { User } from "./user.ts";
 import type { VoiceRegion, VoiceState } from "./voice.ts";
 
-/** https://discord.com/developers/docs/resources/guild#guild-object */
+/** https://discord.dev/resources/guild#guild-object */
 export interface Guild {
   /** guild id */
   id: Snowflake;
   /** guild name (2-100 characters, excluding trailing and leading whitespace) */
   name: string;
-  /** [icon hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [icon hash](https://discord.dev/reference#image-formatting) */
   icon: string | null;
-  /** [icon hash](https://discord.com/developers/docs/reference#image-formatting), returned when in the template object */
+  /** [icon hash](https://discord.dev/reference#image-formatting), returned when in the template object */
   icon_hash?: string | null;
-  /** [splash hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [splash hash](https://discord.dev/reference#image-formatting) */
   splash: string | null;
-  /** [discovery splash hash](https://discord.com/developers/docs/reference#image-formatting); only present for guilds with the "DISCOVERABLE" feature */
+  /** [discovery splash hash](https://discord.dev/reference#image-formatting); only present for guilds with the "DISCOVERABLE" feature */
   discovery_splash: string | null;
-  /** true if [the user](https://discord.com/developers/docs/resources/user#get-current-user-guilds) is the owner of the guild */
+  /** true if [the user](https://discord.dev/resources/user#get-current-user-guilds) is the owner of the guild */
   owner?: boolean;
   /** id of owner */
   owner_id: Snowflake;
-  /** total permissions for [the user](https://discord.com/developers/docs/resources/user#get-current-user-guilds) in the guild (excludes overrides) */
+  /** total permissions for [the user](https://discord.dev/resources/user#get-current-user-guilds) in the guild (excludes overrides) */
   permissions?: string;
-  /** [voice region](https://discord.com/developers/docs/resources/voice#voice-region-object) id for the guild */
+  /** [voice region](https://discord.dev/resources/voice#voice-region-object) id for the guild */
   region: VoiceRegion;
   /** id of afk channel */
   afk_channel_id: Snowflake | null;
@@ -39,11 +42,11 @@ export interface Guild {
   widget_enabled?: boolean;
   /** the channel id that the widget will generate an invite to, or `null` if set to no invite */
   widget_channel_id?: Snowflake | null;
-  /** [verification level](https://discord.com/developers/docs/resources/guild#guild-object-verification-level) required for the guild */
+  /** [verification level](https://discord.dev/resources/guild#guild-object-verification-level) required for the guild */
   verification_level: VerificationLevel;
-  /** default [message notifications level](https://discord.com/developers/docs/resources/guild#guild-object-default-message-notification-level) */
+  /** default [message notifications level](https://discord.dev/resources/guild#guild-object-default-message-notification-level) */
   default_message_notifications: DefaultMessageNotificationLevel;
-  /** [explicit content filter level](https://discord.com/developers/docs/resources/guild#guild-object-explicit-content-filter-level) */
+  /** [explicit content filter level](https://discord.dev/resources/guild#guild-object-explicit-content-filter-level) */
   explicit_content_filter: ExplicitContentFilterLevel;
   /** roles in the guild */
   roles: Role[];
@@ -51,13 +54,13 @@ export interface Guild {
   emojis: Emoji[];
   /** enabled guild features */
   features: GuildFeatures[];
-  /** required [MFA level](https://discord.com/developers/docs/resources/guild#guild-object-mfa-level) for the guild */
+  /** required [MFA level](https://discord.dev/resources/guild#guild-object-mfa-level) for the guild */
   mfa_level: MFALevel;
   /** application id of the guild creator if it is bot-created */
   application_id: Snowflake | null;
   /** the id of the channel where guild notices such as welcome messages and boost events are posted */
   system_channel_id: Snowflake | null;
-  /** [system channel flags](https://discord.com/developers/docs/resources/guild#guild-object-system-channel-flags) */
+  /** [system channel flags](https://discord.dev/resources/guild#guild-object-system-channel-flags) */
   system_channel_flags: SystemChannelFlags;
   /** the id of the channel where Community guilds can display rules and/or guidelines */
   rules_channel_id: Snowflake | null;
@@ -85,9 +88,9 @@ export interface Guild {
   vanity_url_code: string | null;
   /** the description of a Community guild */
   description: string | null;
-  /** [banner hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [banner hash](https://discord.dev/reference#image-formatting) */
   banner: string | null;
-  /** [premium tier](https://discord.com/developers/docs/resources/guild#guild-object-premium-tier) (Server Boost level) */
+  /** [premium tier](https://discord.dev/resources/guild#guild-object-premium-tier) (Server Boost level) */
   premium_tier: PremiumTier;
   /** the number of boosts this guild currently has */
   premium_subscription_count?: number;
@@ -101,13 +104,13 @@ export interface Guild {
   approximate_member_count?: number;
   /** approximate number of non-offline members in this guild, returned from the `GET /guilds/<id>` endpoint when `with_counts` is `true` */
   approximate_presence_count?: number;
-  /** the welcome screen of a Community guild, shown to new members, returned in an [Invite](https://discord.com/developers/docs/resources/invite#invite-object)'s guild object */
+  /** the welcome screen of a Community guild, shown to new members, returned in an [Invite](https://discord.dev/resources/invite#invite-object)'s guild object */
   welcome_screen?: WelcomeScreen;
   /** true if this guild is [designated as NSFW](https://support.discord.com/hc/en-us/articles/1500005389362-NSFW-Server-Designation) */
   nsfw: boolean;
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-default-message-notification-level */
+/** https://discord.dev/resources/guild#guild-object-default-message-notification-level */
 export enum DefaultMessageNotificationLevel {
   /** members will receive notifications for all messages by default */
   AllMessages,
@@ -115,7 +118,7 @@ export enum DefaultMessageNotificationLevel {
   OnlyMentions,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-explicit-content-filter-level */
+/** https://discord.dev/resources/guild#guild-object-explicit-content-filter-level */
 export enum ExplicitContentFilterLevel {
   /** media content will not be scanned */
   Disabled,
@@ -125,7 +128,7 @@ export enum ExplicitContentFilterLevel {
   AllMembers,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-mfa-level */
+/** https://discord.dev/resources/guild#guild-object-mfa-level */
 export enum MFALevel {
   /** guild has no MFA/2FA requirement for moderation actions */
   None,
@@ -133,7 +136,7 @@ export enum MFALevel {
   Elevated,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-verification-level */
+/** https://discord.dev/resources/guild#guild-object-verification-level */
 export enum VerificationLevel {
   /** unrestricted */
   None,
@@ -147,7 +150,7 @@ export enum VerificationLevel {
   VeryHigh,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-premium-tier */
+/** https://discord.dev/resources/guild#guild-object-premium-tier */
 export enum PremiumTier {
   /** guild has not unlocked any Server Boost perks */
   None,
@@ -159,7 +162,7 @@ export enum PremiumTier {
   Tier3,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-system-channel-flags */
+/** https://discord.dev/resources/guild#guild-object-system-channel-flags */
 export enum SystemChannelFlags {
   /** Suppress member join notifications */
   SuppressJoinNotifications = 1 << 0,
@@ -169,7 +172,7 @@ export enum SystemChannelFlags {
   SuppressGuildReminderNotifications = 1 << 2,
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-object-guild-features */
+/** https://discord.dev/resources/guild#guild-object-guild-features */
 export type GuildFeatures =
   | "ANIMATED_ICON"
   | "BANNER"
@@ -187,23 +190,23 @@ export type GuildFeatures =
   | "VIP_REGIONS"
   | "WELCOME_SCREEN_ENABLED";
 
-/** https://discord.com/developers/docs/resources/guild#unavailable-guild-object */
+/** https://discord.dev/resources/guild#unavailable-guild-object */
 export interface UnavailableGuild {
   id: Snowflake;
   unavailable: boolean;
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-preview-object */
+/** https://discord.dev/resources/guild#guild-preview-object */
 export interface GuildPreview {
   /** guild id */
   id: Snowflake;
   /** guild name (2-100 characters) */
   name: string;
-  /** [icon hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [icon hash](https://discord.dev/reference#image-formatting) */
   icon: string | null;
-  /** [splash hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [splash hash](https://discord.dev/reference#image-formatting) */
   splash: string | null;
-  /** [discovery splash hash](https://discord.com/developers/docs/reference#image-formatting) */
+  /** [discovery splash hash](https://discord.dev/reference#image-formatting) */
   discovery_splash: string | null;
   /** custom guild emojis */
   emojis: Emoji[];
@@ -217,7 +220,7 @@ export interface GuildPreview {
   description: string | null;
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-widget-object */
+/** https://discord.dev/resources/guild#guild-widget-object */
 export interface GuildWidget {
   /** whether the widget is enabled */
   enabled: boolean;
@@ -225,13 +228,13 @@ export interface GuildWidget {
   channel_id: Snowflake | null;
 }
 
-/** https://discord.com/developers/docs/resources/guild#guild-member-object */
+/** https://discord.dev/resources/guild#guild-member-object */
 export interface GuildMember {
   /** the user this guild member represents */
   user?: User;
   /** this users guild nickname */
   nick?: string | null;
-  /** array of [role](https://discord.com/developers/docs/topics/permissions#role-object) object ids */
+  /** array of [role](https://discord.dev/topics/permissions#role-object) object ids */
   roles: Snowflake[];
   /** when the user joined the guild */
   joined_at: string;
@@ -241,13 +244,13 @@ export interface GuildMember {
   deaf: boolean;
   /** whether the user is muted in voice channels */
   mute: boolean;
-  /** whether the user has not yet passed the guild's [Membership Screening](https://discord.com/developers/docs/resources/guild#membership-screening-object) requirements */
+  /** whether the user has not yet passed the guild's [Membership Screening](https://discord.dev/resources/guild#membership-screening-object) requirements */
   pending?: boolean;
   /** total permissions of the member in the channel, including overrides, returned when in the interaction object */
   permissions?: string;
 }
 
-/** https://discord.com/developers/docs/resources/guild#integration-object */
+/** https://discord.dev/resources/guild#integration-object */
 export interface Integration {
   /** integration id */
   id: Snowflake;
@@ -281,13 +284,13 @@ export interface Integration {
   application?: Application;
 }
 
-/** https://discord.com/developers/docs/resources/guild#integration-object-integration-expire-behaviors */
+/** https://discord.dev/resources/guild#integration-object-integration-expire-behaviors */
 export enum IntegrationExpireBehaviors {
   RemoveRole,
   Kick,
 }
 
-/** https://discord.com/developers/docs/resources/guild#integration-account-object */
+/** https://discord.dev/resources/guild#integration-account-object */
 export interface IntegrationAccount {
   /** id of the account */
   id: string;
@@ -295,13 +298,13 @@ export interface IntegrationAccount {
   name: string;
 }
 
-/** https://discord.com/developers/docs/resources/guild#integration-application-object */
+/** https://discord.dev/resources/guild#integration-application-object */
 export interface IntegrationApplication {
   /** the id of the app */
   id: Snowflake;
   /** the name of the app */
   name: string;
-  /** the [icon hash](https://discord.com/developers/docs/reference#image-formatting) of the app */
+  /** the [icon hash](https://discord.dev/reference#image-formatting) of the app */
   icon: string | null;
   /** the description of the app */
   description: string;
@@ -311,7 +314,7 @@ export interface IntegrationApplication {
   bot?: User;
 }
 
-/** https://discord.com/developers/docs/resources/guild#ban-object */
+/** https://discord.dev/resources/guild#ban-object */
 export interface Ban {
   /** the reason for the ban */
   reason: string | null;
@@ -319,7 +322,7 @@ export interface Ban {
   user: User;
 }
 
-/** https://discord.com/developers/docs/resources/guild#welcome-screen-object */
+/** https://discord.dev/resources/guild#welcome-screen-object */
 export interface WelcomeScreen {
   /** the server description shown in the welcome screen */
   description: string | null;
@@ -327,13 +330,13 @@ export interface WelcomeScreen {
   welcome_channels: WelcomeScreenChannel[];
 }
 
-/** https://discord.com/developers/docs/resources/guild#welcome-screen-object-welcome-screen-channel-structure */
+/** https://discord.dev/resources/guild#welcome-screen-object-welcome-screen-channel-structure */
 export interface WelcomeScreenChannel {
   /** the channel's id */
   channel_id: Snowflake;
   /** the description shown for the channel */
   description: string;
-  /** the [emoji id](https://discord.com/developers/docs/reference#image-formatting), if the emoji is custom */
+  /** the [emoji id](https://discord.dev/reference#image-formatting), if the emoji is custom */
   emoji_id: Snowflake | null;
   /** the emoji name if custom, the unicode character if standard, or `null` if no emoji is set */
   emoji_name: string | null;

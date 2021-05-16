@@ -1,3 +1,7 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/user
+
 import type { Snowflake } from "../reference.ts";
 import type { Channel } from "./channel.ts";
 import type { Guild, Integration } from "./guild.ts";

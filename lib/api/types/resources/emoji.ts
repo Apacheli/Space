@@ -1,7 +1,9 @@
-import type { Snowflake } from "../reference.ts";
-import type { User } from "./user.ts";
+// deno-lint-ignore-file camelcase
 
 // https://discord.dev/resources/emoji
+
+import type { Snowflake } from "../reference.ts";
+import type { User } from "./user.ts";
 
 /** https://discord.dev/resources/emoji#emoji-object */
 export interface Emoji {

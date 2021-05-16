@@ -1,7 +1,9 @@
-import type { Snowflake } from "../reference.ts";
-import type { GuildMember } from "./guild.ts";
+// deno-lint-ignore-file camelcase
 
 // https://discord.dev/resources/voice
+
+import type { Snowflake } from "../reference.ts";
+import type { GuildMember } from "./guild.ts";
 
 /** https://discord.dev/resources/voice#voice-state-object */
 export interface VoiceState {

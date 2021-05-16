@@ -1,13 +1,14 @@
-import type { MessageInteraction } from "../interactions/slash_commands.ts";
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/channel
+
 import type { Snowflake } from "../reference.ts";
 import type { Nullable } from "../util.ts";
-import type { Application } from "../application.ts";
+import type { Application } from "./application.ts";
 import type { Emoji } from "./emoji.ts";
 import type { GuildMember } from "./guild.ts";
 import type { Invite, InviteTargetTypes } from "./invite.ts";
 import type { User } from "./user.ts";
-
-// https://discord.dev/resources/channel
 
 /** https://discord.dev/resources/channel#channel-object */
 export interface Channel {

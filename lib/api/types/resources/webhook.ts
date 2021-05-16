@@ -1,10 +1,17 @@
-import type { Snowflake } from "../reference.ts";
-import type { AllowedMentions, Attachment, Channel, Embed } from "./channel.ts";
-import type { Guild } from "./guild.ts";
-import type { Message } from "./message.ts";
-import type { User } from "./user.ts";
+// deno-lint-ignore-file camelcase
 
 // https://discord.dev/resources/webhook
+
+import type { Snowflake } from "../reference.ts";
+import type {
+  AllowedMentions,
+  Attachment,
+  Channel,
+  Embed,
+  Message,
+} from "./channel.ts";
+import type { Guild } from "./guild.ts";
+import type { User } from "./user.ts";
 
 /** https://discord.dev/resources/webhook#webhook-object */
 export interface Webhook {

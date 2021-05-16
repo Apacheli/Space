@@ -1,9 +1,11 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/resources/invite
+
 import type { Application } from "./application.ts";
 import type { Channel } from "./channel.ts";
 import type { Guild } from "./guild.ts";
 import type { User } from "./user.ts";
-
-// https://discord.dev/resources/invite
 
 /** https://discord.dev/resources/invite#invite-object */
 export interface Invite {
