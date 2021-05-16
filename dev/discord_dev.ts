@@ -18,6 +18,12 @@ const modifyModText = async (modPath: string) => {
   }
 };
 
+console.log("Running 'discord_dev' script...");
+
+const promises = [];
 for await (const modPath of getMods("lib")) {
-  modifyModText(modPath);
+  promises.push(modifyModText(modPath));
 }
+await Promise.all(promises);
+
+console.log("Done.");
