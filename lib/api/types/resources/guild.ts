@@ -1,9 +1,11 @@
 import type { Snowflake } from "../reference.ts";
 import type { PresenceUpdate } from "../topics/gateway.ts";
 import type { Role } from "../topics/permissions.ts";
+import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
-import type { Channel } from "./channel.ts";
+import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
 import type { Emoji } from "./emoji.ts";
+import type { Invite } from "./invite.ts";
 import type { User } from "./user.ts";
 import type { VoiceRegion, VoiceState } from "./voice.ts";
 
@@ -336,3 +338,237 @@ export interface WelcomeScreenChannel {
   /** the emoji name if custom, the unicode character if standard, or `null` if no emoji is set */
   emoji_name: string | null;
 }
+
+export interface CreateGuildJSON {
+  name: string;
+  region?: VoiceRegion;
+  icon?: string;
+  verification_level?: VerificationLevel;
+  default_message_notifications?: DefaultMessageNotificationLevel;
+  explicit_content_filter?: ExplicitContentFilterLevel;
+  roles?: Role[];
+  channels?: Partial<Channel>[];
+  afk_channel_id?: Snowflake;
+  afk_timeout?: number;
+  system_channel_id?: Snowflake;
+  system_channel_flags?: SystemChannelFlags;
+}
+
+export type CreateGuildBody = Guild;
+
+export interface GetGuildQuery {
+  with_counts?: boolean;
+}
+
+export type GetGuildBody = Guild;
+
+export type GetGuildPreviewBody = GuildPreview;
+
+export interface ModifyGuildJSON {
+  name?: string;
+  region?: VoiceRegion | null;
+  verification_level: VerificationLevel | null;
+  default_message_notifications?: DefaultMessageNotificationLevel | null;
+  explicit_content_filter?: ExplicitContentFilterLevel | null;
+  afk_channel_id?: Snowflake | null;
+  afk_timeout?: number;
+  icon?: string;
+  owner_id?: Snowflake;
+  splash?: string | null;
+  discovery_splash?: string | null;
+  banner?: string | null;
+  system_channel_id?: Snowflake | null;
+  system_channel_flags?: number;
+  rules_channel_id?: Snowflake | null;
+  public_updates_channel_id?: Snowflake | null;
+  preferred_locale?: string | null;
+  features?: GuildFeatures[];
+  description?: string | null;
+}
+
+export type ModifyGuildBody = Guild;
+
+export type DeleteGuildBody = void;
+
+export type GetGuildChannelsBody = Channel[];
+
+export interface CreateGuildChannelJSON {
+  name: string;
+  type?: ChannelTypes;
+  topic?: string;
+  bitrate?: number;
+  user_limit?: number;
+  rate_limit_per_user?: number;
+  position?: number;
+  permission_overwrites?: Overwrite[];
+  parent_id?: Snowflake;
+  nsfw?: boolean;
+}
+
+export type CreateGuildChannelBody = Channel;
+
+export type ModifyGuildChannelPositionsJSON = {
+  id: Snowflake;
+  position: number | null;
+  lock_permissions: boolean | null;
+  parent_id: Snowflake | null;
+}[];
+
+export type ModifyGuildChannelPositionsBody = void;
+
+export type GetGuildMemberBody = GuildMember;
+
+export interface ListGuildMembersQuery {
+  limit?: number;
+  after?: Snowflake;
+}
+
+export type ListGuildMembersBody = GuildMember[];
+
+export interface SearchGuildMembersQuery {
+  query: string;
+  limit?: number;
+}
+
+export type SearchGuildMembersBody = GuildMember[];
+
+export interface AddGuildMemberJSON {
+  access_token: string;
+  nick?: string;
+  roles?: Snowflake[];
+  mute?: boolean;
+  deaf?: boolean;
+}
+
+export type AddGuildMemberBody = GuildMember | void;
+
+export interface ModifyGuildMemberJSON {
+  nick?: string | null;
+  roles?: Snowflake[] | null;
+  mute?: boolean | null;
+  deaf?: boolean | null;
+  channel_id?: Snowflake | null;
+}
+
+export type ModifyGuildMemberBody = GuildMember;
+
+export interface ModifyCurrentUserNickJSON {
+  nick?: string | null;
+}
+
+export type ModifyCurrentUserNickBody = ModifyCurrentUserNickJSON;
+
+export type AddGuildMemberRoleBody = void;
+
+export type RemoveGuildMemberRoleBody = void;
+
+export type RemoveGuildMemberBody = void;
+
+export type GetGuildBansBody = Ban[];
+
+export type GetGuildBan = Ban;
+
+export interface CreateGuildBanJSON {
+  delete_message_days?: number;
+  reason?: string;
+}
+
+export type CreateGuildBanBody = void;
+
+export type RemoveGuildBanBody = void;
+
+export type GetGuildRolesBody = Role[];
+
+export type CreateGuildRoleJSON = Partial<
+  Omit<Role, "id" | "position" | "managed" | "tags">
+>;
+
+export type CreateGuildRoleBody = Role;
+
+export type ModifyGuildRolePositionsJSON = {
+  id: Snowflake;
+  position?: number;
+}[];
+
+export type ModifyGuildRolePositionsBody = Role[];
+
+export type ModifyGuildRoleJSON = Nullable<CreateGuildRoleJSON>;
+
+export type ModifyGuildRoleBody = Role;
+
+export type DeleteGuildRoleBody = void;
+
+export interface GetGuildPruneCountQuery {
+  days: number;
+  include_roles: string;
+}
+
+export interface GetGuildPruneCountBody {
+  pruned: number;
+}
+
+export interface BeginGuildPruneJSON extends GetGuildPruneCountQuery {
+  compute_prune_count?: boolean;
+  reason?: string;
+}
+
+export type BeginGuildPruneBody = Partial<GetGuildPruneCountBody>;
+
+export type GetGuildVoiceRegionsBody = VoiceRegion[];
+
+export type GetGuildInvitesBody = Invite[];
+
+export type GetGuildIntegrationsBody = Integration[];
+
+export type DeleteGuildIntegrationBody = void;
+
+export type GetGuildWidgetSettingsBody = GuildWidget;
+
+export type ModifyGuildWidgetJSON = Partial<GuildWidget>;
+
+export interface GetGuildWidgetBody {
+  id: Snowflake;
+  name: string;
+  instant_invite: string;
+  channels: Partial<Channel>[];
+  members: (User & { status: string; avatar_url: string })[];
+  presence_count: number;
+}
+
+export interface GetGuildVanityURLBody {
+  code: string;
+  uses: number;
+}
+
+export interface GetGuildWidgetImageQuery {
+  style?: WidgetStyleOptions;
+}
+
+export type WidgetStyleOptions =
+  | "shield"
+  | "banner1"
+  | "banner2"
+  | "banner3"
+  | "banner4";
+
+export type GetGuildWelcomeScreenBody = WelcomeScreen;
+
+export type ModifyGuildWelcomeScreenJSON = Nullable<
+  Partial<WelcomeScreen & { enabled: boolean }>
+>;
+
+export type ModifyGuildWelcomeScreenBody = WelcomeScreen;
+
+export interface UpdateCurrentUserVoiceStateJSON
+  extends UpdateUserVoiceStateJSON {
+  request_to_speak_timestamp?: string | null;
+}
+
+export type UpdateCurrentUserVoiceStateBody = void;
+
+export interface UpdateUserVoiceStateJSON {
+  channel_id: Snowflake;
+  suppress?: boolean;
+}
+
+export type UpdateUserVoiceStateBody = void;
