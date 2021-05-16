@@ -351,20 +351,13 @@ export interface Embed {
 }
 
 /** https://discord.dev/resources/channel#embed-object-embed-types */
-export enum EmbedTypes {
-  /** generic embed rendered from embed attributes */
-  Rich = "rich",
-  /** image embed */
-  Image = "image",
-  /** video embed */
-  Video = "video",
-  /** animated gif image embed rendered as a video embed */
-  GIFV = "gifv",
-  /** article embed */
-  Article = "article",
-  /** link embed */
-  Link = "link",
-}
+export type EmbedTypes =
+  | "rich"
+  | "image"
+  | "video"
+  | "gifv"
+  | "article"
+  | "link";
 
 /** https://discord.dev/resources/channel#embed-object-embed-thumbnail-structure */
 export type EmbedThumbnail = EmbedVideo;
@@ -448,14 +441,7 @@ export interface ChannelMention {
 }
 
 /** https://discord.dev/resources/channel#allowed-mentions-object-allowed-mention-types */
-export enum AllowedMentionTypes {
-  /** Controls role mentions */
-  RoleMentions = "roles",
-  /** Controls user mentions */
-  UserMentions = "users",
-  /** Controls @everyone and @here mentions */
-  EveryoneMentions = "everyone",
-}
+export type AllowedMentionTypes = "roles" | "users" | "everyone";
 
 /** https://discord.dev/resources/channel#allowed-mentions-object-allowed-mentions-structure */
 export interface AllowedMentions {
@@ -467,25 +453,6 @@ export interface AllowedMentions {
   users: Snowflake[];
   /** For replies, whether to mention the author of the message being replied to (default false) */
   replied_user: boolean;
-}
-
-/** https://discord.dev/resources/channel#embed-limits */
-export enum EmbedLimits {
-  /** 256 characters */
-  Title = 256,
-  /** 2048 characters */
-  Description = 2048,
-  /** Up to 25 [field](https://discord.dev/resources/channel#embed-object-embed-field-structure) objects */
-  Fields = 25,
-  /** 256 characters */
-  FieldName = 256,
-  /** 1024 characters */
-  FieldValue = 1024,
-  /** 2048 characters */
-  FooterText = 2048,
-  /** 256 characters */
-  AuthorName = 256,
-  Total = 6000,
 }
 
 /** https://discord.dev/resources/channel#get-channel */
