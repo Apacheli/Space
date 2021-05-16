@@ -529,7 +529,7 @@ export interface ModifyGuildMemberJSON extends ModifyCurrentUserNickJSON {
   mute?: boolean | null;
   /** whether the user is deafened in voice channels. Will throw a 400 if the user is not in a voice channel */
   deaf?: boolean | null;
-  /** 	id of channel to move user to (if they are connected to voice) */
+  /** id of channel to move user to (if they are connected to voice) */
   channel_id?: Snowflake | null;
 }
 
