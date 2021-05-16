@@ -1,9 +1,10 @@
 async function* getMods(path: string): AsyncGenerator<string> {
   for await (const dirEntry of Deno.readDir(path)) {
+    const filePath = `${path}/${dirEntry.name}`;
     if (dirEntry.isFile) {
-      yield `${path}/${dirEntry.name}`;
-    } else {
-      yield* getMods(`${path}/${dirEntry.name}`);
+      yield filePath;
+    } else if ([".md", ".ts"].some((ext) => filePath.endsWith(ext))) {
+      yield* getMods(filePath);
     }
   }
 }
@@ -13,7 +14,7 @@ const modifyModText = async (modPath: string) => {
   const newText = modText.replace(/com\/developers\/docs/g, "dev");
   if (newText !== modText) {
     await Deno.writeTextFile(modPath, newText);
-    console.log(`Fixed Discord documentation URLs in '${modPath}'.`);
+    console.log(`Fixed URLs in '${modPath}'.`);
   }
 };
 
