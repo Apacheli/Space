@@ -1,3 +1,7 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/interactions/slash-commands
+
 import type { Snowflake } from "../reference.ts";
 import type {
   AllowedMentions,
