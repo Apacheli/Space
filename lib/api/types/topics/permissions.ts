@@ -1,3 +1,5 @@
+import type { Snowflake } from "../reference.ts";
+
 export interface Role {
   id: Snowflake;
   name: string;

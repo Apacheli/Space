@@ -2,6 +2,7 @@
 
 // https://discord.dev/resources/channel
 
+import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";

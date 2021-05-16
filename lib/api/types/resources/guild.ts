@@ -4,6 +4,7 @@
 
 import type { Snowflake } from "../reference.ts";
 import type { PresenceUpdate } from "../topics/gateway.ts";
+import type { Role } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
