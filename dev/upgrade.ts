@@ -7,16 +7,17 @@ const promptVersion = prompt("new version:");
 if (!promptVersion) {
   throw new Error("bad new version");
 }
-const newVersion = `${promptVersion}${stage && `-${stage}`}`;
+const newVersion = `${promptVersion}${stage ? `-${stage}` : ""}`;
 
 const write = async (file: string) => {
   const content = await Deno.readTextFile(file);
   const newContent = content.replace(new RegExp(version, "g"), newVersion);
   const { ext, name } = parse(file);
-  await Deno.writeTextFile(`${name}-new${ext}`, newContent);
+  return Deno.writeTextFile(`${name}_new${ext}`, newContent);
 };
 
 const files = ["meta.ts", "README.md"];
 
+console.log("Running 'upgrade' script...");
 await Promise.all(files.map(write));
-console.log("Done.");
+console.log(`Done. Upgrade to version '${newVersion}' from ${version}'.`);
