@@ -5,7 +5,7 @@ Handles Discord's HTTP API.
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.8.0-alpha/lib/api/http/mod.ts";
+export * from "https://deno.land/x/space@0.9.0-alpha/lib/api/http/mod.ts";
 ```
 
 ### Getting Started

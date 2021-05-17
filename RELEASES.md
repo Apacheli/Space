@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>          |
 | -------------------------------------- |
+| [0.9.0-alpha](#090-alpha---2021-05-16) |
 | [0.8.0-alpha](#080-alpha---2021-05-01) |
 | [0.7.1-alpha](#071-alpha---2021-04-25) |
 | [0.7.0-alpha](#070-alpha---2021-04-21) |
@@ -21,7 +22,84 @@ This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
 
-## [0.8.0-alpha](https://github.com/Apacheli/Space/compare/0.7.1-alpha...0.8.0-alpha) - 2021-05-01
+## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.8.0-alpha...0.9.0-alpha) - 2021-05-16
+
+0.9.0 is _finally_ here! This update adds a new standalone library just for
+Discord's types. Check it out
+[here](https://github.com/Apacheli/Space/tree/dev/lib/api/types). The types
+library is expected to be completed by 0.10.0-alpha.
+
+See the plans for stable release 1.0.0
+[here](https://github.com/Apacheli/Space/issues/4).
+
+## Added
+
+- ([`3757ca1`](https://github.com/Apacheli/Space/commit/3757ca1)) Added codec
+  for encoding and decoding `Uint8Array`s
+- ([`6175586`](https://github.com/Apacheli/Space/commit/6175586)) Messages
+  displayed in logs were once again improved
+- ([`913d744`](https://github.com/Apacheli/Space/commit/913d744),
+  [`04443aa`](https://github.com/Apacheli/Space/commit/04443aa)) Support the
+  [external term format](https://erlang.org/doc/apps/erts/erl_ext_dist.html)
+  encoding
+- ([`4dfbe75`](https://github.com/Apacheli/Space/commit/4dfbe75),
+  [`c4dce27`](https://github.com/Apacheli/Space/commit/c4dce27),
+  [`88c2471`](https://github.com/Apacheli/Space/commit/88c2471)) Made
+  improvements to the rate limiting system to correct handle `429`s
+- ([`681293c`](https://github.com/Apacheli/Space/commit/681293c),
+  [`a41d870`](https://github.com/Apacheli/Space/commit/a41d870)) Support canary
+  endpoints with `--canary`
+- ([`2a51459`](https://github.com/Apacheli/Space/commit/2a51459)) Added
+  `@guildPermissionsDecorator`
+- ([`193652a`](https://github.com/Apacheli/Space/commit/193652a),
+  [`a35db09`](https://github.com/Apacheli/Space/commit/a35db09),
+  [`a4dcc7a`](https://github.com/Apacheli/Space/commit/a4dcc7a)) Added
+  permission checking support by utilizing `@guildPermissionsDecorator` for
+  several guild HTTP methods
+- ([`ddb1d26`](https://github.com/Apacheli/Space/commit/ddb1d26)) Separated
+  `verifyKey` into a standalone function
+- ([`1007f54`](https://github.com/Apacheli/Space/commit/1007f54),
+  [`6284931`](https://github.com/Apacheli/Space/commit/6284931)) Reworked
+  sharding internals
+
+## Changed
+
+- ([`f522a4f`](https://github.com/Apacheli/Space/commit/f522a4f),
+  [`573b6ae`](https://github.com/Apacheli/Space/commit/573b6ae)) Renamed
+  `Permissions` to `PermissionsKeys`
+- ([`7aa0894`](https://github.com/Apacheli/Space/commit/7aa0894)) Renamed `ALL`
+  to `PERMISSIONS_ALL`
+- ([`e4b3769`](https://github.com/Apacheli/Space/commit/e4b3769),
+  [`9c9873d`](https://github.com/Apacheli/Space/commit/9c9873d)) Guarantee
+  properties exist in `User`
+- ([`ce4089d`](https://github.com/Apacheli/Space/commit/ce4089d))
+  `@channelPermissionsDecorator` now uses an array instead of spread parameters
+- ([`b14fb83`](https://github.com/Apacheli/Space/commit/b14fb83),
+  [`f52455d`](https://github.com/Apacheli/Space/commit/f52455d)) Better examples
+  across all of the API modules
+- ([`ba98395`](https://github.com/Apacheli/Space/commit/ba98395))
+  `Message.nonce` is now a `bigint`
+- ([`1c229cb`](https://github.com/Apacheli/Space/commit/1c229cb))
+  `Guild.joinedAt` is now an integer
+- ([`aa4627e`](https://github.com/Apacheli/Space/commit/aa4627e))
+  `computeOverwrites` parameters were swapped so `permissions` could be optional
+- ([`186fc9d`](https://github.com/Apacheli/Space/commit/186fc9d)) Renamed
+  `Server` to `InteractionsServer`
+
+## Fixed
+
+- ([`195916d`](https://github.com/Apacheli/Space/commit/195916d)) Use
+  `ChannelType.GUILD_STAGE_VOICE` in `channelFromType`
+- ([`16375b8`](https://github.com/Apacheli/Space/commit/16375b8)) Fixed a bug
+  where the correct gateway URL was not used
+- ([`45eeab5`](https://github.com/Apacheli/Space/commit/45eeab5)) Fixed
+  interactions example
+- ([`2aa394c`](https://github.com/Apacheli/Space/commit/2aa394c)) Fixed bitwise
+  AND to use assignment
+- ([`5ca114c`](https://github.com/Apacheli/Space/commit/5ca114c)) Log whenever
+  an invalid session occurs
+
+## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.7.1-alpha...0.9.0-alpha) - 2021-05-01
 
 Threads are currently in beta at the time of this writing.
 

@@ -8,7 +8,10 @@ async function* getMods(path: string): AsyncGenerator<string> {
     const filePath = `${path}/${dirEntry.name}`;
     if (dirEntry.isDirectory) {
       yield* getMods(filePath);
-    } else if ([".md", ".ts"].some((ext) => filePath.endsWith(ext))) {
+    } else if (
+      !["RELEASES", "_backup"].some((f) => filePath.includes(f)) &&
+      [".md", ".ts"].some((ext) => filePath.endsWith(ext))
+    ) {
       yield filePath;
     }
   }
@@ -18,9 +21,10 @@ const write = async (file: string) => {
   const content = await Deno.readTextFile(file);
   const newContent = content.replace(new RegExp(version, "g"), newVersion);
   if (newContent !== content) {
-    const { ext, name } = parse(file);
+    const { dir, ext, name } = parse(file);
+    await Deno.writeTextFile(file, newContent);
+    await Deno.writeTextFile(`${dir}/${name}_backup${ext}`, content);
     console.log(`Fixed version documentation in '${file}'.`);
-    return Deno.writeTextFile(`${name}_new${ext}`, newContent);
   }
 };
 

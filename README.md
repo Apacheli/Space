@@ -22,7 +22,7 @@ A low-level [Deno](https://deno.land/) module for interacting with
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.8.0-alpha/mod.ts";
+export * from "https://deno.land/x/space@0.9.0-alpha/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.
@@ -72,7 +72,7 @@ for await (const [interaction, respond] of server.listen("COMMAND")) {
 ```
 
 See the
-[documentation](https://doc.deno.land/https//deno.land/x/space@0.8.0-alpha/mod.ts)
+[documentation](https://doc.deno.land/https//deno.land/x/space@0.9.0-alpha/mod.ts)
 for reference.
 
 ### Resources
