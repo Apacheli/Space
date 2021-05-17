@@ -24,7 +24,7 @@ This format was adapted from
 
 ## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.8.0-alpha...0.9.0-alpha) - 2021-05-16
 
-0.9.0 is _finally_ here! This update adds a new standalone library just for
+0.9.0-alpha is _finally_ here! This update adds a new standalone library just for
 Discord's types. Check it out
 [here](https://github.com/Apacheli/Space/tree/dev/lib/api/types). The types
 library is expected to be completed by 0.10.0-alpha.
