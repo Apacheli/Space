@@ -32,7 +32,7 @@ library is expected to be completed by 0.10.0-alpha.
 See the plans for stable release 1.0.0
 [here](https://github.com/Apacheli/Space/issues/4).
 
-## Added
+### Added
 
 - ([`3757ca1`](https://github.com/Apacheli/Space/commit/3757ca1)) Added codec
   for encoding and decoding `Uint8Array`s
@@ -62,7 +62,7 @@ See the plans for stable release 1.0.0
   [`6284931`](https://github.com/Apacheli/Space/commit/6284931)) Reworked
   sharding internals
 
-## Changed
+### Changed
 
 - ([`f522a4f`](https://github.com/Apacheli/Space/commit/f522a4f),
   [`573b6ae`](https://github.com/Apacheli/Space/commit/573b6ae)) Renamed
@@ -86,7 +86,7 @@ See the plans for stable release 1.0.0
 - ([`186fc9d`](https://github.com/Apacheli/Space/commit/186fc9d)) Renamed
   `Server` to `InteractionsServer`
 
-## Fixed
+### Fixed
 
 - ([`195916d`](https://github.com/Apacheli/Space/commit/195916d)) Use
   `ChannelType.GUILD_STAGE_VOICE` in `channelFromType`
