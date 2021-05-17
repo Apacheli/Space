@@ -24,8 +24,8 @@ This format was adapted from
 
 ## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.8.0-alpha...0.9.0-alpha) - 2021-05-16
 
-0.9.0-alpha is _finally_ here! This update adds a new standalone library just for
-Discord's types. Check it out
+0.9.0-alpha is _finally_ here! This update adds a new standalone library just
+for Discord's types. Check it out
 [here](https://github.com/Apacheli/Space/tree/dev/lib/api/types). The types
 library is expected to be completed by 0.10.0-alpha.
 
@@ -45,7 +45,7 @@ See the plans for stable release 1.0.0
 - ([`4dfbe75`](https://github.com/Apacheli/Space/commit/4dfbe75),
   [`c4dce27`](https://github.com/Apacheli/Space/commit/c4dce27),
   [`88c2471`](https://github.com/Apacheli/Space/commit/88c2471)) Made
-  improvements to the rate limiting system to correct handle `429`s
+  improvements to the rate limiting system to correctly handle `429`s
 - ([`681293c`](https://github.com/Apacheli/Space/commit/681293c),
   [`a41d870`](https://github.com/Apacheli/Space/commit/a41d870)) Support canary
   endpoints with `--canary`
@@ -91,7 +91,7 @@ See the plans for stable release 1.0.0
 - ([`195916d`](https://github.com/Apacheli/Space/commit/195916d)) Use
   `ChannelType.GUILD_STAGE_VOICE` in `channelFromType`
 - ([`16375b8`](https://github.com/Apacheli/Space/commit/16375b8)) Fixed a bug
-  where the correct gateway URL was not used
+  where the correct gateway URL was not being used
 - ([`45eeab5`](https://github.com/Apacheli/Space/commit/45eeab5)) Fixed
   interactions example
 - ([`2aa394c`](https://github.com/Apacheli/Space/commit/2aa394c)) Fixed bitwise
