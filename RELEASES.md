@@ -99,7 +99,7 @@ See the plans for stable release 1.0.0
 - ([`5ca114c`](https://github.com/Apacheli/Space/commit/5ca114c)) Log whenever
   an invalid session occurs
 
-## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.7.1-alpha...0.9.0-alpha) - 2021-05-01
+## [0.8.0-alpha](https://github.com/Apacheli/Space/compare/0.7.1-alpha...0.8.0-alpha) - 2021-05-01
 
 Threads are currently in beta at the time of this writing.
 
