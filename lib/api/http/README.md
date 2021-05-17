@@ -23,3 +23,6 @@ const message = await client.createMessage(channelID, {
 
 console.log(message);
 ```
+
+See the documentation
+[here](https://doc.deno.land/https/deno.land/x/space@0.9.0-alpha/lib/api/http/mod.ts).

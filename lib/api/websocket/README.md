@@ -19,6 +19,9 @@ const client = new GatewayClient(`Bot ${token}`);
 client.connect({
   intents: GatewayIntentBits.GUILD_MESSAGES,
   shards: 1,
-  url: "wss://gateway.discord.gg", // HTTPClient.getGatewayBot()
+  url: "wss://gateway.discord.gg",
 });
 ```
+
+View the documentation for the gateway implementation
+[here](https://doc.deno.land/https/deno.land/x/space@0.9.0-alpha/lib/api/websocket/mod.ts).
