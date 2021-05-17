@@ -647,11 +647,11 @@ export type TriggerTypingIndicatorBody = void;
 /** https://discord.dev/resources/channel#get-pinned-messages */
 export type GetPinnedMessagesBody = Message[];
 
-/** https://discord.dev/resources/channel#add-pinned-channel-message */
-export type AddPinnedChannelMessageBody = void;
+/** https://discord.dev/resources/channel#pin-message */
+export type PinMessageBody = void;
 
-/** https://discord.dev/resources/channel#delete-pinned-channel-message */
-export type DeletePinnedChannelMessageBody = void;
+/** https://discord.dev/resources/channel#unpin-channel-message */
+export type UnpinMessageBody = void;
 
 /** https://discord.dev/resources/channel#group-dm-add-recipient */
 export interface GroupDMAddRecipientJSON {
