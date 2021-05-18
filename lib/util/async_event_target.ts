@@ -5,16 +5,18 @@ export interface AsyncEventTargetReceiveOptions<T> {
 }
 
 export interface ListenerStream<T> {
+  readable: ReadableStream<T>;
   writer: WritableStreamDefaultWriter<T>;
-  [Symbol.asyncIterator]: ReadableStream<T>;
+  [Symbol.asyncIterator]: () => AsyncIterableIterator<T>;
 }
 
 export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
   listen(event: string): ListenerStream<T[]> {
     const { readable, writable } = new TransformStream<T[], T[]>();
-    const listener = {
+    const listener: ListenerStream<T[]> = {
+      readable,
       writer: writable.getWriter(),
-      [Symbol.asyncIterator]: readable,
+      [Symbol.asyncIterator]: readable[Symbol.asyncIterator],
     };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
@@ -48,7 +50,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
     limit = 1,
   }: AsyncEventTargetReceiveOptions<T> = {}) {
     const listener = this.listen(event);
-    const reader = listener[Symbol.asyncIterator].getReader();
+    const reader = listener.readable.getReader();
     const received = new Array<T[]>(limit);
     const timeout = setTimeout(() => this.deafen(event, listener), delay);
     for (let i = 0; i < limit;) {
