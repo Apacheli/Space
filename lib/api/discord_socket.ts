@@ -6,7 +6,7 @@ export interface DiscordSocketOptions {
   protocols?: string | string[];
 }
 
-export abstract class DiscordSocket extends AsyncEventTarget {
+export abstract class DiscordSocket extends AsyncEventTarget<any> {
   socket?: WebSocket;
 
   constructor(public url: string, public options?: DiscordSocketOptions) {

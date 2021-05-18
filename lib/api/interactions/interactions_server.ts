@@ -19,7 +19,7 @@ export const respondWrapper = (request: ServerRequest) =>
   (body: unknown, status = Status.OK) =>
     request.respond({ body: JSON.stringify(body), headers, status });
 
-export class InteractionsServer extends AsyncEventTarget {
+export class InteractionsServer extends AsyncEventTarget<any> {
   server?: Server;
 
   constructor(public publicKey: string) {

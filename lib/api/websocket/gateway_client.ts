@@ -14,7 +14,7 @@ export interface GatewayClientConnectData extends Omit<ShardOptions, "shard"> {
 export const GATEWAY_VERSION = 8;
 export const SHARD_CONNECT_DELAY = 5000;
 
-export class GatewayClient extends AsyncEventTarget {
+export class GatewayClient extends AsyncEventTarget<any> {
   shards: Shard[] = [];
 
   constructor(public token: string) {
@@ -43,6 +43,7 @@ export class GatewayClient extends AsyncEventTarget {
       const shard = new Shard(this.token, data, i);
       this.shards.push(shard);
       (async () => {
+        // @ts-ignore: TypeScript bug(?)
         for await (const [payload] of shard.listen("DISPATCH")) {
           this.dispatch(payload.t, payload.d, shard);
         }
