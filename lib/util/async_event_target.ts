@@ -16,7 +16,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
     const listener: ListenerStream<T[]> = {
       readable,
       writer: writable.getWriter(),
-      [Symbol.asyncIterator]: readable[Symbol.asyncIterator],
+      [Symbol.asyncIterator]: () => readable[Symbol.asyncIterator](),
     };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
