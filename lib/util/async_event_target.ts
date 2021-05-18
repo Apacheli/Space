@@ -56,7 +56,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
     for (let i = 0; i < limit;) {
       const { done, value } = await reader.read();
       if (done) {
-        throw new Error(`Receiver timed out (${delay * 1000} seconds)`);
+        throw new Error(`Receiver timed out (${delay / 1000} seconds)`);
       } else if (value && (await filter?.(...value) ?? true)) {
         received[i++] = value;
       }
