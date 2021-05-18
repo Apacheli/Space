@@ -35,8 +35,8 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
       }
       return;
     }
-    streams.forEach((listener) => listener.writer.close());
     this.delete(event);
+    streams.forEach((listener) => listener.writer.close());
   }
 
   dispatch(event: string, ...args: T[]) {
