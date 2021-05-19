@@ -2,6 +2,7 @@ import { Shard, ShardOptions } from "./shard.ts";
 import {
   AsyncEventTarget,
   logger,
+  RateLimitBucket,
   RequiredKeys,
   sleep,
 } from "../../util/mod.ts";
@@ -16,6 +17,7 @@ export const SHARD_CONNECT_DELAY = 5000;
 
 export class GatewayClient extends AsyncEventTarget<any> {
   shards: Shard[] = [];
+  queue = new RateLimitBucket(1, SHARD_CONNECT_DELAY);
 
   constructor(public token: string) {
     super();
@@ -43,20 +45,38 @@ export class GatewayClient extends AsyncEventTarget<any> {
       const shard = new Shard(this.token, data, i);
       this.shards.push(shard);
       (async () => {
-        // @ts-ignore: TypeScript bug(?)
-        for await (const [payload] of shard.listen("DISPATCH")) {
+        const readable = shard.listen("DISPATCH");
+        for await (const [payload] of readable) {
           this.dispatch(payload.t, payload.d, shard);
+        }
+      })();
+      (async () => {
+        const readable = shard.listen("DISCONNECT");
+        for await (const [resumable, reconnectable] of readable) {
+          if (!reconnectable) {
+            continue;
+          }
+          this.connectShard(shard, resumable, reconnectable);
         }
       })();
     }
   }
 
   async connectShards() {
-    let i = 0;
-    do {
-      const shard = this.shards[i++];
-      await shard.connect();
-      shard.resumeOrIdentify(true);
-    } while (i < this.shards.length && await sleep(SHARD_CONNECT_DELAY, true));
+    for (const shard of this.shards) {
+      this.connectShard(shard);
+    }
+  }
+
+  async connectShard(shard: Shard, resumable = true, reconnectable = false) {
+    if (this.queue.locked || this.queue.rateLimited) {
+      this.queue.add(() => this.connectShard(shard, resumable, reconnectable));
+      return;
+    }
+    this.queue.lock();
+    await shard.connect(reconnectable);
+    shard.resumeOrIdentify(resumable);
+    this.queue.unlock();
+    this.queue.next();
   }
 }

@@ -97,14 +97,8 @@ export class Shard extends DiscordSocket {
       `Shard ${this.id} disconnected with code ${event.code} and`,
       `with${event.reason ? ` reason "${event.reason}"` : "out a reason"}`,
     );
-    this.dispatch("DISCONNECT", resumable, reconnectable, event);
     this.reset(resumable);
-
-    // TODO: Make reconnecting and resuming work in a queue with other shards.
-    if (reconnectable && this.url) {
-      await this.connect(reconnectable);
-      this.resumeOrIdentify(resumable);
-    }
+    this.dispatch("DISCONNECT", resumable, reconnectable, event);
   }
 
   onSocketError(event: Event) {
