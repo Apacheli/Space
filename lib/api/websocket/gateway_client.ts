@@ -42,21 +42,18 @@ export class GatewayClient extends AsyncEventTarget<any> {
 
   spawnShards(data: RequiredKeys<GatewayClientConnectData, "lastShardID">) {
     for (let i = data.firstShardID ?? 0; i < data.lastShardID; i++) {
-      const shard = new Shard(this.token, data, i);
-      this.shards.push(shard);
+      const s = new Shard(this.token, data, i);
+      this.shards.push(s);
       (async () => {
-        const readable = shard.listen("DISPATCH");
-        for await (const [payload] of readable) {
-          this.dispatch(payload.t, payload.d, shard);
+        for await (const [payload] of s.listen("DISPATCH")) {
+          this.dispatch(payload.t, payload.d, s);
         }
       })();
       (async () => {
-        const readable = shard.listen("DISCONNECT");
-        for await (const [resumable, reconnectable] of readable) {
-          if (!reconnectable) {
-            continue;
+        for await (const [resumable, reconnectable] of s.listen("DISCONNECT")) {
+          if (reconnectable) {
+            this.connectShard(s, resumable, reconnectable);
           }
-          this.connectShard(shard, resumable, reconnectable);
         }
       })();
     }
