@@ -25,10 +25,17 @@ export class RateLimitBucket {
   }
 
   lock() {
+    if (this.locked) {
+      throw new Error("Bucket is currently locked.");
+    }
     this.locked = true;
   }
 
   unlock(max = this.max, reset = this.reset, left = --this.left) {
+    if (!this.locked) {
+      throw new Error("Failed to unlock an unlocked bucket.");
+    }
+
     this.locked = false;
     this.lastRequestAt = Date.now();
 
