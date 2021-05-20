@@ -2711,12 +2711,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
    * [Welcome Screen](https://discord.dev/resources/guild#welcome-screen-object) object.
    *
    * > ℹ️ All parameters to this endpoint are optional and nullable
-   *
-   * | Field            | Type                                                                                                                    | Description                                                     |
-   * | ---------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-   * | enabled          | boolean                                                                                                                 | whether the welcome screen is enabled                           |
-   * | welcome_channels | array of [welcome screen channel](https://discord.dev/resources/guild#welcome-screen-object-welcome-screen-channel-structure) objects | channels linked in the welcome screen and their display options |
-   * | description      | string                                                                                                                  | the server description to show in the welcome screen            |
    * @param guildID https://discord.dev/resources/guild#guild-object
    */
   editGuildWelcomeScreen(
