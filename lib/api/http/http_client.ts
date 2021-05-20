@@ -183,7 +183,7 @@ import {
   RateLimitBucket,
   sleep,
 } from "../../util/mod.ts";
-import * as meta from "../../../meta.ts";
+import { repo, version } from "../../../meta.ts";
 
 export interface HTTPClientOptions {
   delay?: number;
@@ -206,7 +206,7 @@ export const
   DELAY = 60000,
   HTTP_URL = `https://${CANARY ? "canary." : ""}discord.com/api`,
   HTTP_VERSION = 8,
-  USER_AGENT = `DiscordBot (${meta.repo}, ${meta.version})`;
+  USER_AGENT = `DiscordBot (${repo}, ${version})`;
 
 export const parseRateLimitRoute = (route: string, method?: string) => {
   route = route.replace(/\/(\w+)\/\d+/g, "/$1/:id");
@@ -224,7 +224,17 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     super();
   }
 
-  private createRequest(path: string, input?: RequestInput) {
+  async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
+    const route = parseRateLimitRoute(path, input?.method);
+    const bucket = this.get(route) ?? new RateLimitBucket();
+    this.set(route, bucket);
+
+    if (bucket.locked || bucket.rateLimited) {
+      return new Promise<T>((resolve, reject) => { // TypeScript return bug
+        bucket.add(() => this.request<T>(path, input).then(resolve, reject));
+      });
+    }
+
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -251,48 +261,34 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       url += `?${new URLSearchParams(input.query as Record<string, string>)}`;
     }
 
-    return new Request(url, {
+    const controller = new AbortController();
+    const delay = this.options?.delay ?? DELAY;
+    const timeout = setTimeout(() => controller.abort(), delay);
+
+    bucket.lock();
+    const response = await fetch(url, {
       body,
       headers,
       method: input?.method,
-    });
-  }
-
-  private async fetch(request: Request) {
-    const controller = new AbortController();
-    const delay = this.options?.delay ?? DELAY;
-
-    const timeout = setTimeout(() => controller.abort(), delay);
-    const response = await fetch(request, {
       signal: controller.signal,
     });
-    clearTimeout(timeout);
 
-    return response;
-  }
+    const resetAfter = response.headers.get("x-ratelimit-reset-after");
+    const realResetAfter = resetAfter ? parseFloat(resetAfter) * 1000 : 0;
 
-  async realRequest<T>(request: Request, bucket: RateLimitBucket): Promise<T> {
-    const fn = async (): Promise<[Response, number]> => {
-      const response = await this.fetch(request);
-
-      const resetAfter = response.headers.get("x-ratelimit-reset-after");
-      const realResetAfter = resetAfter ? parseFloat(resetAfter) * 1000 : 0;
-
-      if (response.status === Status.TooManyRequests) {
-        logger.warn?.(`Rate limited. Retrying in ${resetAfter} seconds`);
-        return sleep(realResetAfter).then(fn);
-      }
-
-      return [response, realResetAfter];
-    };
-
-    bucket.lock();
-    const [response, realResetAfter] = await fn();
     bucket.unlock(
       parseInt(response.headers.get("x-ratelimit-limit") ?? "0"),
       realResetAfter,
       parseInt(response.headers.get("x-ratelimit-remaining") ?? "0"),
     );
+    clearTimeout(timeout);
+
+    if (response.status === Status.TooManyRequests) {
+      logger.warn?.(`Rate limited. Retrying in ${resetAfter} seconds`);
+      await sleep(realResetAfter);
+      return this.request<T>(path, input);
+    }
+
     bucket.next();
 
     const result = response.headers.get("content-type") === "application/json"
@@ -302,25 +298,6 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       return result;
     }
     throw new HTTPError(result, response);
-  }
-
-  private getRateLimitBucket(path: string, method?: string) {
-    const route = parseRateLimitRoute(path, method);
-    let bucket = this.get(route);
-    if (!bucket) {
-      this.set(route, bucket = new RateLimitBucket());
-    }
-    return bucket;
-  }
-
-  async request<T>(path: string, input?: RequestInput): Promise<T> {
-    const request = this.createRequest(path, input);
-    const bucket = this.getRateLimitBucket(path, input?.method);
-    const fn = () => this.realRequest<T>(request, bucket);
-
-    return bucket.locked || bucket.rateLimited
-      ? new Promise((res, rej) => bucket.add(() => fn().then(res, rej)))
-      : fn();
   }
 
   /**
