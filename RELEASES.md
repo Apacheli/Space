@@ -166,7 +166,7 @@ Threads are currently in beta at the time of this writing.
 
 - ([`c6badff`](https://github.com/Apacheli/Space/commit/c6badff)) Added
   future-proof typings for message buttons
-- ([`885548f`](https://github.com/Apacheli/Space/commit/885548f) Dispatch
+- ([`885548f`](https://github.com/Apacheli/Space/commit/885548f)) Dispatch
   `COMMAND` and `BUTTON` events in `Server`
 - ([`e4dcd90`](https://github.com/Apacheli/Space/commit/e4dcd90),
   [`d5b124b`](https://github.com/Apacheli/Space/commit/d5b124b)) Added HTTP
