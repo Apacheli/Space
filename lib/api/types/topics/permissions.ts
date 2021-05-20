@@ -1,6 +1,10 @@
+// deno-lint-ignore-file camelcase
+
+// https://discord.com/developers/docs/topics/permissions
+
 import type { Snowflake } from "../reference.ts";
 
-/** */
+/** https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags */
 export const BitwisePermissionFlags = {
   /** Allows creation of instant invites */
   CreateInstantInvite: 1n << 0n,
@@ -41,52 +45,69 @@ export const BitwisePermissionFlags = {
   /** Allows the usage of custom emojis from other servers */
   UseExternalEmojis: 1n << 18n,
   /** Allows for viewing guild insights */
-  ViewGuildInsights = 1n << 19n,
+  ViewGuildInsights: 1n << 19n,
   /** Allows for joining of a voice channel */
-  Connect = 1n << 20n,
+  Connect: 1n << 20n,
   /** Allows for speaking in a voice channel */
-  Speak = 1n << 21n,
+  Speak: 1n << 21n,
   /** Allows for muting members in a voice channel */
-  MuteMembers = 1n << 22n,
+  MuteMembers: 1n << 22n,
   /** Allows for deafening of members in a voice channel */
-  DeafenMembers = 1n << 23n,
+  DeafenMembers: 1n << 23n,
   /** Allows for moving of members between voice channels */
-  MoveMembers = 1n << 24n,
+  MoveMembers: 1n << 24n,
   /** Allows for using voice-activity-detection in a voice channel */
-  UseVAD = 1n << 25n,
+  UseVAD: 1n << 25n,
   /** Allows for modification of own nickname */
-  ChangeNickname = 1n << 26n,
+  ChangeNickname: 1n << 26n,
   /** Allows for modification of other users nicknames */
-  ManageNicknames = 1n << 27n,
+  ManageNicknames: 1n << 27n,
   /** Allows management and editing of roles */
-  ManageRoles = 1n << 28n,
+  ManageRoles: 1n << 28n,
   /** Allows management and editing of webhooks */
-  ManageWebhooks = 1n << 29n,
+  ManageWebhooks: 1n << 29n,
   /** Allows management and editing of emojis */
-  ManageEmojis = 1n << 30n,
+  ManageEmojis: 1n << 30n,
   /** Allows members to use slash commands in text channels */
-  UseSlashCommands = 1n << 31n,
-  /** Allows for requesting to speak in stage channels. _(This permission is under active development and may be changed or removed.)_ */
-  RequestToSpeak = 1n << 32n,
+  UseSlashCommands: 1n << 31n,
+  /** Allows for requesting to speak in stage channels. (_This permission is under active development and may be changed or removed._) */
+  RequestToSpeak: 1n << 32n,
   /** Allows for deleting and archiving threads, and viewing all private threads */
-  ManageThreads = 1n << 34n,
+  ManageThreads: 1n << 34n,
   /** Allows for creating and participating in threads */
-  UsePublicThreads = 1n << 35n,
+  UsePublicThreads: 1n << 35n,
   /** Allows for creating and participating in private threads */
-  UsePrivateThreads = 1n << 36n,
-} as const;
+  UsePrivateThreads: 1n << 36n,
+};
 
+/** https://discord.com/developers/docs/topics/permissions#role-object */
 export interface Role {
+  /** role id */
   id: Snowflake;
+  /** role name */
   name: string;
+  /** integer representation of hexadecimal color code */
   color: number;
+  /** if this role is pinned in the user listing */
   hoist: boolean;
+  /** position of this role */
   position: number;
+  /** permission bit set */
   permissions: string;
+  /** whether this role is managed by an integration */
   managed: boolean;
+  /** whether this role is mentionable */
   mentionable: boolean;
+  /** the tags this role has */
   tags?: RoleTags;
 }
 
+/** https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure */
 export interface RoleTags {
+  /** the id of the bot this role belongs to */
+  bot_id?: Snowflake;
+  /** the id of the integration this role belongs to */
+  integration_id?: Snowflake;
+  /** whether this is the guild's premium subscriber role */
+  premium_subscriber?: null;
 }
