@@ -225,7 +225,18 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     super();
   }
 
-  #createRequest = (path: string, input?: RequestInput) => {
+  async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
+    const request = this.createRequest(path, input);
+    const bucket = this.getRateLimitBucket(path, input?.method);
+
+    const fn = () => this.doRequest(request, bucket);
+
+    return bucket.locked || bucket.rateLimited
+      ? new Promise((res, rej) => bucket.add(() => fn().then(res, rej)))
+      : fn();
+  }
+
+  private createRequest(path: string, input?: RequestInput) {
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -257,36 +268,14 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       headers,
       method: input?.method,
     });
-  };
+  }
 
-  #fetch = async (request: Request) => {
-    const controller = new AbortController();
-    const delay = this.options?.delay ?? DELAY;
-
-    const timeout = setTimeout(() => controller.abort(), delay);
-    const response = await fetch(request, {
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-
-    return response;
-  };
-
-  #getRateLimitBucket = (path: string, method?: string) => {
-    const route = parseRateLimitRoute(path, method);
-    let bucket = this.get(route);
-    if (!bucket) {
-      this.set(route, bucket = new RateLimitBucket());
-    }
-    return bucket;
-  };
-
-  #doRequest = async (request: Request, bucket: RateLimitBucket) => {
+  private async doRequest(request: Request, bucket: RateLimitBucket) {
     const fn = async (l = RETRY_LIMIT, r = 0): Promise<[Response, number]> => {
       if (bucket.rateLimited) {
         return new Promise((res, rej) => bucket.add(() => fn().then(res, rej)));
       }
-      const response = await this.#fetch(request);
+      const response = await this.fetch(request);
 
       const resetAfterHeader = response.headers.get("x-ratelimit-reset-after");
       const reset = resetAfterHeader ? parseFloat(resetAfterHeader) * 1000 : 0;
@@ -316,17 +305,28 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
       return result;
     }
     throw new HTTPError(result, response);
-  };
+  }
 
-  async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
-    const request = this.#createRequest(path, input);
-    const bucket = this.#getRateLimitBucket(path, input?.method);
+  private async fetch(request: Request) {
+    const controller = new AbortController();
+    const delay = this.options?.delay ?? DELAY;
 
-    const fn = () => this.#doRequest(request, bucket);
+    const timeout = setTimeout(() => controller.abort(), delay);
+    const response = await fetch(request, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
 
-    return bucket.locked || bucket.rateLimited
-      ? new Promise((res, rej) => bucket.add(() => fn().then(res, rej)))
-      : fn();
+    return response;
+  }
+
+  private getRateLimitBucket(path: string, method?: string) {
+    const route = parseRateLimitRoute(path, method);
+    let bucket = this.get(route);
+    if (!bucket) {
+      this.set(route, bucket = new RateLimitBucket());
+    }
+    return bucket;
   }
 
   /**
