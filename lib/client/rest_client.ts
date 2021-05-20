@@ -260,21 +260,21 @@ export class RESTClient extends HTTPClient {
   // getPinnedMessages
 
   @channelPermissionsDecorator(["MANAGE_MESSAGES", "VIEW_CHANNEL"])
-  addPinnedChannelMessage(
+  pinMessage(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
     reason?: string,
   ) {
-    return super.addPinnedChannelMessage(channelID, messageID, reason);
+    return super.pinMessage(channelID, messageID, reason);
   }
 
   @channelPermissionsDecorator(["MANAGE_MESSAGES", "VIEW_CHANNEL"])
-  deletePinnedChannelMessage(
+  unpinMessage(
     channelID: ActualSnowflake,
     messageID: ActualSnowflake,
     reason?: string,
   ) {
-    return super.deletePinnedChannelMessage(channelID, messageID, reason);
+    return super.unpinMessage(channelID, messageID, reason);
   }
 
   // groupPrivateChannelAddRecipient
