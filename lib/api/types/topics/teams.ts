@@ -1,4 +1,4 @@
-// deno-fmt-ignore-file camelcase
+// deno-lint-ignore-file camelcase
 
 // https://discord.com/developers/docs/topics/teams
 
@@ -34,5 +34,5 @@ export interface TeamMember {
 /** https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum */
 export enum MembershipState {
   Invited = 1,
-  Accepted
+  Accepted,
 }
