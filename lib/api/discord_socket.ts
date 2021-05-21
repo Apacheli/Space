@@ -6,6 +6,7 @@ export interface DiscordSocketOptions {
   protocols?: string | string[];
 }
 
+// deno-lint-ignore no-explicit-any
 export abstract class DiscordSocket extends AsyncEventTarget<any> {
   socket?: WebSocket;
 

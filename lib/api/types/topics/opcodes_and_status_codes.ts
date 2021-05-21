@@ -1,5 +1,3 @@
-// deno-lint-ignore-file camelcase
-
 // https://discord.com/developers/docs/topics/opcodes-and-status-codes
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-opcodes */

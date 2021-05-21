@@ -72,7 +72,7 @@ export class Shard extends DiscordSocket {
     }
   }
 
-  async onSocketClose(event: CloseEvent) {
+  onSocketClose(event: CloseEvent) {
     let reconnectable = false;
     let resumable = false;
 

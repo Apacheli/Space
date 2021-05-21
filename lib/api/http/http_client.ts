@@ -6,7 +6,7 @@ import type {
   RESTDeleteAPIChannelMessageResult,
   RESTDeleteAPIChannelMessageUserReactionResult,
   RESTDeleteAPIChannelPermissionResult,
-  RESTDeleteAPIChannelPinResult,
+  // RESTDeleteAPIChannelPinResult,
   RESTDeleteAPIChannelRecipientResult,
   RESTDeleteAPIChannelResult,
   RESTDeleteAPICurrentUserGuildResult,
@@ -148,8 +148,8 @@ import type {
   RESTPostAPIGuildTemplatesJSONBody,
   RESTPostAPIGuildTemplatesResult,
   RESTPostAPIInteractionCallbackJSONBody,
-  RESTPostAPITemplateCreateGuildJSONBody,
-  RESTPostAPITemplateCreateGuildResult,
+  // RESTPostAPITemplateCreateGuildJSONBody,
+  // RESTPostAPITemplateCreateGuildResult,
   RESTPostAPIWebhookWithTokenGitHubQuery,
   RESTPostAPIWebhookWithTokenGitHubResult,
   RESTPostAPIWebhookWithTokenJSONBody,
@@ -163,7 +163,7 @@ import type {
   RESTPutAPIChannelMessageReactionResult,
   RESTPutAPIChannelPermissionJSONBody,
   RESTPutAPIChannelPermissionResult,
-  RESTPutAPIChannelPinResult,
+  // RESTPutAPIChannelPinResult,
   RESTPutAPIChannelRecipientJSONBody,
   RESTPutAPIChannelRecipientResult,
   RESTPutAPIGuildApplicationCommandsPermissionsJSONBody,
@@ -225,7 +225,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     super();
   }
 
-  async request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
+  request<T = unknown>(path: string, input?: RequestInput): Promise<T> {
     const request = this.createRequest(path, input);
     const bucket = this.getRateLimitBucket(path, input?.method);
 

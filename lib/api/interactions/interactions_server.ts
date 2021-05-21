@@ -19,6 +19,7 @@ export const respondWrapper = (request: ServerRequest) =>
   (body: unknown, status = Status.OK) =>
     request.respond({ body: JSON.stringify(body), headers, status });
 
+// deno-lint-ignore no-explicit-any
 export class InteractionsServer extends AsyncEventTarget<any> {
   server?: Server;
 

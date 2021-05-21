@@ -4,7 +4,6 @@ import {
   logger,
   RateLimitBucket,
   RequiredKeys,
-  sleep,
 } from "../../util/mod.ts";
 
 export interface GatewayClientConnectData extends Omit<ShardOptions, "shard"> {
@@ -15,6 +14,7 @@ export interface GatewayClientConnectData extends Omit<ShardOptions, "shard"> {
 export const GATEWAY_VERSION = 8;
 export const SHARD_CONNECT_DELAY = 5000;
 
+// deno-lint-ignore no-explicit-any
 export class GatewayClient extends AsyncEventTarget<any> {
   shards: Shard[] = [];
   queue = new RateLimitBucket(1, SHARD_CONNECT_DELAY);
@@ -37,7 +37,7 @@ export class GatewayClient extends AsyncEventTarget<any> {
       `Connecting ${lastShardID - firstShardID}/${shards} shards`,
       `(${firstShardID}-${lastShardID - 1}) to "${url}"`,
     );
-    this.connectShards();
+    this.shards.forEach((shard) => this.connectShard(shard));
   }
 
   spawnShards(data: RequiredKeys<GatewayClientConnectData, "lastShardID">) {
@@ -56,12 +56,6 @@ export class GatewayClient extends AsyncEventTarget<any> {
           }
         }
       })();
-    }
-  }
-
-  async connectShards() {
-    for (const shard of this.shards) {
-      this.connectShard(shard);
     }
   }
 
