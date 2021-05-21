@@ -14,6 +14,13 @@ export interface StageInstance {
   channel_id: Snowflake;
   /** The topic of the Stage instance (1-120 characters) */
   topic: string;
+  privacy_level: PrivacyLevel;
+  discoverable_disabled: boolean;
+}
+
+export enum PrivacyLevel {
+  Public,
+  GuildOnly,
 }
 
 /** https://discord.dev/resources/stage-instance#create-stage-instance */
