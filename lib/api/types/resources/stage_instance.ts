@@ -24,7 +24,7 @@ export enum PrivacyLevel {
 }
 
 /** https://discord.dev/resources/stage-instance#create-stage-instance */
-export interface CreateStageInstanceJSON extends UpdateStageInstanceJSON {
+export interface CreateStageInstanceJSON extends RequiredKeys<UpdateStageInstanceJSON, "topic"> {
   /** The id of the Stage channel */
   channel_id: Snowflake;
 }
@@ -38,7 +38,9 @@ export type GetStageInstanceBody = StageInstance;
 /** https://discord.dev/resources/stage-instance#update-stage-instance */
 export interface UpdateStageInstanceJSON {
   /** The topic of the Stage instance (1-120 characters) */
-  topic: string;
+  topic?: string;
+  /** The topic of the Stage instance (1-120 characters) */
+  privacy_level?: PrivacyLevel;
 }
 
 /** https://discord.dev/resources/stage-instance#update-stage-instance */
