@@ -1,3 +1,5 @@
+// https://discord.com/developers/docs/topics/opcodes-and-status-codes
+
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-opcodes */
 export enum GatewayOpcodes {
   /** An event was dispatched. */
@@ -134,4 +136,92 @@ export enum HTTPResponseCodes {
   TooManyRequests = 429,
   /** The server had an error processing your request (these are rare). */
   GatewayUnavailable = 502,
+}
+
+/** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
+export enum JSONErrorCodes {
+  GeneralError,
+  UnknownAccount = 10001,
+  UnknownApplication,
+  UnknownChannel,
+  UnknownGuild,
+  UnknownIntegration,
+  UnknownInvite,
+  UnknownMember,
+  UnknownMessage,
+  UnknownPermissionOverwrite,
+  UnknownProvider,
+  UnknownRole,
+  UnknownToken,
+  UnknownUser,
+  UnknownEmoji,
+  UnknownWebhook,
+  UnknownWebhookService,
+  UnknownSession = 10020,
+  UnknownBan = 10026,
+  UnknownSKU,
+  unknownStoreListing,
+  UnknownEntitlement,
+  UnknownBuild,
+  UnknownLobby,
+  UnknownBranch,
+  UnknownStoreDirectoryLayout,
+  UnknownRedistrubitable = 10036,
+  UnknownGiftCode = 10038,
+  UnknownGuildTemplate = 10057,
+  UnknownInteraction = 10062,
+  UnknownApplicationCommand,
+  UnknownApplicationCommandPermissions = 10066,
+}
+
+/** https://discord.com/developers/docs/topics/opcodes-and-status-codes#rpc-rpc-error-codes */
+export enum RPCErrorCodes {
+  /** An unknown error occurred. */
+  UnknownError = 1000,
+  /** You sent an invalid payload. */
+  InvalidPayload = 4000,
+  /** Invalid command name specified. */
+  InvalidCommand = 4002,
+  /** Invalid guild ID specified. */
+  InvalidGuild,
+  /** Invalid event name specified. */
+  InvalidEvent,
+  /** Invalid channel ID specified. */
+  InvalidChannel,
+  /** You lack permissions to access the given resource. */
+  InvalidPermissions,
+  /** An invalid OAuth2 application ID was used to authorize or authenticate with. */
+  InvalidClientID,
+  /** An invalid OAuth2 application origin was used to authorize or authenticate with. */
+  InvalidOrigin,
+  /** An invalid OAuth2 token was used to authorize or authenticate with. */
+  InvalidToken,
+  /** The specified user ID was invalid. */
+  InvalidUser,
+  /** A standard OAuth2 error occurred; check the data object for the OAuth2 error details. */
+  OAuth2Error = 5000,
+  /** An asynchronous `SELECT_TEXT_CHANNEL`/`SELECT_VOICE_CHANNEL` command timed out. */
+  SelectChannelTimedOut,
+  /** An asynchronous `GET_GUILD` command timed out. */
+  GetGuildTimedOut,
+  /** You tried to join a user to a voice channel but the user was already in one. */
+  SelectVoiceForceRequired,
+  /** You tried to capture more than one shortcut key at once. */
+  CaptureShortcutAlreadyListening,
+}
+
+/** https://discord.com/developers/docs/topics/opcodes-and-status-codes#rpc-rpc-close-event-codes */
+export enum RPCCloseEventCodes {
+  /** You connected to the RPC server with an invalid client ID. */
+  InvalidClientID = 4000,
+  /** You connected to the RPC server with an invalid origin. */
+  InvalidOrigin,
+  /** You are being rate limited. */
+  RateLimited,
+  /** The OAuth2 token associated with a connection was revoked, get a new one! */
+  TokenRevoked,
+  /** The RPC Server version specified in the connection string was not valid. */
+  InvalidVersion,
+  /** The encoding specified in the connection string was not valid. */
+  InvalidEncoding,
 }
