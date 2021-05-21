@@ -109,6 +109,8 @@ export interface Guild {
   welcome_screen?: WelcomeScreen;
   /** true if this guild is [designated as NSFW](https://support.discord.com/hc/en-us/articles/1500005389362-NSFW-Server-Designation) */
   nsfw: boolean;
+  /** [guild NSFW level](https://discord.dev/resources/guild#guild-object-default-message-notification-level) */
+  nsfw_level: GuildNSFWLevel;
 }
 
 /** https://discord.dev/resources/guild#guild-object-default-message-notification-level */
@@ -149,6 +151,14 @@ export enum VerificationLevel {
   High,
   /** must have a verified phone number */
   VeryHigh,
+}
+
+/** https://discord.dev/resources/guild#guild-nsfw-level */
+export enum GuildNSFWLevel {
+  Default,
+  Explicit,
+  Safe,
+  AgeRestricted,
 }
 
 /** https://discord.dev/resources/guild#guild-object-premium-tier */
