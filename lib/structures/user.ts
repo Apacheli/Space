@@ -13,7 +13,7 @@ export class User extends Structure {
   system;
 
   username!: APIUser["username"];
-  discriminator!: number;
+  discriminator!: APIUser["discriminator"];
   avatar!: APIUser["avatar"];
   public publicFlags!: number;
 
@@ -28,7 +28,7 @@ export class User extends Structure {
     super.update(data);
 
     this.username = data.username;
-    this.discriminator = parseInt(data.discriminator);
+    this.discriminator = data.discriminator;
     this.avatar = data.avatar;
     this.publicFlags = data.public_flags ?? 0;
   }
@@ -48,7 +48,7 @@ export class User extends Structure {
 
   defaultAvatarURL(format?: ImageFormats, size?: number) {
     return CDNFormatURL(
-      defaultUserAvatarURL(`${this.discriminator % 5}`),
+      defaultUserAvatarURL(`${parseInt(this.discriminator) % 5}`),
       format,
       size,
     );
