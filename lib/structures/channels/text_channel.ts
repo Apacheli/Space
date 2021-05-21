@@ -130,14 +130,16 @@ export class TextChannel extends GuildChannel implements Textable {
   }
 
   pinMessage(messageID: ActualSnowflake, reason?: string) {
-    return this.client.rest.addPinnedChannelMessage(this.id, messageID, reason);
+    return this.client.rest.pinMessage(this.id, messageID, reason) as Promise<
+      never
+    >;
   }
 
   unpinMessage(messageID: ActualSnowflake, reason?: string) {
-    return this.client.rest.deletePinnedChannelMessage(
+    return this.client.rest.unpinMessage(
       this.id,
       messageID,
       reason,
-    );
+    ) as Promise<never>;
   }
 }

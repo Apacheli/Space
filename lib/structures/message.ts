@@ -139,7 +139,7 @@ export class Message extends Structure {
   }
 
   pin(reason?: string) {
-    return this.client.rest.addPinnedChannelMessage(
+    return this.client.rest.pinMessage(
       this.channelID,
       this.id,
       reason,
@@ -147,7 +147,7 @@ export class Message extends Structure {
   }
 
   unpin(reason?: string) {
-    return this.client.rest.deletePinnedChannelMessage(
+    return this.client.rest.unpinMessage(
       this.channelID,
       this.id,
       reason,
