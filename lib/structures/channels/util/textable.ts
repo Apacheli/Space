@@ -22,7 +22,7 @@ import {
   RESTPutAPIChannelMessageReactionResult,
   RESTPutAPIChannelPinResult,
 } from "../../deps.ts";
-import { ActualSnowflake } from "../../../util/util.ts";
+import { ActualSnowflake } from "../../../util/mod.ts";
 
 /**
  * Interface for textable channels.

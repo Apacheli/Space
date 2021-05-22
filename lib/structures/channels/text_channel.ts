@@ -8,7 +8,7 @@ import type {
 } from "../deps.ts";
 import { GuildChannel } from "./guild_channel.ts";
 import type { Textable } from "./util/textable.ts";
-import type { ActualSnowflake } from "../../util/util.ts";
+import type { ActualSnowflake } from "../../util/mod.ts";
 
 /**
  * Class representing a guild text channel on Discord.

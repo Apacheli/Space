@@ -1,6 +1,6 @@
 # Space
 
-[![](https://github.com/Apacheli/Space/actions/workflows/deno.yaml/badge.svg)](https://github.com/Apacheli/Space/actions/workflows/deno.yaml)
+[![](https://github.com/Apacheli/Space/actions/workflows/ci.yaml/badge.svg)](https://github.com/Apacheli/Space/actions/workflows/ci.yaml)
 [![](https://canary.discord.com/api/guilds/812458966357377067/widget.png)](https://discord.gg/UQuA3EwXCV)
 
 <img align=right src=assets/space_logo.png height=150px>
@@ -15,7 +15,8 @@ A low-level [Deno](https://deno.land/) module for interacting with
   from occuring.
 - Written purely in TypeScript to guarantee type safety.
 - Standalone API modules ([HTTP](lib/api/http),
-  [interactions](lib/api/interactions), [websocket](lib/api/websocket)).
+  [interactions](lib/api/interactions), [types](lib/api/types), and
+  [websocket](lib/api/websocket)).
 - Built-in utilities such as event logging and custom caching.
 - 100% coverage over Discord's HTTP and websocket APIs.
 

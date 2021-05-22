@@ -2,6 +2,7 @@
 
 // https://discord.dev/resources/stage-instance
 
+import type { RequiredKeys } from "../../../util/mod.ts";
 import type { Snowflake } from "../reference.ts";
 
 /** https://discord.dev/resources/stage-instance#auto-closing-stage-instance-structure */

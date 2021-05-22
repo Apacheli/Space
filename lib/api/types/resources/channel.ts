@@ -4,6 +4,7 @@
 
 import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
+import type { Permissions } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Emoji } from "./emoji.ts";
@@ -598,9 +599,9 @@ export type BulkDeleteMessagesBody = void;
 /** https://discord.dev/resources/channel#edit-channel-permissions */
 export interface EditChannelPermissionsJSON {
   /** the bitwise value of all allowed permissions */
-  allow: string;
+  allow: Permissions;
   /** the bitwise value of all disallowed permissions */
-  deny: string;
+  deny: Permissions;
   /** 0 for a role or 1 for a member */
   type: OverwriteTypes;
 }

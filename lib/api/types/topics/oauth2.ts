@@ -2,9 +2,10 @@
 
 // https://discord.dev/topics/oauth2
 
-import type { Permissions, Snowflake } from "../reference.ts";
+import type { Snowflake } from "../reference.ts";
 import type { Application } from "../resources/application.ts";
 import type { User } from "../resources/user.ts";
+import type { Permissions } from "./permissions.ts";
 
 export enum OAuth2Scopes {
   /** allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires Discord approval */

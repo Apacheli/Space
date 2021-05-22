@@ -1,7 +1,7 @@
 import { PermissionFlagsBits } from "./deps.ts";
 import { PermissionsError, RESTClient } from "./mod.ts";
 import type { GuildChannel } from "../structures/mod.ts";
-import type { ActualSnowflake } from "../util/util.ts";
+import type { ActualSnowflake } from "../util/mod.ts";
 import { computePermissions } from "./permissions.ts";
 
 export const channelPermissionsDecorator = (permissions: PermissionKeys[]) =>

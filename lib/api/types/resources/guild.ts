@@ -4,7 +4,7 @@
 
 import type { Snowflake } from "../reference.ts";
 import type { PresenceUpdate } from "../topics/gateway.ts";
-import type { Role } from "../topics/permissions.ts";
+import type { Permissions, Role } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
@@ -32,7 +32,7 @@ export interface Guild {
   /** id of owner */
   owner_id: Snowflake;
   /** total permissions for [the user](https://discord.dev/resources/user#get-current-user-guilds) in the guild (excludes overrides) */
-  permissions?: string;
+  permissions?: Permissions;
   /** [voice region](https://discord.dev/resources/voice#voice-region-object) id for the guild */
   region: VoiceRegion;
   /** id of afk channel */
@@ -258,7 +258,7 @@ export interface GuildMember {
   /** whether the user has not yet passed the guild's [Membership Screening](https://discord.dev/resources/guild#membership-screening-object) requirements */
   pending?: boolean;
   /** total permissions of the member in the channel, including overrides, returned when in the interaction object */
-  permissions?: string;
+  permissions?: Permissions;
 }
 
 /** https://discord.dev/resources/guild#integration-object */

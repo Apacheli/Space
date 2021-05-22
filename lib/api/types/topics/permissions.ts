@@ -4,6 +4,9 @@
 
 import type { Snowflake } from "../reference.ts";
 
+/** https://discord.dev/topics/permissions */
+export type Permissions = `${bigint}`;
+
 /** https://discord.dev/topics/permissions#permissions-bitwise-permission-flags */
 export const BitwisePermissionFlags = {
   /** Allows creation of instant invites */

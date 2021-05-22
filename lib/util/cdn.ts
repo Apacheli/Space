@@ -1,4 +1,4 @@
-import type { ActualSnowflake } from "./util.ts";
+import type { ActualSnowflake } from "./types.ts";
 
 export type ImageFormats = "jpg" | "jpeg" | "png" | "webp" | "gif";
 
