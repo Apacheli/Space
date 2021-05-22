@@ -1,12 +1,10 @@
 # https://github.com/denoland/setup-deno
 
-name: Deno
+name: ci
 
 on:
-  push:
-    branches: [dev]
-  pull_request:
-    branches: [dev]
+  - pull_request
+  - push
 
 jobs:
   test:
@@ -14,8 +12,13 @@ jobs:
 
     strategy:
       matrix:
-        deno: [v1.x, nightly]
-        os: [macOS-latest, windows-latest, ubuntu-latest]
+        deno:
+          - v1.x
+          - nightly
+        os:
+          - macOS-latest
+          - windows-latest
+          - ubuntu-latest
 
     steps:
       - name: Setup repo
@@ -23,8 +26,6 @@ jobs:
 
       - name: Setup Deno
         uses: denoland/setup-deno@main
-        with:
-          deno-version: v1.x
 
       - name: Cache Dependencies
         run: deno cache lib/client/deps.ts
@@ -35,5 +36,5 @@ jobs:
       - name: Format Code
         run: deno fmt
 
-      - name: Run Tests
-        run: deno test -A --unstable
+      # - name: Run Tests
+      #   run: deno test -A --unstable
