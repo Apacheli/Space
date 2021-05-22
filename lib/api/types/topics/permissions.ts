@@ -1,10 +1,10 @@
 // deno-lint-ignore-file camelcase
 
-// https://discord.com/developers/docs/topics/permissions
+// https://discord.dev/topics/permissions
 
 import type { Snowflake } from "../reference.ts";
 
-/** https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags */
+/** https://discord.dev/topics/permissions#permissions-bitwise-permission-flags */
 export const BitwisePermissionFlags = {
   /** Allows creation of instant invites */
   CreateInstantInvite: 1n << 0n,
@@ -80,7 +80,7 @@ export const BitwisePermissionFlags = {
   UsePrivateThreads: 1n << 36n,
 };
 
-/** https://discord.com/developers/docs/topics/permissions#role-object */
+/** https://discord.dev/topics/permissions#role-object */
 export interface Role {
   /** role id */
   id: Snowflake;
@@ -102,7 +102,7 @@ export interface Role {
   tags?: RoleTags;
 }
 
-/** https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure */
+/** https://discord.dev/topics/permissions#role-object-role-tags-structure */
 export interface RoleTags {
   /** the id of the bot this role belongs to */
   bot_id?: Snowflake;

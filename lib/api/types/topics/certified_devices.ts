@@ -1,10 +1,10 @@
 // deno-lint-ignore-file camelcase
 
-// https://discord.com/developers/docs/topics/certified-devices
+// https://discord.dev/topics/certified-devices
 
 import type { Snowflake } from "../reference.ts";
 
-/** https://discord.com/developers/docs/topics/certified-devices#connecting */
+/** https://discord.dev/topics/certified-devices#connecting */
 export interface ConnectingQuery {
   /** `1` */
   v: number;
@@ -14,7 +14,7 @@ export interface ConnectingQuery {
   encoding: "json";
 }
 
-/** https://discord.com/developers/docs/topics/certified-devices#models-device-object */
+/** https://discord.dev/topics/certified-devices#models-device-object */
 export interface Device {
   /** the type of device */
   type: DeviceTypes;
@@ -36,7 +36,7 @@ export interface Device {
   hardware_mute?: boolean;
 }
 
-/** https://discord.com/developers/docs/topics/certified-devices#models-vendor-object */
+/** https://discord.dev/topics/certified-devices#models-vendor-object */
 export interface Vendor {
   /** name of the vendor */
   name: string;
@@ -44,7 +44,7 @@ export interface Vendor {
   url: string;
 }
 
-/** https://discord.com/developers/docs/topics/certified-devices#models-model-object */
+/** https://discord.dev/topics/certified-devices#models-model-object */
 export interface Model {
   /** name of the model */
   name: string;
@@ -52,7 +52,7 @@ export interface Model {
   url: string;
 }
 
-/** https://discord.com/developers/docs/topics/certified-devices#models-device-types */
+/** https://discord.dev/topics/certified-devices#models-device-types */
 export enum DeviceTypes {
   AudioInput = "audioinput",
   AudioOutput = "audiooutput",

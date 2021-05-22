@@ -1,4 +1,4 @@
-/** https://discord.com/developers/docs/topics/permissions */
+/** https://discord.dev/topics/permissions */
 export type Permissions = `${bigint}`;
 
 /** https://discord.dev/reference#snowflakes */

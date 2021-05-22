@@ -1,11 +1,11 @@
 // deno-lint-ignore-file camelcase
 
-// https://discord.com/developers/docs/topics/teams
+// https://discord.dev/topics/teams
 
 import type { Snowflake } from "../reference.ts";
 import type { User } from "../resources/user.ts";
 
-/** https://discord.com/developers/docs/topics/teams#data-models-team-object */
+/** https://discord.dev/topics/teams#data-models-team-object */
 export interface Team {
   /** a hash of the image of the team's icon */
   icon: string | null;
@@ -19,9 +19,9 @@ export interface Team {
   owner_user_id: Snowflake;
 }
 
-/** https://discord.com/developers/docs/topics/teams#data-models-team-members-object */
+/** https://discord.dev/topics/teams#data-models-team-members-object */
 export interface TeamMember {
-  /** the user's [membership state](https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum) on the team */
+  /** the user's [membership state](https://discord.dev/topics/teams#data-models-membership-state-enum) on the team */
   membership_state: MembershipState;
   /** will always be `["*"]` */
   permissions: string[];
@@ -31,7 +31,7 @@ export interface TeamMember {
   user: Partial<User>;
 }
 
-/** https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum */
+/** https://discord.dev/topics/teams#data-models-membership-state-enum */
 export enum MembershipState {
   Invited = 1,
   Accepted,
