@@ -52,24 +52,10 @@ for await (const [data, shard] of client.gateway.listen("MESSAGE_CREATE")) {
 }
 ```
 
-Simple interactions program:
+To run your program:
 
-```ts
-import { InteractionResponseType, Server } from "./deps.ts";
-
-const publicKey = Deno.env.get("PUBLIC_KEY");
-const server = new Server(publicKey);
-
-server.connect(1337);
-
-for await (const [interaction, respond] of server.listen("COMMAND")) {
-  if (interaction.data.name === "ping") {
-    respond({
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: { content: "pong" },
-    });
-  }
-}
+```sh
+deno run --allow-env --allow-net program.ts
 ```
 
 See the
