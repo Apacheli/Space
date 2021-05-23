@@ -272,3 +272,363 @@ export interface DispatchPayload<t extends string, d>
   extends GatewayPayload<GatewayOpcodes.Dispatch, d> {
   t: t;
 }
+
+/** https://discord.com/developers/docs/topics/gateway#ready */
+export type DispatchPayloadReady = DispatchPayload<
+  GatewayEvents.Ready,
+  DispatchPayloadReadyData
+>;
+
+/** https://discord.com/developers/docs/topics/gateway#ready-ready-event-fields */
+export interface DispatchPayloadReadyData {
+  /** [gateway version](https://discord.com/developers/docs/topics/gateway#gateways-gateway-versions) */
+  v: GatewayVersions;
+  /** information about the user including email */
+  user: User;
+  /** the guilds the user is in */
+  guilds: UnavailableGuild[];
+  /** used for resuming connections */
+  session_id: string;
+  /** the [shard information](https://discord.com/developers/docs/topics/gateway#sharding) associated with this session, if sent when identifying */
+  shard?: [shard_id: number, num_shards: number];
+  /** 	contains `id` and `flags` */
+  application: Pick<Application, "id" | "flags">;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#resumed */
+export type DispatchPayloadResumed = DispatchPayload<
+  GatewayEvents.Resumed,
+  DispatchPayloadResumedData
+>;
+
+/** https://discord.com/developers/docs/topics/gateway#resumed */
+export type DispatchPayloadResumedData = void;
+
+export type ApplicationCommandCreate = DispatchPayload<
+  GatewayEvents.ApplicationCommandCreate,
+  DispatchPayloadApplicationCommandCreateData
+>;
+
+export interface DispatchPayloadApplicationCommandCreateData {}
+
+export type ApplicationCommandUpdate = DispatchPayload<
+  GatewayEvents.ApplicationCommandUpdate,
+  DispatchPayloadApplicationCommandUpdateData
+>;
+
+export interface DispatchPayloadApplicationCommandUpdateData {}
+
+export type ApplicationCommandDelete = DispatchPayload<
+  GatewayEvents.ApplicationCommandDelete,
+  DispatchPayloadApplicationCommandDeleteData
+>;
+
+export interface DispatchPayloadApplicationCommandDeleteData {}
+
+export type ChannelCreate = DispatchPayload<
+  GatewayEvents.ChannelCreate,
+  DispatchPayloadChannelCreateData
+>;
+
+export interface DispatchPayloadChannelCreateData {}
+
+export type ChannelUpdate = DispatchPayload<
+  GatewayEvents.ChannelUpdate,
+  DispatchPayloadChannelUpdateData
+>;
+
+export interface DispatchPayloadChannelUpdateData {}
+
+export type ChannelDelete = DispatchPayload<
+  GatewayEvents.ChannelDelete,
+  DispatchPayloadChannelDeleteData
+>;
+
+export interface DispatchPayloadChannelDeleteData {}
+
+export type ChannelPinsUpdate = DispatchPayload<
+  GatewayEvents.ChannelPinsUpdate,
+  DispatchPayloadChannelPinsUpdateData
+>;
+
+export interface DispatchPayloadChannelPinsUpdateData {}
+
+export type ThreadCreate = DispatchPayload<
+  GatewayEvents.ThreadCreate,
+  DispatchPayloadThreadCreateData
+>;
+
+export interface DispatchPayloadThreadCreateData {}
+
+export type ThreadUpdate = DispatchPayload<
+  GatewayEvents.ThreadUpdate,
+  DispatchPayloadThreadUpdateData
+>;
+
+export interface DispatchPayloadThreadUpdateData {}
+
+export type ThreadDelete = DispatchPayload<
+  GatewayEvents.ThreadDelete,
+  DispatchPayloadThreadDeleteData
+>;
+
+export interface DispatchPayloadThreadDeleteData {}
+
+export type ThreadListSync = DispatchPayload<
+  GatewayEvents.ThreadListSync,
+  DispatchPayloadThreadListSyncData
+>;
+
+export interface DispatchPayloadThreadListSyncData {}
+
+export type ThreadMemberUpdate = DispatchPayload<
+  GatewayEvents.ThreadMemberUpdate,
+  DispatchPayloadThreadMemberUpdateData
+>;
+
+export interface DispatchPayloadThreadMemberUpdateData {}
+
+export type ThreadMembersUpdate = DispatchPayload<
+  GatewayEvents.ThreadMembersUpdate,
+  DispatchPayloadThreadMembersUpdateData
+>;
+
+export interface DispatchPayloadThreadMembersUpdateData {}
+
+export type GuildCreate = DispatchPayload<
+  GatewayEvents.GuildCreate,
+  DispatchPayloadGuildCreateData
+>;
+
+export interface DispatchPayloadGuildCreateData {}
+
+export type GuildUpdate = DispatchPayload<
+  GatewayEvents.GuildUpdate,
+  DispatchPayloadGuildUpdateData
+>;
+
+export interface DispatchPayloadGuildUpdateData {}
+
+export type GuildDelete = DispatchPayload<
+  GatewayEvents.GuildDelete,
+  DispatchPayloadGuildDeleteData
+>;
+
+export interface DispatchPayloadGuildDeleteData {}
+
+export type GuildBanAdd = DispatchPayload<
+  GatewayEvents.GuildBanAdd,
+  DispatchPayloadGuildBanAddData
+>;
+
+export interface DispatchPayloadGuildBanAddData {}
+
+export type GuildBanRemove = DispatchPayload<
+  GatewayEvents.GuildBanRemove,
+  DispatchPayloadGuildBanRemoveData
+>;
+
+export interface DispatchPayloadGuildBanRemoveData {}
+
+export type GuildEmojisUpdate = DispatchPayload<
+  GatewayEvents.GuildEmojisUpdate,
+  DispatchPayloadGuildEmojisUpdateData
+>;
+
+export interface DispatchPayloadGuildEmojisUpdateData {}
+
+export type GuildIntegrationsUpdate = DispatchPayload<
+  GatewayEvents.GuildIntegrationsUpdate,
+  DispatchPayloadGuildIntegrationsUpdateData
+>;
+
+export interface DispatchPayloadGuildIntegrationsUpdateData {}
+
+export type GuildMemberAdd = DispatchPayload<
+  GatewayEvents.GuildMemberAdd,
+  DispatchPayloadGuildMemberAddData
+>;
+
+export interface DispatchPayloadGuildMemberAddData {}
+
+export type GuildMemberRemove = DispatchPayload<
+  GatewayEvents.GuildMemberRemove,
+  DispatchPayloadGuildMemberRemoveData
+>;
+
+export interface DispatchPayloadGuildMemberRemoveData {}
+
+export type GuildMemberUpdate = DispatchPayload<
+  GatewayEvents.GuildMemberUpdate,
+  DispatchPayloadGuildMemberUpdateData
+>;
+
+export interface DispatchPayloadGuildMemberUpdateData {}
+
+export type GuildMembersChunk = DispatchPayload<
+  GatewayEvents.GuildMembersChunk,
+  DispatchPayloadGuildMembersChunkData
+>;
+
+export interface DispatchPayloadGuildMembersChunkData {}
+
+export type GuildRoleCreate = DispatchPayload<
+  GatewayEvents.GuildRoleCreate,
+  DispatchPayloadGuildRoleCreateData
+>;
+
+export interface DispatchPayloadGuildRoleCreateData {}
+
+export type GuildRoleUpdate = DispatchPayload<
+  GatewayEvents.GuildRoleUpdate,
+  DispatchPayloadGuildRoleUpdateData
+>;
+
+export interface DispatchPayloadGuildRoleUpdateData {}
+
+export type GuildRoleDelete = DispatchPayload<
+  GatewayEvents.GuildRoleDelete,
+  DispatchPayloadGuildRoleDeleteData
+>;
+
+export interface DispatchPayloadGuildRoleDeleteData {}
+
+export type IntegrationCreate = DispatchPayload<
+  GatewayEvents.IntegrationCreate,
+  DispatchPayloadIntegrationCreateData
+>;
+
+export interface DispatchPayloadIntegrationCreateData {}
+
+export type IntegrationUpdate = DispatchPayload<
+  GatewayEvents.IntegrationUpdate,
+  DispatchPayloadIntegrationUpdateData
+>;
+
+export interface DispatchPayloadIntegrationUpdateData {}
+
+export type IntegrationDelete = DispatchPayload<
+  GatewayEvents.IntegrationDelete,
+  DispatchPayloadIntegrationDeleteData
+>;
+
+export interface DispatchPayloadIntegrationDeleteData {}
+
+export type InteractionCreate = DispatchPayload<
+  GatewayEvents.InteractionCreate,
+  DispatchPayloadInteractionCreateData
+>;
+
+export interface DispatchPayloadInteractionCreateData {}
+
+export type InviteCreate = DispatchPayload<
+  GatewayEvents.InviteCreate,
+  DispatchPayloadInviteCreateData
+>;
+
+export interface DispatchPayloadInviteCreateData {}
+
+export type InviteDelete = DispatchPayload<
+  GatewayEvents.InviteDelete,
+  DispatchPayloadInviteDeleteData
+>;
+
+export interface DispatchPayloadInviteDeleteData {}
+
+export type MessageCreate = DispatchPayload<
+  GatewayEvents.MessageCreate,
+  DispatchPayloadMessageCreateData
+>;
+
+export interface DispatchPayloadMessageCreateData {}
+
+export type MessageUpdate = DispatchPayload<
+  GatewayEvents.MessageUpdate,
+  DispatchPayloadMessageUpdateData
+>;
+
+export interface DispatchPayloadMessageUpdateData {}
+
+export type MessageDelete = DispatchPayload<
+  GatewayEvents.MessageDelete,
+  DispatchPayloadMessageDeleteData
+>;
+
+export interface DispatchPayloadMessageDeleteData {}
+
+export type MessageDeleteBulk = DispatchPayload<
+  GatewayEvents.MessageDeleteBulk,
+  DispatchPayloadMessageDeleteBulkData
+>;
+
+export interface DispatchPayloadMessageDeleteBulkData {}
+
+export type MessageReactionAdd = DispatchPayload<
+  GatewayEvents.MessageReactionAdd,
+  DispatchPayloadMessageReactionAddData
+>;
+
+export interface DispatchPayloadMessageReactionAddData {}
+
+export type MessageReactionRemove = DispatchPayload<
+  GatewayEvents.MessageReactionRemove,
+  DispatchPayloadMessageReactionRemoveData
+>;
+
+export interface DispatchPayloadMessageReactionRemoveData {}
+
+export type MessageReactionRemoveAll = DispatchPayload<
+  GatewayEvents.MessageReactionRemoveAll,
+  DispatchPayloadMessageReactionRemoveAllData
+>;
+
+export interface DispatchPayloadMessageReactionRemoveAllData {}
+
+export type MessageReactionRemoveEmoji = DispatchPayload<
+  GatewayEvents.MessageReactionRemoveEmoji,
+  DispatchPayloadMessageReactionRemoveEmojiData
+>;
+
+export interface DispatchPayloadMessageReactionRemoveEmojiData {}
+
+export type PresenceUpdate = DispatchPayload<
+  GatewayEvents.PresenceUpdate,
+  DispatchPayloadPresenceUpdateData
+>;
+
+export interface DispatchPayloadPresenceUpdateData {}
+
+export type TypingStart = DispatchPayload<
+  GatewayEvents.TypingStart,
+  DispatchPayloadTypingStartData
+>;
+
+export interface DispatchPayloadTypingStartData {}
+
+export type UserUpdate = DispatchPayload<
+  GatewayEvents.UserUpdate,
+  DispatchPayloadUserUpdateData
+>;
+
+export interface DispatchPayloadUserUpdateData {}
+
+export type VoiceStateUpdate = DispatchPayload<
+  GatewayEvents.VoiceStateUpdate,
+  DispatchPayloadVoiceStateUpdateData
+>;
+
+export interface DispatchPayloadVoiceStateUpdateData {}
+
+export type VoiceServerUpdate = DispatchPayload<
+  GatewayEvents.VoiceServerUpdate,
+  DispatchPayloadVoiceServerUpdateData
+>;
+
+export interface DispatchPayloadVoiceServerUpdateData {}
+
+export type WebhooksUpdate = DispatchPayload<
+  GatewayEvents.WebhooksUpdate,
+  DispatchPayloadWebhooksUpdateData
+>;
+
+export interface DispatchPayloadWebhooksUpdateData {}
