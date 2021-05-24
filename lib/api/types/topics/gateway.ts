@@ -49,8 +49,6 @@ export interface GatewayURLQuery {
 
 /** https://discord.dev/topics/gateway#commands-and-events-gateway-events */
 export enum GatewayEvents {
-  /** defines the heartbeat interval */
-  Hello = "HELLO",
   /** contains the initial state information */
   Ready = "READY",
   /** response to [Resume](https://discord.dev/topics/gateway#resume) */
@@ -151,6 +149,15 @@ export enum GatewayEvents {
   WebhooksUpdate = "WEBHOOKS_UPDATE",
 }
 
+/** https://discord.com/developers/docs/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
+export type HeartbeatACKPayload = GatewayPayload<
+  GatewayOpcodes.HeartbeatACK,
+  HeartbeatPayloadData
+>;
+
+/** https://discord.com/developers/docs/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
+export type HeartbeatACKPayloadData = void;
+
 /** https://discord.dev/topics/gateway#identify */
 export type IdentifyPayload = GatewayPayload<
   GatewayOpcodes.Identify,
@@ -200,6 +207,15 @@ export interface ResumePayloadData {
   /** last sequence number received */
   seq: number;
 }
+
+/** https://discord.com/developers/docs/topics/gateway#heartbeat */
+export type HeartbeatPayload = GatewayPayload<
+  GatewayOpcodes.Heartbeat,
+  HeartbeatPayloadData
+>;
+
+/** https://discord.com/developers/docs/topics/gateway#heartbeat */
+export type HeartbeatPayloadData = number;
 
 /** https://discord.dev/topics/gateway#request-guild-members */
 export type GuildRequestMembersPayload = GatewayPayload<
@@ -352,6 +368,15 @@ export type DispatchPayloadApplicationCommandDelete = DispatchPayload<
 /** https://discord.dev/topics/gateway#application-command-delete */
 export type DispatchPayloadApplicationCommandDeleteData =
   DispatchPayloadApplicationCommandCreateData;
+
+/** https://discord.com/developers/docs/topics/gateway#invalid-session */
+export type InvalidSessionPayload = GatewayPayload<
+  GatewayOpcodes.InvalidSession,
+  InvalidSessionPayloadData
+>;
+
+/** https://discord.com/developers/docs/topics/gateway#invalid-session */
+export type InvalidSessionPayloadData = boolean;
 
 /** https://discord.dev/topics/gateway#channel-create */
 export type DispatchPayloadChannelCreate = DispatchPayload<
@@ -1060,3 +1085,68 @@ export interface SessionStartLimit {
   /** The number of identify requests allowed per 5 seconds */
   max_concurrency: number;
 }
+
+export type GatewayPayloads =
+  | DispatchPayloads
+  | HeartbeatPayload
+  | IdentifyPayload
+  | PresenceUpdatePayload
+  | VoiceStateUpdatePayload
+  | ResumePayload
+  // | ReconnectPayload
+  | GuildRequestMembersPayload
+  | InvalidSessionPayload
+  | HelloPayload
+  | HeartbeatACKPayload;
+
+// https://discord.dev/topics/gateway#commands-and-events-gateway-events
+export type DispatchPayloads =
+  | DispatchPayloadReady
+  | DispatchPayloadResumed
+  | DispatchPayloadApplicationCommandCreate
+  | DispatchPayloadApplicationCommandUpdate
+  | DispatchPayloadApplicationCommandDelete
+  | DispatchPayloadChannelCreate
+  | DispatchPayloadChannelUpdate
+  | DispatchPayloadChannelDelete
+  | DispatchPayloadChannelPinsUpdate
+  | DispatchPayloadThreadCreate
+  | DispatchPayloadThreadUpdate
+  | DispatchPayloadThreadDelete
+  | DispatchPayloadThreadListSync
+  | DispatchPayloadThreadMemberUpdate
+  | DispatchPayloadThreadMembersUpdate
+  | DispatchPayloadGuildCreate
+  | DispatchPayloadGuildUpdate
+  | DispatchPayloadGuildDelete
+  | DispatchPayloadGuildBanAdd
+  | DispatchPayloadGuildBanRemove
+  | DispatchPayloadGuildEmojisUpdate
+  | DispatchPayloadGuildIntegrationsUpdate
+  | DispatchPayloadGuildMemberAdd
+  | DispatchPayloadGuildMemberRemove
+  | DispatchPayloadGuildMemberUpdate
+  | DispatchPayloadGuildMembersChunk
+  | DispatchPayloadGuildRoleCreate
+  | DispatchPayloadGuildRoleUpdate
+  | DispatchPayloadGuildRoleDelete
+  | DispatchPayloadIntegrationCreate
+  | DispatchPayloadIntegrationUpdate
+  | DispatchPayloadIntegrationDelete
+  | DispatchPayloadInteractionCreate
+  | DispatchPayloadInviteCreate
+  | DispatchPayloadInviteDelete
+  | DispatchPayloadMessageCreate
+  | DispatchPayloadMessageUpdate
+  | DispatchPayloadMessageDelete
+  | DispatchPayloadMessageDeleteBulk
+  | DispatchPayloadMessageReactionAdd
+  | DispatchPayloadMessageReactionRemove
+  | DispatchPayloadMessageReactionRemoveAll
+  | DispatchPayloadMessageReactionRemoveEmoji
+  | DispatchPayloadPresenceUpdate
+  | DispatchPayloadTypingStart
+  | DispatchPayloadUserUpdate
+  | DispatchPayloadVoiceStateUpdate
+  | DispatchPayloadVoiceServerUpdate
+  | DispatchPayloadWebhooksUpdate;
