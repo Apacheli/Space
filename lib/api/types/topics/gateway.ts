@@ -304,329 +304,467 @@ export type DispatchPayloadResumed = DispatchPayload<
 /** https://discord.com/developers/docs/topics/gateway#resumed */
 export type DispatchPayloadResumedData = void;
 
-export type ApplicationCommandCreate = DispatchPayload<
+export type DispatchPayloadApplicationCommandCreate = DispatchPayload<
   GatewayEvents.ApplicationCommandCreate,
   DispatchPayloadApplicationCommandCreateData
 >;
 
 export interface DispatchPayloadApplicationCommandCreateData {}
 
-export type ApplicationCommandUpdate = DispatchPayload<
+export type DispatchPayloadApplicationCommandUpdate = DispatchPayload<
   GatewayEvents.ApplicationCommandUpdate,
   DispatchPayloadApplicationCommandUpdateData
 >;
 
 export interface DispatchPayloadApplicationCommandUpdateData {}
 
-export type ApplicationCommandDelete = DispatchPayload<
+export type DispatchPayloadApplicationCommandDelete = DispatchPayload<
   GatewayEvents.ApplicationCommandDelete,
   DispatchPayloadApplicationCommandDeleteData
 >;
 
 export interface DispatchPayloadApplicationCommandDeleteData {}
 
-export type ChannelCreate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#channel-create */
+export type DispatchPayloadChannelCreate = DispatchPayload<
   GatewayEvents.ChannelCreate,
   DispatchPayloadChannelCreateData
 >;
 
-export interface DispatchPayloadChannelCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#channel-create */
+export type DispatchPayloadDispatchPayloadChannelCreateData = Channel;
 
-export type ChannelUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#channel-update */
+export type DispatchPayloadChannelUpdate = DispatchPayload<
   GatewayEvents.ChannelUpdate,
   DispatchPayloadChannelUpdateData
 >;
 
-export interface DispatchPayloadChannelUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#channel-update */
+export type DispatchPayloadDispatchPayloadChannelUpdateData = Channel;
 
-export type ChannelDelete = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#channel-delete */
+export type DispatchPayloadChannelDelete = DispatchPayload<
   GatewayEvents.ChannelDelete,
   DispatchPayloadChannelDeleteData
 >;
 
-export interface DispatchPayloadChannelDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#channel-delete */
+export type DispatchPayloadDispatchPayloadChannelDeleteData = Channel;
 
-export type ChannelPinsUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#channel-pins-update */
+export type DispatchPayloadChannelPinsUpdate = DispatchPayload<
   GatewayEvents.ChannelPinsUpdate,
   DispatchPayloadChannelPinsUpdateData
 >;
 
-export interface DispatchPayloadChannelPinsUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#channel-pins-update-channel-pins-update-event-fields */
+export interface DispatchPayloadChannelPinsUpdateData {
+  /** the id of the guild */
+  guild_id?: Snowflake;
+  /** the id of the channel */
+  channel_id: Snowflake;
+  /** the time at which the most recent pinned message was pinned */
+  last_pin_timestamp?: string | null;
+}
 
-export type ThreadCreate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-create */
+export type DispatchPayloadThreadCreate = DispatchPayload<
   GatewayEvents.ThreadCreate,
   DispatchPayloadThreadCreateData
 >;
 
-export interface DispatchPayloadThreadCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-create */
+export type DispatchPayloadDispatchPayloadThreadCreateData = Channel;
 
-export type ThreadUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-update */
+export type DispatchPayloadThreadUpdate = DispatchPayload<
   GatewayEvents.ThreadUpdate,
   DispatchPayloadThreadUpdateData
 >;
 
-export interface DispatchPayloadThreadUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-update */
+export type DispatchPayloadDispatchPayloadThreadUpdateData = Channel;
 
-export type ThreadDelete = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-delete */
+export type DispatchPayloadThreadDelete = DispatchPayload<
   GatewayEvents.ThreadDelete,
   DispatchPayloadThreadDeleteData
 >;
 
-export interface DispatchPayloadThreadDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-delete */
+export type DispatchPayloadDispatchPayloadThreadDeleteData = Pick<
+  Channel,
+  "id" | "guild_id" | "parent_id" | "type"
+>;
 
-export type ThreadListSync = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-list-sync */
+export type DispatchPayloadThreadListSync = DispatchPayload<
   GatewayEvents.ThreadListSync,
   DispatchPayloadThreadListSyncData
 >;
 
-export interface DispatchPayloadThreadListSyncData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-list-sync-thread-list-sync-event-fields */
+export interface DispatchPayloadThreadListSyncData {
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** the parent channel ids whose threads are being synced. If omitted, then threads were synced for the entire guild. This array may contain channel_ids that have no active threads as well, so you know to clear that data. */
+  channel_ids?: Snowflake[];
+  /** all active threads in the given channels that the current user can access */
+  threads: Channel[];
+  /** all thread member objects from the synced threads for the current user, indicating which threads the current user has been added to */
+  members: ThreadMember[];
+}
 
-export type ThreadMemberUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-member-update */
+export type DispatchPayloadThreadMemberUpdate = DispatchPayload<
   GatewayEvents.ThreadMemberUpdate,
   DispatchPayloadThreadMemberUpdateData
 >;
 
-export interface DispatchPayloadThreadMemberUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-member-update */
+export type DispatchPayloadThreadMemberUpdateData = ThreadMember;
 
-export type ThreadMembersUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#thread-members-update */
+export type DispatchPayloadThreadMembersUpdate = DispatchPayload<
   GatewayEvents.ThreadMembersUpdate,
   DispatchPayloadThreadMembersUpdateData
 >;
 
-export interface DispatchPayloadThreadMembersUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#thread-members-update-thread-members-update-event-fields */
+export interface DispatchPayloadThreadMembersUpdateData {
+  /** the id of the thread */
+  id: Snowflake;
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** the approximate number of members in the thread, capped at 50 */
+  member_count: number;
+  /** the users who were added to the thread */
+  added_members?: ThreadMember[];
+  /** the id of the users who were removed from the thread */
+  removed_member_ids?: Snowflake[];
+}
 
-export type GuildCreate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-create */
+export type DispatchPayloadGuildCreate = DispatchPayload<
   GatewayEvents.GuildCreate,
   DispatchPayloadGuildCreateData
 >;
 
-export interface DispatchPayloadGuildCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-create */
+export type DispatchPayloadGuildCreateData = Guild;
 
-export type GuildUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-update */
+export type DispatchPayloadGuildUpdate = DispatchPayload<
   GatewayEvents.GuildUpdate,
   DispatchPayloadGuildUpdateData
 >;
 
-export interface DispatchPayloadGuildUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-update */
+export type DispatchPayloadGuildUpdateData = Guild;
 
-export type GuildDelete = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-delete */
+export type DispatchPayloadGuildDelete = DispatchPayload<
   GatewayEvents.GuildDelete,
   DispatchPayloadGuildDeleteData
 >;
 
-export interface DispatchPayloadGuildDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-delete */
+export type DispatchPayloadGuildDeleteData = UnavailableGuild;
 
-export type GuildBanAdd = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-ban-add */
+export type DispatchPayloadGuildBanAdd = DispatchPayload<
   GatewayEvents.GuildBanAdd,
   DispatchPayloadGuildBanAddData
 >;
 
-export interface DispatchPayloadGuildBanAddData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-ban-add-guild-ban-add-event-fields */
+export interface DispatchPayloadGuildBanAddData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** the banned user */
+  user: User;
+}
 
-export type GuildBanRemove = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-ban-remove */
+export type DispatchPayloadGuildBanRemove = DispatchPayload<
   GatewayEvents.GuildBanRemove,
   DispatchPayloadGuildBanRemoveData
 >;
 
-export interface DispatchPayloadGuildBanRemoveData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-ban-remove-guild-ban-remove-event-fields */
+export interface DispatchPayloadGuildBanRemoveData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** the unbanned user */
+  user: User;
+}
 
-export type GuildEmojisUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-emojis-update */
+export type DispatchPayloadGuildEmojisUpdate = DispatchPayload<
   GatewayEvents.GuildEmojisUpdate,
   DispatchPayloadGuildEmojisUpdateData
 >;
 
-export interface DispatchPayloadGuildEmojisUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-emojis-update-guild-emojis-update-event-fields */
+export interface DispatchPayloadGuildEmojisUpdateData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** array of [emojis](https://discord.com/developers/docs/resources/emoji#emoji-object) */
+  emojis: Emoji[];
+}
 
-export type GuildIntegrationsUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-integrations-update */
+export type DispatchPayloadGuildIntegrationsUpdate = DispatchPayload<
   GatewayEvents.GuildIntegrationsUpdate,
   DispatchPayloadGuildIntegrationsUpdateData
 >;
 
-export interface DispatchPayloadGuildIntegrationsUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-integrations-update-guild-integrations-update-event-fields */
+export interface DispatchPayloadGuildIntegrationsUpdateData {
+  /** id of the guild whose integrations were updated */
+  guild_id: Snowflake;
+}
 
-export type GuildMemberAdd = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-member-add */
+export type DispatchPayloadGuildMemberAdd = DispatchPayload<
   GatewayEvents.GuildMemberAdd,
   DispatchPayloadGuildMemberAddData
 >;
 
-export interface DispatchPayloadGuildMemberAddData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-member-add-guild-member-add-extra-fields */
+export interface DispatchPayloadGuildMemberAddData extends GuildMember {
+  /** id of the guild */
+  guild_id: Snowflake;
+}
 
-export type GuildMemberRemove = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-member-remove */
+export type DispatchPayloadGuildMemberRemove = DispatchPayload<
   GatewayEvents.GuildMemberRemove,
   DispatchPayloadGuildMemberRemoveData
 >;
 
-export interface DispatchPayloadGuildMemberRemoveData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-member-remove-guild-member-remove-event-fields */
+export interface DispatchPayloadGuildMemberRemoveData {
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** the user who was removed */
+  user: user;
+}
 
-export type GuildMemberUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-member-update */
+export type DispatchPayloadGuildMemberUpdate = DispatchPayload<
   GatewayEvents.GuildMemberUpdate,
   DispatchPayloadGuildMemberUpdateData
 >;
 
-export interface DispatchPayloadGuildMemberUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-member-update-guild-member-update-event-fields */
+export interface DispatchPayloadGuildMemberUpdateData
+  extends Omit<GuildMember, "permissions"> {
+  /** the id of the guild */
+  guild_id: Snowflake;
+}
 
-export type GuildMembersChunk = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-members-chunk */
+export type DispatchPayloadGuildMembersChunk = DispatchPayload<
   GatewayEvents.GuildMembersChunk,
   DispatchPayloadGuildMembersChunkData
 >;
 
-export interface DispatchPayloadGuildMembersChunkData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-members-chunk-guild-members-chunk-event-fields */
+export interface DispatchPayloadGuildMembersChunkData {
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** set of guild members */
+  members: GuildMember[];
+  /** the chunk index in the expected chunks for this response (0 <= chunk_index < chunk_count) */
+  chunk_index: number;
+  /** the total number of expected chunks for this response */
+  chunk_count: number;
+  /** if passing an invalid id to `REQUEST_GUILD_MEMBERS`, it will be returned here */
+  not_found: Snowflake[];
+  /** if passing true to `REQUEST_GUILD_MEMBERS`, presences of the returned members will be here */
+  presences?: DispatchPayloadPresenceUpdateData[];
+  /** the nonce used in the [Guild Members Request](https://discord.com/developers/docs/topics/gateway#request-guild-members) */
+  nonce?: string;
+}
 
-export type GuildRoleCreate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-role-create */
+export type DispatchPayloadGuildRoleCreate = DispatchPayload<
   GatewayEvents.GuildRoleCreate,
   DispatchPayloadGuildRoleCreateData
 >;
 
-export interface DispatchPayloadGuildRoleCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-role-create-guild-role-create-event-fields */
+export interface DispatchPayloadGuildRoleCreateData {
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** the role created */
+  role: Role;
+}
 
-export type GuildRoleUpdate = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-role-update */
+export type DispatchPayloadGuildRoleUpdate = DispatchPayload<
   GatewayEvents.GuildRoleUpdate,
   DispatchPayloadGuildRoleUpdateData
 >;
 
-export interface DispatchPayloadGuildRoleUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-role-update-guild-role-update-event-fields */
+export interface DispatchPayloadGuildRoleUpdateData {
+  /** the id of the guild */
+  guild_id: Snowflake;
+  /** the role updated */
+  role: Role;
+}
 
-export type GuildRoleDelete = DispatchPayload<
+/** https://discord.com/developers/docs/topics/gateway#guild-role-delete */
+export type DispatchPayloadGuildRoleDelete = DispatchPayload<
   GatewayEvents.GuildRoleDelete,
   DispatchPayloadGuildRoleDeleteData
 >;
 
-export interface DispatchPayloadGuildRoleDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#guild-role-delete-guild-role-delete-event-fields */
+export interface DispatchPayloadGuildRoleDeleteData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** id of the role */
+  role_id: Snowflake;
+}
 
-export type IntegrationCreate = DispatchPayload<
+export type DispatchPayloadIntegrationCreate = DispatchPayload<
   GatewayEvents.IntegrationCreate,
   DispatchPayloadIntegrationCreateData
 >;
 
 export interface DispatchPayloadIntegrationCreateData {}
 
-export type IntegrationUpdate = DispatchPayload<
+export type DispatchPayloadIntegrationUpdate = DispatchPayload<
   GatewayEvents.IntegrationUpdate,
   DispatchPayloadIntegrationUpdateData
 >;
 
 export interface DispatchPayloadIntegrationUpdateData {}
 
-export type IntegrationDelete = DispatchPayload<
+export type DispatchPayloadIntegrationDelete = DispatchPayload<
   GatewayEvents.IntegrationDelete,
   DispatchPayloadIntegrationDeleteData
 >;
 
 export interface DispatchPayloadIntegrationDeleteData {}
 
-export type InteractionCreate = DispatchPayload<
+export type DispatchPayloadInteractionCreate = DispatchPayload<
   GatewayEvents.InteractionCreate,
   DispatchPayloadInteractionCreateData
 >;
 
 export interface DispatchPayloadInteractionCreateData {}
 
-export type InviteCreate = DispatchPayload<
+export type DispatchPayloadInviteCreate = DispatchPayload<
   GatewayEvents.InviteCreate,
   DispatchPayloadInviteCreateData
 >;
 
 export interface DispatchPayloadInviteCreateData {}
 
-export type InviteDelete = DispatchPayload<
+export type DispatchPayloadInviteDelete = DispatchPayload<
   GatewayEvents.InviteDelete,
   DispatchPayloadInviteDeleteData
 >;
 
 export interface DispatchPayloadInviteDeleteData {}
 
-export type MessageCreate = DispatchPayload<
+export type DispatchPayloadMessageCreate = DispatchPayload<
   GatewayEvents.MessageCreate,
   DispatchPayloadMessageCreateData
 >;
 
 export interface DispatchPayloadMessageCreateData {}
 
-export type MessageUpdate = DispatchPayload<
+export type DispatchPayloadMessageUpdate = DispatchPayload<
   GatewayEvents.MessageUpdate,
   DispatchPayloadMessageUpdateData
 >;
 
 export interface DispatchPayloadMessageUpdateData {}
 
-export type MessageDelete = DispatchPayload<
+export type DispatchPayloadMessageDelete = DispatchPayload<
   GatewayEvents.MessageDelete,
   DispatchPayloadMessageDeleteData
 >;
 
 export interface DispatchPayloadMessageDeleteData {}
 
-export type MessageDeleteBulk = DispatchPayload<
+export type DispatchPayloadMessageDeleteBulk = DispatchPayload<
   GatewayEvents.MessageDeleteBulk,
   DispatchPayloadMessageDeleteBulkData
 >;
 
 export interface DispatchPayloadMessageDeleteBulkData {}
 
-export type MessageReactionAdd = DispatchPayload<
+export type DispatchPayloadMessageReactionAdd = DispatchPayload<
   GatewayEvents.MessageReactionAdd,
   DispatchPayloadMessageReactionAddData
 >;
 
 export interface DispatchPayloadMessageReactionAddData {}
 
-export type MessageReactionRemove = DispatchPayload<
+export type DispatchPayloadMessageReactionRemove = DispatchPayload<
   GatewayEvents.MessageReactionRemove,
   DispatchPayloadMessageReactionRemoveData
 >;
 
 export interface DispatchPayloadMessageReactionRemoveData {}
 
-export type MessageReactionRemoveAll = DispatchPayload<
+export type DispatchPayloadMessageReactionRemoveAll = DispatchPayload<
   GatewayEvents.MessageReactionRemoveAll,
   DispatchPayloadMessageReactionRemoveAllData
 >;
 
 export interface DispatchPayloadMessageReactionRemoveAllData {}
 
-export type MessageReactionRemoveEmoji = DispatchPayload<
+export type DispatchPayloadMessageReactionRemoveEmoji = DispatchPayload<
   GatewayEvents.MessageReactionRemoveEmoji,
   DispatchPayloadMessageReactionRemoveEmojiData
 >;
 
 export interface DispatchPayloadMessageReactionRemoveEmojiData {}
 
-export type PresenceUpdate = DispatchPayload<
+export type DispatchPayloadPresenceUpdate = DispatchPayload<
   GatewayEvents.PresenceUpdate,
   DispatchPayloadPresenceUpdateData
 >;
 
 export interface DispatchPayloadPresenceUpdateData {}
 
-export type TypingStart = DispatchPayload<
+export type DispatchPayloadTypingStart = DispatchPayload<
   GatewayEvents.TypingStart,
   DispatchPayloadTypingStartData
 >;
 
 export interface DispatchPayloadTypingStartData {}
 
-export type UserUpdate = DispatchPayload<
+export type DispatchPayloadUserUpdate = DispatchPayload<
   GatewayEvents.UserUpdate,
   DispatchPayloadUserUpdateData
 >;
 
 export interface DispatchPayloadUserUpdateData {}
 
-export type VoiceStateUpdate = DispatchPayload<
+export type DispatchPayloadVoiceStateUpdate = DispatchPayload<
   GatewayEvents.VoiceStateUpdate,
   DispatchPayloadVoiceStateUpdateData
 >;
 
 export interface DispatchPayloadVoiceStateUpdateData {}
 
-export type VoiceServerUpdate = DispatchPayload<
+export type DispatchPayloadVoiceServerUpdate = DispatchPayload<
   GatewayEvents.VoiceServerUpdate,
   DispatchPayloadVoiceServerUpdateData
 >;
 
 export interface DispatchPayloadVoiceServerUpdateData {}
 
-export type WebhooksUpdate = DispatchPayload<
+export type DispatchPayloadWebhooksUpdate = DispatchPayload<
   GatewayEvents.WebhooksUpdate,
   DispatchPayloadWebhooksUpdateData
 >;
