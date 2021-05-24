@@ -143,7 +143,7 @@ export type IdentifyPayload = GatewayPayload<
 /** https://discord.com/developers/docs/topics/gateway#identify-identify-structure */
 export interface IdentifyPayloadData {
   /** authentication token */
-  token: `Bot ${string}`;
+  token: string;
   /** [connection properties](https://discord.com/developers/docs/topics/gateway#identify-identify-connection-properties) */
   properties: IdentifyConnectionProperties;
   /** whether this connection supports compression of packets */
@@ -177,7 +177,7 @@ export type ResumePayload = GatewayPayload<
 /** https://discord.com/developers/docs/topics/gateway#resume-resume-structure */
 export interface ResumePayloadData {
   /** session token */
-  token: `Bot ${string}`;
+  token: string;
   /** session id */
   session_id: string;
   /** last sequence number received */
