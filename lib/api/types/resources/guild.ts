@@ -3,7 +3,7 @@
 // https://discord.dev/resources/guild
 
 import type { Snowflake } from "../reference.ts";
-import type { PresenceUpdate } from "../topics/gateway.ts";
+import type { DispatchPayloadPresenceUpdateData } from "../topics/gateway.ts";
 import type { Permissions, Role } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
@@ -82,7 +82,7 @@ export interface Guild {
   /** all active threads in the guild that current user has permission to view */
   threads?: Channel[];
   /** presences of the members in the guild, will only include non-offline members if the size is greater than `large threshold` */
-  presences?: PresenceUpdate[];
+  presences?: DispatchPayloadPresenceUpdateData[];
   /** the maximum number of presences for the guild (the default value, currently 25000, is in effect when `null` is returned) */
   max_presences?: number | null;
   /** the vanity url code for the guild */

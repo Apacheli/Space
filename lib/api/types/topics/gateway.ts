@@ -2,8 +2,25 @@
 
 // https://discord.com/developers/docs/topics/gateway
 
-import type { Snowflake } from "../reference";
-import type { GatewayOpcodes } from "./opcodes_and_status_codes.ts";
+import type {
+  ApplicationCommand,
+  Interaction,
+} from "../interactions/slash_commands.ts";
+import type { Snowflake } from "../reference.ts";
+import type { Application } from "../resources/application.ts";
+import type { Channel, Message, ThreadMember } from "../resources/channel.ts";
+import type { Emoji } from "../resources/emoji.ts";
+import type {
+  Guild,
+  GuildMember,
+  Integration,
+  UnavailableGuild,
+} from "../resources/guild.ts";
+import type { Invite, InviteMetadata } from "../resources/invite.ts";
+import type { User } from "../resources/user.ts";
+import type { VoiceState } from "../resources/voice.ts";
+import type { GatewayOpcodes } from "./opcodes_and_status_codes.ts.ts";
+import type { Role } from "./permissions.ts";
 
 /** https://discord.com/developers/docs/topics/gateway#gateways-gateway-versions */
 export type GatewayVersions = 8 | 9;
@@ -304,26 +321,37 @@ export type DispatchPayloadResumed = DispatchPayload<
 /** https://discord.com/developers/docs/topics/gateway#resumed */
 export type DispatchPayloadResumedData = void;
 
+/** https://discord.com/developers/docs/topics/gateway#commands */
 export type DispatchPayloadApplicationCommandCreate = DispatchPayload<
   GatewayEvents.ApplicationCommandCreate,
   DispatchPayloadApplicationCommandCreateData
 >;
 
-export interface DispatchPayloadApplicationCommandCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#commands */
+export interface DispatchPayloadApplicationCommandCreateData
+  extends ApplicationCommand {
+  guild_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#application-command-update */
 export type DispatchPayloadApplicationCommandUpdate = DispatchPayload<
   GatewayEvents.ApplicationCommandUpdate,
   DispatchPayloadApplicationCommandUpdateData
 >;
 
-export interface DispatchPayloadApplicationCommandUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#application-command-update */
+export type DispatchPayloadApplicationCommandUpdateData =
+  DispatchPayloadApplicationCommandCreateData;
 
+/** https://discord.com/developers/docs/topics/gateway#application-command-delete */
 export type DispatchPayloadApplicationCommandDelete = DispatchPayload<
   GatewayEvents.ApplicationCommandDelete,
   DispatchPayloadApplicationCommandDeleteData
 >;
 
-export interface DispatchPayloadApplicationCommandDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#application-command-delete */
+export type DispatchPayloadApplicationCommandDeleteData =
+  DispatchPayloadApplicationCommandCreateData;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-create */
 export type DispatchPayloadChannelCreate = DispatchPayload<
@@ -332,7 +360,7 @@ export type DispatchPayloadChannelCreate = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-create */
-export type DispatchPayloadDispatchPayloadChannelCreateData = Channel;
+export type DispatchPayloadChannelCreateData = Channel;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-update */
 export type DispatchPayloadChannelUpdate = DispatchPayload<
@@ -341,7 +369,7 @@ export type DispatchPayloadChannelUpdate = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-update */
-export type DispatchPayloadDispatchPayloadChannelUpdateData = Channel;
+export type DispatchPayloadChannelUpdateData = Channel;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-delete */
 export type DispatchPayloadChannelDelete = DispatchPayload<
@@ -350,7 +378,7 @@ export type DispatchPayloadChannelDelete = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-delete */
-export type DispatchPayloadDispatchPayloadChannelDeleteData = Channel;
+export type DispatchPayloadChannelDeleteData = Channel;
 
 /** https://discord.com/developers/docs/topics/gateway#channel-pins-update */
 export type DispatchPayloadChannelPinsUpdate = DispatchPayload<
@@ -375,7 +403,7 @@ export type DispatchPayloadThreadCreate = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#thread-create */
-export type DispatchPayloadDispatchPayloadThreadCreateData = Channel;
+export type DispatchPayloadThreadCreateData = Channel;
 
 /** https://discord.com/developers/docs/topics/gateway#thread-update */
 export type DispatchPayloadThreadUpdate = DispatchPayload<
@@ -384,7 +412,7 @@ export type DispatchPayloadThreadUpdate = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#thread-update */
-export type DispatchPayloadDispatchPayloadThreadUpdateData = Channel;
+export type DispatchPayloadThreadUpdateData = Channel;
 
 /** https://discord.com/developers/docs/topics/gateway#thread-delete */
 export type DispatchPayloadThreadDelete = DispatchPayload<
@@ -393,7 +421,7 @@ export type DispatchPayloadThreadDelete = DispatchPayload<
 >;
 
 /** https://discord.com/developers/docs/topics/gateway#thread-delete */
-export type DispatchPayloadDispatchPayloadThreadDeleteData = Pick<
+export type DispatchPayloadThreadDeleteData = Pick<
   Channel,
   "id" | "guild_id" | "parent_id" | "type"
 >;
@@ -549,7 +577,7 @@ export interface DispatchPayloadGuildMemberRemoveData {
   /** the id of the guild */
   guild_id: Snowflake;
   /** the user who was removed */
-  user: user;
+  user: User;
 }
 
 /** https://discord.com/developers/docs/topics/gateway#guild-member-update */
@@ -631,142 +659,404 @@ export interface DispatchPayloadGuildRoleDeleteData {
   role_id: Snowflake;
 }
 
+/** https://discord.com/developers/docs/topics/gateway#integration-create */
 export type DispatchPayloadIntegrationCreate = DispatchPayload<
   GatewayEvents.IntegrationCreate,
   DispatchPayloadIntegrationCreateData
 >;
 
-export interface DispatchPayloadIntegrationCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#integration-create-integration-create-event-additional-fields */
+export interface DispatchPayloadIntegrationCreateData extends Integration {
+  /** id of the guild */
+  guild_id: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#integration-update */
 export type DispatchPayloadIntegrationUpdate = DispatchPayload<
   GatewayEvents.IntegrationUpdate,
   DispatchPayloadIntegrationUpdateData
 >;
 
-export interface DispatchPayloadIntegrationUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#integration-update-integration-update-event-additional-fields */
+export type DispatchPayloadIntegrationUpdateData =
+  DispatchPayloadIntegrationCreateData;
 
+/** https://discord.com/developers/docs/topics/gateway#integration-delete */
 export type DispatchPayloadIntegrationDelete = DispatchPayload<
   GatewayEvents.IntegrationDelete,
   DispatchPayloadIntegrationDeleteData
 >;
 
-export interface DispatchPayloadIntegrationDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#integration-delete-integration-delete-event-fields */
+export interface DispatchPayloadIntegrationDeleteData {
+  /** integration id */
+  id: Snowflake;
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** id of the bot/OAuth2 application for this discord integration */
+  application_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#interaction-create */
 export type DispatchPayloadInteractionCreate = DispatchPayload<
   GatewayEvents.InteractionCreate,
   DispatchPayloadInteractionCreateData
 >;
 
-export interface DispatchPayloadInteractionCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#interaction-create */
+export type DispatchPayloadInteractionCreateData = Interaction;
 
+/** https://discord.com/developers/docs/topics/gateway#invite-create */
 export type DispatchPayloadInviteCreate = DispatchPayload<
   GatewayEvents.InviteCreate,
   DispatchPayloadInviteCreateData
 >;
 
-export interface DispatchPayloadInviteCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#invite-create-invite-create-event-fields */
+export interface DispatchPayloadInviteCreateData
+  extends Omit<Invite, "channel" | "guild">, InviteMetadata {
+  /** the channel the invite is for */
+  channel_id: Snowflake;
+  /** the guild of the invite */
+  guild_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#invite-delete */
 export type DispatchPayloadInviteDelete = DispatchPayload<
   GatewayEvents.InviteDelete,
   DispatchPayloadInviteDeleteData
 >;
 
-export interface DispatchPayloadInviteDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#invite-delete-invite-delete-event-fields */
+export type DispatchPayloadInviteDeleteData = Pick<
+  DispatchPayloadInviteCreateData,
+  "channel_id" | "guild_id" | "code"
+>;
 
+/** https://discord.com/developers/docs/topics/gateway#message-create */
 export type DispatchPayloadMessageCreate = DispatchPayload<
   GatewayEvents.MessageCreate,
   DispatchPayloadMessageCreateData
 >;
 
-export interface DispatchPayloadMessageCreateData {}
+/** https://discord.com/developers/docs/topics/gateway#message-create */
+export type DispatchPayloadMessageCreateData = Message;
 
+/** https://discord.com/developers/docs/topics/gateway#message-update */
 export type DispatchPayloadMessageUpdate = DispatchPayload<
   GatewayEvents.MessageUpdate,
   DispatchPayloadMessageUpdateData
 >;
 
-export interface DispatchPayloadMessageUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#message-update */
+export type DispatchPayloadMessageUpdateData = Message;
 
+/** https://discord.com/developers/docs/topics/gateway#message-delete */
 export type DispatchPayloadMessageDelete = DispatchPayload<
   GatewayEvents.MessageDelete,
   DispatchPayloadMessageDeleteData
 >;
 
-export interface DispatchPayloadMessageDeleteData {}
+/** https://discord.com/developers/docs/topics/gateway#message-delete-message-delete-event-fields */
+export interface DispatchPayloadMessageDeleteData {
+  /** the id of the message */
+  id: Snowflake;
+  /** the id of the channel */
+  channel_id: Snowflake;
+  /** the id of the guild */
+  guild_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#message-delete-bulk */
 export type DispatchPayloadMessageDeleteBulk = DispatchPayload<
   GatewayEvents.MessageDeleteBulk,
   DispatchPayloadMessageDeleteBulkData
 >;
 
-export interface DispatchPayloadMessageDeleteBulkData {}
+/** https://discord.com/developers/docs/topics/gateway#message-delete-bulk-message-delete-bulk-event-fields */
+export interface DispatchPayloadMessageDeleteBulkData {
+  /** the ids of the messages */
+  ids: Snowflake[];
+  /** the id of the channel */
+  channel_id: Snowflake;
+  /** the id of the guild */
+  guild_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-add */
 export type DispatchPayloadMessageReactionAdd = DispatchPayload<
   GatewayEvents.MessageReactionAdd,
   DispatchPayloadMessageReactionAddData
 >;
 
-export interface DispatchPayloadMessageReactionAddData {}
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-add-message-reaction-add-event-fields */
+export interface DispatchPayloadMessageReactionAddData
+  extends DispatchPayloadMessageReactionRemoveData {
+  /** the member who reacted if this happened in a guild */
+  member?: GuildMember;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove */
 export type DispatchPayloadMessageReactionRemove = DispatchPayload<
   GatewayEvents.MessageReactionRemove,
   DispatchPayloadMessageReactionRemoveData
 >;
 
-export interface DispatchPayloadMessageReactionRemoveData {}
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove-message-reaction-remove-event-fields */
+export interface DispatchPayloadMessageReactionRemoveData
+  extends DispatchPayloadMessageReactionRemoveAllData {
+  /** the id of the user */
+  user_id: Snowflake;
+  /** the emoji used to react - [example](https://discord.com/developers/docs/resources/emoji#emoji-object-gateway-reaction-standard-emoji-example) */
+  emoji: Partial<Emoji>;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove-all */
 export type DispatchPayloadMessageReactionRemoveAll = DispatchPayload<
   GatewayEvents.MessageReactionRemoveAll,
   DispatchPayloadMessageReactionRemoveAllData
 >;
 
-export interface DispatchPayloadMessageReactionRemoveAllData {}
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove-all-message-reaction-remove-all-event-fields */
+export interface DispatchPayloadMessageReactionRemoveAllData {
+  /** the id of the channel */
+  channel_id: Snowflake;
+  /** the id of the message */
+  message_id: Snowflake;
+  /** the id of the guild */
+  guild_id?: Snowflake;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove-emoji */
 export type DispatchPayloadMessageReactionRemoveEmoji = DispatchPayload<
   GatewayEvents.MessageReactionRemoveEmoji,
   DispatchPayloadMessageReactionRemoveEmojiData
 >;
 
-export interface DispatchPayloadMessageReactionRemoveEmojiData {}
+/** https://discord.com/developers/docs/topics/gateway#message-reaction-remove-emoji-message-reaction-remove-emoji */
+export interface DispatchPayloadMessageReactionRemoveEmojiData
+  extends DispatchPayloadMessageReactionRemoveAllData {
+  /** the emoji that was removed */
+  emoji: Partial<Emoji>;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#presence-update */
 export type DispatchPayloadPresenceUpdate = DispatchPayload<
   GatewayEvents.PresenceUpdate,
   DispatchPayloadPresenceUpdateData
 >;
 
-export interface DispatchPayloadPresenceUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#presence-update-presence-update-event-fields */
+export interface DispatchPayloadPresenceUpdateData
+  extends Omit<PresenceUpdatePayloadData, "afk"> {
+  /** the user presence is being updated for */
+  user: User;
+  /** user's platform-dependent status */
+  client_status: ClientStatus;
+}
 
+export interface ClientStatus {
+  /** the user's status set for an active desktop (Windows, Linux, Mac) application session */
+  desktop?: string;
+  /** the user's status set for an active mobile (iOS, Android) application session */
+  mobile?: string;
+  /** the user's status set for an active web (browser, bot account) application session */
+  web?: string;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object */
+export interface Activity {
+  /** the activity's name */
+  name: string;
+  /** [activity type](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types) */
+  type: ActivityTypes;
+  /** 	stream url, is validated when type is 1 */
+  url?: string | null;
+  /** unix timestamp of when the activity was added to the user's session */
+  created_at: number;
+  /** unix timestamps for start and/or end of the game */
+  timestamps?: ActivityTimestamps;
+  /** application id for the game */
+  application_id?: Snowflake;
+  /** what the player is currently doing */
+  details?: string | null;
+  /** the user's current party status */
+  state?: string | null;
+  /** the emoji used for a custom status */
+  emoji?: ActivityEmoji | null;
+  /** information for the current party of the player */
+  party?: ActivityParty;
+  /** images for the presence and their hover texts */
+  assets?: ActivityAssets;
+  /** secrets for Rich Presence joining and spectating */
+  secrets?: ActivitySecrets;
+  /** whether or not the activity is an instanced game session */
+  instance?: boolean;
+  /** [activity flags](https://discord.com/developers/docs/topics/gateway#activity-object-activity-flags) `OR`d together, describes what the payload includes */
+  flags?: ActivityFlags;
+  /** the custom buttons shown in the Rich Presence (max 2) */
+  buttons?: ActivityButton[];
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-types */
+export enum ActivityTypes {
+  Game,
+  Streaming,
+  Listening,
+  Watching,
+  Custon,
+  Competing,
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-timestamps */
+export interface ActivityTimestamps {
+  /** unix time (in milliseconds) of when the activity started */
+  start?: number;
+  /** unix time (in milliseconds) of when the activity ends */
+  end?: number;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-emoji */
+export type ActivityEmoji = Pick<Emoji, "name" | "id" | "animated">;
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-party */
+export interface ActivityParty {
+  /** the id of the party */
+  id?: string;
+  /** used to show the party's current and maximum size */
+  size?: [current_size: number, max_size: number];
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-assets */
+export interface ActivityAssets {
+  /** the id for a large asset of the activity, usually a snowflake */
+  large_image?: string;
+  /** text displayed when hovering over the large image of the activity */
+  large_text?: string;
+  /** the id for a small asset of the activity, usually a snowflake */
+  small_image?: string;
+  /** text displayed when hovering over the small image of the activity */
+  small_text?: string;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-secrets */
+export interface ActivitySecrets {
+  /** the secret for joining a party */
+  join?: string;
+  /** the secret for spectating a game */
+  spectate?: string;
+  /** the secret for a specific instanced match */
+  match?: string;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-flags */
+export enum ActivityFlags {
+  Instance = 1 << 0,
+  Join = 1 << 1,
+  Spectate = 1 << 2,
+  JoinRequest = 1 << 3,
+  Sync = 1 << 4,
+  Play = 1 << 5,
+}
+
+/** https://discord.com/developers/docs/topics/gateway#activity-object-activity-buttons */
+export interface ActivityButton {
+  /** the text shown on the button (1-32 characters) */
+  label: string;
+  /** the url opened when clicking the button (1-512 characters) */
+  url: string;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#typing-start */
 export type DispatchPayloadTypingStart = DispatchPayload<
   GatewayEvents.TypingStart,
   DispatchPayloadTypingStartData
 >;
 
-export interface DispatchPayloadTypingStartData {}
+/** https://discord.com/developers/docs/topics/gateway#typing-start-typing-start-event-fields */
+export interface DispatchPayloadTypingStartData {
+  /** id of the channel */
+  channel_id: Snowflake;
+  /** id of the guild */
+  guild_id?: Snowflake;
+  /** id of the user */
+  user_id: Snowflake;
+  /** unix time (in seconds) of when the user started typing */
+  timestamp: number;
+  /** the member who started typing if this happened in a guild */
+  member?: GuildMember;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#user-update */
 export type DispatchPayloadUserUpdate = DispatchPayload<
   GatewayEvents.UserUpdate,
   DispatchPayloadUserUpdateData
 >;
 
-export interface DispatchPayloadUserUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#user-update */
+export type DispatchPayloadUserUpdateData = User;
 
+/** https://discord.com/developers/docs/topics/gateway#voice-state-update */
 export type DispatchPayloadVoiceStateUpdate = DispatchPayload<
   GatewayEvents.VoiceStateUpdate,
   DispatchPayloadVoiceStateUpdateData
 >;
 
-export interface DispatchPayloadVoiceStateUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#voice-state-update */
+export type DispatchPayloadVoiceStateUpdateData = VoiceState;
 
+/** https://discord.com/developers/docs/topics/gateway#voice-server-update */
 export type DispatchPayloadVoiceServerUpdate = DispatchPayload<
   GatewayEvents.VoiceServerUpdate,
   DispatchPayloadVoiceServerUpdateData
 >;
 
-export interface DispatchPayloadVoiceServerUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#voice-server-update-voice-server-update-event-fields */
+export interface DispatchPayloadVoiceServerUpdateData {
+  /** voice connection token */
+  token: string;
+  /** the guild this voice server update is for */
+  guild_id: Snowflake;
+  /** the voice server host */
+  endpoint: string | null;
+}
 
+/** https://discord.com/developers/docs/topics/gateway#webhooks-update */
 export type DispatchPayloadWebhooksUpdate = DispatchPayload<
   GatewayEvents.WebhooksUpdate,
   DispatchPayloadWebhooksUpdateData
 >;
 
-export interface DispatchPayloadWebhooksUpdateData {}
+/** https://discord.com/developers/docs/topics/gateway#webhooks-update-webhook-update-event-fields */
+export interface DispatchPayloadWebhooksUpdateData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** id of the channel */
+  channel_id: Snowflake;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#get-gateway */
+export interface GetGatewayBody {
+  /** The WSS URL that can be used for connecting to the gateway */
+  url: string;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#get-gateway-bot */
+export interface GetGatewayBotBody {
+  /** The recommended number of [shards](https://discord.com/developers/docs/topics/gateway#sharding) to use when connecting */
+  shards: number;
+  /** Information on the current session start limit */
+  session_start_limit: SessionStartLimit;
+}
+
+/** https://discord.com/developers/docs/topics/gateway#session-start-limit-object */
+export interface SessionStartLimit {
+  /** The total number of session starts the current user is allowed */
+  total: number;
+  /** The remaining number of session starts the current user is allowed */
+  remaining: number;
+  /** The number of milliseconds after which the limit resets */
+  reset_after: number;
+  /** The number of identify requests allowed per 5 seconds */
+  max_concurrency: number;
+}
