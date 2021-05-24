@@ -19,7 +19,7 @@ import type {
 import type { Invite, InviteMetadata } from "../resources/invite.ts";
 import type { User } from "../resources/user.ts";
 import type { VoiceState } from "../resources/voice.ts";
-import type { GatewayOpcodes } from "./opcodes_and_status_codes.ts.ts";
+import type { GatewayOpcodes } from "./opcodes_and_status_codes.ts";
 import type { Role } from "./permissions.ts";
 
 /** https://discord.com/developers/docs/topics/gateway#gateways-gateway-versions */
