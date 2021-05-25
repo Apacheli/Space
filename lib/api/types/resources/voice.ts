@@ -14,7 +14,7 @@ export interface VoiceState {
   /** the user id this voice state is for */
   user_id: Snowflake;
   /** the guild member this voice state is for */
-  member?: GuildMember;
+  member?: GuildMember | null;
   /** the session id for this voice state */
   session_id: string;
   /** whether this user is deafened by the server */

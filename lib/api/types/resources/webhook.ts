@@ -53,7 +53,7 @@ export enum WebhookTypes {
 export interface CreateWebhookJSON {
   /** name of the webhook (1-80 characters) */
   name: string;
-  /** mage for the default webhook avatar */
+  /** image for the default webhook avatar */
   avatar?: string;
 }
 
