@@ -10,6 +10,7 @@ import type { Application } from "./application.ts";
 import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
 import type { Emoji } from "./emoji.ts";
 import type { Invite } from "./invite.ts";
+import type { StageInstance } from "./stage_instance.ts";
 import type { User } from "./user.ts";
 import type { VoiceRegion, VoiceState } from "./voice.ts";
 
@@ -109,6 +110,8 @@ export interface Guild {
   welcome_screen?: WelcomeScreen;
   /** [guild NSFW level](https://discord.dev/resources/guild#guild-object-guild-nsfw-level) */
   nsfw_level: GuildNSFWLevel;
+  /** array of [stage instance](https://discord.dev/resources/stage-instance#stage-instance-object) objects */
+  stage_instances?: StageInstance;
 }
 
 /** https://discord.dev/resources/guild#guild-object-default-message-notification-level */

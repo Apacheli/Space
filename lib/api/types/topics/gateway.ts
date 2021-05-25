@@ -6,6 +6,7 @@ import type {
   ApplicationCommand,
   Interaction,
 } from "../interactions/slash_commands.ts";
+import type { StageInstance } from "../resources/stage_instance.ts";
 import type { Snowflake } from "../reference.ts";
 import type { Application } from "../resources/application.ts";
 import type { Channel, Message, ThreadMember } from "../resources/channel.ts";
@@ -147,6 +148,11 @@ export enum GatewayEvents {
   VoiceServerUpdate = "VOICE_SERVER_UPDATE",
   /** guild channel webhook was created, update, or deleted */
   WebhooksUpdate = "WEBHOOKS_UPDATE",
+
+  // These weren't added to the table yet
+  StageInstanceCreate = "STAGE_INSTANCE_CREATE",
+  StageInstanceUpdate = "STAGE_INSTANCE_UPDATE",
+  StageInstanceDelete = "STAGE_INSTANCE_DELETE",
 }
 
 /** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
@@ -1059,6 +1065,33 @@ export interface DispatchPayloadWebhooksUpdateData {
   /** id of the channel */
   channel_id: Snowflake;
 }
+
+/** https://discord.dev/topics/gateway#stage-instance-create */
+export type DispatchPayloadStageInstanceCreate = DispatchPayload<
+  GatewayEvents.StageInstanceCreate,
+  DispatchPayloadStageInstanceCreateData
+>;
+
+/** https://discord.dev/topics/gateway#stage-instance-create */
+export type DispatchPayloadStageInstanceCreateData = StageInstance;
+
+/** https://discord.dev/topics/gateway#stage-instance-update */
+export type DispatchPayloadStageInstanceUpdate = DispatchPayload<
+  GatewayEvents.StageInstanceUpdate,
+  DispatchPayloadStageInstanceUpdateData
+>;
+
+/** https://discord.dev/topics/gateway#stage-instance-update */
+export type DispatchPayloadStageInstanceUpdateData = StageInstance;
+
+/** https://discord.dev/topics/gateway#stage-instance-create */
+export type DispatchPayloadStageInstanceDelete = DispatchPayload<
+  GatewayEvents.StageInstanceDelete,
+  DispatchPayloadStageInstanceDeleteData
+>;
+
+/** https://discord.dev/topics/gateway#stage-instance-create */
+export type DispatchPayloadStageInstanceDeleteData = StageInstance;
 
 /** https://discord.dev/topics/gateway#get-gateway */
 export interface GetGatewayBody {
