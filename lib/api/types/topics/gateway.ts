@@ -1084,13 +1084,13 @@ export type DispatchPayloadStageInstanceUpdate = DispatchPayload<
 /** https://discord.dev/topics/gateway#stage-instance-update */
 export type DispatchPayloadStageInstanceUpdateData = StageInstance;
 
-/** https://discord.dev/topics/gateway#stage-instance-create */
+/** https://discord.dev/topics/gateway#stage-instance-delete */
 export type DispatchPayloadStageInstanceDelete = DispatchPayload<
   GatewayEvents.StageInstanceDelete,
   DispatchPayloadStageInstanceDeleteData
 >;
 
-/** https://discord.dev/topics/gateway#stage-instance-create */
+/** https://discord.dev/topics/gateway#stage-instance-delete */
 export type DispatchPayloadStageInstanceDeleteData = StageInstance;
 
 /** https://discord.dev/topics/gateway#get-gateway */
@@ -1182,4 +1182,7 @@ export type DispatchPayloads =
   | DispatchPayloadUserUpdate
   | DispatchPayloadVoiceStateUpdate
   | DispatchPayloadVoiceServerUpdate
-  | DispatchPayloadWebhooksUpdate;
+  | DispatchPayloadWebhooksUpdate
+  | DispatchPayloadStageInstanceCreate
+  | DispatchPayloadStageInstanceUpdate
+  | DispatchPayloadStageInstanceDelete;
