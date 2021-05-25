@@ -1,3 +1,5 @@
+// deno-lint-ignore-file camelcase
+
 // https://discord.dev/topics/voice-connections
 
 import type { Snowflake } from "../reference.ts";
