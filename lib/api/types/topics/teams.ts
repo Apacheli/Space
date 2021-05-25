@@ -25,7 +25,7 @@ export interface TeamMember {
   membership_state: MembershipState;
   /** will always be `["*"]` */
   permissions: string[];
-  /** 	the id of the parent team of which they are a member */
+  /** the id of the parent team of which they are a member */
   team_id: Snowflake;
   /** the avatar, discriminator, id, and username of the user */
   user: Partial<User>;

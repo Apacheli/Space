@@ -253,7 +253,7 @@ export interface VoiceStateUpdatePayloadData {
   channel_id: Snowflake | null;
   /** is the client muted */
   self_mute: boolean;
-  /** 	is the client deafened */
+  /** is the client deafened */
   self_deaf: boolean;
 }
 
@@ -324,7 +324,7 @@ export interface DispatchPayloadReadyData {
   session_id: string;
   /** the [shard information](https://discord.dev/topics/gateway#sharding) associated with this session, if sent when identifying */
   shard?: [shard_id: number, num_shards: number];
-  /** 	contains `id` and `flags` */
+  /** contains `id` and `flags` */
   application: Pick<Application, "id" | "flags">;
 }
 
@@ -895,7 +895,7 @@ export interface Activity {
   name: string;
   /** [activity type](https://discord.dev/topics/gateway#activity-object-activity-types) */
   type: ActivityTypes;
-  /** 	stream url, is validated when type is 1 */
+  /** stream url, is validated when type is 1 */
   url?: string | null;
   /** unix timestamp of when the activity was added to the user's session */
   created_at: number;
