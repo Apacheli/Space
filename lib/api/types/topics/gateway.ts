@@ -26,7 +26,7 @@ import type { Role } from "./permissions.ts";
 export type GatewayVersions = 8 | 9;
 
 /** https://discord.dev/topics/gateway#payloads */
-export interface GatewayPayload<op extends GatewayOpcodes, d extends unknown> {
+export interface GatewayPayload<op extends number, d extends unknown> {
   /** [opcode](https://discord.dev/topics/opcodes-and-status-codes#gateway-opcodes) for the payload */
   op: op;
   /** event data */
@@ -149,13 +149,13 @@ export enum GatewayEvents {
   WebhooksUpdate = "WEBHOOKS_UPDATE",
 }
 
-/** https://discord.com/developers/docs/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
+/** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
 export type HeartbeatACKPayload = GatewayPayload<
   GatewayOpcodes.HeartbeatACK,
   HeartbeatPayloadData
 >;
 
-/** https://discord.com/developers/docs/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
+/** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
 export type HeartbeatACKPayloadData = void;
 
 /** https://discord.dev/topics/gateway#identify */
@@ -208,13 +208,13 @@ export interface ResumePayloadData {
   seq: number;
 }
 
-/** https://discord.com/developers/docs/topics/gateway#heartbeat */
+/** https://discord.dev/topics/gateway#heartbeat */
 export type HeartbeatPayload = GatewayPayload<
   GatewayOpcodes.Heartbeat,
   HeartbeatPayloadData
 >;
 
-/** https://discord.com/developers/docs/topics/gateway#heartbeat */
+/** https://discord.dev/topics/gateway#heartbeat */
 export type HeartbeatPayloadData = number;
 
 /** https://discord.dev/topics/gateway#request-guild-members */
@@ -369,13 +369,13 @@ export type DispatchPayloadApplicationCommandDelete = DispatchPayload<
 export type DispatchPayloadApplicationCommandDeleteData =
   DispatchPayloadApplicationCommandCreateData;
 
-/** https://discord.com/developers/docs/topics/gateway#invalid-session */
+/** https://discord.dev/topics/gateway#invalid-session */
 export type InvalidSessionPayload = GatewayPayload<
   GatewayOpcodes.InvalidSession,
   InvalidSessionPayloadData
 >;
 
-/** https://discord.com/developers/docs/topics/gateway#invalid-session */
+/** https://discord.dev/topics/gateway#invalid-session */
 export type InvalidSessionPayloadData = boolean;
 
 /** https://discord.dev/topics/gateway#channel-create */
