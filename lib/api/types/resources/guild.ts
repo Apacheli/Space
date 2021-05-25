@@ -31,7 +31,7 @@ export interface Guild {
   owner?: boolean;
   /** id of owner */
   owner_id: Snowflake;
-  /** total permissions for [the user](https://discord.dev/resources/user#get-current-user-guilds) in the guild (excludes overrides) */
+  /** total permissions for [the user](https://discord.dev/resources/user#get-current-user-guilds) in the guild (excludes overwrites) */
   permissions?: Permissions;
   /** [voice region](https://discord.dev/resources/voice#voice-region-object) id for the guild */
   region: VoiceRegion;
@@ -255,7 +255,7 @@ export interface GuildMember {
   mute: boolean;
   /** whether the user has not yet passed the guild's [Membership Screening](https://discord.dev/resources/guild#membership-screening-object) requirements */
   pending?: boolean;
-  /** total permissions of the member in the channel, including overrides, returned when in the interaction object */
+  /** total permissions of the member in the channel, including overwrites, returned when in the interaction object */
   permissions?: Permissions;
 }
 
