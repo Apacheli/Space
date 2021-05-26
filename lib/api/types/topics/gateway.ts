@@ -138,6 +138,12 @@ export enum GatewayEvents {
   MessageReactionRemoveEmoji = "MESSAGE_REACTION_REMOVE_EMOJI",
   /** user was updated */
   PresenceUpdate = "PRESENCE_UPDATE",
+  /** stage instance was created */
+  StageInstanceCreate = "STAGE_INSTANCE_CREATE",
+  /** stage instance was deleted or closed */
+  StageInstanceDelete = "STAGE_INSTANCE_DELETE",
+  /** stage instance was updated */
+  StageInstanceUpdate = "STAGE_INSTANCE_UPDATE",
   /** user started typing in a channel */
   TypingStart = "TYPING_START",
   /** properties about the user changed */
@@ -148,11 +154,6 @@ export enum GatewayEvents {
   VoiceServerUpdate = "VOICE_SERVER_UPDATE",
   /** guild channel webhook was created, update, or deleted */
   WebhooksUpdate = "WEBHOOKS_UPDATE",
-
-  // These weren't added to the table yet
-  StageInstanceCreate = "STAGE_INSTANCE_CREATE",
-  StageInstanceUpdate = "STAGE_INSTANCE_UPDATE",
-  StageInstanceDelete = "STAGE_INSTANCE_DELETE",
 }
 
 /** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
@@ -1178,11 +1179,11 @@ export type DispatchPayloads =
   | DispatchPayloadMessageReactionRemoveAll
   | DispatchPayloadMessageReactionRemoveEmoji
   | DispatchPayloadPresenceUpdate
+  | DispatchPayloadStageInstanceCreate
+  | DispatchPayloadStageInstanceUpdate
+  | DispatchPayloadStageInstanceDelete
   | DispatchPayloadTypingStart
   | DispatchPayloadUserUpdate
   | DispatchPayloadVoiceStateUpdate
   | DispatchPayloadVoiceServerUpdate
-  | DispatchPayloadWebhooksUpdate
-  | DispatchPayloadStageInstanceCreate
-  | DispatchPayloadStageInstanceUpdate
-  | DispatchPayloadStageInstanceDelete;
+  | DispatchPayloadWebhooksUpdate;
