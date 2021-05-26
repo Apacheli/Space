@@ -1180,8 +1180,8 @@ export type DispatchPayloads =
   | DispatchPayloadMessageReactionRemoveEmoji
   | DispatchPayloadPresenceUpdate
   | DispatchPayloadStageInstanceCreate
-  | DispatchPayloadStageInstanceUpdate
   | DispatchPayloadStageInstanceDelete
+  | DispatchPayloadStageInstanceUpdate
   | DispatchPayloadTypingStart
   | DispatchPayloadUserUpdate
   | DispatchPayloadVoiceStateUpdate
