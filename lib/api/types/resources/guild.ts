@@ -683,6 +683,9 @@ export interface GetGuildWidgetImageQuery {
   style?: WidgetStyleOptions;
 }
 
+/** https://discord.dev/resources/guild#get-guild-widget-image */
+export type GetGuildWidgetImageBody = string;
+
 /** https://discord.dev/resources/guild#get-guild-widget-image-widget-style-options */
 export type WidgetStyleOptions =
   | "shield"

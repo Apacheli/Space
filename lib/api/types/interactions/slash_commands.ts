@@ -32,15 +32,15 @@ export type CreateGlobalApplicationCommandJSON = Omit<
 /** https://discord.dev/interactions/slash-commands#create-global-application-command */
 export type CreateGlobalApplicationCommandBody = ApplicationCommand;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#get-global-application-command */
 export type GetGlobalApplicationCommandBody = ApplicationCommand;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-global-application-command */
 export type EditGlobalApplicationCommandJSON = Partial<
   Nullify<CreateGlobalApplicationCommandJSON, "options">
 >;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-global-application-command */
 export type EditGlobalApplicationCommandBody = ApplicationCommand;
 
 /** https://discord.dev/interactions/slash-commands#delete-global-application-command */
@@ -49,68 +49,68 @@ export type DeleteGlobalApplicationCommandBody = void;
 /** https://discord.dev/interactions/slash-commands#get-guild-application-commands */
 export type GetGuildApplicationCommandsBody = ApplicationCommand[];
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#bulk-overwrite-global-application-commands */
 export type BulkOverwriteGlobalApplicationCommandsJSON = ApplicationCommand[];
 
 /** https://discord.dev/interactions/slash-commands#bulk-overwrite-global-application-commands */
 export type BulkOverwriteGlobalApplicationCommandsBody = ApplicationCommand[];
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#create-guild-application-command */
 export type CreateGuildApplicationCommandJSON =
   CreateGlobalApplicationCommandJSON;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#create-guild-application-command */
 export type CreateGuildApplicationCommandBody = ApplicationCommand;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#get-guild-application-command */
 export type GetGuildApplicationCommandBody = ApplicationCommand;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-guild-application-command */
 export type EditGuildApplicationCommandJSON = EditGlobalApplicationCommandJSON;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-guild-application-command */
 export type EditGuildApplicationCommandBody = ApplicationCommand;
 
 /** https://discord.dev/interactions/slash-commands#delete-guild-application-command */
 export type DeleteGuildApplicationCommandBody = void;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#bulk-overwrite-guild-application-commands */
 export type BulkOverwriteGuildApplicationCommandsJSON = ApplicationCommand[];
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#bulk-overwrite-guild-application-commands */
 export type BulkOverwriteGuildApplicationCommandsBody = ApplicationCommand[];
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#create-interaction-response */
 export type CreateInteractionResponseJSON = InteractionResponse;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#create-interaction-response */
 export type CreateInteractionResponseBody = void;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#get-original-interaction-response */
 export type GetOriginalInteractionResponseBody = GetWebhookMessageBody;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-original-interaction-response */
 export type EditOriginalInteractionResponseJSON = EditWebhookMessageJSON;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-original-interaction-response */
 export type EditOriginalInteractionResponseBody = Message;
 
 /** https://discord.dev/interactions/slash-commands#delete-original-interaction-response */
-export type DeleteOriginalInteractionResponse = void;
+export type DeleteOriginalInteractionResponseBody = void;
 
 /** https://discord.dev/interactions/slash-commands#create-followup-message */
 export type CreateFollowupMessageJSON = ExecuteWebhookJSON;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#create-followup-message */
 export type CreateFollowupMessageBody = Message;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-followup-message */
 export type EditFollowupMessageJSON = EditWebhookMessageJSON;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#edit-followup-message */
 export type EditFollowupMessageBody = Message;
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#delete-followup-message */
 export type DeleteFollowupMessageBody = void;
 
 /** https://discord.dev/interactions/slash-commands#get-guild-application-command-permissions */
@@ -118,7 +118,7 @@ export type GetGuildApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions[];
 
 /** https://discord.dev/interactions/slash-commands#get-application-command-permissions */
-export type GetApplicationCommandPermissions =
+export type GetApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions[];
 
 /** https://discord.dev/interactions/slash-commands#edit-application-command-permissions */
@@ -127,11 +127,15 @@ export interface EditApplicationCommandPermissionsJSON {
   permissions: ApplicationCommandPermissions[];
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
-export type BatchEditApplicationCommandPermissions =
+/** https://discord.dev/interactions/slash-commands#edit-application-command-permissions */
+export type EditApplicationCommandPermissionsBody =
+  GuildApplicationCommandPermissions;
+
+/** https://discord.dev/interactions/slash-commands#batch-edit-application-command-permissions */
+export type BatchEditApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions[];
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommand */
 export interface ApplicationCommand {
   /** unique id of the command */
   id: Snowflake;
@@ -147,7 +151,7 @@ export interface ApplicationCommand {
   default_permission?: boolean;
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommandoption */
 export interface ApplicationCommandOption {
   /** value of [ApplicationCommandOptionType](https://discord.dev/interactions/slash-commands#applicationcommandoptiontype) */
   type: ApplicationCommandOptionType;
@@ -163,7 +167,7 @@ export interface ApplicationCommandOption {
   options?: ApplicationCommandOption[];
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommandoptiontype */
 export enum ApplicationCommandOptionType {
   SubCommand = 1,
   SubCommandGroup,
@@ -176,7 +180,7 @@ export enum ApplicationCommandOptionType {
   Mentionable,
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommandoptionchoice */
 export interface ApplicationCommandOptionChoice {
   /** 1-100 character choice name */
   name: string;
@@ -184,7 +188,7 @@ export interface ApplicationCommandOptionChoice {
   value: string | number;
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#guildapplicationcommandpermissions */
 export interface GuildApplicationCommandPermissions {
   /** the id of the command */
   id: Snowflake;
@@ -196,7 +200,7 @@ export interface GuildApplicationCommandPermissions {
   permissions: ApplicationCommandPermissions[];
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommandpermissions */
 export interface ApplicationCommandPermissions {
   /** the id of the role or user */
   id: Snowflake;
@@ -206,13 +210,13 @@ export interface ApplicationCommandPermissions {
   permission: boolean;
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#applicationcommandpermissiontype */
 export enum ApplicationCommandPermissionType {
   Role = 1,
   User,
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#interaction */
 export interface Interaction {
   /** id of the interaction */
   id: Snowflake;
@@ -238,13 +242,13 @@ export interface Interaction {
   message?: Message;
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#interaction-interactiontype */
 export enum InteractionType {
   Ping = 1,
   ApplicationCommand,
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondata */
 export interface ApplicationCommandInteractionData {
   /** the ID of the invoked command */
   id: Snowflake;
@@ -260,7 +264,7 @@ export interface ApplicationCommandInteractionData {
   component_type: ComponentTypes;
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataresolved */
 export interface ApplicationCommandInteractionDataResolved {
   /** the IDs and User objects */
   users?: Record<Snowflake, User>[];
@@ -272,7 +276,7 @@ export interface ApplicationCommandInteractionDataResolved {
   channels?: Record<Snowflake, Channel>[];
 }
 
-/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataoption */
 export interface ApplicationCommandInteractionDataOption {
   /** the name of the parameter */
   name: string;

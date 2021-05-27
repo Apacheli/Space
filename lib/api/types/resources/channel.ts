@@ -648,6 +648,9 @@ export interface FollowNewsChannelJSON {
   webhook_channel_id: Snowflake;
 }
 
+/** https://discord.dev/resources/channel#follow-news-channel */
+export type FollowNewsChannelBody = FollowedChannel;
+
 /** https://discord.dev/resources/channel#trigger-typing-indicator */
 export type TriggerTypingIndicatorBody = void;
 
