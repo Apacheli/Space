@@ -634,7 +634,7 @@ export interface CreateChannelInvite {
 }
 
 /** https://discord.dev/resources/channel#create-channel-invite */
-export type CreateChannelInviteBody = void;
+export type CreateChannelInviteBody = Invite;
 
 /** https://discord.dev/resources/channel#delete-channel-permission */
 export type DeleteChannelPermissionBody = void;
