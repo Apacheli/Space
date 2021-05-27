@@ -74,7 +74,7 @@ export interface GetEntitlementQuery {
 export type GetEntitlementBody = Entitlement;
 
 /** https://discord.dev/game-sdk/store#get-skus */
-export type GetSKUBody = SKU[];
+export type GetSKUsBody = SKU[];
 
 /** https://discord.dev/game-sdk/store#consume-sku */
 export type ConsumeSKUBody = void;
