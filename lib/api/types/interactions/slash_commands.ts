@@ -132,6 +132,9 @@ export type EditApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions;
 
 /** https://discord.dev/interactions/slash-commands#batch-edit-application-command-permissions */
+export type BatchEditApplicationCommandPermissionsJSON = GuildApplicationCommandPermissions[];
+
+/** https://discord.dev/interactions/slash-commands#batch-edit-application-command-permissions */
 export type BatchEditApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions[];
 
