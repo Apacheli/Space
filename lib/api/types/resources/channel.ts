@@ -2,6 +2,7 @@
 
 // https://discord.dev/resources/channel
 
+import type { Component } from "../interactions/message_components.ts";
 import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
 import type { Permissions } from "../topics/permissions.ts";
@@ -158,6 +159,8 @@ export interface Message {
   interaction?: MessageInteraction;
   /** the thread that was started from this message, includes [thread member](https://discord.dev/resources/channel#thread-member-object) object */
   thread?: Channel;
+  /** message components */
+  components?: Component[];
 }
 
 /** https://discord.dev/resources/channel#message-object-message-types */

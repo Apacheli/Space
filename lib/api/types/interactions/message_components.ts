@@ -1,11 +1,13 @@
 // deno-lint-ignore-file camelcase
 
+import type { Emoji } from "../resources/emoji.ts";
+
 // https://discord.dev/interactions/message-components
 
 /** https://discord.dev/interactions/message-components#component-object */
 export interface Component {
   /** [component type](https://discord.dev/interactions/message-components#component-types) */
-  type: ComponentTypews;
+  type: ComponentTypes;
   /** one of [button styles](https://discord.dev/interactions/message-components#buttons-button-styles) */
   style?: ButtonStyles;
   /** text that appears on the button, max 80 characters */
