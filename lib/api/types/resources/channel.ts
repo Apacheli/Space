@@ -619,7 +619,7 @@ export type EditChannelPermissionsBody = void;
 export type GetChannelInvitesBody = Invite[];
 
 /** https://discord.dev/resources/channel#create-channel-invite */
-export interface CreateChannelInvite {
+export interface CreateChannelInviteJSON {
   /** duration of invite in seconds before expiry, or 0 for never. between 0 and 604800 (7 days) */
   max_age: number;
   /** max number of uses or 0 for unlimited. between 0 and 100 */
