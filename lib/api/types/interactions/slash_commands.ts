@@ -67,6 +67,9 @@ export type GetGuildApplicationCommandBody = ApplicationCommand;
 /** https://discord.dev/interactions/slash-commands#create-global-application-command */
 export type EditGuildApplicationCommandJSON = EditGlobalApplicationCommandJSON;
 
+/** https://discord.dev/interactions/slash-commands#create-global-application-command */
+export type EditGuildApplicationCommandBody = ApplicationCommand;
+
 /** https://discord.dev/interactions/slash-commands#delete-guild-application-command */
 export type DeleteGuildApplicationCommandBody = void;
 
