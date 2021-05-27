@@ -584,6 +584,9 @@ export interface EditMessageJSON
   attachments?: Attachment[] | null;
 }
 
+/** https://discord.dev/resources/channel#edit-message */
+export type EditMessageBody = Message;
+
 /** https://discord.dev/resources/channel#delete-message */
 export type DeleteMessageBody = void;
 
