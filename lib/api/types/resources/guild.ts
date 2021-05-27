@@ -658,6 +658,9 @@ export type GetGuildWidgetSettingsBody = GuildWidget;
 /** https://discord.dev/resources/guild#modify-guild-widget */
 export type ModifyGuildWidgetJSON = Partial<GuildWidget>;
 
+/** https://discord.dev/resources/guild#modify-guild-widget */
+export type ModifyGuildWidgetBody = GuildWidget;
+
 /** https://discord.dev/resources/guild#get-guild-widget */
 export interface GetGuildWidgetBody {
   id: Snowflake;
