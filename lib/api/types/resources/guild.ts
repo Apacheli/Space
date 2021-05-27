@@ -569,7 +569,7 @@ export type RemoveGuildMemberBody = void;
 export type GetGuildBansBody = Ban[];
 
 /** https://discord.dev/resources/guild#get-guild-ban */
-export type GetGuildBan = Ban;
+export type GetGuildBanBody = Ban;
 
 /** https://discord.dev/resources/guild#create-guild-ban */
 export interface CreateGuildBanJSON {
