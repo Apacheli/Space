@@ -134,6 +134,12 @@ export type ExecuteSlackCompatibleWebhookQuery = ExecuteWebhookQuery;
 /** https://discord.dev/resources/webhook#execute-slackcompatible-webhook */
 export type ExecuteSlackCompatibleWebhookBody = ExecuteWebhookBody;
 
+/** https://discord.dev/resources/webhook#execute-githubcompatible-webhook */
+export type ExecuteGitHubCompatibleWebhookQuery = ExecuteWebhookQuery;
+
+/** https://discord.dev/resources/webhook#execute-githubcompatible-webhook */
+export type ExecuteGitHubCompatibleWebhookBody = ExecuteWebhookBody;
+
 /** https://discord.dev/resources/webhook#get-webhook-message */
 export type GetWebhookMessageBody = Message;
 
