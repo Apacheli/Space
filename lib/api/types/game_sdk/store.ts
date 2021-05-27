@@ -1,4 +1,10 @@
-/** https://discord.com/developers/docs/game-sdk/store#httpspecific-data-models-limited-payment-data-object */
+// deno-lint-ignore-file camelcase
+
+// https://discord.dev/game-sdk/store
+
+import type { Snowflake } from "../reference.ts";
+
+/** https://discord.dev/game-sdk/store#httpspecific-data-models-limited-payment-data-object */
 export interface LimitedPaymentData {
   /** unique ID of the payment */
   id: string;
@@ -41,7 +47,7 @@ export interface SKU {
   bundled_skus: unknown; // null
 }
 
-/** https://discord.com/developers/docs/game-sdk/store#get-entitlements */
+/** https://discord.dev/game-sdk/store#get-entitlements */
 export interface GetEntitlementsQuery extends GetEntitlementQuery {
   /** the user id to look up entitlements for */
   user_id?: Snowflake;
@@ -55,28 +61,28 @@ export interface GetEntitlementsQuery extends GetEntitlementQuery {
   limit?: number;
 }
 
-/** https://discord.com/developers/docs/game-sdk/store#get-entitlements */
+/** https://discord.dev/game-sdk/store#get-entitlements */
 export type GetEntitlementsBody = Entitlement[];
 
-/** https://discord.com/developers/docs/game-sdk/store#get-entitlement */
+/** https://discord.dev/game-sdk/store#get-entitlement */
 export interface GetEntitlementQuery {
-  /** returns [limited payment data](https://discord.com/developers/docs/game-sdk/store#httpspecific-data-models-limited-payment-data-object) for each entitlement */
+  /** returns [limited payment data](https://discord.dev/game-sdk/store#httpspecific-data-models-limited-payment-data-object) for each entitlement */
   with_payments?: boolean;
 }
 
-/** https://discord.com/developers/docs/game-sdk/store#get-entitlement */
+/** https://discord.dev/game-sdk/store#get-entitlement */
 export type GetEntitlementBody = Entitlement;
 
-/** https://discord.com/developers/docs/game-sdk/store#get-skus */
+/** https://discord.dev/game-sdk/store#get-skus */
 export type GetSKUBody = SKU[];
 
-/** https://discord.com/developers/docs/game-sdk/store#consume-sku */
+/** https://discord.dev/game-sdk/store#consume-sku */
 export type ConsumeSKUBody = void;
 
-/** https://discord.com/developers/docs/game-sdk/store#delete-test-entitlement */
+/** https://discord.dev/game-sdk/store#delete-test-entitlement */
 export type DeleteTestEntitlementBody = void;
 
-/** https://discord.com/developers/docs/game-sdk/store#create-purchase-discount */
+/** https://discord.dev/game-sdk/store#create-purchase-discount */
 export interface CreatePurchaseDiscountJSON {
   /** the percentage to discount - max of 100, min of 1 */
   percent_off: number;
@@ -84,8 +90,8 @@ export interface CreatePurchaseDiscountJSON {
   ttl?: number;
 }
 
-/** https://discord.com/developers/docs/game-sdk/store#create-purchase-discount */
+/** https://discord.dev/game-sdk/store#create-purchase-discount */
 export type CreatePurchaseDiscountBody = void;
 
-/** https://discord.com/developers/docs/game-sdk/store#delete-purchase-discount */
+/** https://discord.dev/game-sdk/store#delete-purchase-discount */
 export type DeletePurchaseDiscountBody = void;
