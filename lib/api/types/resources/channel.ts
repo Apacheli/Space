@@ -159,7 +159,7 @@ export interface Message {
   interaction?: MessageInteraction;
   /** the thread that was started from this message, includes [thread member](https://discord.dev/resources/channel#thread-member-object) object */
   thread?: Channel;
-  /** message components */
+  /** sent if the message contains components like buttons, action rows, or other interactive components */
   components?: Component[];
 }
 

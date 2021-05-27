@@ -18,6 +18,7 @@ import type {
 } from "../resources/webhook.ts";
 import type { Role } from "../topics/permissions.ts";
 import type { Nullify } from "../util.ts";
+import type { Component } from "./message_components.ts";
 
 /** https://discord.dev/interactions/slash-commands#get-global-application-commands */
 export type GetGlobalApplicationCommandsBody = ApplicationCommand[];
@@ -233,6 +234,8 @@ export interface Interaction {
   token: string;
   /** ead-only property, always `1` */
   version: number;
+  /** for components, the message they were attached to */
+  message?: Message;
 }
 
 /** https://discord.dev/interactions/slash-commands#create-global-application-command */
@@ -251,6 +254,10 @@ export interface ApplicationCommandInteractionData {
   resolved?: ApplicationCommandInteractionDataResolved;
   /** the params + values from the user */
   options?: ApplicationCommandInteractionDataOption[];
+  /** for components, the [`custom_id`](https://discord.dev/interactions/message-components#custom-id) of the component */
+  custom_id: string;
+  /** the [type](https://discord.dev/interactions/message-components#component-types) of the component */
+  component_type: ComponentTypes;
 }
 
 /** https://discord.dev/interactions/slash-commands#create-global-application-command */
@@ -293,6 +300,10 @@ export enum InteractionCallbackType {
   ChannelMessageWithSource = 4,
   /** ACK an interaction and edit a response later, the user sees a loading state */
   DeferredChannelMessageWithSource,
+  /** for components, ACK an interaction and edit the original message later; the user sees a loading state */
+  DeferredUpdateMessage,
+  /** for components, edit the message the component was attached to */
+  UpdateMessage,
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-response-interactionapplicationcommandcallbackdata */
@@ -307,6 +318,8 @@ export interface InteractionApplicationCOmmandCallbackData {
   allowed_mentions?: AllowedMentions;
   /** set to `64` to make your response ephemeral */
   flags?: 64;
+  /** message components */
+  components?: Component[];
 }
 
 /** https://discord.dev/interactions/slash-commands#messageinteraction */
