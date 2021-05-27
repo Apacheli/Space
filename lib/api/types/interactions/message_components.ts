@@ -20,6 +20,8 @@ export interface Component {
   url?: string;
   /** whether the button is disabled, default `false` */
   disabled?: boolean;
+  /** a list of child components */
+  components?: Component[];
 }
 
 /** https://discord.dev/interactions/message-components#component-types */
@@ -36,7 +38,7 @@ export interface Button {
   type: number;
   /** one of [button styles](https://discord.dev/interactions/message-components#buttons-button-styles) */
   style: ButtonStyles;
-  /** text the appears on the button, max 80 characters */
+  /** text that appears on the button, max 80 characters */
   label?: string;
   /** `name`, `id`, and `animated` */
   emoji?: Partial<Emoji>;
