@@ -65,6 +65,5 @@ for reference.
 ### Resources
 
 - [Deno](https://deno.land/)
-- [Discord API Types](https://github.com/discordjs/discord-api-types/tree/main/deno)
 - [Discord Developer Documentation](https://discord.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
