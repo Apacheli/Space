@@ -232,7 +232,7 @@ import type {
   UpdateStageInstanceJSON,
   UpdateUserVoiceStateBody,
   UpdateUserVoiceStateJSON,
-} from "../types/mod.ts";
+} from "../../types/mod.ts";
 
 export interface HTTPClientOptions {
   delay?: number;

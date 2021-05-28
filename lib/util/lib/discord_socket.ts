@@ -1,5 +1,4 @@
-import { AsyncEventTarget } from "../util/async_event_target.ts";
-import { pack, unpack } from "../util/mod.ts";
+import { AsyncEventTarget, pack, unpack } from "../../util/mod.ts";
 
 export interface DiscordSocketOptions {
   encoding?: "json" | "etf";

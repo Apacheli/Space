@@ -1,5 +1,4 @@
 export * from "./async_event_target.ts";
-export * from "./cdn.ts";
 export * from "./discord_socket.ts";
 export * from "./etf_codec.ts";
 export * as logger from "./logger.ts";
