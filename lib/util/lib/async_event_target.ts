@@ -29,7 +29,10 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
    */
   listen(event: string) {
     const { readable, writable } = new TransformStream<T[], T[]>();
-    const listener = { readable, writer: writable.getWriter() };
+    const listener: ListenerStream<T[]> = {
+      readable,
+      writer: writable.getWriter(),
+    };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
     }
