@@ -63,6 +63,14 @@ export class AsyncEventTarget<T extends Record<string, unknown>>
     listeners.forEach(({ writer }) => writer.close());
   }
 
+  /**
+   * Dispatch an event
+   *
+   *     AsyncEventTarget.dispatch("event", 1, 2, 3);
+   *
+   * @param event The event to dispatch
+   * @param args The data to pass into the writer stream
+   */
   dispatch<E extends keyof T>(event: E, ...args: T[E][]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
