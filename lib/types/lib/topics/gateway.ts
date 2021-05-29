@@ -27,7 +27,7 @@ import type { Role } from "./permissions.ts";
 export type GatewayVersions = 8 | 9;
 
 /** https://discord.dev/topics/gateway#payloads */
-export interface GatewayPayload<op extends number, d extends unknown> {
+export interface BasePayload<op extends number, d extends unknown> {
   /** [opcode](https://discord.dev/topics/opcodes-and-status-codes#gateway-opcodes) for the payload */
   op: op;
   /** event data */
@@ -157,7 +157,7 @@ export enum GatewayEvents {
 }
 
 /** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
-export type HeartbeatACKPayload = GatewayPayload<
+export type HeartbeatACKPayload = BasePayload<
   GatewayOpcodes.HeartbeatACK,
   HeartbeatPayloadData
 >;
@@ -166,7 +166,7 @@ export type HeartbeatACKPayload = GatewayPayload<
 export type HeartbeatACKPayloadData = void;
 
 /** https://discord.dev/topics/gateway#identify */
-export type IdentifyPayload = GatewayPayload<
+export type IdentifyPayload = BasePayload<
   GatewayOpcodes.Identify,
   IdentifyPayloadData
 >;
@@ -200,7 +200,7 @@ export interface IdentifyConnectionProperties {
 }
 
 /** https://discord.dev/topics/gateway#resume */
-export type ResumePayload = GatewayPayload<
+export type ResumePayload = BasePayload<
   GatewayOpcodes.Resume,
   ResumePayloadData
 >;
@@ -216,7 +216,7 @@ export interface ResumePayloadData {
 }
 
 /** https://discord.dev/topics/gateway#heartbeat */
-export type HeartbeatPayload = GatewayPayload<
+export type HeartbeatPayload = BasePayload<
   GatewayOpcodes.Heartbeat,
   HeartbeatPayloadData
 >;
@@ -225,7 +225,7 @@ export type HeartbeatPayload = GatewayPayload<
 export type HeartbeatPayloadData = number;
 
 /** https://discord.dev/topics/gateway#request-guild-members */
-export type GuildRequestMembersPayload = GatewayPayload<
+export type GuildRequestMembersPayload = BasePayload<
   GatewayOpcodes.RequestGuildMembers,
   GuildRequestMembersPayloadData
 >;
@@ -247,7 +247,7 @@ export interface GuildRequestMembersPayloadData {
 }
 
 /** https://discord.dev/topics/gateway#update-voice-state */
-export type VoiceStateUpdatePayload = GatewayPayload<
+export type VoiceStateUpdatePayload = BasePayload<
   GatewayOpcodes.VoiceStateUpdate,
   VoiceStateUpdatePayloadData
 >;
@@ -265,7 +265,7 @@ export interface VoiceStateUpdatePayloadData {
 }
 
 /** https://discord.dev/topics/gateway#update-presence */
-export type PresenceUpdatePayload = GatewayPayload<
+export type PresenceUpdatePayload = BasePayload<
   GatewayOpcodes.PresenceUpdate,
   PresenceUpdatePayloadData
 >;
@@ -297,7 +297,7 @@ export enum StatusTypes {
 }
 
 /** https://discord.dev/topics/gateway#hello */
-export type HelloPayload = GatewayPayload<
+export type HelloPayload = BasePayload<
   GatewayOpcodes.Hello,
   HelloPayloadData
 >;
@@ -308,13 +308,13 @@ export interface HelloPayloadData {
   heartbeat_interval: number;
 }
 
-export interface DispatchPayload<t extends string, d>
-  extends GatewayPayload<GatewayOpcodes.Dispatch, d> {
+export interface BaseDispatchPayload<t extends GatewayEvents, d>
+  extends BasePayload<GatewayOpcodes.Dispatch, d> {
   t: t;
 }
 
 /** https://discord.dev/topics/gateway#ready */
-export type DispatchPayloadReady = DispatchPayload<
+export type DispatchPayloadReady = BaseDispatchPayload<
   GatewayEvents.Ready,
   DispatchPayloadReadyData
 >;
@@ -336,7 +336,7 @@ export interface DispatchPayloadReadyData {
 }
 
 /** https://discord.dev/topics/gateway#resumed */
-export type DispatchPayloadResumed = DispatchPayload<
+export type DispatchPayloadResumed = BaseDispatchPayload<
   GatewayEvents.Resumed,
   DispatchPayloadResumedData
 >;
@@ -345,7 +345,7 @@ export type DispatchPayloadResumed = DispatchPayload<
 export type DispatchPayloadResumedData = void;
 
 /** https://discord.dev/topics/gateway#commands */
-export type DispatchPayloadApplicationCommandCreate = DispatchPayload<
+export type DispatchPayloadApplicationCommandCreate = BaseDispatchPayload<
   GatewayEvents.ApplicationCommandCreate,
   DispatchPayloadApplicationCommandCreateData
 >;
@@ -357,7 +357,7 @@ export interface DispatchPayloadApplicationCommandCreateData
 }
 
 /** https://discord.dev/topics/gateway#application-command-update */
-export type DispatchPayloadApplicationCommandUpdate = DispatchPayload<
+export type DispatchPayloadApplicationCommandUpdate = BaseDispatchPayload<
   GatewayEvents.ApplicationCommandUpdate,
   DispatchPayloadApplicationCommandUpdateData
 >;
@@ -367,7 +367,7 @@ export type DispatchPayloadApplicationCommandUpdateData =
   DispatchPayloadApplicationCommandCreateData;
 
 /** https://discord.dev/topics/gateway#application-command-delete */
-export type DispatchPayloadApplicationCommandDelete = DispatchPayload<
+export type DispatchPayloadApplicationCommandDelete = BaseDispatchPayload<
   GatewayEvents.ApplicationCommandDelete,
   DispatchPayloadApplicationCommandDeleteData
 >;
@@ -377,7 +377,7 @@ export type DispatchPayloadApplicationCommandDeleteData =
   DispatchPayloadApplicationCommandCreateData;
 
 /** https://discord.dev/topics/gateway#invalid-session */
-export type InvalidSessionPayload = GatewayPayload<
+export type InvalidSessionPayload = BasePayload<
   GatewayOpcodes.InvalidSession,
   InvalidSessionPayloadData
 >;
@@ -386,7 +386,7 @@ export type InvalidSessionPayload = GatewayPayload<
 export type InvalidSessionPayloadData = boolean;
 
 /** https://discord.dev/topics/gateway#channel-create */
-export type DispatchPayloadChannelCreate = DispatchPayload<
+export type DispatchPayloadChannelCreate = BaseDispatchPayload<
   GatewayEvents.ChannelCreate,
   DispatchPayloadChannelCreateData
 >;
@@ -395,7 +395,7 @@ export type DispatchPayloadChannelCreate = DispatchPayload<
 export type DispatchPayloadChannelCreateData = Channel;
 
 /** https://discord.dev/topics/gateway#channel-update */
-export type DispatchPayloadChannelUpdate = DispatchPayload<
+export type DispatchPayloadChannelUpdate = BaseDispatchPayload<
   GatewayEvents.ChannelUpdate,
   DispatchPayloadChannelUpdateData
 >;
@@ -404,7 +404,7 @@ export type DispatchPayloadChannelUpdate = DispatchPayload<
 export type DispatchPayloadChannelUpdateData = Channel;
 
 /** https://discord.dev/topics/gateway#channel-delete */
-export type DispatchPayloadChannelDelete = DispatchPayload<
+export type DispatchPayloadChannelDelete = BaseDispatchPayload<
   GatewayEvents.ChannelDelete,
   DispatchPayloadChannelDeleteData
 >;
@@ -413,7 +413,7 @@ export type DispatchPayloadChannelDelete = DispatchPayload<
 export type DispatchPayloadChannelDeleteData = Channel;
 
 /** https://discord.dev/topics/gateway#channel-pins-update */
-export type DispatchPayloadChannelPinsUpdate = DispatchPayload<
+export type DispatchPayloadChannelPinsUpdate = BaseDispatchPayload<
   GatewayEvents.ChannelPinsUpdate,
   DispatchPayloadChannelPinsUpdateData
 >;
@@ -429,7 +429,7 @@ export interface DispatchPayloadChannelPinsUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#thread-create */
-export type DispatchPayloadThreadCreate = DispatchPayload<
+export type DispatchPayloadThreadCreate = BaseDispatchPayload<
   GatewayEvents.ThreadCreate,
   DispatchPayloadThreadCreateData
 >;
@@ -438,7 +438,7 @@ export type DispatchPayloadThreadCreate = DispatchPayload<
 export type DispatchPayloadThreadCreateData = Channel;
 
 /** https://discord.dev/topics/gateway#thread-update */
-export type DispatchPayloadThreadUpdate = DispatchPayload<
+export type DispatchPayloadThreadUpdate = BaseDispatchPayload<
   GatewayEvents.ThreadUpdate,
   DispatchPayloadThreadUpdateData
 >;
@@ -447,7 +447,7 @@ export type DispatchPayloadThreadUpdate = DispatchPayload<
 export type DispatchPayloadThreadUpdateData = Channel;
 
 /** https://discord.dev/topics/gateway#thread-delete */
-export type DispatchPayloadThreadDelete = DispatchPayload<
+export type DispatchPayloadThreadDelete = BaseDispatchPayload<
   GatewayEvents.ThreadDelete,
   DispatchPayloadThreadDeleteData
 >;
@@ -459,7 +459,7 @@ export type DispatchPayloadThreadDeleteData = Pick<
 >;
 
 /** https://discord.dev/topics/gateway#thread-list-sync */
-export type DispatchPayloadThreadListSync = DispatchPayload<
+export type DispatchPayloadThreadListSync = BaseDispatchPayload<
   GatewayEvents.ThreadListSync,
   DispatchPayloadThreadListSyncData
 >;
@@ -477,7 +477,7 @@ export interface DispatchPayloadThreadListSyncData {
 }
 
 /** https://discord.dev/topics/gateway#thread-member-update */
-export type DispatchPayloadThreadMemberUpdate = DispatchPayload<
+export type DispatchPayloadThreadMemberUpdate = BaseDispatchPayload<
   GatewayEvents.ThreadMemberUpdate,
   DispatchPayloadThreadMemberUpdateData
 >;
@@ -486,7 +486,7 @@ export type DispatchPayloadThreadMemberUpdate = DispatchPayload<
 export type DispatchPayloadThreadMemberUpdateData = ThreadMember;
 
 /** https://discord.dev/topics/gateway#thread-members-update */
-export type DispatchPayloadThreadMembersUpdate = DispatchPayload<
+export type DispatchPayloadThreadMembersUpdate = BaseDispatchPayload<
   GatewayEvents.ThreadMembersUpdate,
   DispatchPayloadThreadMembersUpdateData
 >;
@@ -506,7 +506,7 @@ export interface DispatchPayloadThreadMembersUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#guild-create */
-export type DispatchPayloadGuildCreate = DispatchPayload<
+export type DispatchPayloadGuildCreate = BaseDispatchPayload<
   GatewayEvents.GuildCreate,
   DispatchPayloadGuildCreateData
 >;
@@ -515,7 +515,7 @@ export type DispatchPayloadGuildCreate = DispatchPayload<
 export type DispatchPayloadGuildCreateData = Guild;
 
 /** https://discord.dev/topics/gateway#guild-update */
-export type DispatchPayloadGuildUpdate = DispatchPayload<
+export type DispatchPayloadGuildUpdate = BaseDispatchPayload<
   GatewayEvents.GuildUpdate,
   DispatchPayloadGuildUpdateData
 >;
@@ -524,7 +524,7 @@ export type DispatchPayloadGuildUpdate = DispatchPayload<
 export type DispatchPayloadGuildUpdateData = Guild;
 
 /** https://discord.dev/topics/gateway#guild-delete */
-export type DispatchPayloadGuildDelete = DispatchPayload<
+export type DispatchPayloadGuildDelete = BaseDispatchPayload<
   GatewayEvents.GuildDelete,
   DispatchPayloadGuildDeleteData
 >;
@@ -533,7 +533,7 @@ export type DispatchPayloadGuildDelete = DispatchPayload<
 export type DispatchPayloadGuildDeleteData = UnavailableGuild;
 
 /** https://discord.dev/topics/gateway#guild-ban-add */
-export type DispatchPayloadGuildBanAdd = DispatchPayload<
+export type DispatchPayloadGuildBanAdd = BaseDispatchPayload<
   GatewayEvents.GuildBanAdd,
   DispatchPayloadGuildBanAddData
 >;
@@ -547,7 +547,7 @@ export interface DispatchPayloadGuildBanAddData {
 }
 
 /** https://discord.dev/topics/gateway#guild-ban-remove */
-export type DispatchPayloadGuildBanRemove = DispatchPayload<
+export type DispatchPayloadGuildBanRemove = BaseDispatchPayload<
   GatewayEvents.GuildBanRemove,
   DispatchPayloadGuildBanRemoveData
 >;
@@ -561,7 +561,7 @@ export interface DispatchPayloadGuildBanRemoveData {
 }
 
 /** https://discord.dev/topics/gateway#guild-emojis-update */
-export type DispatchPayloadGuildEmojisUpdate = DispatchPayload<
+export type DispatchPayloadGuildEmojisUpdate = BaseDispatchPayload<
   GatewayEvents.GuildEmojisUpdate,
   DispatchPayloadGuildEmojisUpdateData
 >;
@@ -575,7 +575,7 @@ export interface DispatchPayloadGuildEmojisUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#guild-integrations-update */
-export type DispatchPayloadGuildIntegrationsUpdate = DispatchPayload<
+export type DispatchPayloadGuildIntegrationsUpdate = BaseDispatchPayload<
   GatewayEvents.GuildIntegrationsUpdate,
   DispatchPayloadGuildIntegrationsUpdateData
 >;
@@ -587,7 +587,7 @@ export interface DispatchPayloadGuildIntegrationsUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#guild-member-add */
-export type DispatchPayloadGuildMemberAdd = DispatchPayload<
+export type DispatchPayloadGuildMemberAdd = BaseDispatchPayload<
   GatewayEvents.GuildMemberAdd,
   DispatchPayloadGuildMemberAddData
 >;
@@ -599,7 +599,7 @@ export interface DispatchPayloadGuildMemberAddData extends GuildMember {
 }
 
 /** https://discord.dev/topics/gateway#guild-member-remove */
-export type DispatchPayloadGuildMemberRemove = DispatchPayload<
+export type DispatchPayloadGuildMemberRemove = BaseDispatchPayload<
   GatewayEvents.GuildMemberRemove,
   DispatchPayloadGuildMemberRemoveData
 >;
@@ -613,7 +613,7 @@ export interface DispatchPayloadGuildMemberRemoveData {
 }
 
 /** https://discord.dev/topics/gateway#guild-member-update */
-export type DispatchPayloadGuildMemberUpdate = DispatchPayload<
+export type DispatchPayloadGuildMemberUpdate = BaseDispatchPayload<
   GatewayEvents.GuildMemberUpdate,
   DispatchPayloadGuildMemberUpdateData
 >;
@@ -626,7 +626,7 @@ export interface DispatchPayloadGuildMemberUpdateData
 }
 
 /** https://discord.dev/topics/gateway#guild-members-chunk */
-export type DispatchPayloadGuildMembersChunk = DispatchPayload<
+export type DispatchPayloadGuildMembersChunk = BaseDispatchPayload<
   GatewayEvents.GuildMembersChunk,
   DispatchPayloadGuildMembersChunkData
 >;
@@ -650,7 +650,7 @@ export interface DispatchPayloadGuildMembersChunkData {
 }
 
 /** https://discord.dev/topics/gateway#guild-role-create */
-export type DispatchPayloadGuildRoleCreate = DispatchPayload<
+export type DispatchPayloadGuildRoleCreate = BaseDispatchPayload<
   GatewayEvents.GuildRoleCreate,
   DispatchPayloadGuildRoleCreateData
 >;
@@ -664,7 +664,7 @@ export interface DispatchPayloadGuildRoleCreateData {
 }
 
 /** https://discord.dev/topics/gateway#guild-role-update */
-export type DispatchPayloadGuildRoleUpdate = DispatchPayload<
+export type DispatchPayloadGuildRoleUpdate = BaseDispatchPayload<
   GatewayEvents.GuildRoleUpdate,
   DispatchPayloadGuildRoleUpdateData
 >;
@@ -678,7 +678,7 @@ export interface DispatchPayloadGuildRoleUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#guild-role-delete */
-export type DispatchPayloadGuildRoleDelete = DispatchPayload<
+export type DispatchPayloadGuildRoleDelete = BaseDispatchPayload<
   GatewayEvents.GuildRoleDelete,
   DispatchPayloadGuildRoleDeleteData
 >;
@@ -692,7 +692,7 @@ export interface DispatchPayloadGuildRoleDeleteData {
 }
 
 /** https://discord.dev/topics/gateway#integration-create */
-export type DispatchPayloadIntegrationCreate = DispatchPayload<
+export type DispatchPayloadIntegrationCreate = BaseDispatchPayload<
   GatewayEvents.IntegrationCreate,
   DispatchPayloadIntegrationCreateData
 >;
@@ -704,7 +704,7 @@ export interface DispatchPayloadIntegrationCreateData extends Integration {
 }
 
 /** https://discord.dev/topics/gateway#integration-update */
-export type DispatchPayloadIntegrationUpdate = DispatchPayload<
+export type DispatchPayloadIntegrationUpdate = BaseDispatchPayload<
   GatewayEvents.IntegrationUpdate,
   DispatchPayloadIntegrationUpdateData
 >;
@@ -714,7 +714,7 @@ export type DispatchPayloadIntegrationUpdateData =
   DispatchPayloadIntegrationCreateData;
 
 /** https://discord.dev/topics/gateway#integration-delete */
-export type DispatchPayloadIntegrationDelete = DispatchPayload<
+export type DispatchPayloadIntegrationDelete = BaseDispatchPayload<
   GatewayEvents.IntegrationDelete,
   DispatchPayloadIntegrationDeleteData
 >;
@@ -730,7 +730,7 @@ export interface DispatchPayloadIntegrationDeleteData {
 }
 
 /** https://discord.dev/topics/gateway#interaction-create */
-export type DispatchPayloadInteractionCreate = DispatchPayload<
+export type DispatchPayloadInteractionCreate = BaseDispatchPayload<
   GatewayEvents.InteractionCreate,
   DispatchPayloadInteractionCreateData
 >;
@@ -739,7 +739,7 @@ export type DispatchPayloadInteractionCreate = DispatchPayload<
 export type DispatchPayloadInteractionCreateData = Interaction;
 
 /** https://discord.dev/topics/gateway#invite-create */
-export type DispatchPayloadInviteCreate = DispatchPayload<
+export type DispatchPayloadInviteCreate = BaseDispatchPayload<
   GatewayEvents.InviteCreate,
   DispatchPayloadInviteCreateData
 >;
@@ -754,7 +754,7 @@ export interface DispatchPayloadInviteCreateData
 }
 
 /** https://discord.dev/topics/gateway#invite-delete */
-export type DispatchPayloadInviteDelete = DispatchPayload<
+export type DispatchPayloadInviteDelete = BaseDispatchPayload<
   GatewayEvents.InviteDelete,
   DispatchPayloadInviteDeleteData
 >;
@@ -766,7 +766,7 @@ export type DispatchPayloadInviteDeleteData = Pick<
 >;
 
 /** https://discord.dev/topics/gateway#message-create */
-export type DispatchPayloadMessageCreate = DispatchPayload<
+export type DispatchPayloadMessageCreate = BaseDispatchPayload<
   GatewayEvents.MessageCreate,
   DispatchPayloadMessageCreateData
 >;
@@ -775,7 +775,7 @@ export type DispatchPayloadMessageCreate = DispatchPayload<
 export type DispatchPayloadMessageCreateData = Message;
 
 /** https://discord.dev/topics/gateway#message-update */
-export type DispatchPayloadMessageUpdate = DispatchPayload<
+export type DispatchPayloadMessageUpdate = BaseDispatchPayload<
   GatewayEvents.MessageUpdate,
   DispatchPayloadMessageUpdateData
 >;
@@ -784,7 +784,7 @@ export type DispatchPayloadMessageUpdate = DispatchPayload<
 export type DispatchPayloadMessageUpdateData = Message;
 
 /** https://discord.dev/topics/gateway#message-delete */
-export type DispatchPayloadMessageDelete = DispatchPayload<
+export type DispatchPayloadMessageDelete = BaseDispatchPayload<
   GatewayEvents.MessageDelete,
   DispatchPayloadMessageDeleteData
 >;
@@ -800,7 +800,7 @@ export interface DispatchPayloadMessageDeleteData {
 }
 
 /** https://discord.dev/topics/gateway#message-delete-bulk */
-export type DispatchPayloadMessageDeleteBulk = DispatchPayload<
+export type DispatchPayloadMessageDeleteBulk = BaseDispatchPayload<
   GatewayEvents.MessageDeleteBulk,
   DispatchPayloadMessageDeleteBulkData
 >;
@@ -816,7 +816,7 @@ export interface DispatchPayloadMessageDeleteBulkData {
 }
 
 /** https://discord.dev/topics/gateway#message-reaction-add */
-export type DispatchPayloadMessageReactionAdd = DispatchPayload<
+export type DispatchPayloadMessageReactionAdd = BaseDispatchPayload<
   GatewayEvents.MessageReactionAdd,
   DispatchPayloadMessageReactionAddData
 >;
@@ -829,7 +829,7 @@ export interface DispatchPayloadMessageReactionAddData
 }
 
 /** https://discord.dev/topics/gateway#message-reaction-remove */
-export type DispatchPayloadMessageReactionRemove = DispatchPayload<
+export type DispatchPayloadMessageReactionRemove = BaseDispatchPayload<
   GatewayEvents.MessageReactionRemove,
   DispatchPayloadMessageReactionRemoveData
 >;
@@ -844,7 +844,7 @@ export interface DispatchPayloadMessageReactionRemoveData
 }
 
 /** https://discord.dev/topics/gateway#message-reaction-remove-all */
-export type DispatchPayloadMessageReactionRemoveAll = DispatchPayload<
+export type DispatchPayloadMessageReactionRemoveAll = BaseDispatchPayload<
   GatewayEvents.MessageReactionRemoveAll,
   DispatchPayloadMessageReactionRemoveAllData
 >;
@@ -860,7 +860,7 @@ export interface DispatchPayloadMessageReactionRemoveAllData {
 }
 
 /** https://discord.dev/topics/gateway#message-reaction-remove-emoji */
-export type DispatchPayloadMessageReactionRemoveEmoji = DispatchPayload<
+export type DispatchPayloadMessageReactionRemoveEmoji = BaseDispatchPayload<
   GatewayEvents.MessageReactionRemoveEmoji,
   DispatchPayloadMessageReactionRemoveEmojiData
 >;
@@ -873,7 +873,7 @@ export interface DispatchPayloadMessageReactionRemoveEmojiData
 }
 
 /** https://discord.dev/topics/gateway#presence-update */
-export type DispatchPayloadPresenceUpdate = DispatchPayload<
+export type DispatchPayloadPresenceUpdate = BaseDispatchPayload<
   GatewayEvents.PresenceUpdate,
   DispatchPayloadPresenceUpdateData
 >;
@@ -1000,7 +1000,7 @@ export interface ActivityButton {
 }
 
 /** https://discord.dev/topics/gateway#typing-start */
-export type DispatchPayloadTypingStart = DispatchPayload<
+export type DispatchPayloadTypingStart = BaseDispatchPayload<
   GatewayEvents.TypingStart,
   DispatchPayloadTypingStartData
 >;
@@ -1020,7 +1020,7 @@ export interface DispatchPayloadTypingStartData {
 }
 
 /** https://discord.dev/topics/gateway#user-update */
-export type DispatchPayloadUserUpdate = DispatchPayload<
+export type DispatchPayloadUserUpdate = BaseDispatchPayload<
   GatewayEvents.UserUpdate,
   DispatchPayloadUserUpdateData
 >;
@@ -1029,7 +1029,7 @@ export type DispatchPayloadUserUpdate = DispatchPayload<
 export type DispatchPayloadUserUpdateData = User;
 
 /** https://discord.dev/topics/gateway#voice-state-update */
-export type DispatchPayloadVoiceStateUpdate = DispatchPayload<
+export type DispatchPayloadVoiceStateUpdate = BaseDispatchPayload<
   GatewayEvents.VoiceStateUpdate,
   DispatchPayloadVoiceStateUpdateData
 >;
@@ -1038,7 +1038,7 @@ export type DispatchPayloadVoiceStateUpdate = DispatchPayload<
 export type DispatchPayloadVoiceStateUpdateData = VoiceState;
 
 /** https://discord.dev/topics/gateway#voice-server-update */
-export type DispatchPayloadVoiceServerUpdate = DispatchPayload<
+export type DispatchPayloadVoiceServerUpdate = BaseDispatchPayload<
   GatewayEvents.VoiceServerUpdate,
   DispatchPayloadVoiceServerUpdateData
 >;
@@ -1054,7 +1054,7 @@ export interface DispatchPayloadVoiceServerUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#webhooks-update */
-export type DispatchPayloadWebhooksUpdate = DispatchPayload<
+export type DispatchPayloadWebhooksUpdate = BaseDispatchPayload<
   GatewayEvents.WebhooksUpdate,
   DispatchPayloadWebhooksUpdateData
 >;
@@ -1068,7 +1068,7 @@ export interface DispatchPayloadWebhooksUpdateData {
 }
 
 /** https://discord.dev/topics/gateway#stage-instance-create */
-export type DispatchPayloadStageInstanceCreate = DispatchPayload<
+export type DispatchPayloadStageInstanceCreate = BaseDispatchPayload<
   GatewayEvents.StageInstanceCreate,
   DispatchPayloadStageInstanceCreateData
 >;
@@ -1077,7 +1077,7 @@ export type DispatchPayloadStageInstanceCreate = DispatchPayload<
 export type DispatchPayloadStageInstanceCreateData = StageInstance;
 
 /** https://discord.dev/topics/gateway#stage-instance-update */
-export type DispatchPayloadStageInstanceUpdate = DispatchPayload<
+export type DispatchPayloadStageInstanceUpdate = BaseDispatchPayload<
   GatewayEvents.StageInstanceUpdate,
   DispatchPayloadStageInstanceUpdateData
 >;
@@ -1086,7 +1086,7 @@ export type DispatchPayloadStageInstanceUpdate = DispatchPayload<
 export type DispatchPayloadStageInstanceUpdateData = StageInstance;
 
 /** https://discord.dev/topics/gateway#stage-instance-delete */
-export type DispatchPayloadStageInstanceDelete = DispatchPayload<
+export type DispatchPayloadStageInstanceDelete = BaseDispatchPayload<
   GatewayEvents.StageInstanceDelete,
   DispatchPayloadStageInstanceDeleteData
 >;
@@ -1120,8 +1120,8 @@ export interface SessionStartLimit {
   max_concurrency: number;
 }
 
-export type GatewayPayloads =
-  | DispatchPayloads
+export type GatewayPayload =
+  | DispatchPayload
   | HeartbeatPayload
   | IdentifyPayload
   | PresenceUpdatePayload
@@ -1134,7 +1134,7 @@ export type GatewayPayloads =
   | HeartbeatACKPayload;
 
 // https://discord.dev/topics/gateway#commands-and-events-gateway-events
-export type DispatchPayloads =
+export type DispatchPayload =
   | DispatchPayloadReady
   | DispatchPayloadResumed
   | DispatchPayloadApplicationCommandCreate

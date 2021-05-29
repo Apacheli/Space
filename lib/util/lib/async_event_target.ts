@@ -16,18 +16,20 @@ export interface ListenerStream<T> {
   writer: WritableStreamDefaultWriter<T>;
 }
 
-/** Asynchronous event target taking advtange of async iterators */
-export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
+/** Asynchronous event target taking advantage of async iterators */
+export class AsyncEventTarget<T extends Record<string, unknown>>
+  extends Map<keyof T, ListenerStream<T[keyof T][]>[]> {
   /**
    * Listen to an event
    *
    *     for await (const [...] of AsyncEventTarget.listen("event")) {
    *       // ...
    *     }
+   *
    * @param event The event to listen to
    */
-  listen(event: string) {
-    const { readable, writable } = new TransformStream<T[], T[]>();
+  listen<E extends keyof T>(event: E) {
+    const { readable, writable } = new TransformStream<T[E][], T[E][]>();
     const listener = { readable, writer: writable.getWriter() };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
@@ -40,11 +42,12 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
    *
    *     const readable = AsyncEventTarget.listen("event");
    *     AsyncEventTarget.deafen("event", readable);
+   *
    * @param event The event to deafen
    * @param readable The stream to destroy. If none is provided, it will destroy
    * all of the provided event's listeners
    */
-  deafen(event: string, readable?: ReadableStream<T[]>) {
+  deafen<E extends keyof T>(event: E, readable?: ReadableStream<T[E][]>) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
@@ -60,7 +63,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
     listeners.forEach(({ writer }) => writer.close());
   }
 
-  dispatch(event: string, ...args: T[]) {
+  dispatch<E extends keyof T>(event: E, ...args: T[E][]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }
@@ -69,16 +72,17 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
    * Receive an event with additional options such as a filter, limit, and timer
    *
    *     const results = await AsyncEventTarget.receive("event");
+   *
    * @param event The event to start receiving from
    */
-  async receive(event: string, {
+  async receive<E extends keyof T>(event: E, {
     delay = 60_000,
     filter,
     limit = 1,
-  }: AsyncEventTargetReceiveOptions<T> = {}) {
+  }: AsyncEventTargetReceiveOptions<T[E]> = {}) {
     const readable = this.listen(event);
     const reader = readable.getReader();
-    const received = new Array<T[]>(limit);
+    const received = new Array<T[E][]>(limit);
     const timeout = setTimeout(() => this.deafen(event, readable), delay);
     for (let i = 0; i < limit;) {
       const { done, value } = await reader.read();

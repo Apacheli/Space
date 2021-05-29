@@ -1,3 +1,3 @@
 # Space Utilities
 
-A bunch of independent modules that are consumed by Space.
+A collection of independent modules that are consumed by Space.
