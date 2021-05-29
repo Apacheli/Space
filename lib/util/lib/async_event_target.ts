@@ -17,8 +17,7 @@ export interface ListenerStream<T> {
 }
 
 /** Asynchronous event target taking advantage of async iterators */
-export class AsyncEventTarget<T extends Record<string, unknown>>
-  extends Map<keyof T, ListenerStream<T[keyof T][]>[]> {
+export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
   /**
    * Listen to an event
    *
@@ -28,8 +27,8 @@ export class AsyncEventTarget<T extends Record<string, unknown>>
    *
    * @param event The event to listen to
    */
-  listen<E extends keyof T>(event: E) {
-    const { readable, writable } = new TransformStream<T[E][], T[E][]>();
+  listen(event: string) {
+    const { readable, writable } = new TransformStream<T[], T[]>();
     const listener = { readable, writer: writable.getWriter() };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
@@ -47,7 +46,7 @@ export class AsyncEventTarget<T extends Record<string, unknown>>
    * @param readable The stream to destroy. If none is provided, it will destroy
    * all of the provided event's listeners
    */
-  deafen<E extends keyof T>(event: E, readable?: ReadableStream<T[E][]>) {
+  deafen(event: string, readable?: ReadableStream<T[]>) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
@@ -71,7 +70,7 @@ export class AsyncEventTarget<T extends Record<string, unknown>>
    * @param event The event to dispatch
    * @param args The data to pass into the writer stream
    */
-  dispatch<E extends keyof T>(event: E, ...args: T[E][]) {
+  dispatch(event: string, ...args: T[]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }
@@ -83,14 +82,14 @@ export class AsyncEventTarget<T extends Record<string, unknown>>
    *
    * @param event The event to start receiving from
    */
-  async receive<E extends keyof T>(event: E, {
+  async receive(event: string, {
     delay = 60_000,
     filter,
     limit = 1,
-  }: AsyncEventTargetReceiveOptions<T[E]> = {}) {
+  }: AsyncEventTargetReceiveOptions<T> = {}) {
     const readable = this.listen(event);
     const reader = readable.getReader();
-    const received = new Array<T[E][]>(limit);
+    const received = new Array<T[]>(limit);
     const timeout = setTimeout(() => this.deafen(event, readable), delay);
     for (let i = 0; i < limit;) {
       const { done, value } = await reader.read();
