@@ -14,6 +14,7 @@ export class RateLimitBucket {
    * Construct a new rate limit bucket
    *
    *     const bucket = new RateLimitBucket(5, 10_000);
+   *
    * @param max The maximum amount of requests a bucket can use
    * @param reset The time when the bucket will reset
    * @param left The number of remaining requests

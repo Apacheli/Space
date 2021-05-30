@@ -1,15 +1,17 @@
 /** AsyncEventTarget receiver options */
 export interface AsyncEventTargetReceiveOptions<T> {
-  /** Time to wait before expiring (default: 60 seconds) */
+  /** Abort the receiver without error if an item passes the aborter */
+  abort?: (...received: T[]) => boolean | Promise<boolean>;
+  /** Time to wait in milliseconds before expiring (default: 60 seconds) */
   delay?: number;
-  /** Filters out entries that do not meet the provided function's conditions */
+  /** Filters out items that do not meet the provided function's conditions */
   filter?: (...received: T[]) => boolean | Promise<boolean>;
-  /** The capacity of entries to hold */
+  /** The number of items needed to fulfill the receiver (default: 1) */
   limit?: number;
 }
 
 /** A stream interface consumed by AsyncEventTarget */
-export interface ListenerStream<T> {
+export interface Listener<T> {
   /** Stream used for reading event data */
   readable: ReadableStream<T>;
   /** Writes to the reader */
@@ -17,7 +19,7 @@ export interface ListenerStream<T> {
 }
 
 /** Asynchronous event target taking advantage of async iterators */
-export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
+export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
   /**
    * Listen to an event
    *
@@ -29,7 +31,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
    */
   listen(event: string) {
     const { readable, writable } = new TransformStream<T[], T[]>();
-    const listener: ListenerStream<T[]> = {
+    const listener: Listener<T[]> = {
       readable,
       writer: writable.getWriter(),
     };
@@ -57,7 +59,7 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
     if (readable) {
       const index = listeners.findIndex((l) => l.readable === readable);
       if (index !== -1) {
-        listeners.splice(index, 1)[0].writer.close();
+        listeners.splice(index)[0].writer.close();
       }
       return;
     }
@@ -81,29 +83,29 @@ export class AsyncEventTarget<T> extends Map<string, ListenerStream<T[]>[]> {
   /**
    * Receive an event with additional options such as a filter, limit, and timer
    *
-   *     const results = await AsyncEventTarget.receive("event");
+   *     const received = await AsyncEventTarget.receive("event");
    *
    * @param event The event to start receiving from
    */
   async receive(event: string, {
+    abort,
     delay = 60_000,
     filter,
-    limit = 1,
+    limit = abort ? Infinity : 1,
   }: AsyncEventTargetReceiveOptions<T> = {}) {
     const readable = this.listen(event);
-    const reader = readable.getReader();
-    const received = new Array<T[]>(limit);
+    const chunks = [];
     const timeout = setTimeout(() => this.deafen(event, readable), delay);
-    for (let i = 0; i < limit;) {
-      const { done, value } = await reader.read();
-      if (done) {
-        throw new Error(`Receiver timed out (${delay / 1000} seconds)`);
-      } else if (value && (await filter?.(...value) ?? true)) {
-        received[i++] = value;
+    for await (const received of readable) {
+      if (!(await filter?.(...received) ?? true)) {
+        continue;
+      }
+      if (chunks.push(received) === limit || await abort?.(...received)) {
+        clearTimeout(timeout);
+        this.deafen(event, readable);
+        return chunks;
       }
     }
-    clearTimeout(timeout);
-    this.deafen(event, readable);
-    return received;
+    throw new Error(`Receiver timed out (${delay / 1_000} seconds)`);
   }
 }

@@ -310,6 +310,7 @@ export interface HelloPayloadData {
 
 export interface BaseDispatchPayload<t extends GatewayEvents, d>
   extends BasePayload<GatewayOpcodes.Dispatch, d> {
+  s: number;
   t: t;
 }
 
@@ -905,7 +906,7 @@ export interface Activity {
   /** stream url, is validated when type is 1 */
   url?: string | null;
   /** unix timestamp of when the activity was added to the user's session */
-  created_at: number;
+  created_at?: number;
   /** unix timestamps for start and/or end of the game */
   timestamps?: ActivityTimestamps;
   /** application id for the game */

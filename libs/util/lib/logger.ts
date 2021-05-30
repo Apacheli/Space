@@ -18,7 +18,7 @@ export const log = (level: string, ...args: unknown[]) =>
     ...args.map((arg) => typeof arg === "string" ? highlight(arg) : arg),
   );
 
-const noLogs = Deno.args.includes("--no-logs") ? undefined : true;
+const noLogs = Deno.args.includes("--no-logs") || null;
 
 // deno-fmt-ignore-next-line
 export const
@@ -68,6 +68,7 @@ export const
   brightCyanBackground    = (input: string) => formatColor(input, 106, 49),
   brightWhiteBackground   = (input: string) => formatColor(input, 107, 49);
 
+/** Highlight literals in a string to appear nicer in the terminal */
 export const highlight = (input: string) =>
   input.replace(
     /"(?:.+?)?"|'(?:.+?)?'|(\b\d+\b|true|false)/g,
