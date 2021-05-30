@@ -1,2 +1,3 @@
 /** https://discord.dev/reference#snowflakes */
-export type Snowflake = `${bigint}`;
+// Snowflakes can be bigints if ETF encoding is enabled
+export type Snowflake = bigint | `${bigint}`;

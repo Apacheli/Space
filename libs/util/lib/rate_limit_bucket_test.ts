@@ -4,10 +4,11 @@ import { RateLimitBucket } from "./rate_limit_bucket.ts";
 Deno.test("RateLimitBucket.locked, lock(), and unlock()", () => {
   const bucket = new RateLimitBucket(5, 10_000);
 
-  assert(!bucket.locked);
   bucket.lock();
   assert(bucket.locked);
-  // await someTask();
+
+  // someTask();
+
   bucket.unlock();
   assert(!bucket.locked);
 

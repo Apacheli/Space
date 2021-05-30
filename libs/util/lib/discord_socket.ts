@@ -14,10 +14,9 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /**
    * Create a socket connection
    * @param url The address to establish a socket connection to
-   * @param protocols Socket protocols
    */
-  connect(url: string, protocols?: string | string[]) {
-    const socket = this.socket = new WebSocket(url, protocols);
+  connect(url: string) {
+    const socket = this.socket = new WebSocket(url);
 
     socket.addEventListener("close", (event) => this.onSocketClose(event));
     socket.addEventListener("error", (event) => this.onSocketError(event));
@@ -45,7 +44,7 @@ export abstract class DiscordSocket extends AsyncEventTarget {
    */
   protected sendPayload(opcode: number, data: unknown) {
     if (!this.socket) {
-      throw new Error("No socket");
+      throw new Error("No connected socket.");
     }
     const payload = {
       d: data,

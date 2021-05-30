@@ -159,7 +159,7 @@ export enum GatewayEvents {
 /** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
 export type HeartbeatACKPayload = BasePayload<
   GatewayOpcodes.HeartbeatACK,
-  HeartbeatPayloadData
+  HeartbeatACKPayloadData
 >;
 
 /** https://discord.dev/topics/gateway#heartbeating-example-gateway-heartbeat-ack */
@@ -1102,7 +1102,7 @@ export interface GetGatewayBody {
 }
 
 /** https://discord.dev/topics/gateway#get-gateway-bot */
-export interface GetGatewayBotBody {
+export interface GetGatewayBotBody extends GetGatewayBody {
   /** The recommended number of [shards](https://discord.dev/topics/gateway#sharding) to use when connecting */
   shards: number;
   /** Information on the current session start limit */

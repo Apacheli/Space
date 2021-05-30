@@ -17,7 +17,7 @@ Deno.test("AsyncEventTarget.receive() timed out error", async () => {
   await assertThrowsAsync(
     () => target.receive("event", { delay: 0 }),
     Error,
-    "Receiver timed out (0 seconds)",
+    "Receiver timed out (0 seconds).",
   );
 });
 
@@ -63,9 +63,9 @@ Deno.test("AsyncEventTarget.receive() with limit", async () => {
   const target = new AsyncEventTarget();
 
   setTimeout(() => {
-    target.dispatch("event", 1, 2, 3);
-    target.dispatch("event", 4, 5, 6);
-    target.dispatch("event", 7, 8, 9);
+    for (let i = 1; i < 10; i += 3) {
+      target.dispatch("event", i, i + 1, i + 2);
+    }
   });
 
   const received = await target.receive("event", { limit: 3 });

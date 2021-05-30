@@ -106,6 +106,6 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
         return chunks;
       }
     }
-    throw new Error(`Receiver timed out (${delay / 1_000} seconds)`);
+    throw new Error(`Receiver timed out (${delay / 1_000} seconds).`);
   }
 }

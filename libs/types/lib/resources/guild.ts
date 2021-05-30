@@ -205,7 +205,7 @@ export type GuildFeatures =
 /** https://discord.dev/resources/guild#unavailable-guild-object */
 export interface UnavailableGuild {
   id: Snowflake;
-  unavailable: boolean;
+  unavailable?: boolean;
 }
 
 /** https://discord.dev/resources/guild#guild-preview-object */

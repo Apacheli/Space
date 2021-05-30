@@ -2,29 +2,39 @@ import {
   GatewayCloseEventCodes,
   GatewayEvents,
   GatewayOpcodes,
+} from "../../types/mod.ts";
+import type {
   GatewayPayload,
+  GetGatewayBotBody,
   GuildRequestMembersPayloadData,
+  IdentifyPayloadData,
   PresenceUpdatePayloadData,
   ResumePayloadData,
+  Snowflake,
   VoiceStateUpdatePayloadData,
 } from "../../types/mod.ts";
-import type { Snowflake } from "../../types/mod.ts";
 import { DiscordSocket, PartialKeys } from "../../util/mod.ts";
 
-/** Shard states */
-export enum ShardStates {
-  /** No active socket connections */
-  Inactive,
+/** Shard events */
+export enum ShardEvents {
+  /** The shard has disconnected */
+  Close = "close",
+  /** The shard received a dispatch payload */
+  Dispatch = "dispatch",
+  /** The shard encountered an error */
+  Error = "error",
 }
+
+/** Shard identify data */
+export type ShardIdentifyData = Omit<
+  IdentifyPayloadData & GetGatewayBotBody,
+  "properties" | "session_start_limit" | "shard" | "token"
+>;
 
 /** Class representing a shard */
 export class Shard extends DiscordSocket {
-  /** Heartbeat ACK latency. Latency is `0` if this shard has not received a heartbeat ACK payload */
+  /** Heatbeat send and heartbeat ACK receive latency */
   latency = 0;
-  /** The epoch time at when this shard became ready, or `0` if the shard is not ready */
-  readyAt = 0;
-  /** The state this shard is currently in */
-  state = ShardStates.Inactive;
 
   #heartbeatInterval?: number;
   #lastHeartbeatSent = 0;
@@ -33,7 +43,11 @@ export class Shard extends DiscordSocket {
   #unavailableGuilds = new Set<Snowflake>();
   #token;
 
-  constructor(token: string) {
+  /**
+   * @param token Authentication token used for identifying and resuming
+   * @param id Zero-based integer used for dispersing guilds
+   */
+  constructor(token: string, public id?: number) {
     super();
 
     this.#token = token;
@@ -48,9 +62,9 @@ export class Shard extends DiscordSocket {
     this.#heartbeatInterval = undefined;
     this.socket = undefined;
 
-    if (soft) {
+    if (!soft) {
+      this.deafen(GatewayEvents.GuildMembersChunk);
       this.latency = 0;
-      this.readyAt = 0;
       this.#seq = 0;
       this.#sessionID = undefined;
       this.#unavailableGuilds.clear();
@@ -78,11 +92,13 @@ export class Shard extends DiscordSocket {
       }
     }
 
-    this.dispatch("close", resumable, reconnectable, event);
+    this.reset(resumable);
+
+    this.dispatch(ShardEvents.Close, resumable, reconnectable, event);
   }
 
   protected onSocketError(event: Event) {
-    this.dispatch("error", event);
+    this.dispatch(ShardEvents.Error, event);
   }
 
   protected onSocketMessage(event: MessageEvent) {
@@ -93,7 +109,43 @@ export class Shard extends DiscordSocket {
         this.#seq = payload.s;
 
         switch (payload.t) {
+          case GatewayEvents.GuildCreate: {
+            const guildId = BigInt(payload.d.id);
+            if (this.#unavailableGuilds.has(guildId)) {
+              this.#unavailableGuilds.delete(guildId);
+            }
+            break;
+          }
+
+          case GatewayEvents.GuildDelete: {
+            if (payload.d.unavailable) {
+              this.#unavailableGuilds.add(BigInt(payload.d.id));
+            }
+            break;
+          }
+
+          case GatewayEvents.Ready: {
+            this.id ??= payload.d.shard?.[0];
+            this.#sessionID = payload.d.session_id;
+            for (const unavailableGuild of payload.d.guilds) {
+              this.#unavailableGuilds.add(BigInt(unavailableGuild.id));
+            }
+            break;
+          }
         }
+
+        this.dispatch(ShardEvents.Dispatch, payload.t, payload.d);
+        break;
+      }
+
+      case GatewayOpcodes.Hello: {
+        const delay = payload.d.heartbeat_interval;
+        this.#heartbeatInterval = setInterval(() => this.#heartbeat(), delay);
+        break;
+      }
+
+      case GatewayOpcodes.HeartbeatACK: {
+        this.latency = Date.now() - this.#lastHeartbeatSent;
         break;
       }
     }
@@ -104,7 +156,18 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.Heartbeat, this.#seq);
   };
 
-  #identify = () => {
+  #identify = (data: ShardIdentifyData) => {
+    const payload: IdentifyPayloadData = {
+      properties: {
+        $browser: "Space",
+        $device: "Space",
+        $os: Deno.build.target,
+      },
+      shard: this.id === undefined ? undefined : [this.id, data.shards ?? 1],
+      token: this.#token,
+      ...data,
+    };
+    this.sendPayload(GatewayOpcodes.Identify, payload);
   };
 
   /**
@@ -142,6 +205,9 @@ export class Shard extends DiscordSocket {
   updateVoiceState(
     data: PartialKeys<VoiceStateUpdatePayloadData, "self_deaf" | "self_mute">,
   ) {
+    if (this.#unavailableGuilds.has(BigInt(data.guild_id))) {
+      throw new Error("Guild is unavailable.");
+    }
     const payload: VoiceStateUpdatePayloadData = {
       "self_deaf": false,
       "self_mute": false,
@@ -162,22 +228,29 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.Resume, payload);
   };
 
-  /**
-   * Request members from a guild
-   */
-  async requestGuildMembers(
-    data: PartialKeys<GuildRequestMembersPayloadData, "limit">,
-  ) {
-    const nonce = data.nonce ?? `${Date.now()}`.padStart(16, "0");
+  /** Request members from a guild */
+  async requestGuildMembers(data: GuildRequestMembersPayloadData) {
+    if (this.#unavailableGuilds.has(BigInt(data.guild_id))) {
+      throw new Error("Guild is unavailable.");
+    }
     const payload: GuildRequestMembersPayloadData = {
-      limit: 0,
-      nonce,
+      nonce: data.nonce ?? `${Date.now()}`.padStart(16, "0"),
       query: "",
       ...data,
     };
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
     return this.receive(GatewayEvents.GuildMembersChunk, {
-      terminator: (d) => d.chunk_count + 1 === d.chunk_index,
+      abort: (data) => data.chunk_index + 1 === data.chunk_count,
     });
+  }
+
+  identifyOrResume(identifyData?: ShardIdentifyData, resumable?: boolean) {
+    if (resumable && this.#sessionID) {
+      this.#resume();
+    } else if (identifyData) {
+      this.#identify(identifyData);
+    } else {
+      throw new Error("Failed to identify or resume.");
+    }
   }
 }

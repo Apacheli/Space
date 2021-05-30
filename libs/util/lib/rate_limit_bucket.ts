@@ -1,7 +1,7 @@
 /** A generic function */
 export type GenericFunction = (...args: unknown[]) => unknown;
 
-/** Does rate limiting stuff */
+/** Handles rate limits */
 export class RateLimitBucket {
   #lastRequestAt = 0;
   #queue: GenericFunction[] = [];
@@ -11,10 +11,6 @@ export class RateLimitBucket {
   locked = false;
 
   /**
-   * Construct a new rate limit bucket
-   *
-   *     const bucket = new RateLimitBucket(5, 10_000);
-   *
    * @param max The maximum amount of requests a bucket can use
    * @param reset The time when the bucket will reset
    * @param left The number of remaining requests
@@ -28,12 +24,12 @@ export class RateLimitBucket {
   }
 
   /**Add a funciton to the queue */
-  add(func: GenericFunction) {
+  add(func: GenericFunction, reset = this.reset) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
         this.#timeout = undefined;
         func();
-      }, this.reset);
+      }, reset);
       return;
     }
     this.#queue.push(func);
