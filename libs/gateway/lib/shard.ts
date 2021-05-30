@@ -229,7 +229,7 @@ export class Shard extends DiscordSocket {
   };
 
   /** Request members from a guild */
-  async requestGuildMembers(data: GuildRequestMembersPayloadData) {
+  requestGuildMembers(data: GuildRequestMembersPayloadData) {
     if (this.#unavailableGuilds.has(BigInt(data.guild_id))) {
       throw new Error("Guild is unavailable.");
     }

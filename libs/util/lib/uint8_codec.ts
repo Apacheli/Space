@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any
+
 /** Decodes UTF8 data */
 export const decode = (globalThis as any).Deno?.core.decode ??
   ((c) => (input?: BufferSource) => c.decode(input))(new TextDecoder());

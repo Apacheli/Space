@@ -18,7 +18,8 @@ export interface Listener<T> {
   writer: WritableStreamDefaultWriter<T>;
 }
 
-/** Asynchronous event target taking advantage of async iterators */
+/** Asynchronous event target using async iterators */
+// deno-lint-ignore no-explicit-any
 export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
   /**
    * Listen to an event
@@ -97,10 +98,10 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
     const chunks = [];
     const timeout = setTimeout(() => this.deafen(event, readable), delay);
     for await (const received of readable) {
-      if (!(await filter?.(...received) ?? true)) {
-        continue;
-      }
-      if (chunks.push(received) === limit || await abort?.(...received)) {
+      if (
+        (await filter?.(...received) ?? true) &&
+          chunks.push(received) === limit || await abort?.(...received)
+      ) {
         clearTimeout(timeout);
         this.deafen(event, readable);
         return chunks;
