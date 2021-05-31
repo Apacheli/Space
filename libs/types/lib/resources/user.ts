@@ -138,7 +138,7 @@ export interface CreateGroupDMJSON {
   /** access tokens of users that have granted your app the `gdm.join` scope */
   access_tokens: string[];
   /** a dictionary of user ids to their respective nicknames */
-  nicks: Record<Snowflake, string>;
+  nicks: Record<`${Snowflake}`, string>;
 }
 
 /** https://discord.dev/resources/user#create-group-dm */

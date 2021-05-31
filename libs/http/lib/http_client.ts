@@ -353,7 +353,7 @@ export class HTTPClient extends Map<string, RateLimitBucket> {
     if (response.ok) {
       return result;
     }
-    throw new HTTPError(result, response);
+    throw new HTTPError(result);
   }
 
   private async fetch(request: Request) {

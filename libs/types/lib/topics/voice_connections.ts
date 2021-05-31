@@ -3,14 +3,14 @@
 // https://discord.dev/topics/voice-connections
 
 import type { Snowflake } from "../reference.ts";
-import type { GatewayPayload } from "./gateway.ts";
+import type { BasePayload } from "./gateway.ts";
 import type { VoiceOpcodes } from "./opcodes_and_status_codes.ts";
 
 /** https://discord.dev/topics/voice-connections#voice-gateway-versioning */
 export type VoiceGatewayVersions = 4;
 
 /** https://discord.dev/topics/voice-connections#establishing-a-voice-websocket-connection-example-voice-identify-payload */
-export type VoiceIdentifyPayload = GatewayPayload<
+export type VoiceIdentifyPayload = BasePayload<
   VoiceOpcodes.Identify,
   VoiceIdentifyPayloadData
 >;
@@ -22,7 +22,7 @@ export interface VoiceIdentifyPayloadData extends VoiceResumePayloadData {
 }
 
 /** https://discord.dev/topics/voice-connections#establishing-a-voice-websocket-connection-example-voice-ready-payload */
-export type VoiceReadyPayload = GatewayPayload<
+export type VoiceReadyPayload = BasePayload<
   VoiceOpcodes.Ready,
   VoiceReadyPayloadData
 >;
@@ -44,7 +44,7 @@ export enum EncryptionModes {
 }
 
 /** https://discord.dev/topics/voice-connections#heartbeating-example-hello-payload-since-v3 */
-export type VoiceHelloPayload = GatewayPayload<
+export type VoiceHelloPayload = BasePayload<
   VoiceOpcodes.Hello,
   VoiceHelloPayloadData
 >;
@@ -55,7 +55,7 @@ export interface VoiceHelloPayloadData {
 }
 
 /** https://discord.dev/topics/voice-connections#establishing-a-voice-udp-connection-example-select-protocol-payload */
-export type SelectProtocolPayload = GatewayPayload<
+export type SelectProtocolPayload = BasePayload<
   VoiceOpcodes.SelectProtocol,
   SelectProtocolPayloadData
 >;
@@ -71,7 +71,7 @@ export interface SelectProtocolPayloadData {
 }
 
 /** https://discord.dev/topics/voice-connections#establishing-a-voice-udp-connection-example-session-description-payload */
-export type SessionDescriptionPayload = GatewayPayload<
+export type SessionDescriptionPayload = BasePayload<
   VoiceOpcodes.SessionDescription,
   SessionDescriptionPayloadData
 >;
@@ -93,7 +93,7 @@ export enum SpeakingFlags {
 }
 
 /** https://discord.dev/topics/voice-connections#speaking-example-speaking-payload */
-export type SpeakingPayload = GatewayPayload<
+export type SpeakingPayload = BasePayload<
   VoiceOpcodes.Speaking,
   SpeakingPayloadData
 >;
@@ -108,7 +108,7 @@ export interface SpeakingPayloadData {
 // Frames of silence: [0xF8, 0xFF, 0xFE];
 
 /** https://discord.dev/topics/voice-connections#resuming-voice-connection-example-resume-connection-payload */
-export type VoiceResumePayload = GatewayPayload<
+export type VoiceResumePayload = BasePayload<
   VoiceOpcodes.Resume,
   VoiceResumePayloadData
 >;
