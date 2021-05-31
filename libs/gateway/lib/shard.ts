@@ -17,12 +17,26 @@ import { DiscordSocket, PartialKeys } from "../../util/mod.ts";
 
 /** Shard events */
 export enum ShardEvents {
-  /** The shard has disconnected */
+  /** The shard disconnected */
   Close = "close",
   /** The shard received a dispatch payload */
   Dispatch = "dispatch",
   /** The shard encountered an error */
   Error = "error",
+}
+
+/** Shard states */
+export enum ShardStates {
+  /** The shard has no socket connection or gateway session */
+  Inactive,
+  /** The shard has opened a connection, but is unable to receive dispatch events */
+  Connected,
+  /** The shard is waiting for a dispatch READY payload */
+  Identifying,
+  /** The shard is waiting for a dispatch RESUMED payload */
+  Resuming,
+  /** The shard can receive dispatch events */
+  Active,
 }
 
 /** Shard identify data */
@@ -35,6 +49,8 @@ export type ShardIdentifyData = Omit<
 export class Shard extends DiscordSocket {
   /** Heatbeat send and heartbeat ACK receive latency */
   latency = 0;
+  /** The state this shard is in */
+  state = ShardStates.Inactive;
 
   #heartbeatInterval?: number;
   #lastHeartbeatSent = 0;
@@ -72,6 +88,8 @@ export class Shard extends DiscordSocket {
   }
 
   protected onSocketClose(event: CloseEvent) {
+    this.state = ShardStates.Inactive;
+
     let reconnectable = false;
     let resumable = true;
 
@@ -126,10 +144,16 @@ export class Shard extends DiscordSocket {
 
           case GatewayEvents.Ready: {
             this.id ??= payload.d.shard?.[0];
+            this.state = ShardStates.Active;
             this.#sessionID = payload.d.session_id;
             for (const unavailableGuild of payload.d.guilds) {
               this.#unavailableGuilds.add(BigInt(unavailableGuild.id));
             }
+            break;
+          }
+
+          case GatewayEvents.Resumed: {
+            this.state = ShardStates.Active;
             break;
           }
         }
@@ -139,6 +163,7 @@ export class Shard extends DiscordSocket {
       }
 
       case GatewayOpcodes.Hello: {
+        this.state = ShardStates.Connected;
         const delay = payload.d.heartbeat_interval;
         this.#heartbeatInterval = setInterval(() => this.#heartbeat(), delay);
         break;
@@ -157,6 +182,7 @@ export class Shard extends DiscordSocket {
   };
 
   #identify = (data: ShardIdentifyData) => {
+    this.state = ShardStates.Identifying;
     const payload: IdentifyPayloadData = {
       properties: {
         $browser: "Space",
@@ -220,6 +246,7 @@ export class Shard extends DiscordSocket {
     if (!this.#sessionID) {
       throw new Error("No session to resume.");
     }
+    this.state = ShardStates.Resuming;
     const payload: ResumePayloadData = {
       seq: this.#seq,
       "session_id": this.#sessionID,
