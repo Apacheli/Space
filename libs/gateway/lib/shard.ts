@@ -3,6 +3,7 @@ import {
   GatewayEvents,
   GatewayOpcodes,
 } from "../../types/mod.ts";
+import { DiscordSocket, logger, PartialKeys } from "../../util/mod.ts";
 import type {
   GatewayPayload,
   GetGatewayBotBody,
@@ -13,7 +14,6 @@ import type {
   Snowflake,
   VoiceStateUpdatePayloadData,
 } from "../../types/mod.ts";
-import { DiscordSocket, PartialKeys } from "../../util/mod.ts";
 
 /** Shard events */
 export enum ShardEvents {
@@ -69,6 +69,11 @@ export class Shard extends DiscordSocket {
     this.#token = token;
   }
 
+  async connect(url: string, reconnecting = false) {
+    await super.connect(url);
+    logger.debug?.(`Shard ${this.id} ${reconnecting ? "re" : ""}connected`);
+  }
+
   /**
    * Reset this shard's properties
    * @param soft Don't reset properties that are used for resuming sessions
@@ -109,6 +114,11 @@ export class Shard extends DiscordSocket {
         break;
       }
     }
+
+    logger.warn?.(
+      `Shard ${this.id} disconnected with code ${event.code}`,
+      `with${event.reason ? ` reason "${event.reason}"` : "out a reason"}`,
+    );
 
     this.reset(resumable);
 
