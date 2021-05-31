@@ -3,10 +3,15 @@ import { Shard, ShardEvents } from "./shard.ts";
 import type { ShardIdentifyData } from "./shard.ts";
 import type { GatewayVersions } from "../../types/mod.ts";
 
+/** Gateway client data */
 export interface GatewayClientData extends ShardIdentifyData {
+  /** The index to start the iteration shard spawning process */
   firstShardId?: number;
+  /** The shard spawning terminator index */
   lastShardId?: number;
+  /** How many shards can be connected every 5 seconds */
   maxConcurrency?: number;
+  /** Gateway version */
   version?: GatewayVersions;
 }
 
