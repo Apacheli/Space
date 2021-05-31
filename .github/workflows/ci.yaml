@@ -14,27 +14,14 @@ jobs:
       matrix:
         deno:
           - v1.x
-          - nightly
         os:
           - macOS-latest
-          - windows-latest
           - ubuntu-latest
+          - windows-latest
 
     steps:
-      - name: Setup repo
-        uses: actions/checkout@v2
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@main
-
-      - name: Cache Dependencies
-        run: deno cache lib/client/deps.ts
-
-      - name: Lint Code
-        run: deno lint --unstable
-
-      - name: Format Code
-        run: deno fmt
-
-      # - name: Run Tests
-      #   run: deno test -A --unstable
+      - uses: actions/checkout@v2
+      - uses: denoland/setup-deno@main
+      - run: deno lint
+      - run: deno fmt --check
+      - run: deno test -A --unstable

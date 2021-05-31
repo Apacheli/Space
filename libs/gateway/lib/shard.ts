@@ -27,7 +27,7 @@ export enum ShardEvents {
 
 /** Shard identify data */
 export type ShardIdentifyData = Omit<
-  IdentifyPayloadData & GetGatewayBotBody,
+  PartialKeys<GetGatewayBotBody, "shards"> & IdentifyPayloadData,
   "properties" | "session_start_limit" | "shard" | "token"
 >;
 
@@ -229,7 +229,7 @@ export class Shard extends DiscordSocket {
   };
 
   /** Request members from a guild */
-  requestGuildMembers(data: GuildRequestMembersPayloadData) {
+  requestGuildMembers(data: GuildRequestMembersPayloadData, delay?: number) {
     if (this.#unavailableGuilds.has(BigInt(data.guild_id))) {
       throw new Error("Guild is unavailable.");
     }
@@ -241,6 +241,7 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
     return this.receive(GatewayEvents.GuildMembersChunk, {
       abort: (data) => data.chunk_index + 1 === data.chunk_count,
+      delay,
     });
   }
 

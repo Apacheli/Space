@@ -3,12 +3,13 @@ export type GenericFunction = (...args: unknown[]) => unknown;
 
 /** Handles rate limits */
 export class RateLimitBucket {
-  #lastRequestAt = 0;
-  #queue: GenericFunction[] = [];
-  #timeout?: number;
-
+  /** The last time this bucket was used */
+  lastRequestAt = 0;
   /** If this bucket is locked or not */
   locked = false;
+
+  #queue: GenericFunction[] = [];
+  #timeout?: number;
 
   /**
    * @param max The maximum amount of requests a bucket can use
@@ -20,16 +21,20 @@ export class RateLimitBucket {
 
   /** A getter that determines if this bucket is rate limited or not */
   get rateLimited() {
-    return this.left < 1 && Date.now() - this.#lastRequestAt < this.reset;
+    return this.left < 1 && Date.now() - this.lastRequestAt < this.reset;
   }
 
+  #duration = (frozen = false) => {
+    return frozen ? this.reset - Date.now() + this.lastRequestAt : this.reset;
+  };
+
   /**Add a funciton to the queue */
-  add(func: GenericFunction, reset = this.reset) {
+  add(func: GenericFunction, frozen = false) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
         this.#timeout = undefined;
         func();
-      }, reset);
+      }, this.#duration(frozen));
       return;
     }
     this.#queue.push(func);
@@ -53,7 +58,7 @@ export class RateLimitBucket {
     if (!this.locked) {
       throw new Error("Bucket is unlocked.");
     }
-    this.#lastRequestAt = Date.now();
+    this.lastRequestAt = Date.now();
     this.locked = false;
 
     this.max = max;
