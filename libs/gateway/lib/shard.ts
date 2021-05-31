@@ -277,7 +277,7 @@ export class Shard extends DiscordSocket {
    * @param identifyData Identify data if the shard in unable to resume
    * @param resumable If the shard can resume (must need a session ID)
    */
-  identifyOrResume(resumable?: boolean, identifyData?: ShardIdentifyData) {
+  resumeOrIdentify(resumable?: boolean, identifyData?: ShardIdentifyData) {
     if (resumable && this.#sessionID) {
       this.#resume();
     } else if (identifyData) {

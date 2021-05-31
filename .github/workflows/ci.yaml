@@ -23,5 +23,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: denoland/setup-deno@main
       - run: deno lint
-      - run: deno fmt --check
+      - run: deno fmt
       - run: deno test -A --unstable

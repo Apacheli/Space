@@ -95,7 +95,7 @@ export class GatewayClient extends AsyncEventTarget {
     }
     this.#bucket?.lock();
     await shard.connect(url);
-    shard.identifyOrResume(resumable, data);
+    shard.resumeOrIdentify(resumable, data);
     this.#bucket?.unlock();
     this.#bucket?.next();
   }
