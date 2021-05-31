@@ -45,6 +45,8 @@ export type ShardIdentifyData = Omit<
   "properties" | "session_start_limit" | "shard" | "token"
 >;
 
+const GatewayEventsKeys = new Set(Object.values(GatewayEvents));
+
 /** Class representing a shard */
 export class Shard extends DiscordSocket {
   /** Heatbeat send and heartbeat ACK receive latency */
@@ -61,9 +63,10 @@ export class Shard extends DiscordSocket {
 
   /**
    * @param token Authentication token used for identifying and resuming
+   * @param data Shard identify data
    * @param id Zero-based integer used for dispersing guilds
    */
-  constructor(token: string, public id?: number) {
+  constructor(token: string, public data: ShardIdentifyData, public id = 0) {
     super();
 
     this.#token = token;
@@ -153,8 +156,10 @@ export class Shard extends DiscordSocket {
           }
 
           case GatewayEvents.Ready: {
-            this.id ??= payload.d.shard?.[0];
             this.state = ShardStates.Active;
+            logger.info?.(`Shard ${this.id} is ready`);
+
+            this.id ??= payload.d.shard?.[0] ?? 0;
             this.#sessionID = payload.d.session_id;
             for (const unavailableGuild of payload.d.guilds) {
               this.#unavailableGuilds.add(BigInt(unavailableGuild.id));
@@ -164,11 +169,27 @@ export class Shard extends DiscordSocket {
 
           case GatewayEvents.Resumed: {
             this.state = ShardStates.Active;
+            logger.info?.(`Shard ${this.id} resumed`);
             break;
           }
         }
 
+        if (!GatewayEventsKeys.has(payload.t)) {
+          logger.warn?.(
+            `Shard ${this.id} encountered an unknown dispatch event "${payload.t}"`,
+          );
+        }
+
         this.dispatch(ShardEvents.Dispatch, payload.t, payload.d);
+        break;
+      }
+
+      case GatewayOpcodes.InvalidSession: {
+        logger.trace?.(
+          `Shard ${this.id} encountered an invalid session. Attempting to`,
+          payload.d ? "resume" : "identify",
+        );
+        this.resumeOrIdentify(payload.d);
         break;
       }
 
@@ -191,7 +212,7 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.Heartbeat, this.#seq);
   };
 
-  #identify = (data: ShardIdentifyData) => {
+  #identify = ({ data } = this) => {
     this.state = ShardStates.Identifying;
     const payload: IdentifyPayloadData = {
       properties: {
@@ -282,18 +303,12 @@ export class Shard extends DiscordSocket {
     });
   }
 
-  /**
-   * Resume or identify based on the data the shard holds
-   * @param identifyData Identify data if the shard in unable to resume
-   * @param resumable If the shard can resume (must need a session ID)
-   */
-  resumeOrIdentify(resumable?: boolean, identifyData?: ShardIdentifyData) {
+  /** Resume if possible, else identify if resuming is not possible */
+  resumeOrIdentify(resumable?: boolean) {
     if (resumable && this.#sessionID) {
       this.#resume();
-    } else if (identifyData) {
-      this.#identify(identifyData);
     } else {
-      throw new Error("Failed to identify or resume.");
+      this.#identify();
     }
   }
 }
