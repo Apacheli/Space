@@ -67,14 +67,9 @@ export class Shard extends DiscordSocket {
    * @param id Zero-based integer used for dispersing guilds
    */
   constructor(token: string, public data: ShardIdentifyData, public id = 0) {
-    super();
+    super(data.url);
 
     this.#token = token;
-  }
-
-  async connect(url: string, reconnecting = false) {
-    await super.connect(url);
-    logger.debug?.(`Shard ${this.id} ${reconnecting ? "re" : ""}connected`);
   }
 
   /**
@@ -303,7 +298,7 @@ export class Shard extends DiscordSocket {
     });
   }
 
-  /** Resume if possible, else identify if resuming is not possible */
+  /** Attempt to resume or identify */
   resumeOrIdentify(resumable?: boolean) {
     if (resumable && this.#sessionID) {
       this.#resume();

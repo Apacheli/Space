@@ -35,26 +35,29 @@ export class GatewayClient extends AsyncEventTarget {
   /** Connect to the gateway */
   connect(data: GatewayClientData) {
     this.#bucket = new RateLimitBucket(data.maxConcurrency, 5_000);
+
     const lastShardId = data.lastShardId ?? data.shards;
     if (!lastShardId) {
       throw new RangeError("Invalid number of shards to spawn.");
     }
-    const url = `${data.url}?v=${data.version ?? GATEWAY_VERSION}`;
     const firstShardId = data.firstShardId ?? 0;
     const shards = data.shards ?? lastShardId - firstShardId;
+    const url = `${data.url}?v=${data.version ?? GATEWAY_VERSION}`;
+
     logger.debug?.(
       `Connecting ${lastShardId - firstShardId}/${shards} shards`,
       `(${firstShardId}-${lastShardId - 1}) to "${url}"`,
     );
-    for (let i = data.firstShardId ?? 0; i < lastShardId; i++) {
-      const shard = this.#spawnShard(i, url, data);
-      this.#connectShard(shard, url, data);
+
+    for (let i = firstShardId; i < lastShardId; i++) {
+      const shard = this.#spawnShard(i, { ...data, url });
+      this.#connectShard(shard);
       this.shards.push(shard);
     }
   }
 
-  #spawnShard = (shardId: number, url: string, data: GatewayClientData) => {
-    const shard = new Shard(this.#token, shardId);
+  #spawnShard = (shardId: number, data: GatewayClientData) => {
+    const shard = new Shard(this.#token, data, shardId);
     (async () => {
       for await (const [event, data] of shard.listen(ShardEvents.Dispatch)) {
         this.dispatch(event, data);
@@ -63,28 +66,18 @@ export class GatewayClient extends AsyncEventTarget {
     (async (readable) => {
       for await (const [resumable, reconnectable] of readable) {
         if (reconnectable) {
-          this.#connectShard(shard, url, data, resumable);
+          this.#connectShard(shard, resumable);
         }
       }
     })(shard.listen(ShardEvents.Close));
     return shard;
   };
 
-  #connectShard = async (
-    shard: Shard,
-    url: string,
-    data: GatewayClientData,
-    resumable = true,
-  ) => {
-    if (this.#bucket?.locked || this.#bucket?.rateLimited) {
-      const func = () => this.#connectShard(shard, url, data, resumable);
-      this.#bucket?.add(func, true);
-      return;
-    }
-    this.#bucket?.lock();
-    await shard.connect(url, resumable);
-    shard.resumeOrIdentify(resumable, data);
-    this.#bucket?.unlock();
-    this.#bucket?.next();
+  #connectShard = async (shard: Shard, resumable = true) => {
+    this.#bucket?.task(async () => {
+      await shard.connect();
+      shard.resumeOrIdentify(resumable);
+      return [];
+    });
   };
 }

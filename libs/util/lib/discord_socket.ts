@@ -11,12 +11,13 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /** When the socket receives a message */
   protected abstract onSocketMessage(event: MessageEvent): void;
 
-  /**
-   * Create a socket connection
-   * @param url The address to establish a socket connection to
-   */
-  connect(url: string) {
-    const socket = this.socket = new WebSocket(url);
+  constructor(protected url: string) {
+    super();
+  }
+
+  /** Open a socket connection */
+  connect() {
+    const socket = this.socket = new WebSocket(this.url);
 
     socket.addEventListener("close", (event) => this.onSocketClose(event));
     socket.addEventListener("error", (event) => this.onSocketError(event));

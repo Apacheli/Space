@@ -71,4 +71,15 @@ export class RateLimitBucket {
     const shifted = this.#queue.shift();
     shifted?.();
   }
+
+  /** Lock the bucket, do a task, and unlock the bucket */
+  async task(func: () => number[] | Promise<number[]>): Promise<void> {
+    if (this.locked || this.rateLimited) {
+      return this.add(() => this.task(func));
+    }
+    this.lock();
+    const unlockArgs = await func();
+    this.unlock(...unlockArgs);
+    this.next();
+  }
 }
