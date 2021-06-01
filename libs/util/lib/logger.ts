@@ -18,7 +18,7 @@ export const log = (level: string, ...args: unknown[]) =>
     ...args.map((arg) => typeof arg === "string" ? highlight(arg) : arg),
   );
 
-const noLogs = Deno.args.includes("--no-logs") || null;
+const noLogs = Deno.args.includes("--no-logs") ? null : true;
 
 // deno-fmt-ignore-next-line
 export const

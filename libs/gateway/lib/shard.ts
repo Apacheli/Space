@@ -45,7 +45,7 @@ export type ShardIdentifyData = Omit<
   "properties" | "session_start_limit" | "shard" | "token"
 >;
 
-const GatewayEventsKeys = new Set(Object.values(GatewayEvents));
+const GatewayEventsValues = new Set(Object.values(GatewayEvents));
 
 /** Class representing a shard */
 export class Shard extends DiscordSocket {
@@ -94,13 +94,13 @@ export class Shard extends DiscordSocket {
     this.state = ShardStates.Inactive;
 
     let reconnectable = false;
-    let resumable = true;
+    let resumable = false;
 
     switch (event.code) {
       case 0:
       case 1001: // "Discord WebSocket requesting client reconnect."
       case GatewayCloseEventCodes.UnknownError: {
-        resumable = false;
+        resumable = true;
       } /* falls through */
 
       case GatewayCloseEventCodes.UnknownOpcode:
@@ -169,7 +169,7 @@ export class Shard extends DiscordSocket {
           }
         }
 
-        if (!GatewayEventsKeys.has(payload.t)) {
+        if (!GatewayEventsValues.has(payload.t)) {
           logger.warn?.(
             `Shard ${this.id} encountered an unknown dispatch event "${payload.t}"`,
           );

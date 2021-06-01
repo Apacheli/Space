@@ -32,7 +32,7 @@ Deno.test("AsyncEventTarget.receive() with abort", async () => {
   });
 
   const received = await target.receive("event", {
-    abort: (x) => x.index + 1 === x.count,
+    terminate: (x) => x.index + 1 === x.count,
   });
 
   assertEquals(received, [

@@ -1,13 +1,13 @@
 /** AsyncEventTarget receiver options */
 export interface AsyncEventTargetReceiveOptions<T> {
-  /** Abort the receiver without error if an item passes the aborter */
-  abort?: (...received: T[]) => boolean | Promise<boolean>;
   /** Time to wait in milliseconds before expiring (default: 60 seconds) */
   delay?: number;
   /** Filters out items that do not meet the provided function's conditions */
   filter?: (...received: T[]) => boolean | Promise<boolean>;
   /** The number of items needed to fulfill the receiver (default: 1) */
   limit?: number;
+  /** Terminate the receiver if an item fulfills the terminator's conditions */
+  terminate?: (...received: T[]) => boolean | Promise<boolean>;
 }
 
 /** A stream interface consumed by AsyncEventTarget */
@@ -89,19 +89,19 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
    * @param event The event to start receiving from
    */
   async receive(event: string, {
-    abort,
     delay = 60_000,
     filter,
-    limit = abort ? Infinity : 1,
+    terminate,
+    limit = terminate ? Infinity : 1,
   }: AsyncEventTargetReceiveOptions<T> = {}) {
     const readable = this.listen(event);
     const chunks = [];
     const timeout = setTimeout(() => this.deafen(event, readable), delay);
     for await (const received of readable) {
-      if (
-        (await filter?.(...received) ?? true) &&
-          chunks.push(received) === limit || await abort?.(...received)
-      ) {
+      if (!(await filter?.(...received) ?? true)) {
+        continue;
+      }
+      if (chunks.push(received) === limit || await terminate?.(...received)) {
         clearTimeout(timeout);
         this.deafen(event, readable);
         return chunks;

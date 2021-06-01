@@ -24,17 +24,13 @@ export class RateLimitBucket {
     return this.left < 1 && Date.now() - this.lastRequestAt < this.reset;
   }
 
-  #duration = (frozen = false) => {
-    return frozen ? this.reset - Date.now() + this.lastRequestAt : this.reset;
-  };
-
   /**Add a funciton to the queue */
-  add(func: GenericFunction, frozen = false) {
+  add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
         this.#timeout = undefined;
         func();
-      }, this.#duration(frozen));
+      }, this.reset);
       return;
     }
     this.#queue.push(func);
@@ -58,6 +54,7 @@ export class RateLimitBucket {
     if (!this.locked) {
       throw new Error("Bucket is unlocked.");
     }
+
     this.lastRequestAt = Date.now();
     this.locked = false;
 
@@ -72,14 +69,16 @@ export class RateLimitBucket {
     shifted?.();
   }
 
-  /** Lock the bucket, do a task, and unlock the bucket */
-  async task(func: () => number[] | Promise<number[]>): Promise<void> {
+  /** Do a task */
+  async task(func: () => number[] | Promise<number[]>) {
+    const task = async () => {
+      this.lock();
+      this.unlock(...await func());
+    };
     if (this.locked || this.rateLimited) {
-      return this.add(() => this.task(func));
+      return this.add(task);
     }
-    this.lock();
-    const unlockArgs = await func();
-    this.unlock(...unlockArgs);
+    await task();
     this.next();
   }
 }
