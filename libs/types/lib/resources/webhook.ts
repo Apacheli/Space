@@ -123,6 +123,8 @@ export interface ExecuteWebhookJSON {
   payload_json?: string;
   /** allowed mentions for the message */
   allowed_mentions?: AllowedMentions;
+  /** the components to include with the message */
+  components?: Component[];
 }
 
 /** https://discord.dev/resources/webhook#execute-webhook */
@@ -157,6 +159,8 @@ export interface EditWebhookMessageJSON {
   allowed_mentions?: AllowedMentions | null;
   /** attached files to keep */
   attachments?: Attachment[] | null;
+    /** the components to include with the message */
+    components?: Component[];
 }
 
 /** https://discord.dev/resources/webhook#edit-webhook-message */

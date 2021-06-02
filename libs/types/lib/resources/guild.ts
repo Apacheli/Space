@@ -450,7 +450,7 @@ export type GetGuildChannelsBody = Channel[];
 
 /** https://discord.dev/resources/guild#create-guild-channel */
 export interface CreateGuildChannelJSON {
-  /** channel name (2-100 characters) */
+  /** channel name (1-100 characters) */
   name: string;
   /** the [type of channel](https://discord.dev/resources/channel#channel-object-channel-types) */
   type?: ChannelTypes;

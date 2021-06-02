@@ -25,7 +25,7 @@ export interface Channel {
   position?: number;
   /** explicit permission overwrites for members and roles */
   permission_overwrites?: Overwrite[];
-  /** the name of the channel (2-100 characters) */
+  /** the name of the channel (1-100 characters) */
   name?: string;
   /** the channel topic (0-1024 characters) */
   topic?: string | null;
@@ -540,6 +540,8 @@ export interface CreateMessageJSON {
   allowed_mentions?: AllowedMentions;
   /** include to make your message a reply */
   message_reference?: MessageReference;
+  /** the components to include with the message */
+  components?: Component[];
 }
 
 /** https://discord.dev/resources/channel#create-message */
@@ -585,6 +587,8 @@ export interface EditMessageJSON
   payload_json?: string;
   /** attached files to keep */
   attachments?: Attachment[] | null;
+  /** the components to include with the message */
+  components?: Component[];
 }
 
 /** https://discord.dev/resources/channel#edit-message */
