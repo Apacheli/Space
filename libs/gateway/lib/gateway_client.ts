@@ -74,7 +74,7 @@ export class GatewayClient extends AsyncEventTarget {
   };
 
   #connectShard = (shard: Shard, resumable = true) => {
-    this.#bucket?.task(async () => {
+    return this.#bucket?.task(async () => {
       await shard.connect();
       shard.resumeOrIdentify(resumable);
       return [];

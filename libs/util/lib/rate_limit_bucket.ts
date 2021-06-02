@@ -16,7 +16,7 @@ export class RateLimitBucket {
 
   /**
    * @param max The maximum amount of requests a bucket can use
-   * @param reset The delay when the bucket will reset
+   * @param reset The time when the bucket will reset
    * @param left The number of remaining requests
    */
   constructor(public max = 1, public reset = 0, public left = max) {
@@ -50,7 +50,7 @@ export class RateLimitBucket {
   /**
    * Unlock the bucket
    * @param max Update the bucket maximum limit
-   * @param delay Update the reset timer
+   * @param reset Update the reset timer
    * @param left Update the remaining number of requests
    */
   unlock(max = this.max, reset = this.reset, left = this.left - 1) {

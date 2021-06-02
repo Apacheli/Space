@@ -23,7 +23,7 @@ A low-level [Deno](https://deno.land/) module for interacting with
 ### Install
 
 ```ts
-export * from "https://deno.land/x/space@0.9.0-alpha/mod.ts";
+export * from "https://deno.land/x/space@0.10.0-alpha/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.

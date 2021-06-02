@@ -2,25 +2,41 @@
 
 This document contains notable changes throughout Space's development.
 
-| **0-alpha**<sup>Current</sup>          |
-| -------------------------------------- |
-| [0.9.0-alpha](#090-alpha---2021-05-16) |
-| [0.8.0-alpha](#080-alpha---2021-05-01) |
-| [0.7.1-alpha](#071-alpha---2021-04-25) |
-| [0.7.0-alpha](#070-alpha---2021-04-21) |
-| [0.6.1-alpha](#061-alpha---2021-04-18) |
-| [0.6.0-alpha](#060-alpha---2021-04-15) |
-| [0.5.0-alpha](#050-alpha---2021-04-10) |
-| [0.4.2-alpha](#042-alpha---2021-04-04) |
-| [0.4.1-alpha](#041-alpha---2021-04-02) |
-| [0.4.0-alpha](#040-alpha---2021-03-31) |
-| [0.3.4-alpha](#034-alpha---2021-03-29) |
-| [0.3.3-alpha](#033-alpha---2021-03-23) |
-| [0.3.2-alpha](#032-alpha---2021-03-22) |
+| **0-alpha**<sup>Current</sup>            |
+| ---------------------------------------- |
+| [0.10.0-alpha](#0100-alpha---2021-06-02) |
+| [0.9.0-alpha](#090-alpha---2021-05-16)   |
+| [0.8.0-alpha](#080-alpha---2021-05-01)   |
+| [0.7.1-alpha](#071-alpha---2021-04-25)   |
+| [0.7.0-alpha](#070-alpha---2021-04-21)   |
+| [0.6.1-alpha](#061-alpha---2021-04-18)   |
+| [0.6.0-alpha](#060-alpha---2021-04-15)   |
+| [0.5.0-alpha](#050-alpha---2021-04-10)   |
+| [0.4.2-alpha](#042-alpha---2021-04-04)   |
+| [0.4.1-alpha](#041-alpha---2021-04-02)   |
+| [0.4.0-alpha](#040-alpha---2021-03-31)   |
+| [0.3.4-alpha](#034-alpha---2021-03-29)   |
+| [0.3.3-alpha](#033-alpha---2021-03-23)   |
+| [0.3.2-alpha](#032-alpha---2021-03-22)   |
 
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.10.0-alpha](https://github.com/Apacheli/Space/compare/0.9.0-alpha...0.10.0-alpha) - 2021-06-02
+
+Unstable update. Released just to remove some work strain.
+
+### Fixed
+
+- Massive rework of the module ecosystem.
+- Typings library is mostly finished and just needs to be maintained now.
+- Shard queueing should be mostly correct. There are a few optimizations needing
+  to be made with `rate_limit_bucket`, but it works for now.
+
+### Removed
+
+- Removed the `client` library. This needs to be heavily reworked.
 
 ## [0.9.0-alpha](https://github.com/Apacheli/Space/compare/0.8.0-alpha...0.9.0-alpha) - 2021-05-16
 

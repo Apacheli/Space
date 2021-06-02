@@ -190,6 +190,7 @@ export class Shard extends DiscordSocket {
 
       case GatewayOpcodes.Hello: {
         this.state = ShardStates.Connected;
+        logger.debug?.(`Shard ${this.id} connected`);
         const delay = payload.d.heartbeat_interval;
         this.#heartbeatInterval = setInterval(() => this.#heartbeat(), delay);
         break;
