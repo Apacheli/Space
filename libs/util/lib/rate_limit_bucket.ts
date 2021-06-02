@@ -1,6 +1,9 @@
 /** A generic function */
 export type GenericFunction = (...args: unknown[]) => unknown;
 
+// TODO: Make this class properly handle fixed/static reset times
+//       This class depends on dynamic reset times due to how HTTP headers work
+
 /** Handles rate limits */
 export class RateLimitBucket {
   /** The last time this bucket was used */
@@ -13,7 +16,7 @@ export class RateLimitBucket {
 
   /**
    * @param max The maximum amount of requests a bucket can use
-   * @param reset The time when the bucket will reset
+   * @param reset The delay when the bucket will reset
    * @param left The number of remaining requests
    */
   constructor(public max = 1, public reset = 0, public left = max) {
@@ -24,7 +27,7 @@ export class RateLimitBucket {
     return this.left < 1 && Date.now() - this.lastRequestAt < this.reset;
   }
 
-  /**Add a funciton to the queue */
+  /** Add a funciton to the queue */
   add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
@@ -47,7 +50,7 @@ export class RateLimitBucket {
   /**
    * Unlock the bucket
    * @param max Update the bucket maximum limit
-   * @param reset Update the reset timer
+   * @param delay Update the reset timer
    * @param left Update the remaining number of requests
    */
   unlock(max = this.max, reset = this.reset, left = this.left - 1) {
@@ -71,14 +74,12 @@ export class RateLimitBucket {
 
   /** Do a task */
   async task(func: () => number[] | Promise<number[]>) {
-    const task = async () => {
-      this.lock();
-      this.unlock(...await func());
-    };
     if (this.locked || this.rateLimited) {
-      return this.add(task);
+      this.add(() => this.task(func));
+      return;
     }
-    await task();
+    this.lock();
+    this.unlock(...await func());
     this.next();
   }
 }

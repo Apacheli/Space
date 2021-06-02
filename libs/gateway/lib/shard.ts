@@ -293,8 +293,8 @@ export class Shard extends DiscordSocket {
     };
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
     return this.receive(GatewayEvents.GuildMembersChunk, {
-      abort: (data) => data.chunk_index + 1 === data.chunk_count,
       delay,
+      terminate: (data) => data.chunk_index + 1 === data.chunk_count,
     });
   }
 
