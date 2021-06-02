@@ -2,6 +2,7 @@
 
 // https://discord.dev/resources/webhook
 
+import type { Component } from "../interactions/message_components.ts";
 import type { Snowflake } from "../reference.ts";
 import type {
   AllowedMentions,
@@ -159,8 +160,8 @@ export interface EditWebhookMessageJSON {
   allowed_mentions?: AllowedMentions | null;
   /** attached files to keep */
   attachments?: Attachment[] | null;
-    /** the components to include with the message */
-    components?: Component[];
+  /** the components to include with the message */
+  components?: Component[];
 }
 
 /** https://discord.dev/resources/webhook#edit-webhook-message */
