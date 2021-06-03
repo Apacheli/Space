@@ -200,7 +200,10 @@ export type GuildFeatures =
   | "VANITY_URL"
   | "VERIFIED"
   | "VIP_REGIONS"
-  | "WELCOME_SCREEN_ENABLED";
+  | "WELCOME_SCREEN_ENABLED"
+  | "TICKETED_EVENTS_ENABLED"
+  | "MONETIZATION_ENABLED"
+  | "MORE_STICKERS";
 
 /** https://discord.dev/resources/guild#unavailable-guild-object */
 export interface UnavailableGuild {
