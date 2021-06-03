@@ -28,7 +28,7 @@ A low-level [Deno](https://deno.land/) module for interacting with
 To install the whole package, add this into your `deps.ts` script:
 
 ```ts
-export * from "https://deno.land/x/space@0.10.0-alpha/mod.ts";
+export * from "https://deno.land/x/space@0.10.1-alpha/mod.ts";
 ```
 
 See the [release notes](RELEASES.md) for all available versions.

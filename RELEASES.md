@@ -4,6 +4,7 @@ This document contains notable changes throughout Space's development.
 
 | **0-alpha**<sup>Current</sup>            |
 | ---------------------------------------- |
+| [0.10.1-alpha](#0101-alpha---2021-06-02) |
 | [0.10.0-alpha](#0100-alpha---2021-06-02) |
 | [0.9.0-alpha](#090-alpha---2021-05-16)   |
 | [0.8.0-alpha](#080-alpha---2021-05-01)   |
@@ -22,6 +23,13 @@ This document contains notable changes throughout Space's development.
 This format was adapted from
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and
 [Node.js's changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md).
+
+## [0.10.1-alpha](https://github.com/Apacheli/Space/compare/0.10.0-alpha...0.10.1-alpha) - 2021-06-02
+
+### Fixed
+
+- Fix `components` type bug
+- Bumped typings
 
 ## [0.10.0-alpha](https://github.com/Apacheli/Space/compare/0.9.0-alpha...0.10.0-alpha) - 2021-06-02
 
