@@ -352,10 +352,7 @@ export type DispatchPayloadApplicationCommandCreate = BaseDispatchPayload<
 >;
 
 /** https://discord.dev/topics/gateway#commands */
-export interface DispatchPayloadApplicationCommandCreateData
-  extends ApplicationCommand {
-  guild_id?: Snowflake;
-}
+export type DispatchPayloadApplicationCommandCreateData = ApplicationCommand;
 
 /** https://discord.dev/topics/gateway#application-command-update */
 export type DispatchPayloadApplicationCommandUpdate = BaseDispatchPayload<

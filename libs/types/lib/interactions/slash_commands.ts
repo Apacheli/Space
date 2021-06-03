@@ -145,6 +145,8 @@ export interface ApplicationCommand {
   id: Snowflake;
   /** unique id of the parent application */
   application_id: Snowflake;
+  /** guild id of the command, if not global */
+  guild_id?: boolean;
   /** 1-32 lowercase character name matching `^[\w-]{1,32}$` */
   name: string;
   /** 1-100 character description */

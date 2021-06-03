@@ -1,3 +1,6 @@
+/** The expressed can be used with `await` */
+export type Awaitable<V> = V | PromiseLike<V>;
+
 /** Makes some properties within an interface partial */
 export type PartialKeys<T, K extends keyof T> =
   & Omit<T, K>

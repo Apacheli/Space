@@ -1,15 +1,18 @@
+import type { Awaitable } from "./types.ts";
+
 /** A generic function */
 export type GenericFunction = (...args: unknown[]) => unknown;
 
-// TODO: Make this class properly handle fixed/static reset times
-//       This class depends on dynamic reset times due to how HTTP headers work
+/** A task function */
+export type TaskFunction = () => Awaitable<number[]>;
 
 /** Handles rate limits */
 export class RateLimitBucket {
-  /** The last time this bucket was used */
-  lastRequestAt = 0;
   /** If this bucket is locked or not */
   locked = false;
+
+  /** The epoch time of when the last request was made */
+  protected lastRequestAt = 0;
 
   #queue: GenericFunction[] = [];
   #timeout?: number;
@@ -28,15 +31,16 @@ export class RateLimitBucket {
   }
 
   /** Add a funciton to the queue */
-  add(func: GenericFunction) {
+  add(func: GenericFunction, fixed?: boolean) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
+        this.left = this.max;
         this.#timeout = undefined;
         func();
-      }, this.reset);
-      return;
+      }, fixed ? this.reset - Date.now() + this.lastRequestAt : this.reset);
+    } else {
+      this.#queue.push(func);
     }
-    this.#queue.push(func);
   }
 
   /** Lock the bucket */
@@ -44,6 +48,7 @@ export class RateLimitBucket {
     if (this.locked) {
       throw new Error("Bucket is locked.");
     }
+
     this.locked = true;
   }
 
@@ -73,13 +78,13 @@ export class RateLimitBucket {
   }
 
   /** Do a task */
-  async task(func: () => number[] | Promise<number[]>) {
+  async task(func: () => Awaitable<number[]>, fixed?: boolean) {
     if (this.locked || this.rateLimited) {
-      this.add(() => this.task(func));
-      return;
+      this.add(() => this.task(func, fixed), fixed);
+    } else {
+      this.lock();
+      this.unlock(...await func());
+      this.next();
     }
-    this.lock();
-    this.unlock(...await func());
-    this.next();
   }
 }
