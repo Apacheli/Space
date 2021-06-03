@@ -74,6 +74,9 @@ export enum AuditLogEvents {
   IntegrationCreate = 80,
   IntegrationUpdate,
   IntegrationDelete,
+  StageInstanceCreate,
+  StageInstanceUpdate,
+  StageInstanceDelete,
 }
 
 /** https://discord.dev/resources/audit-log#audit-log-entry-object-optional-audit-entry-info */
