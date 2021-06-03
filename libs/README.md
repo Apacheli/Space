@@ -1,4 +1,4 @@
-# Space Environment
+# Space Ecosystem
 
 Space consists of many standalone modules for interacting with specific parts of
 Discord's API. Although Space is not a traditional monorepo, Deno's flexibility
