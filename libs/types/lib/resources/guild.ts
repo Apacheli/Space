@@ -185,25 +185,44 @@ export enum SystemChannelFlags {
 }
 
 /** https://discord.dev/resources/guild#guild-object-guild-features */
-export type GuildFeatures =
-  | "ANIMATED_ICON"
-  | "BANNER"
-  | "COMMERCE"
-  | "COMMUNITY"
-  | "DISCOVERABLE"
-  | "FEATURABLE"
-  | "INVITE_SPLASH"
-  | "MEMBER_VERIFICATION_GATE_ENABLED"
-  | "NEWS"
-  | "PARTNERED"
-  | "PREVIEW_ENABLED"
-  | "VANITY_URL"
-  | "VERIFIED"
-  | "VIP_REGIONS"
-  | "WELCOME_SCREEN_ENABLED"
-  | "TICKETED_EVENTS_ENABLED"
-  | "MONETIZATION_ENABLED"
-  | "MORE_STICKERS";
+export enum GuildFeatures {
+  /** guild has access to set an animated guild icon */
+  AnimatedIcon = "ANIMATED_ICON",
+  /** guild has access to set a guild banner image */
+  Banner = "BANNER",
+  /** guild has access to use commerce features (i.e. create store channels) */
+  Commerce = "COMMERCE",
+  /** guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates */
+  Community = "COMMUNITY",
+  /** guild is able to be discovered in the directory */
+  Discoverable = "DISCOVERABLE",
+  /** guild is able to be featured in the directory */
+  Featurable = "FEATURABLE",
+  /** guild has access to set an invite splash background */
+  InviteSplash = "INVITE_SPLASH",
+  /** guild has enabled [Membership Screening](https://discord.dev/resources/guild#membership-screening-object) */
+  MemberVerificationGateEnabled = "MEMBER_VERIFICATION_GATE_ENABLED",
+  /** guild has access to create news channels */
+  News = "NEWS",
+  /** guild is partnered */
+  Partnered = "PARTNERED",
+  /** guild can be previewed before joining via Membership Screening or the directory */
+  PreviewEnabled = "PREVIEW_ENABLED",
+  /** guild has access to set a vanity URL */
+  VanityURL = "VANITY_URL",
+  /** guild is verified */
+  Verified = "VERIFIED",
+  /** guild has access to set 384kbps bitrate in voice (previously VIP voice servers) */
+  VIPRegions = "VIP_REGIONS",
+  /** guild has enabled the welcome screen */
+  WelcomeScreenEnabled = "WELCOME_SCREEN_ENABLED",
+  /** guild has enabled ticketed events */
+  TicketedEventsEnabled = "TICKETED_EVENTS_ENABLED",
+  /** guild has enabled monetization */
+  MonetizationEnabled = "MONETIZATION_ENABLED",
+  /** guild has increased custom sticker slots */
+  MoreStickers = "MORE_STICKERS",
+}
 
 /** https://discord.dev/resources/guild#unavailable-guild-object */
 export interface UnavailableGuild {
