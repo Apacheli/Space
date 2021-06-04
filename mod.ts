@@ -1,2 +1,2 @@
 export * from "./libs/mod.ts";
-export * from "./meta.ts";
+export * as meta from "./meta.ts";
