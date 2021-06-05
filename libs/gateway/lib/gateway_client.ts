@@ -33,7 +33,7 @@ export class GatewayClient extends AsyncEventTarget {
   }
 
   /** Connect to the gateway */
-  connect(data: GatewayClientData) {
+  async connect(data: GatewayClientData) {
     this.#bucket = new RateLimitBucket(data.maxConcurrency, 5_000);
 
     const lastShardId = data.lastShardId ?? data.shards;
@@ -51,7 +51,7 @@ export class GatewayClient extends AsyncEventTarget {
 
     for (let i = firstShardId; i < lastShardId; i++) {
       const shard = this.#spawnShard(i, { ...data, url });
-      this.#connectShard(shard);
+      await this.#connectShard(shard);
       this.shards.push(shard);
     }
   }
@@ -66,7 +66,7 @@ export class GatewayClient extends AsyncEventTarget {
     (async (readable) => {
       for await (const [resumable, reconnectable] of readable) {
         if (reconnectable) {
-          this.#connectShard(shard, resumable);
+          await this.#connectShard(shard, resumable);
         }
       }
     })(shard.listen(ShardEvents.Close));
@@ -77,7 +77,6 @@ export class GatewayClient extends AsyncEventTarget {
     this.#bucket?.task(async () => {
       await shard.connect();
       shard.resumeOrIdentify(resumable);
-      return [];
-    }, true);
+    });
   };
 }

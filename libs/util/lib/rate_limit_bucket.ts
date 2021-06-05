@@ -37,11 +37,14 @@ export class RateLimitBucket {
   /** Add a funciton to the queue */
   add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
-      this.#timeout = setTimeout(() => {
-        this.left = this.max;
-        this.#timeout = undefined;
-        func();
-      }, this.reset - (this.fixed ? Date.now() + this.#lastRequestAt : 0));
+      this.#timeout = setTimeout(
+        () => {
+          this.left = this.max;
+          this.#timeout = undefined;
+          func();
+        },
+        this.fixed ? this.reset - Date.now() + this.#lastRequestAt : this.reset,
+      );
     } else {
       this.#queue.push(func);
     }
@@ -82,12 +85,12 @@ export class RateLimitBucket {
   }
 
   /** Do a task */
-  async task(func: () => Awaitable<undefined | number[]>) {
+  async task(func: () => Awaitable<void | number[]>) {
     if (this.locked || this.rateLimited) {
       this.add(() => this.task(func));
     } else {
       this.lock();
-      this.unlock(...await func() ?? []);
+      this.unlock(...await func() || []);
       this.next();
     }
   }
