@@ -11,9 +11,7 @@ export class RateLimitBucket {
   /** If this bucket is locked or not */
   locked = false;
 
-  /** The epoch time of when the last request was made */
-  protected lastRequestAt = 0;
-
+  #lastRequestAt = 0;
   #queue: GenericFunction[] = [];
   #timeout?: number;
 
@@ -21,23 +19,29 @@ export class RateLimitBucket {
    * @param max The maximum amount of requests a bucket can use
    * @param reset The time when the bucket will reset
    * @param left The number of remaining requests
+   * @param fixed If the bucket's reset timer is fixed or not
    */
-  constructor(public max = 1, public reset = 0, public left = max) {
+  constructor(
+    public max = 1,
+    public reset = 0,
+    public left = max,
+    public fixed = true,
+  ) {
   }
 
-  /** A getter that determines if this bucket is rate limited or not */
+  /** If bucket is currently rate limited */
   get rateLimited() {
-    return this.left < 1 && Date.now() - this.lastRequestAt < this.reset;
+    return this.left < 1 && Date.now() - this.#lastRequestAt < this.reset;
   }
 
   /** Add a funciton to the queue */
-  add(func: GenericFunction, fixed?: boolean) {
+  add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
       this.#timeout = setTimeout(() => {
         this.left = this.max;
         this.#timeout = undefined;
         func();
-      }, fixed ? this.reset - Date.now() + this.lastRequestAt : this.reset);
+      }, this.reset - (this.fixed ? Date.now() + this.#lastRequestAt : 0));
     } else {
       this.#queue.push(func);
     }
@@ -63,7 +67,7 @@ export class RateLimitBucket {
       throw new Error("Bucket is unlocked.");
     }
 
-    this.lastRequestAt = Date.now();
+    this.#lastRequestAt = Date.now();
     this.locked = false;
 
     this.max = max;
@@ -78,12 +82,12 @@ export class RateLimitBucket {
   }
 
   /** Do a task */
-  async task(func: () => Awaitable<number[]>, fixed?: boolean) {
+  async task(func: () => Awaitable<undefined | number[]>) {
     if (this.locked || this.rateLimited) {
-      this.add(() => this.task(func, fixed), fixed);
+      this.add(() => this.task(func));
     } else {
       this.lock();
-      this.unlock(...await func());
+      this.unlock(...await func() ?? []);
       this.next();
     }
   }
