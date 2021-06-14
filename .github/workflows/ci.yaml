@@ -1,27 +1,25 @@
-# https://github.com/denoland/setup-deno
-
 name: ci
 
 on:
-  - pull_request
   - push
+  - pull_request
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        deno:
-          - v1.x
-        os:
-          - macOS-latest
-          - ubuntu-latest
-          - windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - uses: denoland/setup-deno@main
-      - run: deno lint
-      - run: deno fmt
-      - run: deno test -A --unstable
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: 1.11.0
+
+      - name: fmt
+        run: deno fmt --check
+
+      - name: lint
+        run: deno lint
+
+      - name: test
+        run: deno test

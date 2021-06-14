@@ -1,7 +1,6 @@
 // deno-fmt-ignore-line
 export const
-  deno = "1.10.3",
-  repo = "https://github.com/Apacheli/Space",
-  version = "0.10.1-alpha",
-  mod = `https://deno.land/x/space@${version}`,
-  tag = `${repo}/tree/${version}`;
+  deno = "1.11.0",
+  repo = "https://github.com/Cosdromeda/Space",
+  version = "0.11.0-alpha",
+  url = `https://deno.land/x/space@${version}`;
