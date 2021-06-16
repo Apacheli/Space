@@ -1,3 +1,4 @@
+import { EncodingTypes } from "../../types/mod.ts";
 import { AsyncEventTarget } from "./async_event_target.ts";
 import { pack, unpack } from "./etf_codec.ts";
 import { parse, stringify } from "./json_codec.ts";
@@ -13,7 +14,7 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /** When the socket receives a message */
   protected abstract onSocketMessage(event: MessageEvent): void;
 
-  constructor(public url: string, public encoding: "etf" | "json" = "json") {
+  constructor(public url: string, public encoding: EncodingTypes = "json") {
     super();
   }
 

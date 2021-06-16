@@ -1,6 +1,6 @@
 import { logger } from "../../util/mod.ts";
 
-/** Represents an exception from a failed HTTP request */
+/** Represents an HTTP exception */
 export class HTTPError extends Error {
   name = "HTTPError";
 

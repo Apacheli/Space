@@ -185,6 +185,8 @@ import type {
   ModifyCurrentUserJSON,
   ModifyCurrentUserNickBody,
   ModifyCurrentUserNickJSON,
+  ModifyCurrentUserVoiceStateBody,
+  ModifyCurrentUserVoiceStateJSON,
   ModifyGuildBody,
   ModifyGuildChannelPositionsBody,
   ModifyGuildChannelPositionsJSON,
@@ -203,6 +205,10 @@ import type {
   ModifyGuildWelcomeScreenJSON,
   ModifyGuildWidgetBody,
   ModifyGuildWidgetJSON,
+  ModifyStageInstanceBody,
+  ModifyStageInstanceJSON,
+  ModifyUserVoiceStateBody,
+  ModifyUserVoiceStateJSON,
   ModifyWebhookBody,
   ModifyWebhookJSON,
   ModifyWebhookWithTokenBody,
@@ -222,14 +228,9 @@ import type {
   SyncGuildTemplateBody,
   TriggerTypingIndicatorBody,
   UnpinMessageBody,
-  UpdateCurrentUserVoiceStateBody,
-  UpdateCurrentUserVoiceStateJSON,
-  UpdateStageInstanceBody,
-  UpdateStageInstanceJSON,
-  UpdateUserVoiceStateBody,
-  UpdateUserVoiceStateJSON,
 } from "../../types/mod.ts";
 import type { APIVersions } from "../../types/mod.ts";
+import { BaseURL } from "../../types/mod.ts";
 import { stringify } from "../../util/src/json_codec.ts";
 import { DELAY, HTTP_VERSION, USER_AGENT } from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
@@ -350,7 +351,12 @@ export interface RequestOptions {
   route?: string;
 }
 
+/** Handles the Discord HTTP API */
 export class HTTPClient {
+  /**
+   * @param token Authentication bot token
+   * @param options HTTP client options
+   */
   constructor(public token: string, public options?: HTTPClientOptions) {
   }
 
@@ -376,8 +382,7 @@ export class HTTPClient {
       headers.set("Content-Type", "application/json");
     }
 
-    const version = this.options?.version ?? HTTP_VERSION;
-    let url = `https://canary.discord.com/api/v${version}/${path}`;
+    let url = `{BaseURL}/v${this.options?.version ?? HTTP_VERSION}/${path}`;
     if (options?.query) {
       url += `?${encodeQuery(options.query)}`;
     }
@@ -1473,7 +1478,7 @@ export class HTTPClient {
   /**
    * https://discord.dev/resources/channel#edit-message
    *
-   * Edit a previously sent message. The fields `content`, `embed`, and `flags` can be edited by the original message author. Other users can only edit `flags` and only if they have the `MANAGE_MESSAGES` permission in the corresponding channel. When specifying flags, ensure to include all previously set flags/bits in addition to ones that you are modifying. Only `flags` documented in the table below may be modified by users (unsupported flag changes are currently ignored without error).
+   * Edit a previously sent message. The fields `content`, `embeds`, and `flags` can be edited by the original message author. Other users can only edit `flags` and only if they have the `MANAGE_MESSAGES` permission in the corresponding channel. When specifying flags, ensure to include all previously set flags/bits in addition to ones that you are modifying. Only `flags` documented in the table below may be modified by users (unsupported flag changes are currently ignored without error).
    *
    * When the `content` field is edited, the `mentions` array in the message object will be reconstructed from scratch based on the new content. The `allowed_mentions` field of the edit request controls how this happens. If there is no explicit `allowed_mentions` in the edit request, the content will be parsed with _default_ allowances, that is, without regard to whether or not an `allowed_mentions` was present in the request that originally created the message.
    *
@@ -1484,7 +1489,7 @@ export class HTTPClient {
    *
    * > ⚠
    * > This endpoint supports both `application/json` and `multipart/form-data` bodies. When uploading files the `multipart/form-data` content type must be used.
-   * > Note that in multipart form data, the `embed`, `allowed_mentions`, and `attachments` fields cannot be used. You can pass a stringified JSON body as a form value as `payload_json` instead.
+   * > Note that in multipart form data, the `embeds`, `allowed_mentions`, and `attachments` fields cannot be used. You can pass a stringified JSON body as a form value as `payload_json` instead.
    * > **If you supply a `payload_json` form value, all fields except for `file` fields will be ignored in the form data**.
    *
    * > ℹ
@@ -1851,7 +1856,7 @@ export class HTTPClient {
   /**
    * https://discord.dev/resources/channel#remove-thread-member
    *
-   * Removes another member from a thread. Requires the `MANAGE_THREADS` permission or that you are the creator of the thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update) Gateway event.
+   * Removes another member from a thread. Requires the `MANAGE_THREADS` permission, or the creator of the thread if it is a `GUILD_PRIVATE_THREAD`. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discord.dev/topics/gateway#thread-members-update) Gateway event.
    *
    *     await HTTPClient.removeThreadMember("0123456789", "0123456789");
    *
@@ -1886,7 +1891,7 @@ export class HTTPClient {
   /**
    * https://discord.dev/resources/channel#list-active-threads
    *
-   * Returns all active threads in the channel, including public and private threads. Threads are ordered by their `id`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
+   * Returns all active threads in the channel, including public and private threads. Threads are ordered by their `id`, in descending order.
    *
    *     const activeThreads = await HTTPClient.listActiveThreads("0123456789");
    *
@@ -2086,7 +2091,7 @@ export class HTTPClient {
   /**
    * https://discord.dev/resources/guild#get-guild-preview
    *
-   * Returns the [guild preview](https://discord.dev/resources/guild#guild-preview-object) object for the given id. If the user is not in the guild, then the guild must be Discoverable.
+   * Returns the [guild preview](https://discord.dev/resources/guild#guild-preview-object) object for the given id. if the user is not in the guild, then the guild must be lurkable (it must be discoverable or have a [live public stage](#docs/resources/stage/instance#definitions)).
    *
    *     const guildPreview = await HTTPClient.getGuildPreview("0123456789");
    *
@@ -2797,39 +2802,39 @@ export class HTTPClient {
   }
 
   /**
-   * https://discord.dev/resources/guild#update-current-user-voice-state
+   * https://discord.dev/resources/guild#modify-current-user-voice-state
    *
    * Updates the current user's voice state.
    *
-   *     await HTTPClient.updateCurrentUserVoiceState("0123456789", { ... });
+   *     await HTTPClient.modifyCurrentUserVoiceState("0123456789", { ... });
    *
    * @param guildId https://discord.dev/resources/guild#guild-object
    */
-  updateCurrentUserVoiceState(
+  modifyCurrentUserVoiceState(
     guildId: Snowflake,
-    data: UpdateCurrentUserVoiceStateJSON,
-  ): Promise<UpdateCurrentUserVoiceStateBody> {
+    data: ModifyCurrentUserVoiceStateJSON,
+  ): Promise<ModifyCurrentUserVoiceStateBody> {
     return this.patch(GUILD_VOICE_STATE_ME(guildId), {
       data,
     });
   }
 
   /**
-   * https://discord.dev/resources/guild#update-user-voice-state
+   * https://discord.dev/resources/guild#modify-user-voice-state
    *
    * Updates another user's voice state.
    *
-   *     await HTTPClient.updateUserVoiceState("0123456789", "0123456789", { ... });
+   *     await HTTPClient.modifyUserVoiceState("0123456789", "0123456789", { ... });
    *
    * @param guildId https://discord.dev/resources/guild#guild-object
    * @param userId https://discord.dev/resources/user#user-object
    */
-  updateUserVoiceState(
+  modifyUserVoiceState(
     guildId: Snowflake,
     userId: Snowflake,
-    data: UpdateUserVoiceStateJSON,
+    data: ModifyUserVoiceStateJSON,
     reason?: string,
-  ): Promise<UpdateUserVoiceStateBody> {
+  ): Promise<ModifyUserVoiceStateBody> {
     return this.patch(GUILD_VOICE_STATE(guildId, userId), {
       data,
       reason,
@@ -3022,20 +3027,20 @@ export class HTTPClient {
   }
 
   /**
-   * https://discord.dev/resources/stage-instance#update-stage-instance
+   * https://discord.dev/resources/stage-instance#modify-stage-instance
    *
    * Updates fields of an existing Stage instance.
    *
    * Requires the user to be a moderator of the Stage channel.
    *
-   *     const stageInstance = await HTTPClient.updateStageInstance("0123456789", { ... });
+   *     const stageInstance = await HTTPClient.modifyStageInstance("0123456789", { ... });
    *
    * @param channelId https://discord.dev/resources/channel#channel-object
    */
-  updateStageInstance(
+  modifyStageInstance(
     channelId: Snowflake,
-    data: UpdateStageInstanceJSON,
-  ): Promise<UpdateStageInstanceBody> {
+    data: ModifyStageInstanceJSON,
+  ): Promise<ModifyStageInstanceBody> {
     return this.patch(STAGE_INSTANCE(channelId), {
       data,
     });
@@ -3424,7 +3429,7 @@ export class HTTPClient {
    *
    * Returns a previously-sent webhook message from the same token. Returns a [message](https://discord.dev/resources/channel#message-object) object on success.
    *
-   *     await HTTPClient.getWebhookMessage("0123456789", "MjM4NDk0NzU2NTIxMzc3Nzky.CunGFQ.wUILz7z6HoJzVeq6pyHPmVgQgV4", "0123456789");
+   *     const message = await HTTPClient.getWebhookMessage("0123456789", "MjM4NDk0NzU2NTIxMzc3Nzky.CunGFQ.wUILz7z6HoJzVeq6pyHPmVgQgV4", "0123456789");
    *
    * @param webhookId https://discord.dev/resources/webhook#webhook-object
    * @param webhookToken https://discord.dev/resources/webhook#webhook-object

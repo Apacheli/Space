@@ -22,8 +22,8 @@ export interface Webhook {
   type: WebhookTypes;
   /** the guild id this webhook is for */
   guild_id?: Snowflake;
-  /** the channel id this webhook is for */
-  channel_id?: Snowflake;
+  /** the channel id this webhook is for, if any */
+  channel_id?: Snowflake | null;
   /** the user this webhook was created by (not returned when getting a webhook with its token) */
   user?: User;
   /** the default name of the webhook */

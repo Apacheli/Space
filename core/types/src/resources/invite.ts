@@ -4,7 +4,7 @@
 
 import type { Application } from "./application.ts";
 import type { Channel } from "./channel.ts";
-import type { Guild } from "./guild.ts";
+import type { Guild, GuildMember } from "./guild.ts";
 import type { User } from "./user.ts";
 
 /** https://discord.dev/resources/invite#invite-object */
@@ -29,6 +29,8 @@ export interface Invite {
   approximate_member_count?: number;
   /** the expiration date of this invite, returned from the `GET /invites/<code>` endpoint when `with_expiration` is `true` */
   expires_at?: string | null;
+  /** stage instance data if there is a [public Stage instance](https://discord.dev/resources/stage-instance) in the Stage channel this invite is for */
+  stage_instance?: InviteStageInstance;
 }
 
 /** https://discord.dev/resources/invite#invite-object-invite-target-types */
@@ -49,6 +51,18 @@ export interface InviteMetadata {
   temporary: boolean;
   /** when this invite was created */
   created_at: string;
+}
+
+/** https://discord.dev/resources/invite#invite-stage-instance-object */
+export interface InviteStageInstance {
+  /** the members speaking in the Stage */
+  members: Partial<GuildMember>[];
+  /** the number of users in the Stage */
+  participant_count: number;
+  /** the number of users speaking in the Stage */
+  speaker_count: number;
+  /** the topic of the Stage instance (1-120 characters) */
+  topic: string;
 }
 
 /** https://discord.dev/resources/invite#get-invite */

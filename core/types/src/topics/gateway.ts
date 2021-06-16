@@ -43,10 +43,12 @@ export interface GatewayURLQuery {
   /** Gateway Version to use */
   v: GatewayVersions;
   /** The encoding of received gateway packets */
-  encoding: "etf" | "json";
+  encoding: EncodingTypes;
   /** The (optional) compression of gateway packets */
   compress?: "zlib-stream";
 }
+
+export type EncodingTypes = "etf" | "json";
 
 /** https://discord.dev/topics/gateway#commands-and-events-gateway-events */
 export enum GatewayEvents {

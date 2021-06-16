@@ -1,11 +1,19 @@
 # Space
 
-**Space is currently under heavy development. Using Space for production is
-highly unrecommended. Any contributions are greatly appreciated. The
+**Space is currently under heavy development and is therefore highly
+unrecommended for production. Any contributions are greatly appreciated. The
 [contributing guide](CONTRIBUTING.md) contains further instructions.**
 
 Space is a collection of fast, scalable, low-level [Deno](https://deno.land/)
 modules for interacting with the [Discord API](https://discord.dev/).
+
+### Table of Contents
+
+- [Install](#install)
+- [Getting Started](#getting-started)
+- [Resources](#resources)
+- [Contributing Guide](CONTRIBUTING.md)
+- [License](LICENSE.txt)
 
 ### Install
 
@@ -34,7 +42,7 @@ export * from "https://github.com/Cosdromeda/Space/raw/dev/core/client/mod.ts";
 Run an [example](examples/example.ts) directly from the CLI:
 
 ```sh
-BOT_TOKEN= deno run --allow-env --allow-net https://deno.land/x/space@0.11.0-alpha/examples/example.ts
+deno run --allow-env --allow-net https://deno.land/x/space@0.11.0-alpha/examples/example.ts
 ```
 
 More examples are available [here](examples).
@@ -69,11 +77,11 @@ client.gateway.connect({
 To run it:
 
 ```sh
-BOT_TOKEN= deno run --allow-env --allow-net main.ts
+deno run --allow-env --allow-net main.ts
 ```
 
-The full module reference can be viewed at the
-[Space documentation](https://olykir.dev/) or at the
+The module reference is available at the
+[Space documentation](https://olykir.dev/) or
 [generated documentation](https://doc.deno.land/https/deno.land/x/space@0.11.0-alpha/core/client/mod.ts).
 
 ### Resources
@@ -84,5 +92,5 @@ The full module reference can be viewed at the
 - [TypeScript](https://www.typescriptlang.org/)
 
 The [Space Discord server](https://discord.gg/UQuA3EwXCV) is a great place to
-ask general and support questions. All participating members must abide by the
-terms of the [Space code of conduct](CODE_OF_CONDUCT.md).
+ask general questions. All participating members must abide by the terms of the
+[Space code of conduct](CODE_OF_CONDUCT.md).

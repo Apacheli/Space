@@ -5,6 +5,7 @@
 import type { Component } from "../interactions/message_components.ts";
 import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
+import type { DispatchPayloadPresenceUpdateData } from "../topics/gateway.ts";
 import type { Permissions } from "../topics/permissions.ts";
 import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
@@ -153,7 +154,7 @@ export interface Message {
   message_reference: MessageReference;
   /** [message flags](https://discord.dev/resources/channel#message-object-message-flags) combined as a [bitfield](https://en.wikipedia.org/wiki/Bit_field) */
   flags?: MessageFlags;
-  /** the stickers sent with the message (bots currently can only receive messages with stickers, not send) */
+  /** **Deprecated** the stickers sent with the message (bots currently can only receive messages with stickers, not send) */
   stickers?: MessageSticker[];
   /** the message associated with the message_reference */
   referenced_message?: Message;
@@ -233,17 +234,23 @@ export interface MessageSticker {
   /** id of the sticker */
   id: Snowflake;
   /** id of the pack the sticker is from */
-  pack_id: Snowflake;
+  pack_id?: Snowflake;
   /** name of the sticker */
   name: string;
   /** description of the sticker */
   description: string;
-  /** a comma-separated list of tags for the sticker */
-  tags?: string;
-  /** sticker asset hash */
-  asset: string;
+  /** a unicode emoji representing the sticker's expression */
+  tags: string;
   /** [type of sticker format](https://discord.dev/resources/channel#message-object-message-sticker-format-types) */
   format_type: MessageStickerFormat;
+  /** whether or not the sticker is available */
+  available?: boolean;
+  /** id of the guild that owns this sticker */
+  guild_id?: Snowflake;
+  /** the user that uploaded the sticker */
+  user?: User;
+  /** a sticker's sort order within a pack */
+  sort_value?: number;
 }
 
 /** https://discord.dev/resources/channel#message-object-message-sticker-format-types */
@@ -324,6 +331,10 @@ export interface ThreadMember {
   join_timestamp: string;
   /** any user-thread settings, currently only used for notifications */
   flags: number;
+  /** the member object for the user who joined the thread */
+  member?: GuildMember;
+  /** the current presence of the user who joined the thread */
+  presence?: DispatchPayloadPresenceUpdateData;
 }
 
 /** https://discord.dev/resources/channel#embed-object */
