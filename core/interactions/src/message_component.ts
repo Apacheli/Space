@@ -1,2 +1,2 @@
-export class Component {
+export class MessageComponent {
 }

@@ -232,6 +232,7 @@ import type {
 import type { APIVersions } from "../../types/mod.ts";
 import { BaseURL } from "../../types/mod.ts";
 import { stringify } from "../../util/src/json_codec.ts";
+import { RateLimitBucket } from "../../util/src/rate_limit_bucket.ts";
 import { DELAY, HTTP_VERSION, USER_AGENT } from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
 import {
@@ -353,6 +354,8 @@ export interface RequestOptions {
 
 /** Handles the Discord HTTP API */
 export class HTTPClient {
+  buckets = new Map<string, RateLimitBucket>();
+
   /**
    * @param token Authentication bot token
    * @param options HTTP client options
@@ -360,7 +363,52 @@ export class HTTPClient {
   constructor(public token: string, public options?: HTTPClientOptions) {
   }
 
-  async request(path: string, options?: RequestOptions) {
+  request(path: string, options?: RequestOptions) {
+    const route = options?.route ?? path;
+    let bucket = this.buckets.get(route);
+    if (!bucket) {
+      this.buckets.set(route, bucket = new RateLimitBucket());
+    }
+
+    return this.#actualRequest(bucket, this.#buildRequest(path, options));
+  }
+
+  async #actualRequest(bucket: RateLimitBucket, request: Request) {
+    if (bucket.locked || bucket.rateLimited) {
+      bucket.add(() => this.#actualRequest(bucket, request));
+      return;
+    }
+
+    bucket.lock();
+
+    const controller = new AbortController();
+    const delay = this.options?.delay ?? DELAY;
+    const timeout = setTimeout(() => controller.abort(), delay);
+
+    const response = await fetch(request, controller);
+
+    clearTimeout(timeout);
+
+    bucket.unlock(
+      parseInt(response.headers.get("X-RateLimit-Limit") ?? "0"),
+      parseFloat(response.headers.get("X-RateLimit-Reset-After") ?? "0") * 1000,
+      parseInt(response.headers.get("X-RateLimit-Remaining") ?? "0"),
+    );
+
+    bucket.shift();
+
+    const data = response.headers.get("Content-Type") === "application/json"
+      ? response.json()
+      : response.text();
+
+    if (response.ok) {
+      return data;
+    }
+
+    throw new HTTPError(await data);
+  }
+
+  #buildRequest(path: string, options?: RequestOptions) {
     const headers = new Headers();
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -387,28 +435,11 @@ export class HTTPClient {
       url += `?${encodeQuery(options.query)}`;
     }
 
-    const controller = new AbortController();
-    const delay = this.options?.delay ?? DELAY;
-    const timeout = setTimeout(() => controller.abort(), delay);
-
-    const response = await fetch(url, {
+    return new Request(url, {
       body,
       headers,
       method: options?.method,
-      signal: controller.signal,
     });
-
-    clearTimeout(timeout);
-
-    const data = response.headers.get("Content-Type") === "application/json"
-      ? response.json()
-      : response.text();
-
-    if (response.ok) {
-      return data;
-    }
-
-    throw new HTTPError(await data);
   }
 
   //#region http

@@ -10,7 +10,7 @@ export class HTTPError extends Error {
   }
 
   get message() {
-    const { code, message } = this.body;
+    const { code = 0, message } = this.body;
     return logger.highlight(`[${code}] ${message}${this.#formatErrors()}`);
   }
 

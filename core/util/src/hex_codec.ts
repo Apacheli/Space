@@ -1,5 +1,4 @@
 const chars = "0123456789ABCDEF";
-// deno-lint-ignore no-explicit-any
 const decimal: Record<string, number> = {};
 const hex = new Array(0x100);
 for (let i = 0; i < hex.length; i++) {
