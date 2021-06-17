@@ -2,6 +2,7 @@
 
 // https://discord.dev/interactions/slash-commands
 
+import type { Nullify } from "../../../util/src/types.ts";
 import type { Snowflake } from "../reference.ts";
 import type {
   AllowedMentions,
@@ -17,7 +18,6 @@ import type {
   GetWebhookMessageBody,
 } from "../resources/webhook.ts";
 import type { Role } from "../topics/permissions.ts";
-import type { Nullify } from "../util.ts";
 import type { Component, ComponentTypes } from "./message_components.ts";
 
 /** https://discord.dev/interactions/slash-commands#get-global-application-commands */

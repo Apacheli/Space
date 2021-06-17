@@ -1,12 +1,13 @@
 const chars = "0123456789ABCDEF";
-const hex = new Array(0x100);
 // deno-lint-ignore no-explicit-any
-const decimal: any = {};
-for (let i = 0; i < 0x100; i++) {
+const decimal: Record<string, number> = {};
+const hex = new Array(0x100);
+for (let i = 0; i < hex.length; i++) {
   const nyble = `${chars[i >> 4 & 0xF]}${chars[i & 0xF]}`;
   hex[decimal[nyble] = i] = nyble;
 }
 
+/** Encode a byte array into a hex string */
 export const encode = (arr: Uint8Array) => {
   let str = "";
   for (let i = 0; i < arr.length; i++) {
@@ -15,6 +16,7 @@ export const encode = (arr: Uint8Array) => {
   return str;
 };
 
+/** Decode a hex string into a byte array */
 export const decode = (str: string) => {
   const arr = new Uint8Array(str.length >> 1);
   for (let i = 0; i < arr.length; i++) {

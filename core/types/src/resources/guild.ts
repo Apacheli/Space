@@ -2,10 +2,10 @@
 
 // https://discord.dev/resources/guild
 
+import type { Nullable } from "../../../util/src/types.ts";
 import type { Snowflake } from "../reference.ts";
 import type { DispatchPayloadPresenceUpdateData } from "../topics/gateway.ts";
 import type { Permissions, Role } from "../topics/permissions.ts";
-import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
 import type { Emoji } from "./emoji.ts";

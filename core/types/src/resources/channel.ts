@@ -2,12 +2,12 @@
 
 // https://discord.dev/resources/channel
 
+import type { Nullable } from "../../../util/src/types.ts";
 import type { Component } from "../interactions/message_components.ts";
 import type { MessageInteraction } from "../interactions/slash_commands.ts";
 import type { Snowflake } from "../reference.ts";
 import type { DispatchPayloadPresenceUpdateData } from "../topics/gateway.ts";
 import type { Permissions } from "../topics/permissions.ts";
-import type { Nullable } from "../util.ts";
 import type { Application } from "./application.ts";
 import type { Emoji } from "./emoji.ts";
 import type { GuildMember } from "./guild.ts";
@@ -239,7 +239,7 @@ export interface MessageSticker {
   name: string;
   /** description of the sticker */
   description: string;
-  /** a unicode emoji representing the sticker's expression */
+  /** for guild stickers, a unicode emoji representing the sticker's expression. for nitro stickers, a comma-separated list of related expressions. */
   tags: string;
   /** [type of sticker format](https://discord.dev/resources/channel#message-object-message-sticker-format-types) */
   format_type: MessageStickerFormat;

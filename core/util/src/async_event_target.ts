@@ -12,14 +12,6 @@ export interface AsyncEventTargetReceiveOptions<T> {
   terminate?: (...chunk: T[]) => Awaitable<boolean>;
 }
 
-/** A stream interface consumed by `AsyncEventTarget` */
-export interface Listener<T> {
-  /** Stream used for reading event data */
-  readable: ReadableStream<T>;
-  /** Writes to the reader */
-  writer: WritableStreamDefaultWriter<T>;
-}
-
 /** Asynchronous version of `EventTarget` using async iterators */
 // deno-lint-ignore no-explicit-any
 export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
@@ -34,35 +26,30 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
    */
   listen(event: string) {
     const { readable, writable } = new TransformStream();
-    const listener = {
-      readable,
-      writer: writable.getWriter(),
-    };
+    const listener = new Listener<T[]>(readable, writable.getWriter());
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
     }
-    return readable;
+    return listener;
   }
 
   /**
    * Deafen an event
    *
-   *     const readable = AsyncEventTarget.listen("event");
-   *     AsyncEventTarget.deafen("event", readable);
+   *     const listener = AsyncEventTarget.listen("event");
+   *     AsyncEventTarget.deafen("event", listener);
    *
    * @param event The event to deafen
-   * @param readable The stream to destroy, or destroy every stream
+   * @param listener The listener to destroy, or destroy every listener
    */
-  deafen(event: string, readable?: ReadableStream<T[]>) {
+  deafen(event: string, listener?: Listener<T[]>) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
     }
-    if (readable) {
-      const index = listeners.findIndex((l) => l.readable === readable);
-      if (index !== -1) {
-        listeners.splice(index)[0].writer.close();
-      }
+    if (listener) {
+      const index = listeners.indexOf(listener);
+      listeners.splice(index, index > -1 ? 1 : 0)[0].writer.close();
       return;
     }
     this.delete(event);
@@ -85,7 +72,7 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
   /**
    * Receive event data with middleware options
    *
-   *     const received = await AsyncEventTarget.receive("event");
+   *     const receiver = AsyncEventTarget.receive("event");
    *
    * @param event The event to start receiving from
    */
@@ -95,18 +82,30 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
     terminate,
     limit = terminate ? Infinity : 1,
   }: AsyncEventTargetReceiveOptions<T> = {}) {
-    const readable = this.listen(event);
+    const listener = this.listen(event);
     const chunks = [];
-    const timeout = setTimeout(() => this.deafen(event, readable), delay);
-    for await (const chunk of readable) {
+    const timeout = setTimeout(() => this.deafen(event, listener), delay);
+    for await (const chunk of listener) {
       if (
         (await filter?.(...chunk) ?? true) && chunks.push(chunk) === limit ||
         await terminate?.(...chunk)
       ) {
         clearTimeout(timeout);
-        this.deafen(event, readable);
+        this.deafen(event, listener);
       }
     }
     return chunks;
+  }
+}
+
+class Listener<T> {
+  constructor(
+    public readable: ReadableStream<T>,
+    public writer: WritableStreamDefaultWriter<T>,
+  ) {
+  }
+
+  async *[Symbol.asyncIterator]() {
+    yield* this.readable;
   }
 }

@@ -372,7 +372,7 @@ export class HTTPClient {
     if (options?.files) {
       body = new FormData();
       for (const file of options.files) {
-        body.append(file.name, file, file.name);
+        body.append(file.name, file);
       }
       if (options.data) {
         body.append("payload_json", stringify(options.data));
@@ -382,7 +382,7 @@ export class HTTPClient {
       headers.set("Content-Type", "application/json");
     }
 
-    let url = `{BaseURL}/v${this.options?.version ?? HTTP_VERSION}/${path}`;
+    let url = `${BaseURL}/v${this.options?.version ?? HTTP_VERSION}/${path}`;
     if (options?.query) {
       url += `?${encodeQuery(options.query)}`;
     }

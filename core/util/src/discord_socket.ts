@@ -1,4 +1,4 @@
-import { EncodingTypes } from "../../types/mod.ts";
+import type { EncodingTypes } from "../../types/mod.ts";
 import { AsyncEventTarget } from "./async_event_target.ts";
 import { pack, unpack } from "./etf_codec.ts";
 import { parse, stringify } from "./json_codec.ts";
