@@ -49,7 +49,7 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
     }
     if (listener) {
       const index = listeners.indexOf(listener);
-      listeners.splice(index, index > -1 ? 1 : 0)[0].writer.close();
+      listeners.splice(index, index > -1 ? 1 : 0)[0]?.writer.close();
       return;
     }
     this.delete(event);
@@ -72,7 +72,7 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
   /**
    * Receive event data with middleware options
    *
-   *     const receiver = AsyncEventTarget.receive("event");
+   *     const received = await AsyncEventTarget.receive("event");
    *
    * @param event The event to start receiving from
    */
