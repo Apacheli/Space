@@ -21,6 +21,8 @@ export interface HTTPClientOptions {
   baseURL?: string;
   /** Request timeout delay */
   delay?: number;
+  /** Disable rate limiting (highly unrecommended) */
+  disableRateLimiting?: boolean;
   /** The `User-Agent` header */
   userAgent?: string;
   /** HTTP version */
@@ -64,22 +66,25 @@ export abstract class HTTPClient {
    * @param options Request optiona
    */
   request(path: string, options?: RequestOptions) {
-    const route = options?.route ?? path;
-    let bucket = this.buckets.get(route);
-    if (!bucket) {
-      this.buckets.set(route, bucket = new RateLimitBucket());
+    let bucket;
+    if (!this.options?.disableRateLimiting) {
+      const route = options?.route ?? path;
+      bucket = this.buckets.get(route);
+      if (!bucket) {
+        this.buckets.set(route, bucket = new RateLimitBucket());
+      }
     }
 
-    return this.#actualRequest(bucket, this.#buildRequest(path, options));
+    return this.#actualRequest(this.#buildRequest(path, options), bucket);
   }
 
-  async #actualRequest(bucket: RateLimitBucket, request: Request) {
-    if (bucket.locked || bucket.rateLimited) {
-      bucket.add(() => this.#actualRequest(bucket, request));
+  async #actualRequest(request: Request, bucket?: RateLimitBucket) {
+    if (bucket?.locked || bucket?.rateLimited) {
+      bucket.add(() => this.#actualRequest(request, bucket));
       return;
     }
 
-    bucket.lock();
+    bucket?.lock();
 
     const controller = new AbortController();
     const delay = this.options?.delay ?? DELAY;
@@ -90,14 +95,14 @@ export abstract class HTTPClient {
     clearTimeout(timeout);
 
     if (response.headers.get(HEADER_BUCKET)) {
-      bucket.unlock(
+      bucket?.unlock(
         parseInt(response.headers.get(HEADER_LIMIT) ?? "0"),
         parseFloat(response.headers.get(HEADER_RESET_AFTER) ?? "0") * 1e+3,
         parseInt(response.headers.get(HEADER_REMAINING) ?? "0"),
       );
     }
 
-    bucket.shift();
+    bucket?.shift();
 
     const data = response.headers.get("Content-Type") === "application/json"
       ? response.json()
