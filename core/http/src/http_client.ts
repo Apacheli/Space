@@ -80,11 +80,8 @@ export abstract class HTTPClient {
 
   async #actualRequest(request: Request, bucket?: RateLimitBucket) {
     if (bucket?.locked || bucket?.rateLimited) {
-      return new Promise((resolve, reject) => {
-        bucket.add(() =>
-          this.#actualRequest(request, bucket)
-            .then(resolve, reject)
-        );
+      return new Promise((...args) => {
+        bucket.add(() => this.#actualRequest(request, bucket).then(...args));
       });
     }
 
@@ -108,8 +105,12 @@ export abstract class HTTPClient {
 
     bucket?.shift();
 
-    const data = response.headers.get("Content-Type") === "application/json"
+    const contentType = response.headers.get("Content-Type");
+
+    const data = contentType === "application/json"
       ? response.json()
+      : contentType?.startsWith("image")
+      ? response.arrayBuffer().then((buffer) => new Uint8Array(buffer))
       : response.text();
 
     if (response.ok) {
