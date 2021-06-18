@@ -2,7 +2,16 @@ import type { APIVersions } from "../../types/mod.ts";
 import { BaseURL } from "../../types/mod.ts";
 import { stringify } from "../../util/src/json_codec.ts";
 import { RateLimitBucket } from "../../util/src/rate_limit_bucket.ts";
-import { API_VERSION, DELAY, USER_AGENT } from "./constants.ts";
+import {
+  API_VERSION,
+  DELAY,
+  HEADER_BUCKET,
+  HEADER_LIMIT,
+  HEADER_REASON,
+  HEADER_REMAINING,
+  HEADER_RESET_AFTER,
+  USER_AGENT,
+} from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
 import { encodeQuery } from "./util.ts";
 
@@ -80,11 +89,13 @@ export abstract class HTTPClient {
 
     clearTimeout(timeout);
 
-    bucket.unlock(
-      parseInt(response.headers.get("X-RateLimit-Limit") ?? "0"),
-      parseFloat(response.headers.get("X-RateLimit-Reset-After") ?? "0") * 1000,
-      parseInt(response.headers.get("X-RateLimit-Remaining") ?? "0"),
-    );
+    if (response.headers.get(HEADER_BUCKET)) {
+      bucket.unlock(
+        parseInt(response.headers.get(HEADER_LIMIT) ?? "0"),
+        parseFloat(response.headers.get(HEADER_RESET_AFTER) ?? "0") * 1e+3,
+        parseInt(response.headers.get(HEADER_REMAINING) ?? "0"),
+      );
+    }
 
     bucket.shift();
 
@@ -106,7 +117,7 @@ export abstract class HTTPClient {
       headers.set("Authorization", this.options.token);
     }
     if (options?.reason) {
-      headers.set("X-Audit-Log-Reason", options.reason);
+      headers.set(HEADER_REASON, options.reason);
     }
 
     let body;
