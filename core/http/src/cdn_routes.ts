@@ -11,6 +11,6 @@ export const
   USER_AVATAR            = (userId: Snowflake, userAvatar: string) => `/avatars/${userId}/${userAvatar}`,
   APPLICATION_ICON       = (applicationId: Snowflake, icon: string) => `/app-icons/${applicationId}/${icon}`,
   APPLICATION_COVER      = (applicationId: Snowflake, coverImage: string) => `/app-icons/${applicationId}/${coverImage}`,
-  APPLICATION_ASSET      = (applicationId: Snowflake, assetId: string) => `/app-assets/${applicationId}/${assetId}`,
+  APPLICATION_ASSET      = (applicationId: Snowflake, assetId: Snowflake) => `/app-assets/${applicationId}/${assetId}`,
   ACHIEVEMENT_ICON       = (applicationId: Snowflake, achievementId: Snowflake, iconHash: string) => `/app-assets/${applicationId}/achievements/${achievementId}/icons/${iconHash}`,
   TEAM_ICON              = (teamId: Snowflake, teamIcon: string) => `/team-icons/${teamId}/${teamIcon}`;
