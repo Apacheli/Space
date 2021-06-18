@@ -80,8 +80,12 @@ export abstract class HTTPClient {
 
   async #actualRequest(request: Request, bucket?: RateLimitBucket) {
     if (bucket?.locked || bucket?.rateLimited) {
-      bucket.add(() => this.#actualRequest(request, bucket));
-      return;
+      return new Promise((resolve, reject) => {
+        bucket.add(() =>
+          this.#actualRequest(request, bucket)
+            .then(resolve, reject)
+        );
+      });
     }
 
     bucket?.lock();
