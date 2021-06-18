@@ -13,7 +13,7 @@ import {
   USER_AGENT,
 } from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
-import { encodeQuery } from "./util.ts";
+import { encodeQuery, getResponseData } from "./util.ts";
 
 /** HTTP client options */
 export interface HTTPClientOptions {
@@ -105,13 +105,7 @@ export abstract class HTTPClient {
 
     bucket?.shift();
 
-    const contentType = response.headers.get("Content-Type");
-
-    const data = contentType === "application/json"
-      ? response.json()
-      : contentType?.startsWith("image")
-      ? response.arrayBuffer().then((buffer) => new Uint8Array(buffer))
-      : response.text();
+    const data = getResponseData(response);
 
     if (response.ok) {
       return data;
