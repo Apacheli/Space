@@ -13,7 +13,7 @@ import {
   USER_AGENT,
 } from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
-import { encodeQuery, getResponseData } from "./util.ts";
+import { encodeQuery } from "./util.ts";
 
 /** HTTP client options */
 export interface HTTPClientOptions {
@@ -105,7 +105,9 @@ export abstract class HTTPClient {
 
     bucket?.shift();
 
-    const data = getResponseData(response);
+    const data = response.headers.get("Content-Type") === "application/json"
+      ? response.json()
+      : response.text();
 
     if (response.ok) {
       return data;
@@ -139,7 +141,7 @@ export abstract class HTTPClient {
     }
 
     const { baseURL = BaseURL, version = API_VERSION } = this.options ?? {};
-    let url = `${baseURL}/v${version}/${path}`;
+    let url = `${baseURL}/v${version}${path}`;
     if (options?.query) {
       url += `?${encodeQuery(options.query)}`;
     }

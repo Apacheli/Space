@@ -1,4 +1,5 @@
-import type { Snowflake } from "../../types/src/reference.ts";
+import type { ImageFormats, Snowflake } from "../../types/src/reference.ts";
+import { ImageBaseURL } from "../../types/src/reference.ts";
 import {
   ACHIEVEMENT_ICON,
   APPLICATION_ASSET,
@@ -13,14 +14,39 @@ import {
   TEAM_ICON,
   USER_AVATAR,
 } from "./cdn_routes.ts";
-import { HTTPClient } from "./http_client.ts";
+import { HTTPError } from "./http_error.ts";
+
+/** CDN client options */
+export interface CDNClientOptions {
+  format?: ImageFormats;
+  size?: number;
+}
 
 /**
  * Handles the Discord CDN API
  *
  * https://discord.com/developers/docs/reference#image-formatting
  */
-export class CDNClient extends HTTPClient {
+export class CDNClient {
+  constructor(public options?: CDNClientOptions) {
+  }
+
+  async get(path: string) {
+    console.log(this.formatURL(path));
+    const response = await fetch(this.formatURL(path));
+
+    if (response.ok) {
+      return new Uint8Array(await response.arrayBuffer());
+    }
+
+    throw new HTTPError("bad image");
+  }
+
+  formatURL(path: string) {
+    const { format = "png", size = 512 } = this.options ?? {};
+    return `${ImageBaseURL}${path}.${format}?size=${size}`;
+  }
+
   /**
    * @param applicationId https://discord.dev/resources/application#application-object
    * @param achievementId https://discord.dev/game-sdk/achievements#data-models-user-achievement-struct
@@ -31,9 +57,7 @@ export class CDNClient extends HTTPClient {
     achievementId: Snowflake,
     iconHash: string,
   ): Promise<Uint8Array> {
-    return this.request(
-      ACHIEVEMENT_ICON(applicationId, achievementId, iconHash),
-    );
+    return this.get(ACHIEVEMENT_ICON(applicationId, achievementId, iconHash));
   }
 
   /**
@@ -44,7 +68,7 @@ export class CDNClient extends HTTPClient {
     applicationId: Snowflake,
     assetId: Snowflake,
   ): Promise<Uint8Array> {
-    return this.request(APPLICATION_ASSET(applicationId, assetId));
+    return this.get(APPLICATION_ASSET(applicationId, assetId));
   }
 
   /**
@@ -55,7 +79,7 @@ export class CDNClient extends HTTPClient {
     applicationId: Snowflake,
     coverImage: string,
   ): Promise<Uint8Array> {
-    return this.request(APPLICATION_COVER(applicationId, coverImage));
+    return this.get(APPLICATION_COVER(applicationId, coverImage));
   }
 
   /**
@@ -66,21 +90,21 @@ export class CDNClient extends HTTPClient {
     applicationId: Snowflake,
     icon: string,
   ): Promise<Uint8Array> {
-    return this.request(APPLICATION_ICON(applicationId, icon));
+    return this.get(APPLICATION_ICON(applicationId, icon));
   }
 
   /**
    * @param emojiId https://discord.dev/resources/emoji#emoji-object
    */
   getCustomEmoji(emojiId: Snowflake): Promise<Uint8Array> {
-    return this.request(CUSTOM_EMOJI(emojiId));
+    return this.get(CUSTOM_EMOJI(emojiId));
   }
 
   /**
    * @param userDiscriminator https://discord.dev/resources/user#user-object
    */
   getDefaultUserAvatar(userDiscriminator: string): Promise<Uint8Array> {
-    return this.request(DEFAULT_USER_AVATAR(userDiscriminator));
+    return this.get(DEFAULT_USER_AVATAR(userDiscriminator));
   }
 
   /**
@@ -88,7 +112,7 @@ export class CDNClient extends HTTPClient {
    * @param guildBanner https://discord.dev/resources/guild#guild-object
    */
   getGuildBanner(guildId: Snowflake, guildBanner: string): Promise<Uint8Array> {
-    return this.request(GUILD_BANNER(guildId, guildBanner));
+    return this.get(GUILD_BANNER(guildId, guildBanner));
   }
 
   /**
@@ -99,7 +123,7 @@ export class CDNClient extends HTTPClient {
     guildId: Snowflake,
     guildDiscoverySplash: string,
   ): Promise<Uint8Array> {
-    return this.request(GUILD_DISCOVERY_SPLASH(guildId, guildDiscoverySplash));
+    return this.get(GUILD_DISCOVERY_SPLASH(guildId, guildDiscoverySplash));
   }
 
   /**
@@ -107,7 +131,7 @@ export class CDNClient extends HTTPClient {
    * @param guildIcon https://discord.dev/resources/guild#guild-object
    */
   getGuildIcon(guildId: Snowflake, guildIcon: string): Promise<Uint8Array> {
-    return this.request(GUILD_ICON(guildId, guildIcon));
+    return this.get(GUILD_ICON(guildId, guildIcon));
   }
 
   /**
@@ -115,7 +139,7 @@ export class CDNClient extends HTTPClient {
    * @param guildSplash https://discord.dev/resources/guild#guild-object
    */
   getGuildSplash(guildId: Snowflake, guildSplash: string): Promise<Uint8Array> {
-    return this.request(GUILD_SPLASH(guildId, guildSplash));
+    return this.get(GUILD_SPLASH(guildId, guildSplash));
   }
 
   /**
@@ -123,7 +147,7 @@ export class CDNClient extends HTTPClient {
    * @param teamIcon https://discord.dev/topics/teams#team-object
    */
   getTeamIcon(teamId: Snowflake, teamIcon: string): Promise<Uint8Array> {
-    return this.request(TEAM_ICON(teamId, teamIcon));
+    return this.get(TEAM_ICON(teamId, teamIcon));
   }
 
   /**
@@ -131,6 +155,6 @@ export class CDNClient extends HTTPClient {
    * @param userAvatar https://discord.dev/resources/user#user-object
    */
   getUserAvatar(userId: Snowflake, userAvatar: string): Promise<Uint8Array> {
-    return this.request(USER_AVATAR(userId, userAvatar));
+    return this.get(USER_AVATAR(userId, userAvatar));
   }
 }
