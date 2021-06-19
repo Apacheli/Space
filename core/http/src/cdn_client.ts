@@ -1,5 +1,6 @@
 import type { ImageFormats, Snowflake } from "../../types/src/reference.ts";
 import { ImageBaseURL } from "../../types/src/reference.ts";
+import { IMAGE_FORMAT, IMAGE_SIZE } from "./cdn_constants.ts";
 import {
   ACHIEVEMENT_ICON,
   APPLICATION_ASSET,
@@ -14,6 +15,7 @@ import {
   TEAM_ICON,
   USER_AVATAR,
 } from "./cdn_routes.ts";
+import { HTTPError } from "./http_error.ts";
 
 /** CDN client options */
 export interface CDNClientOptions {
@@ -49,11 +51,15 @@ export class CDNClient {
       return new Uint8Array(await response.arrayBuffer());
     }
 
-    throw new Error("Invalid or unknown image");
+    // <?xml version='1.0' encoding='UTF-8'?><Error><Code>AuthenticationRequired</Code><Message>Authentication required.</Message></Error>
+    throw new HTTPError({
+      code: 401,
+      message: "Authentication required.",
+    });
   }
 
   formatImagePath(path: string) {
-    const { format = "png", size = 512 } = this.options ?? {};
+    const { format = IMAGE_FORMAT, size = IMAGE_SIZE } = this.options ?? {};
     return `${path}.${format}?size=${size}`;
   }
 

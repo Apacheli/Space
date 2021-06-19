@@ -235,12 +235,12 @@ import { stringify } from "../../util/src/json_codec.ts";
 import { RateLimitBucket } from "../../util/src/rate_limit_bucket.ts";
 import {
   API_VERSION,
+  AUDIT_LOG_REASON,
   DELAY,
-  HEADER_BUCKET,
-  HEADER_LIMIT,
-  HEADER_REASON,
-  HEADER_REMAINING,
-  HEADER_RESET_AFTER,
+  PAYLOAD_JSON,
+  RATELIMIT_LIMIT,
+  RATELIMIT_REMAINING,
+  RATELIMIT_RESET_AFTER,
   USER_AGENT,
 } from "./constants.ts";
 import { HTTPError } from "./http_error.ts";
@@ -415,13 +415,11 @@ export class HTTPClient {
 
     clearTimeout(timeout);
 
-    if (response.headers.get(HEADER_BUCKET)) {
-      bucket.unlock(
-        parseInt(response.headers.get(HEADER_LIMIT) ?? "0"),
-        parseFloat(response.headers.get(HEADER_RESET_AFTER) ?? "0") * 1e+3,
-        parseInt(response.headers.get(HEADER_REMAINING) ?? "0"),
-      );
-    }
+    bucket.unlock(
+      parseInt(response.headers.get(RATELIMIT_LIMIT) ?? "0"),
+      parseFloat(response.headers.get(RATELIMIT_RESET_AFTER) ?? "0") * 1e+3,
+      parseInt(response.headers.get(RATELIMIT_REMAINING) ?? "0"),
+    );
 
     bucket.shift();
 
@@ -441,7 +439,7 @@ export class HTTPClient {
     headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
     if (options?.reason) {
-      headers.set(HEADER_REASON, options.reason);
+      headers.set(AUDIT_LOG_REASON, options.reason);
     }
 
     let body;
@@ -451,7 +449,7 @@ export class HTTPClient {
         body.append(file.name, file);
       }
       if (options.data) {
-        body.append("payload_json", stringify(options.data));
+        body.append(PAYLOAD_JSON, stringify(options.data));
       }
     } else if (options?.data) {
       body = stringify(options.data);

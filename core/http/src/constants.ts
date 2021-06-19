@@ -4,9 +4,10 @@ import { url, version } from "../../../meta.ts";
 export const
   API_VERSION = 9,
   DELAY = 30_000,
-  HEADER_BUCKET = "X-RateLimit-Bucket",
-  HEADER_LIMIT = "X-RateLimit-Limit",
-  HEADER_REMAINING = "X-RateLimit-Remaining",
-  HEADER_REASON = "X-Audit-Log-Reason",
-  HEADER_RESET_AFTER = "X-RateLimit-Reset-After",
+  AUDIT_LOG_REASON = "X-Audit-Log-Reason",
+  PAYLOAD_JSON = "payload_json",
+  RATELIMIT_BUCKET = "X-RateLimit-Bucket",
+  RATELIMIT_LIMIT = "X-RateLimit-Limit",
+  RATELIMIT_REMAINING = "X-RateLimit-Remaining",
+  RATELIMIT_RESET_AFTER = "X-RateLimit-Reset-After",
   USER_AGENT = `DiscordBot (${url}, ${version}) Deno/${Deno.version.deno}`;
