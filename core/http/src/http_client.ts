@@ -21,14 +21,10 @@ export interface HTTPClientOptions {
   baseURL?: string;
   /** Request timeout delay */
   delay?: number;
-  /** Disable rate limiting (highly unrecommended) */
-  disableRateLimiting?: boolean;
   /** The `User-Agent` header */
   userAgent?: string;
   /** HTTP version */
   version?: APIVersions;
-  /** Authentication bot token */
-  token?: string;
 }
 
 /** Request options */
@@ -55,9 +51,10 @@ export abstract class HTTPClient {
   buckets = new Map<string, RateLimitBucket>();
 
   /**
+   * @param token Authentication bot token
    * @param options HTTP client options
    */
-  constructor(public options?: HTTPClientOptions) {
+  constructor(public token: string, public options?: HTTPClientOptions) {
   }
 
   /**
@@ -67,25 +64,23 @@ export abstract class HTTPClient {
    */
   request(path: string, options?: RequestOptions) {
     let bucket;
-    if (!this.options?.disableRateLimiting) {
-      const route = options?.route ?? path;
-      bucket = this.buckets.get(route);
-      if (!bucket) {
-        this.buckets.set(route, bucket = new RateLimitBucket());
-      }
+    const route = options?.route ?? path;
+    bucket = this.buckets.get(route);
+    if (!bucket) {
+      this.buckets.set(route, bucket = new RateLimitBucket());
     }
 
     return this.#actualRequest(this.#buildRequest(path, options), bucket);
   }
 
-  async #actualRequest(request: Request, bucket?: RateLimitBucket) {
-    if (bucket?.locked || bucket?.rateLimited) {
+  async #actualRequest(request: Request, bucket: RateLimitBucket) {
+    if (bucket.locked || bucket.rateLimited) {
       return new Promise((...args) => {
         bucket.add(() => this.#actualRequest(request, bucket).then(...args));
       });
     }
 
-    bucket?.lock();
+    bucket.lock();
 
     const controller = new AbortController();
     const delay = this.options?.delay ?? DELAY;
@@ -96,14 +91,14 @@ export abstract class HTTPClient {
     clearTimeout(timeout);
 
     if (response.headers.get(HEADER_BUCKET)) {
-      bucket?.unlock(
+      bucket.unlock(
         parseInt(response.headers.get(HEADER_LIMIT) ?? "0"),
         parseFloat(response.headers.get(HEADER_RESET_AFTER) ?? "0") * 1e+3,
         parseInt(response.headers.get(HEADER_REMAINING) ?? "0"),
       );
     }
 
-    bucket?.shift();
+    bucket.shift();
 
     const data = response.headers.get("Content-Type") === "application/json"
       ? response.json()
@@ -118,10 +113,8 @@ export abstract class HTTPClient {
 
   #buildRequest(path: string, options?: RequestOptions) {
     const headers = new Headers();
+    headers.set("Authorization", this.token);
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
-    if (this.options?.token) {
-      headers.set("Authorization", this.options.token);
-    }
     if (options?.reason) {
       headers.set(HEADER_REASON, options.reason);
     }

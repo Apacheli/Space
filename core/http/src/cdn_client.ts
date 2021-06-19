@@ -31,9 +31,16 @@ export interface CDNClientOptions {
  * https://discord.com/developers/docs/reference#image-formatting
  */
 export class CDNClient {
+  /**
+   * @param options CDN client options
+   */
   constructor(public options?: CDNClientOptions) {
   }
 
+  /**
+   * Make a request
+   * @param path The path to make the request to
+   */
   async request(path: string) {
     const url = `${this.options?.baseURL ?? ImageBaseURL}${path}`;
     const response = await fetch(url);
@@ -42,7 +49,7 @@ export class CDNClient {
       return new Uint8Array(await response.arrayBuffer());
     }
 
-    throw new Error("bad image");
+    throw new Error("Invalid or unknown image");
   }
 
   formatImagePath(path: string) {
