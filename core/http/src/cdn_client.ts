@@ -1,6 +1,6 @@
 import type { ImageFormats, Snowflake } from "../../types/src/reference.ts";
 import { ImageBaseURL } from "../../types/src/reference.ts";
-import { IMAGE_FORMAT, IMAGE_SIZE } from "./cdn_constants.ts";
+import { IMAGE_FORMAT, IMAGE_SIZE, USER_AGENT } from "./constants.ts";
 import {
   ACHIEVEMENT_ICON,
   APPLICATION_ASSET,
@@ -15,7 +15,6 @@ import {
   TEAM_ICON,
   USER_AVATAR,
 } from "./cdn_routes.ts";
-import { HTTPError } from "./http_error.ts";
 
 /** CDN client options */
 export interface CDNClientOptions {
@@ -25,6 +24,8 @@ export interface CDNClientOptions {
   format?: ImageFormats;
   /** Image size of any power of two between 16 and 4096 */
   size?: number;
+  /** User-Agent */
+  userAgent?: string;
 }
 
 /**
@@ -44,18 +45,19 @@ export class CDNClient {
    * @param path The path to make the request to
    */
   async request(path: string) {
+    const headers = new Headers();
+    headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
+
     const url = `${this.options?.baseURL ?? ImageBaseURL}${path}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers,
+    });
 
     if (response.ok) {
       return new Uint8Array(await response.arrayBuffer());
     }
 
-    // <?xml version='1.0' encoding='UTF-8'?><Error><Code>AuthenticationRequired</Code><Message>Authentication required.</Message></Error>
-    throw new HTTPError({
-      code: 401,
-      message: "Authentication required.",
-    });
+    throw new Error("Bad image");
   }
 
   formatImagePath(path: string) {
