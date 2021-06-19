@@ -368,13 +368,14 @@ export interface Embed {
 }
 
 /** https://discord.dev/resources/channel#embed-object-embed-types */
-export type EmbedTypes =
-  | "rich"
-  | "image"
-  | "video"
-  | "gifv"
-  | "article"
-  | "link";
+export enum EmbedTypes {
+  Rich = "rich",
+  Image = "image",
+  Video = "video",
+  GIFV = "gifv",
+  Article = "article",
+  Link = "link",
+}
 
 /** https://discord.dev/resources/channel#embed-object-embed-thumbnail-structure */
 export type EmbedThumbnail = EmbedVideo;
