@@ -1,21 +1,24 @@
-import { decode as hexDecode } from "../../util/src/hex_codec.ts";
-import { encode as utf8Encode } from "../../util/src/utf8_codec.ts";
+import { hexEncode } from "../../util/src/hex_codec.ts";
+import { uint8Concat, utf8Encode } from "../../util/src/utf8_codec.ts";
 import type { ServerRequest } from "../deps.ts";
 import { readAll, verify } from "../deps.ts";
 
 /** Determines if a request is bad or not */
 export const bad = (
   method: string,
-  contentType: string | null,
-  signature: string | null,
-  timestamp: string | null,
+  contentType?: string | null,
+  signature?: string | null,
+  timestamp?: string | null,
 ) =>
   method !== "POST" ||
   contentType !== "application/json" ||
   !signature ||
   !timestamp;
 
-/** Parse a request body */
+/**
+ * Parse a request body
+ * @param request Server request
+ */
 export const parse = (request: ServerRequest) => readAll(request.body);
 
 /**
@@ -29,15 +32,18 @@ export const validate = (
   publicKey: string,
   signature: string,
   timestamp: string,
-  body: string,
+  body: Uint8Array,
 ) =>
   verify(
-    hexDecode(utf8Encode(publicKey)),
-    hexDecode(utf8Encode(signature)),
-    utf8Encode(timestamp + body),
+    hexEncode(utf8Encode(publicKey)),
+    hexEncode(utf8Encode(signature)),
+    uint8Concat(utf8Encode(timestamp), body),
   );
 
-/** Request respond helper */
+/**
+ * Request respond helper
+ * @param request Server request
+ */
 export const wrap = (request: ServerRequest) =>
   (body: unknown, status = 200) =>
     request.respond({

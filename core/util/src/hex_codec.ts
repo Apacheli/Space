@@ -7,7 +7,7 @@ for (let i = 0; i < hex.length; i++) {
 }
 
 /** Encode a byte array into a hex string */
-export const encode = (arr: Uint8Array) => {
+export const hexEncode = (arr: Uint8Array) => {
   let str = "";
   for (let i = 0; i < arr.length; i++) {
     str += hex[arr[i]];
@@ -16,7 +16,7 @@ export const encode = (arr: Uint8Array) => {
 };
 
 /** Decode a hex string into a byte array */
-export const decode = (str: string) => {
+export const hexDecode = (str: string) => {
   const arr = new Uint8Array(str.length >> 1);
   for (let i = 0; i < arr.length; i++) {
     arr[i] = decimal[str[i * 2] + str[i * 2 + 1]];
