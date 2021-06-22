@@ -35,8 +35,8 @@ export const validate = (
   body: Uint8Array,
 ) =>
   verify(
-    hexEncode(utf8Encode(publicKey)),
-    hexEncode(utf8Encode(signature)),
+    hexEncode(publicKey),
+    hexEncode(signature),
     uint8Concat(utf8Encode(timestamp), body),
   );
 
