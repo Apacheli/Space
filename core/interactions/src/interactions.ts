@@ -1,3 +1,7 @@
+import {
+  InteractionCallbackType,
+  InteractionType,
+} from "../../types/src/interactions/slash_commands.ts";
 import { utf8Decode } from "../../util/src/utf8_codec.ts";
 import type { ServerRequest } from "../deps.ts";
 import { Status } from "../deps.ts";
@@ -33,10 +37,16 @@ export class Interactions {
     const body = await (this.options?.body ?? parse)(request);
 
     // https://github.com/microsoft/TypeScript/issues/26916
-    if (validate(this.publicKey, signature!, timestamp!, body)) {
+    if (!validate(this.publicKey, signature!, timestamp!, body)) {
       return respond("invalid request", Status.Unauthorized);
     }
 
-    console.log(JSON.parse(utf8Decode(body)));
+    const interaction = JSON.parse(utf8Decode(body));
+
+    if (interaction.type === InteractionType.Ping) {
+      return respond({ type: InteractionCallbackType.Pong });
+    }
+
+    return [interaction, respond];
   }
 }

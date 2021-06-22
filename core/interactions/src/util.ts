@@ -1,4 +1,4 @@
-import { hexEncode } from "../../util/src/hex_codec.ts";
+import { hexDecode } from "../../util/src/hex_codec.ts";
 import { uint8Concat, utf8Encode } from "../../util/src/utf8_codec.ts";
 import type { ServerRequest } from "../deps.ts";
 import { readAll, verify } from "../deps.ts";
@@ -35,8 +35,8 @@ export const validate = (
   body: Uint8Array,
 ) =>
   verify(
-    hexEncode(publicKey),
-    hexEncode(signature),
+    hexDecode(publicKey),
+    hexDecode(signature),
     uint8Concat(utf8Encode(timestamp), body),
   );
 

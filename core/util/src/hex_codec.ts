@@ -1,12 +1,14 @@
-const chars = "0123456789ABCDEF";
+const symbols = "0123456789abcdef";
+
 const decimal: Record<string, number> = {};
-const hex = new Array(0x100);
-for (let i = 0; i < hex.length; i++) {
-  const nyble = `${chars[i >> 4 & 0xF]}${chars[i & 0xF]}`;
-  hex[decimal[nyble] = i] = nyble;
+const hex = new Array<string>(0x100);
+
+for (let i = 0; i < 0x100; i++) {
+  const nyble = `${symbols[i >> 4 & 0xF]}${symbols[i & 0xF]}`;
+  decimal[hex[i] = nyble] = i;
 }
 
-/** Encode a byte array into a hex string */
+/** Encode a UTF-8 byte array into a hex string */
 export const hexEncode = (arr: Uint8Array) => {
   let str = "";
   for (let i = 0; i < arr.length; i++) {
