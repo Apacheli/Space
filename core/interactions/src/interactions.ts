@@ -4,7 +4,7 @@ import {
   InteractionRequestType,
 } from "../../types/src/interactions/slash_commands.ts";
 import { hexDecode } from "../../util/src/hex_codec.ts";
-import { stringify } from "../../util/src/json_codec.ts";
+import { parse, stringify } from "../../util/src/json_codec.ts";
 import {
   uint8Concat,
   utf8Decode,
@@ -12,6 +12,7 @@ import {
 } from "../../util/src/utf8_codec.ts";
 import type { ServerRequest } from "../deps.ts";
 import { readAll, Status, STATUS_TEXT, verify } from "../deps.ts";
+import { HEADER_SIGNATURE, HEADER_TIMESTAMP } from "./constants.ts";
 
 /**
  * Handle a request (request interface must be compatible with `std/http`)
@@ -26,8 +27,8 @@ export const handle = async (publicKey: string, request: ServerRequest) => {
     request.respond({ body: stringify(body), headers, status });
 
   const contentType = request.headers.get("Content-Type");
-  const signature = request.headers.get("X-Signature-Ed25519");
-  const timestamp = request.headers.get("X-Signature-Timestamp");
+  const signature = request.headers.get(HEADER_SIGNATURE);
+  const timestamp = request.headers.get(HEADER_TIMESTAMP);
 
   if (
     request.method !== "POST" ||
@@ -44,7 +45,7 @@ export const handle = async (publicKey: string, request: ServerRequest) => {
     return respond(STATUS_TEXT.get(Status.Unauthorized), Status.Unauthorized);
   }
 
-  const interaction: Interaction = JSON.parse(utf8Decode(body));
+  const interaction: Interaction = parse(utf8Decode(body));
 
   if (interaction.type === InteractionRequestType.Ping) {
     return respond({ type: InteractionCallbackType.Pong });
