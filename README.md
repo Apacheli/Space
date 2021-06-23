@@ -1,5 +1,8 @@
 # Space
 
+[![](https://github.com/spacelandx/Space/actions/workflows/ci.yaml/badge.svg)](https://github.com/spacelandx/Space/actions/workflows/ci.yaml)
+[![](https://canary.discord.com/api/guilds/812458966357377067/widget.png)](https://discord.gg/UQuA3EwXCV)
+
 **Space is currently under heavy development and is therefore highly
 unrecommended for production. Any contributions are greatly appreciated. The
 [contributing guide](CONTRIBUTING.md) contains further instructions.**

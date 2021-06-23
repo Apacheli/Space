@@ -274,13 +274,13 @@ export interface ApplicationCommandInteractionData {
 /** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataresolved */
 export interface ApplicationCommandInteractionDataResolved {
   /** the IDs and User objects */
-  users?: Record<`${Snowflake}`, User>[];
+  users?: Record<string, User>[];
   /** the IDs and partial Member objects */
-  members?: Record<`${Snowflake}`, GuildMember>[];
+  members?: Record<string, GuildMember>[];
   /** the IDs and Role objects */
-  roles?: Record<`${Snowflake}`, Role>[];
+  roles?: Record<string, Role>[];
   /** the IDs and partial Channel objects */
-  channels?: Record<`${Snowflake}`, Channel>[];
+  channels?: Record<string, Channel>[];
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataoption */
