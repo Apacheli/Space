@@ -28,6 +28,7 @@ export class RateLimitBucket {
     return this.left < 1 && Date.now() - this.#lastRequestAt < this.reset;
   }
 
+  /** Add a function */
   add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
       const delay = this.reset - Date.now() + this.#lastRequestAt;
@@ -40,6 +41,7 @@ export class RateLimitBucket {
     }
   }
 
+  /** Lock the bucket */
   lock() {
     if (this.locked) {
       throw new Error("Bucket is locked.");
@@ -47,6 +49,7 @@ export class RateLimitBucket {
     this.locked = true;
   }
 
+  /** Unlock the bucket */
   unlock(max = this.max, reset = this.reset, left = this.left - 1) {
     if (!this.locked) {
       throw new Error("Bucket is unlocked.");
@@ -59,6 +62,7 @@ export class RateLimitBucket {
     this.left = left;
   }
 
+  /** Shift the queue */
   shift() {
     const shifted = this.#queue.shift();
     shifted?.();

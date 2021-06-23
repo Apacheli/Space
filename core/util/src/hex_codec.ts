@@ -17,7 +17,7 @@ export const hexEncode = (arr: Uint8Array) => {
   return str;
 };
 
-/** Decode a hex string into a byte array */
+/** Decode a hex string into a UTF-8 byte array */
 export const hexDecode = (str: string) => {
   const arr = new Uint8Array(str.length >> 1);
   for (let i = 0; i < arr.length; i++) {

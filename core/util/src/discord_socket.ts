@@ -59,12 +59,10 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /** Encode an outgoing payload */
   protected encodePayload(payload: unknown) {
     switch (this.encoding) {
-      case "etf": {
+      case "etf":
         return pack(payload);
-      }
-      case "json": {
+      case "json":
         return stringify(payload);
-      }
     }
   }
 }
