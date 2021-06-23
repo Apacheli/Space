@@ -229,7 +229,7 @@ export interface Interaction {
   /** id of the application this interaction is for */
   application_id: Snowflake;
   /** the type of interaction */
-  type: InteractionType;
+  type: InteractionRequestType;
   /** the command data payload */
   data?: ApplicationCommandInteractionData;
   /** the guild it was sent from */
@@ -249,9 +249,10 @@ export interface Interaction {
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-interactiontype */
-export enum InteractionType {
+export enum InteractionRequestType {
   Ping = 1,
   ApplicationCommand,
+  MessageComponent,
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondata */
@@ -337,7 +338,7 @@ export interface MessageInteraction {
   /** id of the interaction */
   id: Snowflake;
   /** the type of interaction */
-  type: InteractionType;
+  type: InteractionRequestType;
   /** the name of the [ApplicationCommand](https://discord.dev/interactions/slash-commands#applicationcommand) */
   name: string;
   /** the user who invoked the interaction */

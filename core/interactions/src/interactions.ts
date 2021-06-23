@@ -1,52 +1,73 @@
+import type { Interaction } from "../../types/src/interactions/slash_commands.ts";
 import {
   InteractionCallbackType,
-  InteractionType,
+  InteractionRequestType,
 } from "../../types/src/interactions/slash_commands.ts";
-import { utf8Decode } from "../../util/src/utf8_codec.ts";
+import { hexDecode } from "../../util/src/hex_codec.ts";
+import { stringify } from "../../util/src/json_codec.ts";
+import {
+  uint8Concat,
+  utf8Decode,
+  utf8Encode,
+} from "../../util/src/utf8_codec.ts";
 import type { ServerRequest } from "../deps.ts";
-import { Status } from "../deps.ts";
-import { bad, parse, validate, wrap } from "./util.ts";
+import { readAll, Status, STATUS_TEXT, verify } from "../deps.ts";
 
-/** Interactions options */
-export interface InteractionsOptions {
-  /** Determine how the request body will be parsed */
-  body?: (request: ServerRequest) => Promise<Uint8Array>;
-}
+/**
+ * Handle a request (request interface must be compatible with `std/http`)
+ * @param publicKey Bot application public key
+ * @param request The request
+ */
+export const handle = async (publicKey: string, request: ServerRequest) => {
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
 
-/** A class for HTTP server interactions */
-export class Interactions {
-  /**
-   * @param publicKey Bot application public key
-   * @param options Interactions options
-   */
-  constructor(public publicKey: string, public options?: InteractionsOptions) {
+  const respond = (body: unknown, status = Status.OK) =>
+    request.respond({ body: stringify(body), headers, status });
+
+  const contentType = request.headers.get("Content-Type");
+  const signature = request.headers.get("X-Signature-Ed25519");
+  const timestamp = request.headers.get("X-Signature-Timestamp");
+
+  if (
+    request.method !== "POST" ||
+    contentType !== "application/json" ||
+    !signature ||
+    !timestamp
+  ) {
+    return respond(STATUS_TEXT.get(Status.BadRequest), Status.BadRequest);
   }
 
-  /** Handle a request */
-  async handle(request: ServerRequest) {
-    const respond = wrap(request);
+  const body = await readAll(request.body);
 
-    const contentType = request.headers.get("Content-Type");
-    const signature = request.headers.get("X-Signature-Ed25519");
-    const timestamp = request.headers.get("X-Signature-Timestamp");
-
-    if (bad(request.method, contentType, signature, timestamp)) {
-      return respond("bad request", Status.BadRequest);
-    }
-
-    const body = await (this.options?.body ?? parse)(request);
-
-    // https://github.com/microsoft/TypeScript/issues/26916
-    if (!validate(this.publicKey, signature!, timestamp!, body)) {
-      return respond("invalid request", Status.Unauthorized);
-    }
-
-    const interaction = JSON.parse(utf8Decode(body));
-
-    if (interaction.type === InteractionType.Ping) {
-      return respond({ type: InteractionCallbackType.Pong });
-    }
-
-    return [interaction, respond];
+  if (!validate(publicKey, signature, timestamp, body)) {
+    return respond(STATUS_TEXT.get(Status.Unauthorized), Status.Unauthorized);
   }
-}
+
+  const interaction: Interaction = JSON.parse(utf8Decode(body));
+
+  if (interaction.type === InteractionRequestType.Ping) {
+    return respond({ type: InteractionCallbackType.Pong });
+  }
+
+  return { interaction, respond };
+};
+
+/**
+ * Validate a request
+ * @param publicKey The bot application's public key
+ * @param signature The request header `X-Signature-Ed25519`
+ * @param timestamp The request header `X-Signature-Timestamp`
+ * @param body The request body
+ */
+export const validate = (
+  publicKey: string,
+  signature: string,
+  timestamp: string,
+  body: Uint8Array,
+) =>
+  verify(
+    hexDecode(publicKey),
+    hexDecode(signature),
+    uint8Concat(utf8Encode(timestamp), body),
+  );
