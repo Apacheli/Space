@@ -22,6 +22,14 @@ export interface Component {
   disabled?: boolean;
   /** a list of child components */
   components?: Component[];
+  /** TODO: Undocumented */
+  placeholder?: string;
+  /** TODO: Undocumented */
+  max_values?: number;
+  /** TODO: Undocumented */
+  min_values?: number;
+  /** TODO: Undocumented */
+  options?: { description?: string; label: string; value: string }[];
 }
 
 /** https://discord.dev/interactions/message-components#component-types */
