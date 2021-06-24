@@ -705,7 +705,11 @@ export interface StartThreadWithMessageJSON {
 export type StartThreadWithMessageBody = Channel;
 
 /** https://discord.dev/resources/channel#start-thread-without-message */
-export type StartThreadWithoutMessageJSON = StartThreadWithMessageJSON;
+export interface StartThreadWithoutMessageJSON
+  extends StartThreadWithMessageJSON {
+  /** the [type of thread](https://discord.dev/resources/channel#channel-object-channel-types) to create */
+  type?: ChannelTypes;
+}
 
 /** https://discord.dev/resources/channel#start-thread-without-message */
 export type StartThreadWithoutMessageBody = Channel;
