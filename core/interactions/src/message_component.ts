@@ -32,3 +32,13 @@ export const selectMenu = (
   options,
   ...extra,
 });
+
+export const SelectMenuOption = (
+  label: string,
+  value: string,
+  description?: string,
+) => ({
+  label,
+  value,
+  description,
+});
