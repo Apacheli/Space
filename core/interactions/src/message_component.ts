@@ -28,8 +28,8 @@ export const selectMenu = (
   extra?: Omit<Component, "custom_id" | "options" | "type">,
 ): Component => ({
   custom_id: customId,
-  type: ComponentTypes.SelectMenu,
   options,
+  type: ComponentTypes.SelectMenu,
   ...extra,
 });
 
@@ -38,7 +38,7 @@ export const SelectMenuOption = (
   value: string,
   description?: string,
 ) => ({
+  description,
   label,
   value,
-  description,
 });
