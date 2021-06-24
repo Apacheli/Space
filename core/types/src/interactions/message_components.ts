@@ -15,7 +15,7 @@ export interface Component {
   /**` name`, `id`, and `animated` */
   emoji?: Partial<Emoji>;
   /** a developer-defined identifier for the button, max 100 characters */
-  custon_id?: string;
+  custom_id?: string;
   /** a url for link-style buttons */
   url?: string;
   /** whether the button is disabled, default `false` */
@@ -30,6 +30,8 @@ export enum ComponentTypes {
   ActionRow = 1,
   /** A clickable button */
   Button,
+  /** TODO: Undocumented */
+  SelectMenu,
 }
 
 /** https://discord.dev/interactions/message-components#buttons */
