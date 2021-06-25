@@ -39,7 +39,7 @@ The [release notes](RELEASES.md) contains all available versions.
 Latest (not recommended for production):
 
 ```ts
-export * from "https://github.com/Cosdromeda/Space/raw/dev/core/client/mod.ts";
+export * from "https://github.com/spacelandx/space/raw/dev/core/client/mod.ts";
 ```
 
 ### Getting Started
