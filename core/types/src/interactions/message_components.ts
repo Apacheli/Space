@@ -29,7 +29,16 @@ export interface Component {
   /** TODO: Undocumented */
   min_values?: number;
   /** TODO: Undocumented */
-  options?: { description?: string; label: string; value: string }[];
+  options?: _SelectMenuOption[];
+}
+
+/** TODO: Undocumented */
+/* export */ interface _SelectMenuOption {
+  description?: string;
+  label: string;
+  value: string;
+  emoji?: { name: string };
+  default?: boolean;
 }
 
 /** https://discord.dev/interactions/message-components#component-types */
