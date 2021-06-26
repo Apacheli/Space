@@ -300,7 +300,7 @@ export interface InteractionResponse {
   /** the type of response */
   type: InteractionCallbackType;
   /** an optional response message */
-  data?: InteractionApplicationCOmmandCallbackData;
+  data?: InteractionApplicationCommandCallbackData;
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-response-interactioncallbacktype */
@@ -318,7 +318,7 @@ export enum InteractionCallbackType {
 }
 
 /** https://discord.dev/interactions/slash-commands#interaction-response-interactionapplicationcommandcallbackdata */
-export interface InteractionApplicationCOmmandCallbackData {
+export interface InteractionApplicationCommandCallbackData {
   /** is the response TTS */
   tts?: boolean;
   /** message content */
