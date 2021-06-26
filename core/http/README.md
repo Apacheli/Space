@@ -14,9 +14,9 @@ export * from "https://deno.land/x/space@0.11.0-alpha/core/http/mod.ts";
 import { HTTPClient } from "./deps.ts";
 
 const token = Deno.env.get("BOT_TOKEN");
-const client = new HTTPClient(`Bot ${token}`);
+const http = new HTTPClient(`Bot ${token}`);
 
-const message = await client.createMessage(826605722397442089n, {
+const message = await http.createMessage(826605722397442089n, {
   content: "Hello, World!",
 });
 ```

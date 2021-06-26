@@ -16,7 +16,7 @@ import { HEADER_SIGNATURE, HEADER_TIMESTAMP } from "./constants.ts";
 
 /**
  * Handle a request (request interface must be compatible with `std/http`)
- * @param publicKey Bot application public key
+ * @param publicKey Hex decoded bot application public key
  * @param request The request
  */
 export const handle = async (publicKey: string, request: ServerRequest) => {
@@ -56,7 +56,7 @@ export const handle = async (publicKey: string, request: ServerRequest) => {
 
 /**
  * Validate a request
- * @param publicKey The bot application's public key
+ * @param publicKey The bot's application public key hex decoded
  * @param signature The request header `X-Signature-Ed25519`
  * @param timestamp The request header `X-Signature-Timestamp`
  * @param body The request body
@@ -68,7 +68,7 @@ export const validate = (
   body: Uint8Array,
 ) =>
   verify(
-    hexDecode(publicKey),
+    publicKey,
     hexDecode(signature),
     uint8Concat(utf8Encode(timestamp), body),
   );
