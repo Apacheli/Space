@@ -19,7 +19,7 @@ import { handle, serve } from "./deps.ts";
 
 const PUBLIC_KEY = Deno.env.get("BOT_PUBLIC_KEY") ?? prompt("bot public key:");
 if (!PUBLIC_KEY) {
-  throw new Error(`An invalid bot public key was provided.`);
+  throw new Error("An invalid bot public key was provided.");
 }
 
 const handleRequest = async (request: ServerRequest) => {
