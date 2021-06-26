@@ -1,5 +1,10 @@
 # Space Interactions
 
+A module that helps with building components (looks more visually appealing but
+entirely optional) and serverless interactions (such as
+[validating](https://discord.dev/interactions/slash-commands#security-and-authorization)
+and PONGing).
+
 ### Install
 
 ```ts

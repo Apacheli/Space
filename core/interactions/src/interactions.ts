@@ -1,6 +1,8 @@
-import type { Interaction } from "../../types/src/interactions/slash_commands.ts";
-import {
+import type {
+  Interaction,
   InteractionApplicationCommandCallbackData,
+} from "../../types/src/interactions/slash_commands.ts";
+import {
   InteractionCallbackType,
   InteractionRequestType,
 } from "../../types/src/interactions/slash_commands.ts";
