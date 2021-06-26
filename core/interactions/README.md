@@ -19,20 +19,21 @@ const PUBLIC_KEY = Deno.env.get("BOT_PUBLIC_KEY") ?? prompt("bot public key:");
 if (!PUBLIC_KEY) {
   throw new Error("An invalid bot public key was provided.");
 }
+const publicKey = hexDecode(PUBLIC_KEY);
 
-const handleRequest = async (publicKey: Uint8Array, request: ServerRequest) => {
-  const { interaction, respond } = await handle(publicKey, request) ?? {};
+const handleRequest = async (request: ServerRequest) => {
+  const { callback, interaction } = await handle(publicKey, request) ?? {};
   if (interaction?.data?.name === "ping") {
-    respond?.(InteractionCallbackType.ChannelMessageWithSource, {
+    callback?.(InteractionCallbackType.ChannelMessageWithSource, {
       content: "pong",
     });
   }
 };
 
-(async (publicKey) => {
+(async () => {
   const server = serve({ port: 1337 });
   for await (const request of server) {
-    handleRequest(publicKey, request);
+    handleRequest(request);
   }
-})(hexDecode(PUBLIC_KEY));
+})();
 ```

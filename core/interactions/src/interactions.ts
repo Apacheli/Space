@@ -21,6 +21,12 @@ import { HEADER_SIGNATURE, HEADER_TIMESTAMP } from "./constants.ts";
  * @param request The request
  */
 export const handle = async (publicKey: Uint8Array, request: ServerRequest) => {
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+
+  const respond = (body: unknown, status = Status.OK) =>
+    request.respond({ body: stringify(body), headers, status });
+
   const contentType = request.headers.get("Content-Type");
   const signature = request.headers.get(HEADER_SIGNATURE);
   const timestamp = request.headers.get(HEADER_TIMESTAMP);
@@ -31,44 +37,27 @@ export const handle = async (publicKey: Uint8Array, request: ServerRequest) => {
     !signature ||
     !timestamp
   ) {
-    return request.respond({
-      body: STATUS_TEXT.get(Status.BadRequest),
-      status: Status.BadRequest,
-    });
+    return respond(STATUS_TEXT.get(Status.BadRequest), Status.BadRequest);
   }
 
   const body = await readAll(request.body);
 
   if (!validate(publicKey, signature, timestamp, body)) {
-    return request.respond({
-      body: STATUS_TEXT.get(Status.Unauthorized),
-      status: Status.Unauthorized,
-    });
+    return respond(STATUS_TEXT.get(Status.Unauthorized), Status.Unauthorized);
   }
 
   const interaction: Interaction = parse(utf8Decode(body));
 
-  const headers = new Headers();
-  headers.set("Content-Type", "application/json");
-
-  const respond = (
+  const callback = (
     type: InteractionCallbackType,
     data?: InteractionApplicationCommandCallbackData,
-  ) =>
-    request.respond({
-      body: stringify({ data, type }),
-      headers,
-      status: Status.OK,
-    });
+  ) => respond({ data, type });
 
   if (interaction.type === InteractionRequestType.Ping) {
-    return respond(InteractionCallbackType.Pong);
+    return callback(InteractionCallbackType.Pong);
   }
 
-  return {
-    interaction,
-    respond,
-  };
+  return { callback, interaction };
 };
 
 /**
