@@ -78,7 +78,7 @@ export const selectMenu = (
  * @param value Select menu option value
  * @param description Select menu option description
  */
-export const SelectMenuOption = (
+export const selectMenuOption = (
   label: string,
   value: string,
   description?: string,
