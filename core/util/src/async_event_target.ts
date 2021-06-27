@@ -1,20 +1,24 @@
 import type { Awaitable } from "./types.ts";
 
 /** AsyncEventTarget receive options */
-export interface AsyncEventTargetReceiveOptions<T> {
+export interface AsyncEventTargetReceiveOptions {
   /** Time to wait in milliseconds before expiring */
   delay?: number;
   /** Filter out items that do not pass the `filter` function */
-  filter?: (...chunk: T[]) => Awaitable<boolean>;
+  filter?: (...chunk: unknown[]) => Awaitable<boolean>;
   /** The number of items needed to fulfill the receiver */
   limit?: number;
   /** Terminate early if an item passes the `terminate` function */
-  terminate?: (...chunk: T[]) => Awaitable<boolean>;
+  terminate?: (...chunk: unknown[]) => Awaitable<boolean>;
+}
+
+export interface Listener {
+  writer: WritableStreamDefaultWriter<unknown[]>;
+  [Symbol.asyncIterator]: () => AsyncIterableIterator<unknown[]>;
 }
 
 /** Asynchronous version of `EventTarget` using async iterators */
-// deno-lint-ignore no-explicit-any
-export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
+export class AsyncEventTarget extends Map<string, Listener[]> {
   /**
    * Listen to an event
    *
@@ -24,9 +28,12 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
    *
    * @param event The event to listen to
    */
-  listen(event: string) {
+  listen(event: string): Listener {
     const { readable, writable } = new TransformStream();
-    const listener = new Listener<T[]>(readable, writable.getWriter());
+    const listener = {
+      writer: writable.getWriter(),
+      [Symbol.asyncIterator]: () => readable[Symbol.asyncIterator](),
+    };
     if (this.get(event)?.push(listener) === undefined) {
       this.set(event, [listener]);
     }
@@ -42,18 +49,20 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
    * @param event The event to deafen
    * @param listener The listener to destroy, or destroy every listener
    */
-  deafen(event: string, listener?: Listener<T[]>) {
+  deafen(event: string, listener?: Listener) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
     }
     if (listener) {
-      const index = listeners.indexOf(listener);
-      listeners.splice(index, index > -1 ? 1 : 0)[0]?.writer.close();
-      return;
+      const start = listeners.indexOf(listener);
+      listeners.splice(start, start > -1 ? 1 : 0)[0]?.writer.close();
+    } else {
+      listeners.forEach(({ writer }) => writer.close());
     }
-    this.delete(event);
-    listeners.forEach(({ writer }) => writer.close());
+    if (listeners.length < 1) {
+      this.delete(event);
+    }
   }
 
   /**
@@ -64,7 +73,7 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
    * @param event The event to dispatch
    * @param args The data to pass into the writer
    */
-  dispatch(event: string, ...args: T[]) {
+  dispatch(event: string, ...args: unknown[]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }
@@ -81,7 +90,7 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
     filter,
     terminate,
     limit = terminate ? Infinity : 1,
-  }: AsyncEventTargetReceiveOptions<T> = {}) {
+  }: AsyncEventTargetReceiveOptions = {}) {
     const listener = this.listen(event);
     const chunks = [];
     const timeout = setTimeout(() => this.deafen(event, listener), delay);
@@ -95,17 +104,5 @@ export class AsyncEventTarget<T = any> extends Map<string, Listener<T[]>[]> {
       }
     }
     return chunks;
-  }
-}
-
-class Listener<T> {
-  constructor(
-    public readable: ReadableStream<T>,
-    public writer: WritableStreamDefaultWriter<T>,
-  ) {
-  }
-
-  async *[Symbol.asyncIterator]() {
-    yield* this.readable;
   }
 }
