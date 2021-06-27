@@ -14,6 +14,10 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /** When the socket receives a message */
   protected abstract onSocketMessage(event: MessageEvent): void;
 
+  /**
+   * @param url Socket URL
+   * @param encoding Socket encoding
+   */
   constructor(public url: string, public encoding: EncodingTypes = "json") {
     super();
   }
