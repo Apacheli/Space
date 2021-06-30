@@ -7,8 +7,7 @@ export const BaseURL = "https://canary.discord.com/api";
 export type APIVersions = 8 | 9;
 
 /** https://discord.dev/reference#snowflakes */
-// Snowflakes can be bigints if ETF encoding is enabled
-export type Snowflake = string | bigint;
+export type Snowflake = `${bigint}`;
 
 /** https://discord.dev/reference#image-formatting-image-base-url */
 export const ImageBaseURL = "https://cdn.discordapp.com";

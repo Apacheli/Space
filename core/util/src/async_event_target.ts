@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any
+
 import type { Awaitable } from "./types.ts";
 
 /** AsyncEventTarget receive options */
@@ -5,16 +7,16 @@ export interface AsyncEventTargetReceiveOptions {
   /** Time to wait in milliseconds before expiring */
   delay?: number;
   /** Filter out items that do not pass the `filter` function */
-  filter?: (...chunk: unknown[]) => Awaitable<boolean>;
+  filter?: (...chunk: any[]) => Awaitable<boolean>;
   /** The number of items needed to fulfill the receiver */
   limit?: number;
   /** Terminate early if an item passes the `terminate` function */
-  terminate?: (...chunk: unknown[]) => Awaitable<boolean>;
+  terminate?: (...chunk: any[]) => Awaitable<boolean>;
 }
 
 export interface Listener {
-  writer: WritableStreamDefaultWriter<unknown[]>;
-  [Symbol.asyncIterator]: () => AsyncIterableIterator<unknown[]>;
+  writer: WritableStreamDefaultWriter<any[]>;
+  [Symbol.asyncIterator]: () => AsyncIterableIterator<any[]>;
 }
 
 /** Asynchronous version of `EventTarget` using async iterators */
@@ -73,7 +75,7 @@ export class AsyncEventTarget extends Map<string, Listener[]> {
    * @param event The event to dispatch
    * @param args The data to pass into the writer
    */
-  dispatch(event: string, ...args: unknown[]) {
+  dispatch(event: string, ...args: any[]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }

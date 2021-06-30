@@ -7,7 +7,6 @@ import {
   InteractionRequestType,
 } from "../../types/src/interactions/slash_commands.ts";
 import { hexDecode } from "../../util/src/hex_codec.ts";
-import { parse, stringify } from "../../util/src/json_codec.ts";
 import {
   uint8Concat,
   utf8Decode,
@@ -27,7 +26,7 @@ export const handle = async (publicKey: Uint8Array, request: ServerRequest) => {
   headers.set("Content-Type", "application/json");
 
   const respond = (body: unknown, status = Status.OK) =>
-    request.respond({ body: stringify(body), headers, status });
+    request.respond({ body: JSON.stringify(body), headers, status });
 
   const contentType = request.headers.get("Content-Type");
   const signature = request.headers.get(HEADER_SIGNATURE);
@@ -48,7 +47,7 @@ export const handle = async (publicKey: Uint8Array, request: ServerRequest) => {
     return respond(STATUS_TEXT.get(Status.Unauthorized), Status.Unauthorized);
   }
 
-  const interaction: Interaction = parse(utf8Decode(body));
+  const interaction: Interaction = JSON.parse(utf8Decode(body));
 
   const callback = (
     type: InteractionCallbackType,

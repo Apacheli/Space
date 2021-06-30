@@ -1,4 +1,4 @@
-import { logger } from "../../util/mod.ts";
+import * as logger from "../../util/src/logger.ts";
 
 /** Represents an HTTP exception */
 export class HTTPError extends Error {
@@ -10,7 +10,7 @@ export class HTTPError extends Error {
   }
 
   get message() {
-    const { code = 0, message } = this.body;
+    const { code, message } = this.body;
     return logger.highlight(`[${code}] ${message}${this.#formatErrors()}`);
   }
 

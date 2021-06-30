@@ -1,11 +1,8 @@
-import type { EncodingTypes } from "../../types/mod.ts";
 import { AsyncEventTarget } from "./async_event_target.ts";
-import { pack, unpack } from "./etf_codec.ts";
-import { parse, stringify } from "./json_codec.ts";
 
-/** A socket client for Discord consumed by gateway and voice */
+/** A socket client for gateway clients and voice clients */
 export abstract class DiscordSocket extends AsyncEventTarget {
-  /** The active socket */
+  /** The socket */
   protected socket?: WebSocket;
   /** When the socket closes */
   protected abstract onSocketClose(event: CloseEvent): void;
@@ -16,9 +13,8 @@ export abstract class DiscordSocket extends AsyncEventTarget {
 
   /**
    * @param url Socket URL
-   * @param encoding Socket encoding
    */
-  constructor(public url: string, public encoding: EncodingTypes = "json") {
+  constructor(public url: string) {
     super();
   }
 
@@ -52,21 +48,6 @@ export abstract class DiscordSocket extends AsyncEventTarget {
       d: data,
       op: opcode,
     };
-    this.socket?.send(this.encodePayload(payload));
-  }
-
-  /** Decode an incoming payload */
-  protected decodePayload(payload: string | Uint8Array) {
-    return typeof payload === "string" ? parse(payload) : unpack(payload);
-  }
-
-  /** Encode an outgoing payload */
-  protected encodePayload(payload: unknown) {
-    switch (this.encoding) {
-      case "etf":
-        return pack(payload);
-      case "json":
-        return stringify(payload);
-    }
+    this.socket?.send(JSON.stringify(payload));
   }
 }

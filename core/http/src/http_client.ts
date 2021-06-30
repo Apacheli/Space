@@ -229,9 +229,8 @@ import type {
   TriggerTypingIndicatorBody,
   UnpinMessageBody,
 } from "../../types/mod.ts";
-import type { Snowflake } from "../../types/mod.ts";
-import { BaseURL } from "../../types/mod.ts";
-import { stringify } from "../../util/src/json_codec.ts";
+import type { Snowflake } from "../../types/src/reference.ts";
+import { BaseURL } from "../../types/src/reference.ts";
 import { RateLimitBucket } from "../../util/src/rate_limit_bucket.ts";
 import {
   API_VERSION,
@@ -449,10 +448,10 @@ export class HTTPClient {
         body.append(file.name, file);
       }
       if (options.data) {
-        body.append(PAYLOAD_JSON, stringify(options.data));
+        body.append(PAYLOAD_JSON, JSON.stringify(options.data));
       }
     } else if (options?.data) {
-      body = stringify(options.data);
+      body = JSON.stringify(options.data);
       headers.set("Content-Type", "application/json");
     }
 
