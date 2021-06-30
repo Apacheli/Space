@@ -11,16 +11,9 @@ export abstract class DiscordSocket extends AsyncEventTarget {
   /** When the socket receives a message */
   protected abstract onSocketMessage(event: MessageEvent): void;
 
-  /**
-   * @param url Socket URL
-   */
-  constructor(public url: string) {
-    super();
-  }
-
   /** Open a socket connection */
-  connect() {
-    const socket = this.socket = new WebSocket(this.url);
+  connect(url: string, protocols?: string | string[]) {
+    const socket = this.socket = new WebSocket(url, protocols);
 
     socket.addEventListener("close", (event) => this.onSocketClose(event));
     socket.addEventListener("error", (event) => this.onSocketError(event));

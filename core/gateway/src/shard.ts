@@ -14,35 +14,34 @@ import type {
 import { GatewayEvents } from "../../types/src/topics/gateway.ts";
 import { DiscordSocket } from "../../util/src/discord_socket.ts";
 import type { PartialKeys } from "../../util/src/types.ts";
-import { hexDecode } from "../../util/src/hex_codec.ts";
-import { utf8Decode } from "../../util/src/utf8_codec.ts";
+import { hexDecode, hexEncode } from "../../util/src/hex_codec.ts";
+import { utf8Decode, utf8Encode } from "../../util/src/utf8_codec.ts";
 
 /** Shard events */
 export enum ShardEvents {
   /** The shard disconnected */
-  Close = "CLOSE",
-  /** The shard received a dispatch payload */
-  Dispatch = "DISPATCH",
+  Close = "Close",
   /** The shard encountered an error */
-  Error = "ERROR",
+  Error = "Error",
 }
 
 /** Class representing a shard */
 export class Shard extends DiscordSocket {
+  latency = -1;
+
   #seq = 0;
   #sessionId?: string;
   #lastHeartbeatSentAt = -1;
-  #token;
 
   /**
-   * @param url Gateway URL
    * @param token Bot authentication token
-   * @param id Zero-based integer used for dispersing guilds
    */
-  constructor(url: string, token: string, public id?: number) {
-    super(url);
+  constructor(public token: string) {
+    super();
+  }
 
-    this.#token = token;
+  isResumable(resumable: boolean) {
+    return resumable && !!this.#sessionId;
   }
 
   onSocketClose(event: CloseEvent) {
@@ -66,7 +65,7 @@ export class Shard extends DiscordSocket {
       }
     }
 
-    this.dispatch(ShardEvents.Close, resumable, reconnectable, event);
+    this.dispatch(ShardEvents.Close, reconnectable, resumable, event);
   }
 
   onSocketError(event: Event) {
@@ -74,10 +73,28 @@ export class Shard extends DiscordSocket {
   }
 
   onSocketMessage(message: MessageEvent) {
-    const _payload: GatewayPayload = JSON.parse(message.data);
+    const payload: GatewayPayload = JSON.parse(message.data);
 
-    /* switch (payload.op) {
-    } */
+    switch (payload.op) {
+      case GatewayOpcodes.Dispatch: {
+        this.#seq = payload.s;
+
+        switch (payload.t) {
+          case GatewayEvents.Ready: {
+            this.#sessionId = utf8Decode(hexDecode(payload.d.session_id));
+            break;
+          }
+        }
+        break;
+      }
+
+      case GatewayOpcodes.HeartbeatACK: {
+        this.latency = Date.now() - this.#lastHeartbeatSentAt;
+        break;
+      }
+    }
+
+    this.dispatch(GatewayOpcodes[payload.op], payload.d, payload.t);
   }
 
   /** Send a heartbeat */
@@ -94,7 +111,7 @@ export class Shard extends DiscordSocket {
         $device: "space",
         $os: Deno.build.os,
       },
-      token: this.#token,
+      token: this.token,
       ...data,
     };
     this.sendPayload(GatewayOpcodes.Identify, payload);
@@ -140,8 +157,8 @@ export class Shard extends DiscordSocket {
     }
     const payload: ResumePayloadData = {
       seq: this.#seq,
-      "session_id": utf8Decode(hexDecode(this.#sessionId)),
-      token: this.#token,
+      "session_id": hexEncode(utf8Encode(this.#sessionId)),
+      token: this.token,
     };
     this.sendPayload(GatewayOpcodes.Resume, payload);
   }
@@ -166,6 +183,7 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
     return this.receive(GatewayEvents.GuildMembersChunk, {
       delay,
+      filter: (chunk) => chunk.nonce === payload.nonce,
       terminate: (chunk) => chunk.chunk_index + 1 === chunk.chunk_count,
     });
   }
