@@ -59,7 +59,7 @@ export const button = (
  * Select menu component helper
  *
  *     actionRow([
- *       selectMenu("id", [selectMenuOption(...)]),
+ *       selectMenu("id", [selectOption(...)]),
  *     ]);
  *
  * @param customId Select menu custom ID
@@ -78,17 +78,17 @@ export const selectMenu = (
 });
 
 /**
- * Select menu option component helper
+ * Select option helper
  *
  *     selectMenu("hi", [
- *       selectMenuOption("select me!", 1, "descriptive description"),
+ *       selectMenuOption("select me!", "1", "descriptive description"),
  *     ]);
  *
- * @param label Select menu option label
- * @param value Select menu option value
- * @param description Select menu option description
+ * @param label Select option label
+ * @param value Select option value
+ * @param description Select option description
  */
-export const selectMenuOption = (
+export const selectOption = (
   label: string,
   value: string,
   description?: string,
