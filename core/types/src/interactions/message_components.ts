@@ -22,23 +22,6 @@ export interface Component {
   disabled?: boolean;
   /** a list of child components */
   components?: Component[];
-  /** TODO: Undocumented */
-  placeholder?: string;
-  /** TODO: Undocumented */
-  max_values?: number;
-  /** TODO: Undocumented */
-  min_values?: number;
-  /** TODO: Undocumented */
-  options?: _SelectMenuOption[];
-}
-
-/** TODO: Undocumented */
-/* export */ interface _SelectMenuOption {
-  description?: string;
-  label: string;
-  value: string;
-  emoji?: { name: string };
-  default?: boolean;
 }
 
 /** https://discord.dev/interactions/message-components#component-types */
@@ -47,7 +30,7 @@ export enum ComponentTypes {
   ActionRow = 1,
   /** A clickable button */
   Button,
-  /** TODO: Undocumented */
+  /** A select menu for picking from choices */
   SelectMenu,
 }
 
@@ -81,4 +64,32 @@ export enum ButtonStyles {
   Danger,
   /** grey, navigates to a URL */
   Link,
+}
+
+/** https://discord.dev/interactions/message-components#select-menu-object */
+export interface SelectMenu {
+  /** a developer-defined identifier for the button, max 100 characters */
+  custom_id: string;
+  /** the choices in the select, max 25 */
+  options?: SelectOption[];
+  /** custom placeholder text if nothing is selected, max 100 characters */
+  placeholder?: string;
+  /** the minimum number of items that must be chosen; default 1, min 0, max 25 */
+  min_values?: number;
+  /** the maximum number of items that can be chosen; default 1, max 25 */
+  max_values?: number;
+}
+
+/** https://discord.dev/interactions/message-components#select-menu-object-select-option-structure */
+export interface SelectOption {
+  /** the user-facing name of the option, max 25 characters */
+  label: string;
+  /** the dev-define value of the option, max 100 characters */
+  value: string;
+  /** an additional description of the option, max 50 characters */
+  description?: string;
+  /**` name`, `id`, and `animated` */
+  emoji?: Partial<Emoji>;
+  /** will render this option as selected by default */
+  default?: boolean;
 }

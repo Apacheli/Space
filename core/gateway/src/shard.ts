@@ -27,8 +27,10 @@ export enum ShardEvents {
 
 /** Class representing a shard */
 export class Shard extends DiscordSocket {
+  /** `Heartbeat` send and `heartbeat ACK` receive latency */
   latency = -1;
 
+  #heartbeatInterval?: number;
   #seq = 0;
   #sessionId?: string;
   #lastHeartbeatSentAt = -1;
@@ -42,6 +44,19 @@ export class Shard extends DiscordSocket {
 
   isResumable(resumable: boolean) {
     return resumable && !!this.#sessionId;
+  }
+
+  reset(soft: boolean) {
+    this.socket = undefined;
+    clearInterval(this.#heartbeatInterval);
+    this.#heartbeatInterval = undefined;
+
+    if (!soft) {
+      this.deafen(GatewayEvents.GuildMembersChunk);
+      this.latency = -1;
+      this.#seq = 0;
+      this.#sessionId = undefined;
+    }
   }
 
   onSocketClose(event: CloseEvent) {
@@ -90,6 +105,14 @@ export class Shard extends DiscordSocket {
 
       case GatewayOpcodes.HeartbeatACK: {
         this.latency = Date.now() - this.#lastHeartbeatSentAt;
+        break;
+      }
+
+      case GatewayOpcodes.Hello: {
+        this.#heartbeatInterval = setInterval(
+          () => this.heartbeat(),
+          payload.d.heartbeat_interval,
+        );
         break;
       }
     }
