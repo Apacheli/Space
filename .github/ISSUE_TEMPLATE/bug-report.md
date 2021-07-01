@@ -21,6 +21,6 @@ assignees: ''
 
 **Information**
 
-- Deno version: 
-- Platform: 
-- Space Version: 
+- Deno version:
+- Platform:
+- Space Version:
