@@ -34,22 +34,19 @@ export const actionRow = <T extends Component>(
  * Button component helper
  *
  *     actionRow([
- *       button("id", "press me!", ButtonStyles.Primary),
+ *       button("id", ButtonStyles.Primary),
  *     ]);
  *
  * @param customId Button custom ID
- * @param label Button label
  * @param style Button style
  * @param extra Extra button data
  */
 export const button = (
   customId: string,
-  label: string,
   style: ButtonStyles,
   extra?: Button,
 ): Button => ({
   custom_id: customId,
-  label,
   style,
   type: ComponentTypes.Button,
   ...extra,

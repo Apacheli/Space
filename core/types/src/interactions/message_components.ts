@@ -45,7 +45,7 @@ export interface Button {
   /** `name`, `id`, and `animated` */
   emoji?: Pick<Emoji, "name" | "id" | "animated">;
   /** a developer-defined identifier for the button, max 100 characters */
-  custom_id?: string;
+  custom_id: string;
   /** a url for link-style buttons */
   url?: string;
   /** whether the button is disabled, default `false` */
