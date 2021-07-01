@@ -6,9 +6,9 @@ import type { Emoji } from "../resources/emoji.ts";
 
 /** https://discord.dev/interactions/message-components#component-object */
 export interface Component {
-  /** [component type](https://discord.dev/interactions/message-components#component-types) */
+  /** [component type](https://discord.dev/interactions/message-components#component-object-component-types) */
   type: ComponentTypes;
-  /** one of [button styles](https://discord.dev/interactions/message-components#buttons-button-styles) */
+  /** one of [button styles](https://discord.dev/interactions/message-components#button-object-button-styles) */
   style?: ButtonStyles;
   /** text that appears on the button, max 80 characters */
   label?: string;
@@ -24,7 +24,7 @@ export interface Component {
   components?: Component[];
 }
 
-/** https://discord.dev/interactions/message-components#component-types */
+/** https://discord.dev/interactions/message-components#component-object-component-types */
 export enum ComponentTypes {
   /** A container for other components */
   ActionRow = 1,
@@ -34,16 +34,16 @@ export enum ComponentTypes {
   SelectMenu,
 }
 
-/** https://discord.dev/interactions/message-components#buttons */
+/** https://discord.dev/interactions/message-components#button-object */
 export interface Button {
   /** `2` for a button */
   type: number;
-  /** one of [button styles](https://discord.dev/interactions/message-components#buttons-button-styles) */
+  /** one of [button styles](https://discord.dev/interactions/message-components#button-object-button-styles) */
   style: ButtonStyles;
   /** text that appears on the button, max 80 characters */
   label?: string;
   /** `name`, `id`, and `animated` */
-  emoji?: Partial<Emoji>;
+  emoji?: Pick<Emoji, "name" | "id" | "animated">;
   /** a developer-defined identifier for the button, max 100 characters */
   custom_id?: string;
   /** a url for link-style buttons */
@@ -52,7 +52,7 @@ export interface Button {
   disabled?: boolean;
 }
 
-/** https://discord.dev/interactions/message-components#buttons-button-styles */
+/** https://discord.dev/interactions/message-components#button-object-button-styles */
 export enum ButtonStyles {
   /** blurple */
   Primary = 1,
@@ -89,7 +89,7 @@ export interface SelectOption {
   /** an additional description of the option, max 50 characters */
   description?: string;
   /**` name`, `id`, and `animated` */
-  emoji?: Partial<Emoji>;
+  emoji?: Pick<Emoji, "name" | "id" | "animated">;
   /** will render this option as selected by default */
   default?: boolean;
 }
