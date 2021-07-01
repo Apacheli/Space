@@ -222,6 +222,12 @@ export enum GuildFeatures {
   MonetizationEnabled = "MONETIZATION_ENABLED",
   /** guild has increased custom sticker slots */
   MoreStickers = "MORE_STICKERS",
+  /** guild has access to the three day archive time for threads */
+  ThreeDayThreadArchive = "THREE_DAY_THREAD_ARCHIVE",
+  /** guild has access to the seven day archive time for threads */
+  SevenDayThreadArchive = "SEVEN_DAY_THREAD_ARCHIVE",
+  /** guild has access to create private threads */
+  PrivateThreads = "PRIVATE_THREADS",
 }
 
 /** https://discord.dev/resources/guild#unavailable-guild-object */
