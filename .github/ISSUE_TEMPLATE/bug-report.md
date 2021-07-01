@@ -9,18 +9,18 @@ assignees: ''
 
 **Description**
 
-<!-- describe the bug -->
+<!--describe the bug -->
 
 **Reproduce**
 
-<!-- describe the steps to reproduce -->
+<!-- describe the steps to reproduce the bug -->
 
 **Expected behavior**
 
-<!-- what should be happening instead -->
+<!-- describe what the expected behavior should be -->
 
-**Information**:
+**Information**
 
-Deno version: 
-Platform: 
-Space Version:
+- Deno version: 
+- Platform: 
+- Space Version: 
