@@ -140,38 +140,72 @@ export enum HTTPResponseCodes {
 
 /** https://discord.dev/topics/opcodes-and-status-codes#json-json-error-codes */
 export enum JSONErrorCodes {
+  /** General error (such as a malformed request body, amongst other things) */
   GeneralError,
+  /** Unknown account */
   UnknownAccount = 10001,
+  /** Unknown application */
   UnknownApplication,
+  /** Unknown channel */
   UnknownChannel,
+  /** Unknown guild */
   UnknownGuild,
+  /** Unknown integration */
   UnknownIntegration,
+  /** Unknown invite */
   UnknownInvite,
+  /** Unknown member */
   UnknownMember,
+  /** Unknown message */
   UnknownMessage,
+  /** Unknown permission overwrite */
   UnknownPermissionOverwrite,
+  /** Unknown provider */
   UnknownProvider,
+  /** Unknown role */
   UnknownRole,
+  /** Unknown token */
   UnknownToken,
+  /** Unknown user */
   UnknownUser,
+  /** Unknown emoji */
   UnknownEmoji,
+  /** Unknown webhook */
   UnknownWebhook,
+  /** Unknown webhook service */
   UnknownWebhookService,
+  /** Unknown session */
   UnknownSession = 10020,
+  /** Unknown ban */
   UnknownBan = 10026,
+  /** Unknown SKU */
   UnknownSKU,
+  /** Unknown Store Listing */
   unknownStoreListing,
+  /** Unknown entitlement */
   UnknownEntitlement,
+  /** Unknown build */
   UnknownBuild,
+  /** Unknown lobby */
   UnknownLobby,
+  /** Unknown branch */
   UnknownBranch,
+  /** Unknown store directory layout */
   UnknownStoreDirectoryLayout,
+  /** Unknown redistributable */
   UnknownRedistrubitable = 10036,
+  /** Unknown gift code */
   UnknownGiftCode = 10038,
+  /** Unknown guild template */
   UnknownGuildTemplate = 10057,
+  /** Unknown interaction */
   UnknownInteraction = 10062,
+  /** Unknown application command */
   UnknownApplicationCommand,
+  /** Unknown application command permissions */
   UnknownApplicationCommandPermissions = 10066,
+  /** Unknown Stage Instance */
+  UnknownStageInstance,
 }
 
 /** https://discord.dev/topics/opcodes-and-status-codes#rpc-rpc-error-codes */
