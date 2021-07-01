@@ -8,7 +8,7 @@ import type {
 import { ComponentTypes } from "../../types/src/interactions/message_components.ts";
 
 interface ActionRow<T extends Component> {
-  components?: T[];
+  components?: [T?, T?, T?, T?, T?];
   type: ComponentTypes.ActionRow;
 }
 
@@ -24,7 +24,7 @@ interface ActionRow<T extends Component> {
  * @param components Components for the action row
  */
 export const actionRow = <T extends Component>(
-  components?: T[],
+  components?: [T?, T?, T?, T?, T?],
 ): ActionRow<T> => ({
   components,
   type: ComponentTypes.ActionRow,
