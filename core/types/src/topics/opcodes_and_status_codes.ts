@@ -193,7 +193,7 @@ export enum JSONErrorCodes {
   /** Unknown store directory layout */
   UnknownStoreDirectoryLayout,
   /** Unknown redistributable */
-  UnknownRedistrubitable = 10036,
+  UnknownRedistributable = 10036,
   /** Unknown gift code */
   UnknownGiftCode = 10038,
   /** Unknown guild template */
@@ -225,7 +225,7 @@ export enum RPCErrorCodes {
   /** You lack permissions to access the given resource. */
   InvalidPermissions,
   /** An invalid OAuth2 application ID was used to authorize or authenticate with. */
-  InvalidClientID,
+  InvalidClientId,
   /** An invalid OAuth2 application origin was used to authorize or authenticate with. */
   InvalidOrigin,
   /** An invalid OAuth2 token was used to authorize or authenticate with. */
@@ -247,7 +247,7 @@ export enum RPCErrorCodes {
 /** https://discord.dev/topics/opcodes-and-status-codes#rpc-rpc-close-event-codes */
 export enum RPCCloseEventCodes {
   /** You connected to the RPC server with an invalid client ID. */
-  InvalidClientID = 4000,
+  InvalidClientId = 4000,
   /** You connected to the RPC server with an invalid origin. */
   InvalidOrigin,
   /** You are being rate limited. */
