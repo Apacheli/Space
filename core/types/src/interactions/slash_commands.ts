@@ -139,7 +139,7 @@ export type BatchEditApplicationCommandPermissionsJSON =
 export type BatchEditApplicationCommandPermissionsBody =
   GuildApplicationCommandPermissions[];
 
-/** https://discord.dev/interactions/slash-commands#applicationcommand */
+/** https://discord.dev/interactions/slash-commands#application-command-object */
 export interface ApplicationCommand {
   /** unique id of the command */
   id: Snowflake;
@@ -157,9 +157,9 @@ export interface ApplicationCommand {
   default_permission?: boolean;
 }
 
-/** https://discord.dev/interactions/slash-commands#applicationcommandoption */
+/** https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-structure */
 export interface ApplicationCommandOption {
-  /** value of [ApplicationCommandOptionType](https://discord.dev/interactions/slash-commands#applicationcommandoptiontype) */
+  /** value of [application command option type](https://discord.dev/interactions/slash-commands#application-command-object-application-command-option-type) */
   type: ApplicationCommandOptionType;
   /** 1-32 lowercase character name matching `^[\w-]{1,32}$` */
   name: string;
@@ -173,7 +173,7 @@ export interface ApplicationCommandOption {
   options?: ApplicationCommandOption[];
 }
 
-/** https://discord.dev/interactions/slash-commands#applicationcommandoptiontype */
+/** https://discord.dev/interactions/slash-commands#application-command-object-application-command-option-type */
 export enum ApplicationCommandOptionType {
   SubCommand = 1,
   SubCommandGroup,
@@ -186,7 +186,7 @@ export enum ApplicationCommandOptionType {
   Mentionable,
 }
 
-/** https://discord.dev/interactions/slash-commands#applicationcommandoptionchoice */
+/** https://discord.dev/interactions/slash-commands#application-command-object-application-command-option-choice-structure */
 export interface ApplicationCommandOptionChoice {
   /** 1-100 character choice name */
   name: string;
@@ -194,7 +194,7 @@ export interface ApplicationCommandOptionChoice {
   value: string | number;
 }
 
-/** https://discord.dev/interactions/slash-commands#guildapplicationcommandpermissions */
+/** https://discord.dev/interactions/slash-commands#application-command-permissions-object */
 export interface GuildApplicationCommandPermissions {
   /** the id of the command */
   id: Snowflake;
@@ -206,7 +206,7 @@ export interface GuildApplicationCommandPermissions {
   permissions: ApplicationCommandPermissions[];
 }
 
-/** https://discord.dev/interactions/slash-commands#applicationcommandpermissions */
+/** https://discord.dev/interactions/slash-commands#application-command-permissions-object-application-command-permissions-structure */
 export interface ApplicationCommandPermissions {
   /** the id of the role or user */
   id: Snowflake;
@@ -216,13 +216,13 @@ export interface ApplicationCommandPermissions {
   permission: boolean;
 }
 
-/** https://discord.dev/interactions/slash-commands#applicationcommandpermissiontype */
+/** https://discord.dev/interactions/slash-commands#application-command-permissions-object-application-command-permission-type */
 export enum ApplicationCommandPermissionType {
   Role = 1,
   User,
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction */
+/** https://discord.dev/interactions/slash-commands#interaction-object */
 export interface Interaction {
   /** id of the interaction */
   id: Snowflake;
@@ -248,14 +248,14 @@ export interface Interaction {
   message?: Message;
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-interactiontype */
+/** https://discord.dev/interactions/slash-commands#interaction-object-interaction-request-type */
 export enum InteractionRequestType {
   Ping = 1,
   ApplicationCommand,
   MessageComponent,
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondata */
+/** https://discord.dev/interactions/slash-commands#interaction-object-application-command-interaction-data-structure */
 export interface ApplicationCommandInteractionData {
   /** the ID of the invoked command */
   id: Snowflake;
@@ -267,11 +267,11 @@ export interface ApplicationCommandInteractionData {
   options?: ApplicationCommandInteractionDataOption[];
   /** for components, the [`custom_id`](https://discord.dev/interactions/message-components#custom-id) of the component */
   custom_id: string;
-  /** the [type](https://discord.dev/interactions/message-components#component-types) of the component */
+  /** the [type](https://discord.dev/interactions/message-components#component-object-component-types) of the component */
   component_type: ComponentTypes;
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataresolved */
+/** https://discord.dev/interactions/slash-commands#interaction-object-application-command-interaction-data-resolved-structure */
 export interface ApplicationCommandInteractionDataResolved {
   /** the IDs and User objects */
   users?: Record<string, User>[];
@@ -279,15 +279,15 @@ export interface ApplicationCommandInteractionDataResolved {
   members?: Record<string, GuildMember>[];
   /** the IDs and Role objects */
   roles?: Record<string, Role>[];
-  /** the IDs and partial Channel objects */
+  /** the IDs and partial hannel objects */
   channels?: Record<string, Channel>[];
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-applicationcommandinteractiondataoption */
+/** https://discord.dev/interactions/slash-commands#interaction-object-application-command-interaction-data-option-structure */
 export interface ApplicationCommandInteractionDataOption {
   /** the name of the parameter */
   name: string;
-  /** value of [ApplicationCommandOptionType](https://discord.dev/interactions/slash-commands#applicationcommandoptiontype) */
+  /** value of [application command option type](https://discord.dev/interactions/slash-commands#application-command-object-application-command-option-type) */
   type: ApplicationCommandOptionType;
   /** the value of the pair */
   value?: string | number;
@@ -295,7 +295,7 @@ export interface ApplicationCommandInteractionDataOption {
   options?: ApplicationCommandInteractionDataOption[];
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-response */
+/** https://discord.dev/interactions/slash-commands#interaction-response-object */
 export interface InteractionResponse {
   /** the type of response */
   type: InteractionCallbackType;
@@ -303,7 +303,7 @@ export interface InteractionResponse {
   data?: InteractionApplicationCommandCallbackData;
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-response-interactioncallbacktype */
+/** https://discord.dev/interactions/slash-commands#interaction-response-object-interaction-callback-type */
 export enum InteractionCallbackType {
   /** ACK a `Ping` */
   Pong = 1,
@@ -317,7 +317,7 @@ export enum InteractionCallbackType {
   UpdateMessage,
 }
 
-/** https://discord.dev/interactions/slash-commands#interaction-response-interactionapplicationcommandcallbackdata */
+/** https://discord.dev/interactions/slash-commands#interaction-response-object-interaction-application-command-callback-data-structure */
 export interface InteractionApplicationCommandCallbackData {
   /** is the response TTS */
   tts?: boolean;
@@ -327,19 +327,25 @@ export interface InteractionApplicationCommandCallbackData {
   embeds?: Embed[];
   /** [allowed mentions](https://discord.dev/resources/channel#allowed-mentions-object) object */
   allowed_mentions?: AllowedMentions;
-  /** set to `64` to make your response ephemeral */
-  flags?: 64;
+  /** [interaction application command callback data flags](https://discord.dev/interactions/slash-commands#interaction-response-object-interaction-application-command-callback-data-flags) */
+  flags?: InteractionApplicationCommandCallbackDataFlags;
   /** message components */
   components?: Component[];
 }
 
-/** https://discord.dev/interactions/slash-commands#messageinteraction */
+/** https://discord.dev/interactions/slash-commands#interaction-response-object-interaction-application-command-callback-data-flags */
+export enum InteractionApplicationCommandCallbackDataFlags {
+  /** only the user receiving the message can see it */
+  Ephemeral = 1 << 6,
+}
+
+/** https://discord.dev/interactions/slash-commands#message-interaction-object */
 export interface MessageInteraction {
   /** id of the interaction */
   id: Snowflake;
   /** the type of interaction */
   type: InteractionRequestType;
-  /** the name of the [ApplicationCommand](https://discord.dev/interactions/slash-commands#applicationcommand) */
+  /** the name of the [application command](https://discord.dev/interactions/slash-commands#application-command-object) */
   name: string;
   /** the user who invoked the interaction */
   user: User;
