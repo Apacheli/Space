@@ -41,7 +41,7 @@ export interface Button {
   /** one of [button styles](https://discord.dev/interactions/message-components#button-object-button-styles) */
   style: ButtonStyles;
   /** text that appears on the button, max 80 characters */
-  label?: string;
+  label: string;
   /** `name`, `id`, and `animated` */
   emoji?: Pick<Emoji, "name" | "id" | "animated">;
   /** a developer-defined identifier for the button, max 100 characters */
