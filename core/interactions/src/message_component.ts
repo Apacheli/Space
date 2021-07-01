@@ -46,7 +46,7 @@ export const button = (
   customId: string,
   label: string,
   style: ButtonStyles,
-  extra?: Button,
+  extra?: Omit<Button, "custom_id" | "label" | "style">,
 ): Button => ({
   custom_id: customId,
   label,
@@ -69,7 +69,7 @@ export const button = (
 export const selectMenu = (
   customId: string,
   options: SelectOption[],
-  extra?: SelectMenu,
+  extra?: Omit<SelectMenu, "custom_id" | "options">,
 ): SelectMenu => ({
   custom_id: customId,
   options,
@@ -81,7 +81,7 @@ export const selectMenu = (
  * Select option helper
  *
  *     selectMenu("hi", [
- *       selectMenuOption("select me!", "1", "descriptive description"),
+ *       selectOption("select me!", "1", "descriptive description"),
  *     ]);
  *
  * @param label Select option label
