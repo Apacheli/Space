@@ -27,7 +27,7 @@ const c = (
   type: ApplicationCommandOptionType,
   name: string,
   description: string,
-  extra?: ApplicationCommandOption,
+  extra?: Omit<ApplicationCommandOption, "type" | "name" | "description">,
 ): ApplicationCommandOption => ({
   name,
   description,
