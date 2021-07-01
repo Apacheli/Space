@@ -37,7 +37,7 @@ export enum ComponentTypes {
 /** https://discord.dev/interactions/message-components#button-object */
 export interface Button {
   /** `2` for a button */
-  type: number;
+  type: ComponentTypes;
   /** one of [button styles](https://discord.dev/interactions/message-components#button-object-button-styles) */
   style: ButtonStyles;
   /** text that appears on the button, max 80 characters */
@@ -68,6 +68,8 @@ export enum ButtonStyles {
 
 /** https://discord.dev/interactions/message-components#select-menu-object */
 export interface SelectMenu {
+  /** TODO: Undocumented */
+  type: ComponentTypes;
   /** a developer-defined identifier for the button, max 100 characters */
   custom_id: string;
   /** the choices in the select, max 25 */

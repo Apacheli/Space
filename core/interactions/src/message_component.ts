@@ -1,8 +1,16 @@
 import type {
+  Button,
   ButtonStyles,
   Component,
+  SelectMenu,
+  SelectOption,
 } from "../../types/src/interactions/message_components.ts";
 import { ComponentTypes } from "../../types/src/interactions/message_components.ts";
+
+interface ActionRow<T extends Component> {
+  components?: T[];
+  type: ComponentTypes.ActionRow;
+}
 
 /**
  * Action row component helper
@@ -15,7 +23,9 @@ import { ComponentTypes } from "../../types/src/interactions/message_components.
  *
  * @param components Components for the action row
  */
-export const actionRow = (components?: Component[]): Component => ({
+export const actionRow = <T extends Component>(
+  components?: T[],
+): ActionRow<T> => ({
   components,
   type: ComponentTypes.ActionRow,
 });
@@ -36,8 +46,8 @@ export const button = (
   customId: string,
   label: string,
   style: ButtonStyles,
-  extra?: Omit<Component, "custom_id" | "label" | "style" | "type">,
-): Component => ({
+  extra?: Button,
+): Button => ({
   custom_id: customId,
   label,
   style,
@@ -58,9 +68,9 @@ export const button = (
  */
 export const selectMenu = (
   customId: string,
-  options: Component["options"],
-  extra?: Omit<Component, "custom_id" | "options" | "type">,
-): Component => ({
+  options: SelectOption[],
+  extra?: SelectMenu,
+): SelectMenu => ({
   custom_id: customId,
   options,
   type: ComponentTypes.SelectMenu,
@@ -82,7 +92,7 @@ export const selectMenuOption = (
   label: string,
   value: string,
   description?: string,
-) => ({
+): SelectOption => ({
   description,
   label,
   value,
