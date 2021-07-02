@@ -19,9 +19,9 @@ assignees: ""
 
 <!-- Describe what the expected behavior should be -->
 
-**Code/Screenshot/Video**
+**Code/Screenshots/Videos**
 
-<!-- Share nedia to help us debug the issue -->
+<!-- Share media to help us debug the issue -->
 
 **Information**
 
