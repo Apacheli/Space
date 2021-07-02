@@ -1,7 +1,7 @@
 # Release Notes
 
 An older version of the release notes is available
-[here](https://github.com/spacelandx/Space/blob/832527411a67b092616eb3894d18de2bd57833b6/RELEASES.md).
+[here](https://github.com/apacheli/space/blob/832527411a67b092616eb3894d18de2bd57833b6/RELEASES.md).
 
 | **0-alpha**<sup>Current</sup>            |
 | ---------------------------------------- |
