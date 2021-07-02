@@ -86,7 +86,6 @@ deno run --allow-env --allow-net main.ts
 ```
 
 The module reference is available at the
-[Space documentation](https://olykir.dev/) or
 [generated documentation](https://doc.deno.land/https/deno.land/x/space@0.11.0-alpha/core/client/mod.ts).
 
 ### Resources
@@ -97,5 +96,5 @@ The module reference is available at the
 - [TypeScript](https://www.typescriptlang.org/)
 
 The [Space Discord server](https://discord.gg/UQuA3EwXCV) is a great place to
-ask general questions. All participating members must abide by the terms of the
+ask questions. All participating members must abide by the terms of the
 [Space code of conduct](CODE_OF_CONDUCT.md).

@@ -2,10 +2,10 @@ blank_issues_enabled: false
 
 contact_links:
 
-  - name: help
-    about: Join our Discord server to ask for help.
-    url: https://discord.gg/UQuA3EwXCV
-
   - name: feature request
     about: To submit a feature request, please use our discussions instead.
     url: https://github.com/spacelandx/space/discussions
+
+  - name: questions
+    about: Have any questions? Join our Discord server to get an answer.
+    url: https://discord.gg/UQuA3EwXCV
