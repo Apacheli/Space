@@ -11,7 +11,7 @@ export class RateLimitBucket {
   /** If this bucket is locked or not */
   locked = false;
 
-  #lastRequestAt = 0;
+  #lastUnlockAt = 0;
   #queue: GenericFunction[] = [];
   #timeout?: number;
 
@@ -23,19 +23,19 @@ export class RateLimitBucket {
   constructor(public max = 1, public reset = 0, public left = max) {
   }
 
-  /** If this bucket is rate limited or not */
+  /** If the bucket is rate limited or not */
   get rateLimited() {
-    return this.left < 1 && Date.now() - this.#lastRequestAt < this.reset;
+    return this.left < 1 && Date.now() - this.#lastUnlockAt < this.reset;
   }
 
-  /** Add a function */
+  /** Add a function to the queue */
   add(func: GenericFunction) {
     if (this.rateLimited && !this.#timeout) {
-      const delay = this.reset - Date.now() + this.#lastRequestAt;
       this.#timeout = setTimeout(() => {
         this.#timeout = undefined;
+        this.left = this.max;
         func();
-      }, delay);
+      }, this.reset - Date.now() + this.#lastUnlockAt);
     } else {
       this.#queue.push(func);
     }
@@ -44,7 +44,7 @@ export class RateLimitBucket {
   /** Lock the bucket */
   lock() {
     if (this.locked) {
-      throw new Error("Bucket is locked.");
+      throw new Error("Bucket is already locked.");
     }
     this.locked = true;
   }
@@ -52,9 +52,9 @@ export class RateLimitBucket {
   /** Unlock the bucket */
   unlock(max = this.max, reset = this.reset, left = this.left - 1) {
     if (!this.locked) {
-      throw new Error("Bucket is unlocked.");
+      throw new Error("Bucket is already unlocked.");
     }
-    this.#lastRequestAt = Date.now();
+    this.#lastUnlockAt = Date.now();
     this.locked = false;
 
     this.max = max;

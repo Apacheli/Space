@@ -1,0 +1,1 @@
+export const GUILDS_PER_SHARD_LIMIT = 25_000;

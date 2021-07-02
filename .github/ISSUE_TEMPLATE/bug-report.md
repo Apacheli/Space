@@ -15,7 +15,7 @@ assignees: ""
 
 <!-- Describe the steps to reproduce the bug -->
 
-**Expected behavior**
+**Expected Behavior**
 
 <!-- Describe what the behavior should be -->
 

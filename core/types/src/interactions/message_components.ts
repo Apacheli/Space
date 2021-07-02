@@ -68,7 +68,7 @@ export enum ButtonStyles {
 
 /** https://discord.dev/interactions/message-components#select-menu-object */
 export interface SelectMenu {
-  /** TODO: Undocumented */
+  /** `3` for a select menu */
   type: ComponentTypes;
   /** a developer-defined identifier for the button, max 100 characters */
   custom_id: string;
@@ -80,6 +80,8 @@ export interface SelectMenu {
   min_values?: number;
   /** the maximum number of items that can be chosen; default 1, max 25 */
   max_values?: number;
+  /** disable the select, default false */
+  disabled?: boolean;
 }
 
 /** https://discord.dev/interactions/message-components#select-menu-object-select-option-structure */

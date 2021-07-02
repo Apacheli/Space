@@ -42,10 +42,10 @@ export class Shard extends DiscordSocket {
     super();
   }
 
-  isResumable(resumable: boolean) {
-    return resumable && !!this.#sessionId;
-  }
-
+  /**
+   * Reset the shard
+   * @param soft Soft reset if the shard is able to resume
+   */
   reset(soft: boolean) {
     this.socket = undefined;
     clearInterval(this.#heartbeatInterval);
