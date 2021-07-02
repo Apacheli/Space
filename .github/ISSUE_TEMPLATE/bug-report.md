@@ -17,13 +17,13 @@ assignees: ""
 
 **Expected behavior**
 
-<!-- Describe what the expected behavior should be -->
+<!-- Describe what the behavior should be -->
 
 **Code/Screenshots/Videos**
 
 <!-- Share media to help us debug the issue -->
 
-**Information**
+**System Information**
 
 - Deno version:
 - Platform:
