@@ -490,7 +490,7 @@ export type GetChannelBody = Channel;
 
 /** https://discord.dev/resources/channel#modify-channel */
 export interface ModifyChannelJSON {
-  /** 2-100 character channel name */
+  /** 1-100 character channel name */
   name?: string;
   /** base64 encoded icon */
   icon?: string;
@@ -707,7 +707,7 @@ export type GroupDMRemoveRecipientBody = void;
 
 /** https://discord.dev/resources/channel#start-thread-with-message */
 export interface StartThreadWithMessageJSON {
-  /** 2-100 character channel name */
+  /** 1-100 character channel name */
   name: string;
   /** duration in minutes to automatically archive the thread after recent activity, can be set to: 60, 1440, 4320, 10080 */
   auto_archive_duration: AutoArchiveDuration;
