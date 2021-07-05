@@ -20,7 +20,7 @@ export interface Listener {
 }
 
 /** Asynchronous version of `EventTarget` using async iterators */
-export class AsyncEventTarget extends Map<string, Listener[]> {
+export class AsyncEventTarget extends Map<string | number, Listener[]> {
   /**
    * Listen to an event
    *
@@ -30,7 +30,7 @@ export class AsyncEventTarget extends Map<string, Listener[]> {
    *
    * @param event The event to listen to
    */
-  listen(event: string): Listener {
+  listen(event: string | number): Listener {
     const { readable, writable } = new TransformStream();
     const listener = {
       writer: writable.getWriter(),
@@ -51,7 +51,7 @@ export class AsyncEventTarget extends Map<string, Listener[]> {
    * @param event The event to deafen
    * @param listener The listener to destroy, or destroy every listener
    */
-  deafen(event: string, listener?: Listener) {
+  deafen(event: string | number, listener?: Listener) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
@@ -75,7 +75,7 @@ export class AsyncEventTarget extends Map<string, Listener[]> {
    * @param event The event to dispatch
    * @param args The data to pass into the writer
    */
-  dispatch(event: string, ...args: any[]) {
+  dispatch(event: string | number, ...args: any[]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }
@@ -87,7 +87,7 @@ export class AsyncEventTarget extends Map<string, Listener[]> {
    *
    * @param event The event to start receiving from
    */
-  async receive(event: string, {
+  async receive(event: string | number, {
     delay = 60_000,
     filter,
     terminate,

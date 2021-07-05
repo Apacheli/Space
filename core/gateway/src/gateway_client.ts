@@ -7,13 +7,24 @@ export class GatewayClient extends AsyncEventTarget {
 
   #token;
 
+  /**
+   * @param token Authentication bot token
+   */
   constructor(token: string) {
     super();
 
     this.#token = token;
   }
 
-  spawnShard() {
-    // const shard = new Shard(this.#token);
+  /** Create shards and begins connecting and identifying/resuming them */
+  connect() {
+  }
+
+  /** Disconnect every shard */
+  disconnect() {
+  }
+
+  /** Disconnect and connect each shard in sequential order */
+  reconnect() {
   }
 }
