@@ -20,15 +20,11 @@ import {
 
 /** Discord interactions client */
 export class InteractionsClient extends AsyncEventTarget {
-  #publicKey;
-
   /**
    * @param publicKey Bot application public key
    */
-  constructor(publicKey: string) {
+  constructor(public publicKey: string) {
     super();
-
-    this.#publicKey = hexDecode(publicKey);
   }
 
   /**
@@ -88,7 +84,7 @@ export class InteractionsClient extends AsyncEventTarget {
    */
   validateRequest(signature: string, timestamp: string, body: Uint8Array) {
     return verify(
-      this.#publicKey,
+      hexDecode(this.publicKey),
       hexDecode(signature),
       uint8Concat(utf8Encode(timestamp), body),
     );
