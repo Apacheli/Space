@@ -13,10 +13,14 @@ export * from "https://deno.land/x/space@0.11.0-alpha/core/http/mod.ts";
 ```ts
 import { HTTPClient } from "./deps.ts";
 
-const token = Deno.env.get("BOT_TOKEN");
-const http = new HTTPClient(`Bot ${token}`);
+const token = Deno.env.get("BOT_TOKEN") ?? prompt("bot token:");
+if (!token) {
+  throw new TypeError("An invalid bot token was provided.");
+}
 
-const message = await http.createMessage(826605722397442089n, {
+const client = new HTTPClient(`Bot ${token}`);
+
+const message = await client.createMessage(826605722397442089n, {
   content: "Hello, World!",
 });
 ```

@@ -93,4 +93,12 @@ export class InteractionsClient extends AsyncEventTarget {
       uint8Concat(utf8Encode(timestamp), body),
     );
   }
+
+  onApplicationCommand() {
+    return this.listen(InteractionRequestType.ApplicationCommand);
+  }
+
+  onMessageComponent() {
+    return this.listen(InteractionRequestType.MessageComponent);
+  }
 }

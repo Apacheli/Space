@@ -17,29 +17,24 @@ An example program using [`std/http`](https://deno.land/std@0.100.0/http) in
 conjunction with Space Interactions:
 
 ```ts
-import {
-  InteractionCallbackType,
-  InteractionRequestType,
-  InteractionsClient,
-  serve,
-} from "./deps.ts";
+import { InteractionCallbackType, InteractionsClient, serve } from "./deps.ts";
 
-const PUBLIC_KEY = Deno.env.get("BOT_PUBLIC_KEY") ?? prompt("bot public key:");
-if (!PUBLIC_KEY) {
+const publicKey = Deno.env.get("BOT_PUBLIC_KEY") ?? prompt("bot public key:");
+if (!publicKey) {
   throw new Error("An invalid bot public key was provided.");
 }
 
-const client = new InteractionsClient(PUBLIC_KEY);
+const client = new InteractionsClient(publicKey);
 
-(async (event) => {
-  for await (const [callback, interaction] of client.listen(event)) {
+(async () => {
+  for await (const [callback, interaction] of client.onApplicationCommand()) {
     if (interaction.data.name === "ping") {
       callback(InteractionCallbackType.ChannelMessageWithSource, {
         content: "pong",
       });
     }
   }
-})(InteractionRequestType.ApplicationCommand);
+})();
 
 (async () => {
   for await (const request of serve({ port: 1337 })) {
