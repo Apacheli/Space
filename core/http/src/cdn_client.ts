@@ -50,9 +50,11 @@ export class CDNClient {
     const {
       baseURL = ImageBaseURL,
       userAgent = USER_AGENT,
-      format = options?.format ?? IMAGE_FORMAT,
-      size = options?.size ?? IMAGE_SIZE,
     } = this.options ?? {};
+    const {
+      format = IMAGE_FORMAT,
+      size = IMAGE_SIZE,
+    } = options ?? this.options ?? {};
 
     const headers = new Headers();
     headers.set("User-Agent", userAgent);
