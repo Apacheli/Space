@@ -1,6 +1,6 @@
 import type { ImageFormats, Snowflake } from "../../types/src/reference.ts";
 import { ImageBaseURL } from "../../types/src/reference.ts";
-import { IMAGE_FORMAT, IMAGE_SIZE, USER_AGENT } from "./constants.ts";
+import { DELAY, IMAGE_FORMAT, IMAGE_SIZE, USER_AGENT } from "./constants.ts";
 import {
   ACHIEVEMENT_ICON,
   APPLICATION_ASSET,
@@ -20,20 +20,24 @@ import {
 export interface CDNClientOptions extends ImageOptions {
   /** Base CDN URL */
   baseURL?: string;
+  /** Request timeout delay */
+  delay?: number;
   /** User-Agent */
   userAgent?: string;
 }
 
 /** Image options */
-export interface ImageOptions {
+export interface ImageOptions<F extends string = ImageFormats> {
   /** Image format */
-  format?: ImageFormats;
+  format?: F;
   /** Any power of two between 16 and 4096 */
   size?: number;
 }
 
 /**
  * Handles the Discord CDN API
+ *
+ * https://discord.dev/reference#image-formatting
  */
 export class CDNClient {
   /**
@@ -47,21 +51,27 @@ export class CDNClient {
    * @param path The path to make the request to
    */
   async request(path: string, options?: ImageOptions) {
-    const {
-      baseURL = ImageBaseURL,
-      userAgent = USER_AGENT,
-    } = this.options ?? {};
-    const {
-      format = IMAGE_FORMAT,
-      size = IMAGE_SIZE,
-    } = options ?? this.options ?? {};
+    const format = options?.format ?? this.options?.format ?? IMAGE_FORMAT;
+    const size = options?.size ?? this.options?.size ?? IMAGE_SIZE;
 
     const headers = new Headers();
-    headers.set("User-Agent", userAgent);
+    headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
 
-    const response = await fetch(`${baseURL}${path}.${format}?size=${size}`, {
-      headers,
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      this.options?.delay ?? DELAY,
+    );
+
+    const response = await fetch(
+      `${this.options?.baseURL ?? ImageBaseURL}${path}.${format}?size=${size}`,
+      {
+        headers,
+        signal: controller.signal,
+      },
+    );
+
+    clearTimeout(timeout);
 
     if (response.ok) {
       return new Uint8Array(await response.arrayBuffer());
