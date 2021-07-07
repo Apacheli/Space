@@ -65,7 +65,7 @@ if (!token) {
 const client = new Client(`Bot ${token}`);
 
 (async () => {
-  for await (const [message, shard] of client.gateway.messageCreate()) {
+  for await (const [message, shard] of client.gateway.onMessageCreate()) {
     if (message.content === "!ping") {
       client.http.createMessage(message.channelId, {
         content: "pong!",

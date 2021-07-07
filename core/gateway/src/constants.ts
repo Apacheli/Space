@@ -1,3 +1,5 @@
 // deno-fmt-ignore
 export const
-  GUILDS_PER_SHARD_LIMIT = 2_500;
+  GATEWAY_VERSION = 9,
+  GUILDS_PER_SHARD_LIMIT = 2_500,
+  SHARD_CONCURRENCY_DELAY = 5_000;

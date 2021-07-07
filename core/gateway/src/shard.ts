@@ -37,29 +37,15 @@ export class Shard extends DiscordSocket {
 
   /**
    * @param token Bot authentication token
+   * @param id Shard ID
    */
-  constructor(public token: string) {
+  constructor(public token: string, public id?: number) {
     super();
   }
 
-  /**
-   * Reset the shard
-   * @param soft Soft reset if the shard is able to resume
-   */
-  reset(soft: boolean) {
-    this.socket = undefined;
-    clearInterval(this.#heartbeatInterval);
-    this.#heartbeatInterval = undefined;
-
-    if (!soft) {
-      this.deafen(GatewayEvents.GuildMembersChunk);
-      this.latency = -1;
-      this.#seq = 0;
-      this.#sessionId = undefined;
-    }
-  }
-
   onSocketClose(event: CloseEvent) {
+    clearInterval(this.#heartbeatInterval);
+
     let reconnectable = false;
     let resumable = false;
 
@@ -96,6 +82,7 @@ export class Shard extends DiscordSocket {
 
         switch (payload.t) {
           case GatewayEvents.Ready: {
+            this.id ??= payload.d.shard?.[0];
             this.#sessionId = utf8Decode(hexDecode(payload.d.session_id));
             break;
           }
