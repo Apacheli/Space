@@ -17,21 +17,23 @@ import {
 } from "./cdn_routes.ts";
 
 /** CDN client options */
-export interface CDNClientOptions {
+export interface CDNClientOptions extends ImageOptions {
   /** Base CDN URL */
   baseURL?: string;
-  /** Image format */
-  format?: ImageFormats;
-  /** Image size of any power of two between 16 and 4096 */
-  size?: number;
   /** User-Agent */
   userAgent?: string;
 }
 
+/** Image options */
+export interface ImageOptions {
+  /** Image format */
+  format?: ImageFormats;
+  /** Any power of two between 16 and 4096 */
+  size?: number;
+}
+
 /**
  * Handles the Discord CDN API
- *
- * https://discord.com/developers/docs/reference#image-formatting
  */
 export class CDNClient {
   /**
@@ -44,12 +46,18 @@ export class CDNClient {
    * Make a request
    * @param path The path to make the request to
    */
-  async request(path: string) {
-    const headers = new Headers();
-    headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
+  async request(path: string, options?: ImageOptions) {
+    const {
+      baseURL = ImageBaseURL,
+      userAgent = USER_AGENT,
+      format = options?.format ?? IMAGE_FORMAT,
+      size = options?.size ?? IMAGE_SIZE,
+    } = this.options ?? {};
 
-    const url = `${this.options?.baseURL ?? ImageBaseURL}${path}`;
-    const response = await fetch(url, {
+    const headers = new Headers();
+    headers.set("User-Agent", userAgent);
+
+    const response = await fetch(`${baseURL}${path}.${format}?size=${size}`, {
       headers,
     });
 
@@ -58,15 +66,6 @@ export class CDNClient {
     }
 
     throw new Error("Bad image");
-  }
-
-  formatImagePath(path: string) {
-    const { format = IMAGE_FORMAT, size = IMAGE_SIZE } = this.options ?? {};
-    return `${path}.${format}?size=${size}`;
-  }
-
-  getImage(path: string) {
-    return this.request(this.formatImagePath(path));
   }
 
   /**
@@ -78,9 +77,11 @@ export class CDNClient {
     applicationId: Snowflake,
     achievementId: Snowflake,
     iconHash: string,
+    options?: ImageOptions,
   ): Promise<Uint8Array> {
-    return this.getImage(
+    return this.request(
       ACHIEVEMENT_ICON(applicationId, achievementId, iconHash),
+      options,
     );
   }
 
@@ -91,8 +92,9 @@ export class CDNClient {
   getApplicationAsset(
     applicationId: Snowflake,
     assetId: Snowflake,
+    options?: ImageOptions,
   ): Promise<Uint8Array> {
-    return this.getImage(APPLICATION_ASSET(applicationId, assetId));
+    return this.request(APPLICATION_ASSET(applicationId, assetId), options);
   }
 
   /**
@@ -102,8 +104,9 @@ export class CDNClient {
   getApplicationCover(
     applicationId: Snowflake,
     coverImage: string,
+    options?: ImageOptions,
   ): Promise<Uint8Array> {
-    return this.getImage(APPLICATION_COVER(applicationId, coverImage));
+    return this.request(APPLICATION_COVER(applicationId, coverImage), options);
   }
 
   /**
@@ -113,30 +116,41 @@ export class CDNClient {
   getApplicationIcon(
     applicationId: Snowflake,
     icon: string,
+    options?: ImageOptions,
   ): Promise<Uint8Array> {
-    return this.getImage(APPLICATION_ICON(applicationId, icon));
+    return this.request(APPLICATION_ICON(applicationId, icon), options);
   }
 
   /**
    * @param emojiId https://discord.dev/resources/emoji#emoji-object
    */
-  getCustomEmoji(emojiId: Snowflake): Promise<Uint8Array> {
-    return this.getImage(CUSTOM_EMOJI(emojiId));
+  getCustomEmoji(
+    emojiId: Snowflake,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(CUSTOM_EMOJI(emojiId), options);
   }
 
   /**
    * @param userDiscriminator https://discord.dev/resources/user#user-object
    */
-  getDefaultUserAvatar(userDiscriminator: string): Promise<Uint8Array> {
-    return this.getImage(DEFAULT_USER_AVATAR(userDiscriminator));
+  getDefaultUserAvatar(
+    userDiscriminator: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(DEFAULT_USER_AVATAR(userDiscriminator), options);
   }
 
   /**
    * @param guildId https://discord.dev/resources/guild#guild-object
    * @param guildBanner https://discord.dev/resources/guild#guild-object
    */
-  getGuildBanner(guildId: Snowflake, guildBanner: string): Promise<Uint8Array> {
-    return this.getImage(GUILD_BANNER(guildId, guildBanner));
+  getGuildBanner(
+    guildId: Snowflake,
+    guildBanner: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(GUILD_BANNER(guildId, guildBanner), options);
   }
 
   /**
@@ -146,39 +160,59 @@ export class CDNClient {
   getGuildDiscoverySplash(
     guildId: Snowflake,
     guildDiscoverySplash: string,
+    options?: ImageOptions,
   ): Promise<Uint8Array> {
-    return this.getImage(GUILD_DISCOVERY_SPLASH(guildId, guildDiscoverySplash));
+    return this.request(
+      GUILD_DISCOVERY_SPLASH(guildId, guildDiscoverySplash),
+      options,
+    );
   }
 
   /**
    * @param guildId https://discord.dev/resources/guild#guild-object
    * @param guildIcon https://discord.dev/resources/guild#guild-object
    */
-  getGuildIcon(guildId: Snowflake, guildIcon: string): Promise<Uint8Array> {
-    return this.getImage(GUILD_ICON(guildId, guildIcon));
+  getGuildIcon(
+    guildId: Snowflake,
+    guildIcon: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(GUILD_ICON(guildId, guildIcon), options);
   }
 
   /**
    * @param guildId https://discord.dev/resources/guild#guild-object
    * @param guildSplash https://discord.dev/resources/guild#guild-object
    */
-  getGuildSplash(guildId: Snowflake, guildSplash: string): Promise<Uint8Array> {
-    return this.getImage(GUILD_SPLASH(guildId, guildSplash));
+  getGuildSplash(
+    guildId: Snowflake,
+    guildSplash: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(GUILD_SPLASH(guildId, guildSplash), options);
   }
 
   /**
    * @param teamId https://discord.dev/topics/teams#team-object
    * @param teamIcon https://discord.dev/topics/teams#team-object
    */
-  getTeamIcon(teamId: Snowflake, teamIcon: string): Promise<Uint8Array> {
-    return this.getImage(TEAM_ICON(teamId, teamIcon));
+  getTeamIcon(
+    teamId: Snowflake,
+    teamIcon: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(TEAM_ICON(teamId, teamIcon), options);
   }
 
   /**
    * @param userId https://discord.dev/resources/user#user-object
    * @param userAvatar https://discord.dev/resources/user#user-object
    */
-  getUserAvatar(userId: Snowflake, userAvatar: string): Promise<Uint8Array> {
-    return this.getImage(USER_AVATAR(userId, userAvatar));
+  getUserAvatar(
+    userId: Snowflake,
+    userAvatar: string,
+    options?: ImageOptions,
+  ): Promise<Uint8Array> {
+    return this.request(USER_AVATAR(userId, userAvatar), options);
   }
 }
