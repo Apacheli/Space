@@ -1,5 +1,7 @@
 import type { Snowflake } from "../../types/src/reference.ts";
 
+// This is only used for decreasing computation time when parsing routes.
+// Do not use `:${string}` unless you know what you are doing!
 type RouteParameter = Snowflake | `:${string}`;
 
 // deno-fmt-ignore

@@ -18,8 +18,19 @@ import {
   InteractionRequestType,
 } from "./constants.ts";
 
+export type Callback = (
+  type: InteractionCallbackType,
+  data?: InteractionApplicationCommandCallbackData,
+) => Promise<void>;
+
+export type InteractionsClientEvents = {
+  [InteractionRequestType.ApplicationCommand]: [Callback, Interaction];
+  [InteractionRequestType.MessageComponent]: [Callback, Interaction];
+};
+
 /** Discord interactions client */
-export class InteractionsClient extends AsyncEventTarget {
+export class InteractionsClient
+  extends AsyncEventTarget<InteractionsClientEvents> {
   /**
    * @param publicKey Bot application public key
    */
@@ -90,10 +101,12 @@ export class InteractionsClient extends AsyncEventTarget {
     );
   }
 
+  /** Create a stream listener for `ApplicationCommand` events */
   onApplicationCommand() {
     return this.listen(InteractionRequestType.ApplicationCommand);
   }
 
+  /** Create a stream listener for `MessageComponent` events */
   onMessageComponent() {
     return this.listen(InteractionRequestType.MessageComponent);
   }

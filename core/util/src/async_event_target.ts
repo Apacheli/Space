@@ -14,13 +14,14 @@ export interface AsyncEventTargetReceiveOptions {
   terminate?: (...chunk: any[]) => Awaitable<boolean>;
 }
 
-export interface Listener {
-  writer: WritableStreamDefaultWriter<any[]>;
-  [Symbol.asyncIterator]: () => AsyncIterableIterator<any[]>;
+export interface Listener<T extends unknown[]> {
+  writer: WritableStreamDefaultWriter<T>;
+  [Symbol.asyncIterator]: () => AsyncIterableIterator<T>;
 }
 
 /** Asynchronous version of `EventTarget` using async iterators */
-export class AsyncEventTarget extends Map<string | number, Listener[]> {
+export class AsyncEventTarget<T extends Record<string | number, unknown[]>>
+  extends Map<keyof T, Listener<T[keyof T]>[]> {
   /**
    * Listen to an event
    *
@@ -30,7 +31,7 @@ export class AsyncEventTarget extends Map<string | number, Listener[]> {
    *
    * @param event The event to listen to
    */
-  listen(event: string | number): Listener {
+  listen<E extends keyof T>(event: E): Listener<T[E]> {
     const { readable, writable } = new TransformStream();
     const listener = {
       writer: writable.getWriter(),
@@ -51,7 +52,7 @@ export class AsyncEventTarget extends Map<string | number, Listener[]> {
    * @param event The event to deafen
    * @param listener The listener to destroy, or destroy every listener
    */
-  deafen(event: string | number, listener?: Listener) {
+  deafen<E extends keyof T>(event: E, listener?: Listener<T[E]>) {
     const listeners = this.get(event);
     if (!listeners) {
       return;
@@ -75,7 +76,7 @@ export class AsyncEventTarget extends Map<string | number, Listener[]> {
    * @param event The event to dispatch
    * @param args The data to pass into the writer
    */
-  dispatch(event: string | number, ...args: any[]) {
+  dispatch<E extends keyof T>(event: E, ...args: T[E]) {
     const listeners = this.get(event);
     listeners?.forEach(({ writer }) => writer.write(args));
   }
@@ -87,7 +88,7 @@ export class AsyncEventTarget extends Map<string | number, Listener[]> {
    *
    * @param event The event to start receiving from
    */
-  async receive(event: string | number, {
+  async receive<L extends keyof T>(event: L, {
     delay = 60_000,
     filter,
     terminate,
