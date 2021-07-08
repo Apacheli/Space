@@ -23,14 +23,20 @@ export type Callback = (
   data?: InteractionApplicationCommandCallbackData,
 ) => Promise<void>;
 
-export type InteractionsClientEvents = {
-  [InteractionRequestType.ApplicationCommand]: [Callback, Interaction];
-  [InteractionRequestType.MessageComponent]: [Callback, Interaction];
+export type InteractionsClientListeners = {
+  [InteractionRequestType.ApplicationCommand]: [
+    callback: Callback,
+    interaction: Interaction,
+  ];
+  [InteractionRequestType.MessageComponent]: [
+    callback: Callback,
+    interaction: Interaction,
+  ];
 };
 
 /** Discord interactions client */
 export class InteractionsClient
-  extends AsyncEventTarget<InteractionsClientEvents> {
+  extends AsyncEventTarget<InteractionsClientListeners> {
   /**
    * @param publicKey Bot application public key
    */

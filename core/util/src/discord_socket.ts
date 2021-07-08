@@ -1,7 +1,9 @@
 import { AsyncEventTarget } from "./async_event_target.ts";
 
 /** A socket client for gateway clients and voice clients */
-export abstract class DiscordSocket extends AsyncEventTarget {
+export abstract class DiscordSocket<
+  T extends Record<string | number, unknown[]>,
+> extends AsyncEventTarget<T> {
   /** The socket */
   protected socket?: WebSocket;
   /** When the socket closes */

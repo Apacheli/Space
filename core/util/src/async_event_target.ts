@@ -1,17 +1,15 @@
-// deno-lint-ignore-file no-explicit-any
-
 import type { Awaitable } from "./types.ts";
 
 /** AsyncEventTarget receive options */
-export interface AsyncEventTargetReceiveOptions {
+export interface AsyncEventTargetReceiveOptions<T extends unknown[]> {
   /** Time to wait in milliseconds before expiring */
   delay?: number;
   /** Filter out items that do not pass the `filter` function */
-  filter?: (...chunk: any[]) => Awaitable<boolean>;
+  filter?: (...chunk: T) => Awaitable<boolean>;
   /** The number of items needed to fulfill the receiver */
   limit?: number;
   /** Terminate early if an item passes the `terminate` function */
-  terminate?: (...chunk: any[]) => Awaitable<boolean>;
+  terminate?: (...chunk: T) => Awaitable<boolean>;
 }
 
 export interface Listener<T extends unknown[]> {
@@ -88,12 +86,12 @@ export class AsyncEventTarget<T extends Record<string | number, unknown[]>>
    *
    * @param event The event to start receiving from
    */
-  async receive<L extends keyof T>(event: L, {
+  async receive<E extends keyof T>(event: E, {
     delay = 60_000,
     filter,
     terminate,
     limit = terminate ? Infinity : 1,
-  }: AsyncEventTargetReceiveOptions = {}) {
+  }: AsyncEventTargetReceiveOptions<T[E]> = {}) {
     const listener = this.listen(event);
     const chunks = [];
     const timeout = setTimeout(() => this.deafen(event, listener), delay);

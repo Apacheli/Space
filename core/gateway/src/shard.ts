@@ -25,8 +25,20 @@ export enum ShardEvents {
   Error = "Error",
 }
 
+export type ShardListeners = {
+  [ShardEvents.Close]: [
+    reconnectable: boolean,
+    resumable: boolean,
+    event: CloseEvent,
+  ];
+  [ShardEvents.Error]: [event: Event];
+  [GatewayEvents.GuildMembersChunk]: [
+    chunk: DispatchPayloadGuildMembersChunkData,
+  ];
+};
+
 /** Class representing a shard */
-export class Shard extends DiscordSocket {
+export class Shard extends DiscordSocket<ShardListeners> {
   /** `Heartbeat` send and `heartbeat ACK` receive latency */
   latency = -1;
 
@@ -104,7 +116,8 @@ export class Shard extends DiscordSocket {
       }
     }
 
-    this.dispatch(GatewayOpcodes[payload.op], payload.d, payload.t);
+    // @ts-ignore: FIX LATER
+    this.dispatch(payload.op, payload.d, payload.t);
   }
 
   /** Send a heartbeat */
