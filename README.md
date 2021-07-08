@@ -90,11 +90,11 @@ The module reference is available at the
 
 ### Resources
 
-- [Deno](https://deno.land/)
+- [Deno](https://deno.land/) ([Manual](https://discord.dev/))
 - [Discord Developer Documentation](https://discord.dev/)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 - [TypeScript](https://www.typescriptlang.org/)
 
-The [Space Discord server](https://discord.gg/UQuA3EwXCV) is a great place to
-ask questions. All participating members must abide by the terms of the
-[Space code of conduct](CODE_OF_CONDUCT.md).
+Come hang out with us at the
+[Space Discord server](https://discord.gg/UQuA3EwXCV)! All participating members
+must abide by the terms of the [Space code of conduct](CODE_OF_CONDUCT.md).
