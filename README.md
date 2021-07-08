@@ -90,7 +90,7 @@ The module reference is available at the
 
 ### Resources
 
-- [Deno](https://deno.land/) ([Manual](https://discord.dev/))
+- [Deno](https://deno.land/) ([Manual](https://deno.land/manual))
 - [Discord Developer Documentation](https://discord.dev/)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 - [TypeScript](https://www.typescriptlang.org/)
