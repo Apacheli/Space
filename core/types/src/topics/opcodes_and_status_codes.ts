@@ -343,7 +343,7 @@ export enum JSONErrorCodes {
   /** Invalid OAuth2 access token provided */
   InvalidAccessToken,
   /** Missing required OAuth2 scope */
-  MissingScope,
+  MissingOAuth2Scope,
   /** Invalid webhook token provided */
   InvalidWebhookToken,
   /** Invalid role */

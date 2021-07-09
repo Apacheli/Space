@@ -1,3 +1,4 @@
+import { JSONErrorCodes } from "../../types/src/topics/opcodes_and_status_codes.ts";
 import * as logger from "../../util/src/logger.ts";
 
 /** Represents an HTTP exception */
@@ -7,6 +8,10 @@ export class HTTPError extends Error {
   // deno-lint-ignore no-explicit-any
   constructor(public body: any) {
     super();
+  }
+
+  get codeName() {
+    return JSONErrorCodes[this.body.code];
   }
 
   get message() {
