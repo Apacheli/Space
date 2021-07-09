@@ -13,4 +13,4 @@ export type Snowflake = `${bigint}`;
 export const ImageBaseURL = "https://cdn.discordapp.com";
 
 /** https://discord.dev/reference#image-formatting-image-formats */
-export type ImageFormats = "jpg" | "jpeg" | "png" | "webp" | "gif";
+export type ImageFormats = "jpeg" | "png" | "webp" | "gif" | "json";

@@ -77,6 +77,9 @@ export enum AuditLogEvents {
   StageInstanceCreate,
   StageInstanceUpdate,
   StageInstanceDelete,
+  StickerCreate = 90,
+  StickerUpdate,
+  StickerDelete,
 }
 
 /** https://discord.dev/resources/audit-log#audit-log-entry-object-optional-audit-entry-info */

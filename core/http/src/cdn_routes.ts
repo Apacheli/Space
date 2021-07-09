@@ -12,5 +12,7 @@ export const
   GUILD_DISCOVERY_SPLASH = (guildId: Snowflake, guildDiscoverySplash: string) => `/discovery-splashes/${guildId}/${guildDiscoverySplash}`,
   GUILD_ICON             = (guildId: Snowflake, guildIcon: string) => `/icons/${guildId}/${guildIcon}`,
   GUILD_SPLASH           = (guildId: Snowflake, guildSplash: string) => `/splashes/${guildId}/${guildSplash}`,
+  STICKER                = (stickerId: Snowflake) => `/stickers/${stickerId}`,
+  STICKER_PACK_BANNER    = (stickerPackBannerAssetId: Snowflake) => `/app-assets/710982414301790216/store/${stickerPackBannerAssetId}`,
   TEAM_ICON              = (teamId: Snowflake, teamIcon: string) => `/team-icons/${teamId}/${teamIcon}`,
   USER_AVATAR            = (userId: Snowflake, userAvatar: string) => `/avatars/${userId}/${userAvatar}`;

@@ -566,6 +566,8 @@ export interface CreateMessageJSON {
   message_reference?: MessageReference;
   /** the components to include with the message */
   components?: Component[];
+  /** IDs of up to 3 [stickers](https://discord.dev/resources/sticker#sticker-object) in the server to send in the message | one of content, file, embed(s), sticker_ids */
+  sticker_ids?: Snowflake[];
 }
 
 /** https://discord.dev/resources/channel#create-message */

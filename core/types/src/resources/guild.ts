@@ -7,7 +7,7 @@ import type { Snowflake } from "../reference.ts";
 import type { DispatchPayloadPresenceUpdateData } from "../topics/gateway.ts";
 import type { Permissions, Role } from "../topics/permissions.ts";
 import type { Application } from "./application.ts";
-import type { Channel, ChannelTypes, Overwrite } from "./channel.ts";
+import type { Channel, ChannelTypes, MessageSticker, Overwrite } from "./channel.ts";
 import type { Emoji } from "./emoji.ts";
 import type { Invite } from "./invite.ts";
 import type { StageInstance } from "./stage_instance.ts";
@@ -112,6 +112,8 @@ export interface Guild {
   nsfw_level: GuildNSFWLevel;
   /** array of [stage instance](https://discord.dev/resources/stage-instance#stage-instance-object) objects */
   stage_instances?: StageInstance;
+  /** custom guild stickers */
+  stickers?: MessageSticker[];
 }
 
 /** https://discord.dev/resources/guild#guild-object-default-message-notification-level */

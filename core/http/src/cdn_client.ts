@@ -12,12 +12,14 @@ import {
   GUILD_DISCOVERY_SPLASH,
   GUILD_ICON,
   GUILD_SPLASH,
+  STICKER,
+  STICKER_PACK_BANNER,
   TEAM_ICON,
   USER_AVATAR,
 } from "./cdn_routes.ts";
 
 /** CDN client options */
-export interface CDNClientOptions extends ImageOptions {
+export interface CDNClientOptions {
   /** Base CDN URL */
   baseURL?: string;
   /** Request timeout delay */
@@ -27,7 +29,7 @@ export interface CDNClientOptions extends ImageOptions {
 }
 
 /** Image options */
-export interface ImageOptions<F extends string = ImageFormats> {
+export interface ImageOptions<F extends ImageFormats = ImageFormats> {
   /** Image format */
   format?: F;
   /** Any power of two between 16 and 4096 */
@@ -51,8 +53,8 @@ export class CDNClient {
    * @param path The path to make the request to
    */
   async request(path: string, options?: ImageOptions) {
-    const format = options?.format ?? this.options?.format ?? IMAGE_FORMAT;
-    const size = options?.size ?? this.options?.size ?? IMAGE_SIZE;
+    const format = options?.format ?? IMAGE_FORMAT;
+    const size = options?.size ?? IMAGE_SIZE;
 
     const headers = new Headers();
     headers.set("User-Agent", this.options?.userAgent ?? USER_AGENT);
@@ -89,7 +91,7 @@ export class CDNClient {
     applicationId: Snowflake,
     achievementId: Snowflake,
     iconHash: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(
       ACHIEVEMENT_ICON(applicationId, achievementId, iconHash),
@@ -104,7 +106,7 @@ export class CDNClient {
   getApplicationAsset(
     applicationId: Snowflake,
     assetId: Snowflake,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(APPLICATION_ASSET(applicationId, assetId), options);
   }
@@ -116,7 +118,7 @@ export class CDNClient {
   getApplicationCover(
     applicationId: Snowflake,
     coverImage: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(APPLICATION_COVER(applicationId, coverImage), options);
   }
@@ -128,7 +130,7 @@ export class CDNClient {
   getApplicationIcon(
     applicationId: Snowflake,
     icon: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(APPLICATION_ICON(applicationId, icon), options);
   }
@@ -138,7 +140,7 @@ export class CDNClient {
    */
   getCustomEmoji(
     emojiId: Snowflake,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp" | "gif">,
   ): Promise<Uint8Array> {
     return this.request(CUSTOM_EMOJI(emojiId), options);
   }
@@ -148,7 +150,7 @@ export class CDNClient {
    */
   getDefaultUserAvatar(
     userDiscriminator: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png">,
   ): Promise<Uint8Array> {
     return this.request(DEFAULT_USER_AVATAR(userDiscriminator), options);
   }
@@ -160,7 +162,7 @@ export class CDNClient {
   getGuildBanner(
     guildId: Snowflake,
     guildBanner: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(GUILD_BANNER(guildId, guildBanner), options);
   }
@@ -172,7 +174,7 @@ export class CDNClient {
   getGuildDiscoverySplash(
     guildId: Snowflake,
     guildDiscoverySplash: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(
       GUILD_DISCOVERY_SPLASH(guildId, guildDiscoverySplash),
@@ -187,7 +189,7 @@ export class CDNClient {
   getGuildIcon(
     guildId: Snowflake,
     guildIcon: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp" | "gif">,
   ): Promise<Uint8Array> {
     return this.request(GUILD_ICON(guildId, guildIcon), options);
   }
@@ -199,9 +201,29 @@ export class CDNClient {
   getGuildSplash(
     guildId: Snowflake,
     guildSplash: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(GUILD_SPLASH(guildId, guildSplash), options);
+  }
+
+  /**
+   * @param stickerId https://discord.dev/resources/sticker#sticker-object
+   */
+  getSticker(
+    stickerId: Snowflake,
+    options?: ImageOptions<"png" | "json">,
+  ): Promise<Uint8Array> {
+    return this.request(STICKER(stickerId), options);
+  }
+
+  /**
+   * @param stickerPackBannerAssetId https://discord.dev/resources/sticker#sticker-pack-object
+   */
+  getStickerPackBanner(
+    stickerPackBannerAssetId: Snowflake,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
+  ): Promise<Uint8Array> {
+    return this.request(STICKER_PACK_BANNER(stickerPackBannerAssetId), options);
   }
 
   /**
@@ -211,7 +233,7 @@ export class CDNClient {
   getTeamIcon(
     teamId: Snowflake,
     teamIcon: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp">,
   ): Promise<Uint8Array> {
     return this.request(TEAM_ICON(teamId, teamIcon), options);
   }
@@ -223,7 +245,7 @@ export class CDNClient {
   getUserAvatar(
     userId: Snowflake,
     userAvatar: string,
-    options?: ImageOptions,
+    options?: ImageOptions<"png" | "jpeg" | "webp" | "gif">,
   ): Promise<Uint8Array> {
     return this.request(USER_AVATAR(userId, userAvatar), options);
   }
