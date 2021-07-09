@@ -271,7 +271,7 @@ export enum JSONErrorCodes {
   /** Max number of thread participants has been reached */
   MaximumThreadParticipants = 30033,
   /** Maximum number of bans for non-guild members have been exceeded */
-  MaximumNonGuildMembers = 30035,
+  MaximumNonGuildMembersBanned = 30035,
   /** Maximum number of bans fetches has been reached */
   MaximumBanFetches = 30037,
   /** Maximum number of stickers reached */
@@ -284,7 +284,7 @@ export enum JSONErrorCodes {
   /** You need to verify your account in order to perform this action */
   ActionAccountRequiresVerification,
   /** You are opening direct messages too fast */
-  DirectMessagesOpenedTooQuickly,
+  DirectMessagesOpenTooQuickly,
   /** Request entity too large. Try sending something smaller in size */
   RequestEntityTooLarge = 40005,
   /** This feature has been temporarily disabled server-side */
@@ -309,13 +309,13 @@ export enum JSONErrorCodes {
   /** Guild widget disabled */
   GuildWidgetDisabled,
   /** Cannot edit a message authored by another user */
-  CannotEditMessage,
+  CannotEditMessageByAnotherUser,
   /** Cannot send an empty message */
   CannotSendEmptyMessage,
   /** Cannot send messages to this user */
-  CannotSendMessagesToUser,
+  CannotSendMessageToUser,
   /** Cannot send messages in a voice channel */
-  CannotSendMessagesToVoiceChannel,
+  CannotSendMessageToVoiceChannel,
   /** Channel verification level is too high for you to gain access */
   ChannelVerificationLevelTooHigh,
   /** OAuth2 application does not have a bot */
