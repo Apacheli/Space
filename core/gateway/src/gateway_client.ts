@@ -1,13 +1,16 @@
 import type {
   GatewayVersions,
   GetGatewayBotBody,
-  IdentifyPayloadData,
+  IdentifyPayloadData as _c,
 } from "../../types/src/topics/gateway.ts";
 import { GatewayEvents } from "../../types/src/topics/gateway.ts";
 import { AsyncEventTarget } from "../../util/src/async_event_target.ts";
 import { RateLimitBucket } from "../../util/src/rate_limit_bucket.ts";
 import type { PartialKeys } from "../../util/src/types.ts";
-import { GATEWAY_VERSION, SHARD_CONCURRENCY_DELAY } from "./constants.ts";
+import {
+  GATEWAY_VERSION as _a,
+  SHARD_CONCURRENCY_DELAY as _b,
+} from "./constants.ts";
 import { Shard } from "./shard.ts";
 
 /** Gateway client connect data */
@@ -35,7 +38,7 @@ export class GatewayClient extends AsyncEventTarget {
   }
 
   /** Connect shards */
-  connect(data: GatewayClientConnectData) {
+  connect(_data: GatewayClientConnectData) {
   }
 
   /** Disconnect every shard */
