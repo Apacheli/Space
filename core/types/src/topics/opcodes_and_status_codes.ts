@@ -206,6 +206,10 @@ export enum JSONErrorCodes {
   UnknownApplicationCommandPermissions = 10066,
   /** Unknown Stage Instance */
   UnknownStageInstance,
+  /** Unknown Guild Member Verification Form */
+  UnknownGuildMemberVerificationForm,
+  /** Unknown Guild Welcome Screen */
+  UnknownGuildWelcomeScreen,
 }
 
 /** https://discord.dev/topics/opcodes-and-status-codes#rpc-rpc-error-codes */
