@@ -1,6 +1,7 @@
 export * from "./application.ts";
 export * from "./audit_log.ts";
 export * from "./channel.ts";
+export * from "./discovery.ts";
 export * from "./emoji.ts";
 export * from "./guild.ts";
 export * from "./guild_template.ts";
