@@ -17,7 +17,7 @@ jobs:
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: 1.11.3
+          deno-version: 1.11.5
 
       - name: fmt
         run: deno fmt --check
