@@ -6,7 +6,6 @@ import type {
   ApplicationCommand,
   Interaction,
 } from "../interactions/slash_commands.ts";
-import type { StageInstance } from "../resources/stage_instance.ts";
 import type { Snowflake } from "../reference.ts";
 import type { Application } from "../resources/application.ts";
 import type { Channel, Message, ThreadMember } from "../resources/channel.ts";
@@ -18,6 +17,8 @@ import type {
   UnavailableGuild,
 } from "../resources/guild.ts";
 import type { Invite, InviteMetadata } from "../resources/invite.ts";
+import type { StageInstance } from "../resources/stage_instance.ts";
+import type { Sticker } from "../resources/sticker.ts";
 import type { User } from "../resources/user.ts";
 import type { VoiceState } from "../resources/voice.ts";
 import type { GatewayOpcodes } from "./opcodes_and_status_codes.ts";
@@ -49,6 +50,25 @@ export interface GatewayURLQuery {
 }
 
 export type EncodingTypes = "etf" | "json";
+
+/** https://discord.dev/topics/gateway#gateway-intents */
+export enum GatewayIntents {
+  Guilds = 1 << 0,
+  GuildMembers = 1 << 1,
+  GuildBans = 1 << 2,
+  GuildEmojisAndStickers = 1 << 3,
+  GuildIntegrations = 1 << 4,
+  GuildWebhooks = 1 << 5,
+  GuildInvites = 1 << 6,
+  GuildVoiceStates = 1 << 7,
+  GuildPresences = 1 << 8,
+  GuildMessages = 1 << 9,
+  GuildMessageReactions = 1 << 10,
+  GuildMessageTyping = 1 << 11,
+  DirectMessages = 1 << 12,
+  DirectMessageReactions = 1 << 13,
+  DirectMessageTyping = 1 << 14,
+}
 
 /** https://discord.dev/topics/gateway#commands-and-events-gateway-events */
 export enum GatewayEvents {
@@ -94,6 +114,8 @@ export enum GatewayEvents {
   GuildBanRemove = "GUILD_BAN_REMOVE",
   /** guild emojis were updated */
   GuildEmojisUpdate = "GUILD_EMOJIS_UPDATE",
+  /** guild stickers were updated */
+  GuildStickersUpdate = "GUILD_STICKERS_UPDATE",
   /** guild integration was updated */
   GuildIntegrationsUpdate = "GUILD_INTEGRATIONS_UPDATE",
   /** new user joined a guild */
@@ -188,7 +210,7 @@ export interface IdentifyPayloadData {
   /** presence structure for initial presence information */
   presence?: PresenceUpdatePayloadData;
   /** the [Gateway Intents](https://discord.dev/topics/gateway#gateway-intents) you wish to receive */
-  intents: number;
+  intents: GatewayIntents;
 }
 
 /** https://discord.dev/topics/gateway#identify-identify-connection-properties */
@@ -572,6 +594,20 @@ export interface DispatchPayloadGuildEmojisUpdateData {
   guild_id: Snowflake;
   /** array of [emojis](https://discord.dev/resources/emoji#emoji-object) */
   emojis: Emoji[];
+}
+
+/** https://discord.dev/topics/gateway#guild-stickers-update */
+export type DispatchPayloadGuildStickersUpdate = BaseDispatchPayload<
+  GatewayEvents.GuildStickersUpdate,
+  DispatchPayloadGuildStickersUpdateData
+>;
+
+/** /** https://discord.dev/topics/gateway#guild-sticker-update-guild-sticker-update-event-fields */
+export interface DispatchPayloadGuildStickersUpdateData {
+  /** id of the guild */
+  guild_id: Snowflake;
+  /** array of [stickers](https://discord.dev/resources/sticker#sticker-object) */
+  stickers: Sticker[];
 }
 
 /** https://discord.dev/topics/gateway#guild-integrations-update */

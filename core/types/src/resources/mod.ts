@@ -6,6 +6,7 @@ export * from "./guild.ts";
 export * from "./guild_template.ts";
 export * from "./invite.ts";
 export * from "./stage_instance.ts";
+export * from "./sticker.ts";
 export * from "./user.ts";
 export * from "./voice.ts";
 export * from "./webhook.ts";

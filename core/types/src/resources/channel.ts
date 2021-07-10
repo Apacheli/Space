@@ -12,6 +12,7 @@ import type { Application } from "./application.ts";
 import type { Emoji } from "./emoji.ts";
 import type { GuildMember } from "./guild.ts";
 import type { Invite, InviteTargetTypes } from "./invite.ts";
+import type { StickerItem } from "./sticker.ts";
 import type { User } from "./user.ts";
 
 /** https://discord.dev/resources/channel#channel-object */
@@ -163,9 +164,7 @@ export interface Message {
   /** sent if the message contains components like buttons, action rows, or other interactive components */
   components?: Component[];
   /** sent if the message contains stickers */
-  sticker_items?: MessageStickerItem[];
-  /** **Deprecated** the stickers sent with the message (bots currently can only receive messages with stickers, not send) */
-  stickers?: MessageSticker[];
+  sticker_items?: StickerItem[];
 }
 
 /** https://discord.dev/resources/channel#message-object-message-types */
@@ -229,47 +228,6 @@ export enum MessageFlags {
   Ephemeral = 1 << 6,
   /** this message is an Interaction Response and the bot is "thinking" */
   Loading = 1 << 7,
-}
-
-/** https://discord.dev/resources/channel#message-object-message-sticker-structure */
-export interface MessageStickerItem {
-  /** id of the sticker */
-  id: Snowflake;
-  /** name of the sticker */
-  name: string;
-  /** [type of sticker format](https://discord.dev/resources/channel#message-object-message-sticker-format-types) */
-  format_type: MessageStickerFormat;
-}
-
-/** https://discord.dev/resources/channel#message-object-message-sticker-format-types */
-export enum MessageStickerFormat {
-  PNG = 1,
-  APNG,
-  Lottie,
-}
-
-/** https://discord.dev/resources/channel#message-object-message-sticker-structure */
-export interface MessageSticker {
-  /** id of the sticker */
-  id: Snowflake;
-  /** id of the pack the sticker is from */
-  pack_id?: Snowflake;
-  /** name of the sticker */
-  name: string;
-  /** description of the sticker */
-  description: string;
-  /** for guild stickers, a unicode emoji representing the sticker's expression. for nitro stickers, a comma-separated list of related expressions. */
-  tags: string;
-  /** [type of sticker format](https://discord.dev/resources/channel#message-object-message-sticker-format-types) */
-  format_type: MessageStickerFormat;
-  /** whether or not the sticker is available */
-  available?: boolean;
-  /** id of the guild that owns this sticker */
-  guild_id?: Snowflake;
-  /** the user that uploaded the sticker */
-  user?: User;
-  /** a sticker's sort order within a pack */
-  sort_value?: number;
 }
 
 /** https://discord.dev/resources/channel#message-reference-object */

@@ -358,6 +358,10 @@ export enum JSONErrorCodes {
   InviteAcceptedToGuildBotNotIn,
   /** Invalid API version provided */
   InvalidAPIVersion = 50041,
+  /** File uploaded exceeds the maximum size */
+  FileExceedsMaximumSize = 50045,
+  /** Invalid file uploaded */
+  InvalidFileUploaded,
   /** Cannot self-redeem this gift */
   CannotRedeemGift = 50054,
   /** Payment source required to redeem gift */
@@ -409,6 +413,13 @@ export enum JSONErrorCodes {
   /** Maximum number of active announcement threads reached */
   MaximumAnnouncementThreads,
   //#endregion 16xxxx
+
+  //#region 17xxxx
+  /** Invalid JSON for uploaded Lottie file */
+  InvalidLottieJSON = 170001,
+  /** Lottie animation maximum dimensions exceeded */
+  LottieMaximumAnimation = 170005,
+  //#endregion 17xxxx
 }
 
 /** https://discord.dev/topics/opcodes-and-status-codes#rpc-rpc-error-codes */

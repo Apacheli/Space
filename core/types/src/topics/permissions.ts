@@ -70,7 +70,7 @@ export const BitwisePermissionFlags = {
   /** Allows management and editing of webhooks */
   ManageWebhooks: 1n << 29n,
   /** Allows management and editing of emojis */
-  ManageEmojis: 1n << 30n,
+  ManageEmojisAndStickers: 1n << 30n,
   /** Allows members to use slash commands in text channels */
   UseSlashCommands: 1n << 31n,
   /** Allows for requesting to speak in stage channels. (_This permission is under active development and may be changed or removed._) */
