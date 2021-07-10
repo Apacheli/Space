@@ -200,6 +200,8 @@ export enum JSONErrorCodes {
   UnknownGiftCode = 10038,
   /** Unknown guild template */
   UnknownGuildTemplate = 10057,
+  /** Unknown discovery category */
+  UnknownDiscoveryCategory = 10059,
   /** Unknown interaction */
   UnknownInteraction = 10062,
   /** Unknown application command */

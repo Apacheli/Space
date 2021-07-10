@@ -196,6 +196,8 @@ export enum GuildFeatures {
   Community = "COMMUNITY",
   /** guild is able to be discovered in the directory */
   Discoverable = "DISCOVERABLE",
+  /** guild cannot be discoverable */
+  DiscoverableDisabled = "DISCOVERABLE_DISABLED",
   /** guild is able to be featured in the directory */
   Featurable = "FEATURABLE",
   /** guild has access to set an invite splash background */
@@ -721,6 +723,23 @@ export type WidgetStyleOptions =
   | "banner2"
   | "banner3"
   | "banner4";
+
+export type GetGuildDiscoveryMetadataBody = DiscoveryMetadata[];
+
+export interface ModifyGuildDiscoveryMetadataJSON {
+  primary_category_id: number;
+  keywords: string[] | null;
+  emoji_discoverability_enabled: boolean;
+}
+
+export type ModifyGuildDiscoveryMetadataBody = DiscoveryMetadata[];
+
+export interface AddGuildDiscoverySubcategoryBody {
+  guild_id: Snowflake;
+  category_id: number;
+}
+
+export type RemoveGuildCategorySubcategoryBody = void;
 
 /** https://discord.dev/resources/guild#get-guild-welcome-screen */
 export type GetGuildWelcomeScreenBody = WelcomeScreen;
