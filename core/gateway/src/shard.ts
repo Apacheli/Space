@@ -13,7 +13,7 @@ import type {
 } from "../../types/src/topics/gateway.ts";
 import { GatewayEvents } from "../../types/src/topics/gateway.ts";
 import { DiscordSocket } from "../../util/src/discord_socket.ts";
-import type { PartialKeys } from "../../util/src/types.ts";
+import type { PartialKeys, RequiredKeys } from "../../util/src/types.ts";
 import { hexDecode, hexEncode } from "../../util/src/hex_codec.ts";
 import { utf8Decode, utf8Encode } from "../../util/src/utf8_codec.ts";
 
@@ -25,20 +25,8 @@ export enum ShardEvents {
   Error = "Error",
 }
 
-export type ShardListeners = {
-  [ShardEvents.Close]: [
-    reconnectable: boolean,
-    resumable: boolean,
-    event: CloseEvent,
-  ];
-  [ShardEvents.Error]: [event: Event];
-  [GatewayEvents.GuildMembersChunk]: [
-    chunk: DispatchPayloadGuildMembersChunkData,
-  ];
-};
-
 /** Class representing a shard */
-export class Shard extends DiscordSocket<ShardListeners> {
+export class Shard extends DiscordSocket {
   /** `Heartbeat` send and `heartbeat ACK` receive latency */
   latency = -1;
 
@@ -46,6 +34,8 @@ export class Shard extends DiscordSocket<ShardListeners> {
   #seq = 0;
   #sessionId?: string;
   #lastHeartbeatSentAt = -1;
+  #requestGuildMembersMap = new Map<string, any>();
+  #requestGuildMembersNonce = 0;
 
   /**
    * @param token Bot authentication token
@@ -96,6 +86,21 @@ export class Shard extends DiscordSocket<ShardListeners> {
           case GatewayEvents.Ready: {
             this.id ??= payload.d.shard?.[0];
             this.#sessionId = utf8Decode(hexDecode(payload.d.session_id));
+            break;
+          }
+
+          case GatewayEvents.GuildMembersChunk: {
+            if (!payload.d.nonce) {
+              break;
+            }
+            const entry = this.#requestGuildMembersMap.get(payload.d.nonce);
+            if (
+              entry?.chunks.push(payload.d) !== undefined &&
+              payload.d.chunk_index + 1 === payload.d.chunk_count
+            ) {
+              this.#requestGuildMembersMap.delete(payload.d.nonce);
+              entry.resolve(entry.chunks);
+            }
             break;
           }
         }
@@ -194,20 +199,18 @@ export class Shard extends DiscordSocket<ShardListeners> {
    *       limit: 0,
    *     });
    */
-  requestGuildMembers(
-    data: GuildRequestMembersPayloadData,
-    delay?: number,
-  ): Promise<DispatchPayloadGuildMembersChunkData[][]> {
-    const payload: GuildRequestMembersPayloadData = {
-      nonce: data.nonce ?? `${Date.now()}`,
+  requestGuildMembers(data: GuildRequestMembersPayloadData) {
+    const payload: RequiredKeys<GuildRequestMembersPayloadData, "nonce"> = {
+      nonce: data.nonce ?? `${this.#requestGuildMembersNonce++}`,
       query: "",
       ...data,
     };
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
-    return this.receive(GatewayEvents.GuildMembersChunk, {
-      delay,
-      filter: (chunk) => chunk.nonce === payload.nonce,
-      terminate: (chunk) => chunk.chunk_index + 1 === chunk.chunk_count,
+    return new Promise((resolve) => {
+      this.#requestGuildMembersMap.set(payload.nonce, {
+        chunks: [],
+        resolve,
+      });
     });
   }
 }
