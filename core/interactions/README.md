@@ -21,7 +21,7 @@ import { InteractionCallbackType, InteractionsClient, serve } from "./deps.ts";
 
 const publicKey = Deno.env.get("BOT_PUBLIC_KEY") ?? prompt("bot public key:");
 if (!publicKey) {
-  throw new Error("An invalid bot public key was provided.");
+  throw new TypeError("An invalid bot public key was provided.");
 }
 
 const client = new InteractionsClient(publicKey);
