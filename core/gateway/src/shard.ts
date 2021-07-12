@@ -1,9 +1,9 @@
+import type { GuildMember } from "../../types/src/resources/guild.ts";
 import {
   GatewayCloseEventCodes,
   GatewayOpcodes,
 } from "../../types/src/topics/opcodes_and_status_codes.ts";
 import type {
-  DispatchPayloadGuildMembersChunkData,
   GatewayPayload,
   GuildRequestMembersPayloadData,
   IdentifyPayloadData,
@@ -16,6 +16,8 @@ import { DiscordSocket } from "../../util/src/discord_socket.ts";
 import type { PartialKeys, RequiredKeys } from "../../util/src/types.ts";
 import { hexDecode, hexEncode } from "../../util/src/hex_codec.ts";
 import { utf8Decode, utf8Encode } from "../../util/src/utf8_codec.ts";
+import type { RequestGuildMembersMapEntry } from "./util.ts";
+import { concatGuildMembersChunk } from "./util.ts";
 
 /** Shard events */
 export enum ShardEvents {
@@ -34,14 +36,13 @@ export class Shard extends DiscordSocket {
   #seq = 0;
   #sessionId?: string;
   #lastHeartbeatSentAt = -1;
-  #requestGuildMembersMap = new Map<string, any>();
+  #requestGuildMembersMap = new Map<string, RequestGuildMembersMapEntry>();
   #requestGuildMembersNonce = 0;
 
   /**
    * @param token Bot authentication token
-   * @param id Shard ID
    */
-  constructor(public token: string, public id?: number) {
+  constructor(public token: string) {
     super();
   }
 
@@ -84,7 +85,6 @@ export class Shard extends DiscordSocket {
 
         switch (payload.t) {
           case GatewayEvents.Ready: {
-            this.id ??= payload.d.shard?.[0];
             this.#sessionId = utf8Decode(hexDecode(payload.d.session_id));
             break;
           }
@@ -94,12 +94,13 @@ export class Shard extends DiscordSocket {
               break;
             }
             const entry = this.#requestGuildMembersMap.get(payload.d.nonce);
-            if (
-              entry?.chunks.push(payload.d) !== undefined &&
-              payload.d.chunk_index + 1 === payload.d.chunk_count
-            ) {
+            if (!entry) {
+              break;
+            }
+            concatGuildMembersChunk(entry, payload.d);
+            if (payload.d.chunk_index + 1 === payload.d.chunk_count) {
               this.#requestGuildMembersMap.delete(payload.d.nonce);
-              entry.resolve(entry.chunks);
+              entry.resolve(entry);
             }
             break;
           }
@@ -121,8 +122,7 @@ export class Shard extends DiscordSocket {
       }
     }
 
-    // @ts-ignore: FIX LATER
-    this.dispatch(payload.op, payload.d, payload.t);
+    this.dispatch(payload.op, payload.d);
   }
 
   /** Send a heartbeat */
@@ -146,7 +146,7 @@ export class Shard extends DiscordSocket {
   }
 
   /**
-   * Update this shard's presence
+   * Update the shard's presence
    *
    *     Shard.presenceUpdate({
    *       activities: [
@@ -165,7 +165,7 @@ export class Shard extends DiscordSocket {
   }
 
   /**
-   * Update this shard's voice state for a guild
+   * Update the shard's voice state for a guild
    *
    *     Shard.voiceStateUpdate({
    *       channel_id: "836841935976923146",
@@ -208,7 +208,9 @@ export class Shard extends DiscordSocket {
     this.sendPayload(GatewayOpcodes.RequestGuildMembers, payload);
     return new Promise((resolve) => {
       this.#requestGuildMembersMap.set(payload.nonce, {
-        chunks: [],
+        members: [],
+        presences: [],
+        notFound: [],
         resolve,
       });
     });
